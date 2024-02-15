@@ -40,6 +40,7 @@ namespace TheOtherRoles.Utilities
         public static void clearAndReload()
         {
             Guesser.clearAndReload();
+            //Doomsayer.clearAndReload();
             GuesserGM.clearAndReload();
             isGuesserGm = TORMapOptions.gameMode == CustomGamemodes.Guesser;
             if (isGuesserGm)

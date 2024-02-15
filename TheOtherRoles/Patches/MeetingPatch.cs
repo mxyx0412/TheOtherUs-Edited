@@ -311,7 +311,7 @@ namespace TheOtherRoles.Patches
                 {
                     selections[i] = true;
                     renderer.color = Color.yellow;
-                    meetingExtraButtonLabel.text = Helpers.cs(Color.yellow, "»∑»œªª∆±");
+                    meetingExtraButtonLabel.text = Helpers.cs(Color.yellow, "Á°ÆËÆ§Êç¢Á•®");
                 }
             }
             else if (selectedCount == 2)
@@ -320,7 +320,7 @@ namespace TheOtherRoles.Patches
                 {
                     renderer.color = Color.red;
                     selections[i] = false;
-                    meetingExtraButtonLabel.text = Helpers.cs(Color.red, "»∑»œªª∆±");
+                    meetingExtraButtonLabel.text = Helpers.cs(Color.red, "Á°ÆËÆ§Êç¢Á•®");
                 }
             }
         }
@@ -362,9 +362,9 @@ namespace TheOtherRoles.Patches
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
 
                 RPCProcedure.swapperSwap((byte)firstPlayer.TargetPlayerId, (byte)secondPlayer.TargetPlayerId);
-                meetingExtraButtonLabel.text = Helpers.cs(Color.green, "ªª∆±≥…π¶!");
+                meetingExtraButtonLabel.text = Helpers.cs(Color.green, "Êç¢Á•®ÊàêÂäü!");
                 Swapper.charges--;
-                meetingExtraButtonText.text = $"ªª∆±¥Œ ˝: {Swapper.charges}";
+                meetingExtraButtonText.text = $"Êç¢Á•®Ê¨°Êï∞: {Swapper.charges}";
             }
         }
 
@@ -407,8 +407,8 @@ namespace TheOtherRoles.Patches
                 swapperButtonList[i].OnClick.RemoveAllListeners();
                 swapperButtonList[i].OnClick.AddListener((System.Action)(() => swapperOnClick(copyI, __instance)));
             }
-            meetingExtraButtonText.text = $"ªª∆±¥Œ ˝: {Swapper.charges}";
-            meetingExtraButtonLabel.text = Helpers.cs(Color.red, "»∑»œΩªªª");
+            meetingExtraButtonText.text = $"Êç¢Á•®Ê¨°Êï∞: {Swapper.charges}";
+            meetingExtraButtonLabel.text = Helpers.cs(Color.red, "Á°ÆËÆ§‰∫§Êç¢");
 
         }
 
@@ -432,7 +432,7 @@ namespace TheOtherRoles.Patches
             writer.Write(Mayor.voteTwice);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
 
-            meetingExtraButtonLabel.text = Helpers.cs(Mayor.color, "À´±∂∆± ˝: " + (Mayor.voteTwice ? Helpers.cs(Color.green, "ø™") : Helpers.cs(Color.red, "πÿ")));
+            meetingExtraButtonLabel.text = Helpers.cs(Mayor.color, "ÂèåÂÄçÁ•®Êï∞: " + (Mayor.voteTwice ? Helpers.cs(Color.green, "ÂºÄ") : Helpers.cs(Color.red, "ÂÖ≥")));
         }
 
         public static GameObject guesserUI;
@@ -700,7 +700,7 @@ namespace TheOtherRoles.Patches
                 Transform infoTransform = __instance.playerStates[0].NameText.transform.parent.FindChild("Info");
                 TMPro.TextMeshPro meetingInfo = infoTransform != null ? infoTransform.GetComponent<TMPro.TextMeshPro>() : null;
                 meetingExtraButtonText = UnityEngine.Object.Instantiate(__instance.playerStates[0].NameText, meetingExtraButtonParent);
-                meetingExtraButtonText.text = addSwapperButtons ? $"ªª∆±¥Œ ˝: {Swapper.charges}" : "";
+                meetingExtraButtonText.text = addSwapperButtons ? $"Êç¢Á•®Ê¨°Êï∞: {Swapper.charges}" : "";
                 meetingExtraButtonText.enableWordWrapping = false;
                 meetingExtraButtonText.transform.localScale = Vector3.one * 1.7f;
                 meetingExtraButtonText.transform.localPosition = new Vector3(-2.5f, 0f, 0f);
@@ -716,12 +716,12 @@ namespace TheOtherRoles.Patches
                 if (addSwapperButtons)
                 {
                     meetingExtraButtonLabel.transform.localScale *= 1.7f;
-                    meetingExtraButtonLabel.text = Helpers.cs(Color.red, "»∑»œΩªªª");
+                    meetingExtraButtonLabel.text = Helpers.cs(Color.red, "Á°ÆËÆ§‰∫§Êç¢");
                 }
                 else if (addMayorButton)
                 {
                     meetingExtraButtonLabel.transform.localScale = new Vector3(meetingExtraButtonLabel.transform.localScale.x * 1.5f, meetingExtraButtonLabel.transform.localScale.x * 1.7f, meetingExtraButtonLabel.transform.localScale.x * 1.7f);
-                    meetingExtraButtonLabel.text = Helpers.cs(Mayor.color, "À´±∂∆± ˝: " + (Mayor.voteTwice ? Helpers.cs(Color.green, "ø™") : Helpers.cs(Color.red, "πÿ")));
+                    meetingExtraButtonLabel.text = Helpers.cs(Mayor.color, "ÂèåÂÄçÁ•®Êï∞: " + (Mayor.voteTwice ? Helpers.cs(Color.green, "ÂºÄ") : Helpers.cs(Color.red, "ÂÖ≥")));
                 }
                 PassiveButton passiveButton = meetingExtraButton.GetComponent<PassiveButton>();
                 passiveButton.OnClick.RemoveAllListeners();
@@ -771,7 +771,8 @@ namespace TheOtherRoles.Patches
 
             // Add Guesser Buttons
             int remainingShots = HandleGuesser.remainingShots(CachedPlayer.LocalPlayer.PlayerId);
-            //!!!ÃÌº”ƒ©»’‘§—‘º“∂ƒ
+            //!!!Ê∑ªÂä†Êú´Êó•È¢ÑË®ÄÂÆ∂Ëµå
+
             if (addDoomsayerButtons)
             {
                 for (int i = 0; i < __instance.playerStates.Length; i++)
@@ -786,6 +787,7 @@ namespace TheOtherRoles.Patches
                     GameObject targetBox = UnityEngine.Object.Instantiate(template, playerVoteArea.transform);
                     targetBox.name = "ShootButton";
                     targetBox.transform.localPosition = new Vector3(-0.95f, 0.03f, -1.3f);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
                     SpriteRenderer renderer = targetBox.GetComponent<SpriteRenderer>();
                     renderer.sprite = HandleGuesser.getTargetSprite();
                     PassiveButton button = targetBox.GetComponent<PassiveButton>();
@@ -890,12 +892,12 @@ namespace TheOtherRoles.Patches
                 {
                     if (Portal.teleportedPlayers.Count > 0)
                     {
-                        string msg = "–«√≈ π”√»’÷æ:\n";
+                        string msg = "ÊòüÈó®‰ΩøÁî®Êó•Âøó:\n";
                         foreach (var entry in Portal.teleportedPlayers)
                         {
                             float timeBeforeMeeting = ((float)(DateTime.UtcNow - entry.time).TotalMilliseconds) / 1000;
-                            msg += Portalmaker.logShowsTime ? $"{(int)timeBeforeMeeting} √Î«∞: " : "";
-                            msg = msg + $"{entry.name}  π”√¡À–«√≈\n";
+                            msg += Portalmaker.logShowsTime ? $"{(int)timeBeforeMeeting} ÁßíÂâç: " : "";
+                            msg = msg + $"{entry.name} ‰ΩøÁî®‰∫ÜÊòüÈó®\n";
                         }
                         FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(Portalmaker.portalmaker, $"{msg}");
                     }
@@ -905,19 +907,19 @@ namespace TheOtherRoles.Patches
                 if (Trapper.trapper != null && (CachedPlayer.LocalPlayer.PlayerControl == Trapper.trapper || Helpers.shouldShowGhostInfo()) && !Trapper.trapper.Data.IsDead)
                 {
                     if (Trap.traps.Any(x => x.revealed))
-                        FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(Trapper.trapper, "œ›⁄Â»’÷æ:");
+                        FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(Trapper.trapper, "Èô∑Èò±Êó•Âøó:");
                     foreach (Trap trap in Trap.traps)
                     {
                         if (!trap.revealed) continue;
-                        string message = $"œ›⁄Â {trap.instanceId}: \n";
+                        string message = $"Èô∑Èò± {trap.instanceId}: \n";
                         trap.trappedPlayer = trap.trappedPlayer.OrderBy(x => rnd.Next()).ToList();
                         foreach (PlayerControl p in trap.trappedPlayer)
                         {
                             if (Trapper.infoType == 0) message += RoleInfo.GetRolesString(p, false, false, true) + "\n";
                             else if (Trapper.infoType == 1)
                             {
-                                if (Helpers.isNeutral(p) || p.Data.Role.IsImpostor) message += "–∞∂Ò÷∞“µ \n";
-                                else message += "…∆¡º÷∞“µ \n";
+                                if (Helpers.isNeutral(p) || p.Data.Role.IsImpostor) message += "ÈÇ™ÊÅ∂ËÅå‰∏ö \n";
+                                else message += "ÂñÑËâØËÅå‰∏ö \n";
                             }
                             else message += p.Data.PlayerName + "\n";
                         }
@@ -944,7 +946,7 @@ namespace TheOtherRoles.Patches
                         System.Random random = new System.Random();
                         int x = random.Next(0, (int)Doomsayer.formationNum);
                         RoleInfo roleInfoTarget = RoleInfo.getRoleInfoForPlayer(predictionTarget, false).FirstOrDefault();
-                        string message = $"‘§—‘ " + i + ": " + predictionTarget.name + "\n";
+                        string message = $"È¢ÑË®Ä " + i + ": " + predictionTarget.name + "\n";
                         List<int> temp = Enumerable.Range(0, allRoleInfo.Count).OrderBy(q => Guid.NewGuid()).Take((int)Doomsayer.formationNum).ToList();
                         List<string> allProperty = new List<string>();
 
@@ -991,7 +993,7 @@ namespace TheOtherRoles.Patches
                     int numberOfTasks = playerTotal - playerCompleted;
                     if (numberOfTasks == 0)
                     {
-                        output = $"≥°…œµƒ–∞∂ÒÕÊº“: \n \n";
+                        output = $"Âú∫‰∏äÁöÑÈÇ™ÊÅ∂Áé©ÂÆ∂: \n \n";
                         FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(0.4f, new Action<float>((x) =>
                         {
                             if (x == 1f)
@@ -1003,12 +1005,12 @@ namespace TheOtherRoles.Patches
                                     if (!Snitch.playerRoomMap.ContainsKey(p.PlayerId)) continue;
                                     if (p.Data.IsDead) continue;
                                     var room = Snitch.playerRoomMap[p.PlayerId];
-                                    var roomName = " “Õ‚";
+                                    var roomName = "ÂÆ§Â§ñ";
                                     if (room != byte.MinValue)
                                     {
                                         roomName = DestroyableSingleton<TranslationController>.Instance.GetString((SystemTypes)room);
                                     }
-                                    output += "- " + RoleInfo.GetRolesString(p, false, false, true) + ", ◊Ó∫Û“ª¥Œ≥ˆœ÷ " + roomName + "\n";
+                                    output += "- " + RoleInfo.GetRolesString(p, false, false, true) + ", ÊúÄÂêé‰∏ÄÊ¨°Âá∫Áé∞ " + roomName + "\n";
                                 }
                                 FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(Snitch.snitch, $"{output}");
                             }

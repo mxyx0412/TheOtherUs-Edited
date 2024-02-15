@@ -39,7 +39,7 @@ namespace TheOtherRoles.Patches
                 RPCProcedure.shifterShift(Shifter.futureShift.PlayerId);
             }
             Shifter.futureShift = null;
-            //Ä©ÈÕÔ¤ÑÔ¼Ò
+            //æœ«æ—¥é¢„è¨€å®¶
             if (Doomsayer.doomsayer != null && AmongUsClient.Instance.AmHost && !Doomsayer.canGuess)
             {
                 Doomsayer.canGuess = true;
@@ -562,7 +562,7 @@ namespace TheOtherRoles.Patches
                     {
                         if (Jester.jester != null && player.PlayerId == Jester.jester.PlayerId) __result = "";
                     }
-                    if (Tiebreaker.isTiebreak) __result += " (ÆÆÆ½)";
+                    if (Tiebreaker.isTiebreak) __result += " (ç ´å¹³)";
                     Tiebreaker.isTiebreak = false;
                 }
             }
