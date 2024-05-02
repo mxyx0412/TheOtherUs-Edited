@@ -7,4 +7,5 @@ global using Il2CppInterop.Runtime.InteropTypes.Arrays;
 global using TheOtherRoles.Helper;
 global using static TheOtherRoles.Helper.LogHelper;
 global using static TheOtherRoles.ModTranslation;
+global using static TheOtherRoles.Helper.RoleHelper;
 global using Main = TheOtherRoles.TheOtherRolesPlugin;

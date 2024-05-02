@@ -4,6 +4,7 @@ using Hazel;
 using Il2CppSystem.Collections.Generic;
 using TheOtherRoles.CustomGameModes;
 using TheOtherRoles.Objects.Map;
+using TheOtherRoles.Roles;
 using TheOtherRoles.Roles.Crewmate;
 using TheOtherRoles.Roles.Impostor;
 using TheOtherRoles.Roles.Modifier;

@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Hazel;
 using InnerNet;
+using TheOtherRoles.Roles;
 using TheOtherRoles.Roles.Crewmate;
 using TheOtherRoles.Roles.Modifier;
 using TheOtherRoles.Utilities;

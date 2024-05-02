@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TheOtherRoles.CustomGameModes;
+using TheOtherRoles.Roles;
 using TheOtherRoles.Roles.Modifier;
 using TheOtherRoles.Roles.Neutral;
 using TheOtherRoles.Utilities;

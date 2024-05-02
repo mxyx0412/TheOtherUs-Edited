@@ -24,6 +24,7 @@ using TheOtherRoles.Roles.Modifier;
 using TheOtherRoles.Roles.Impostor;
 using TheOtherRoles.Roles.Crewmate;
 using TheOtherRoles.Roles.Neutral;
+using TheOtherRoles.Roles;
 
 namespace TheOtherRoles;
 
