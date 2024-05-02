@@ -20,6 +20,10 @@ using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.MapOptions;
 using Object = UnityEngine.Object;
 using TheOtherRoles.Objects.Map;
+using TheOtherRoles.Roles.Modifier;
+using TheOtherRoles.Roles.Impostor;
+using TheOtherRoles.Roles.Crewmate;
+using TheOtherRoles.Roles.Neutral;
 
 namespace TheOtherRoles;
 
@@ -64,7 +68,6 @@ public enum RoleId
     Juggernaut,
     Akujo,
     Thief,
-
 
     Crew,
     Crewmate,

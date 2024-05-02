@@ -13,6 +13,9 @@ using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.MapOptions;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
+using TheOtherRoles.Roles.Modifier;
+using TheOtherRoles.Roles.Crewmate;
+using TheOtherRoles.Roles.Impostor;
 
 namespace TheOtherRoles.Patches;
 
