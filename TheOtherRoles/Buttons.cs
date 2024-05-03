@@ -1973,7 +1973,7 @@ internal static class HudManagerStartPatch
 
 
                 writer.WriteBytesAndSize(buff);
-        
+
 
                 writer.Write(0.01f);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -2977,7 +2977,7 @@ internal static class HudManagerStartPatch
 
                 SoundEffectsManager.stop("mediumAsk");
             },
-            buttonText:getString("MediumText")
+            buttonText: getString("MediumText")
         );
 
         // Pursuer button

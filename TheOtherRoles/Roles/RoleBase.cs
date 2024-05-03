@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 
 namespace TheOtherRoles.Roles;
 
@@ -17,13 +16,13 @@ public abstract class RoleBase : IDisposable
 
     public virtual void ClearAndReload()
     {
-        
+
     }
 
     public virtual void ButtonCreate(HudManager _hudManager)
     {
     }
-    
+
 
     public virtual void ResetCustomButton()
     {
@@ -32,8 +31,8 @@ public abstract class RoleBase : IDisposable
     public abstract RoleInfo RoleInfo { get; protected set; }
     public abstract Type RoleType { get; protected set; }
     //public List<RoleControllerBase> Controllers { get; protected set; } = [];
-    
-    #nullable enable
+
+#nullable enable
     public Type? PathType { get; protected set; } = null;
 }
 

@@ -9,19 +9,19 @@ namespace TheOtherRoles.Modules;
 public class ResourceSprite(string pathName = "", float pixel = 115f, bool cache = true, Action<ResourceSprite>? onGetSprite = null)
 {
     private Sprite? _sprite;
-    
+
     public string _pathName = pathName;
 
     public float _pixel = pixel;
-    
+
     public bool _cache = cache;
-    
+
     private const string ResourcePath = "TheOtherRoles.Resources.";
 
     private static readonly Assembly assembly = Assembly.GetExecutingAssembly();
-    
+
     public static implicit operator Sprite(ResourceSprite rs) => rs.GetSprite();
-    
+
     public string Path => GetPath();
 
     public event Action<ResourceSprite>? OnGetSprite = onGetSprite;
@@ -33,10 +33,10 @@ public class ResourceSprite(string pathName = "", float pixel = 115f, bool cache
     public Sprite GetSprite()
     {
         OnGetSprite?.Invoke(this);
-        
+
         if (ReturnSprite != null)
             return ReturnSprite;
-        
+
         if (_sprite != null && _sprite.pixelsPerUnit == _pixel)
             return _sprite;
 

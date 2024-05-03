@@ -10,13 +10,13 @@ public class CustomRoleManager : ManagerBase<CustomRoleManager>
     public readonly List<RoleBase> _RoleBases = [];
 
     public readonly List<RoleBase> _AllActiveRole = [];
-    
+
     public readonly List<RoleControllerBase> _AllControllerBases = [];
 
     public readonly Dictionary<RoleBase, List<PlayerControl>> PlayerAndRoles = new();
 
     public readonly List<RoleBase> LocalRoleBases = [];
-    
+
     public readonly List<RoleControllerBase> LocalControllerBases = [];
 
     public void Register(RoleBase role)
@@ -34,7 +34,7 @@ public class CustomRoleManager : ManagerBase<CustomRoleManager>
             LocalControllerBases.Remove(ControllerBase);
             ControllerBase.Dispose();
         }
-            
+
         foreach (var Base in LocalRoleBases)
         {
             LocalRoleBases.Remove(Base);
@@ -58,10 +58,10 @@ public class CustomRoleManager : ManagerBase<CustomRoleManager>
         {
             if (dic.Value.Any() && !_AllActiveRole.Contains(dic.Key))
                 _AllActiveRole.Add(dic.Key);
-            
+
             if (!dic.Value.Any() && _AllActiveRole.Contains(dic.Key))
                 _AllActiveRole.Remove(dic.Key);
-        }   
+        }
     }
 
     public void ShifterRole(PlayerControl player, RoleBase target)
@@ -76,7 +76,7 @@ public class CustomRoleManager : ManagerBase<CustomRoleManager>
         {
             return;
         }
-        
+
         foreach (var Base in _AllControllerBases)
         {
             Base.Update(__instance);

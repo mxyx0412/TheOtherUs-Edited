@@ -51,7 +51,7 @@ public static class Medic
                 || showShielded == 1 && (CachedPlayer.LocalPlayer.PlayerControl == shielded
                 || CachedPlayer.LocalPlayer.PlayerControl == medic) // Shielded + Medic
                 || showShielded == 2 && CachedPlayer.LocalPlayer.PlayerControl == medic; // Medic only
-                                                                                           // Make shield invisible till after the next meeting if the option is set (the medic can already see the shield)
+                                                                                         // Make shield invisible till after the next meeting if the option is set (the medic can already see the shield)
             hasVisibleShield = hasVisibleShield && (meetingAfterShielding
                 || !showShieldAfterMeeting
                 || CachedPlayer.LocalPlayer.PlayerControl == medic
