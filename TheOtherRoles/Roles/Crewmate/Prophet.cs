@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using TheOtherRoles.Objects;
 using UnityEngine;
-using static TheOtherRoles.TheOtherRoles;
 using Object = UnityEngine.Object;
 
 namespace TheOtherRoles.Roles.Crewmate;

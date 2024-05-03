@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace TheOtherRoles;
+namespace TheOtherRoles.Roles.Neutral;
 
 public static class Juggernaut
 {
