@@ -86,7 +86,7 @@ public class RoleInfo
 
     //躲猫猫
     public static RoleInfo hunter = new("猎人", Palette.ImpostorRed, Helpers.cs(Palette.ImpostorRed, "抓捕"), "找到并击杀所有猎物", RoleId.Impostor);
-    public static RoleInfo hunted = new("猎物", Color.white, "躲起来", "躲起来", RoleId.Crewmate);
+    public static RoleInfo hunted = new("躲藏者", Color.white, "躲起来", "躲起来", RoleId.Crewmate);
     public static RoleInfo prop = new("躲藏者", Color.white, "伪装成物品并生存", "伪装成物品并生存", RoleId.Crewmate);
 
     // Modifier

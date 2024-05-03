@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TheOtherRoles.Objects;
 using TheOtherRoles.Roles;
+using TheOtherRoles.Roles.Neutral;
 using TheOtherRoles.Utilities;
 using UnityEngine;
 using static TheOtherRoles.Roles.RoleInfo;
@@ -12,6 +13,23 @@ namespace TheOtherRoles.Helper;
 
 public static class RoleHelper
 {
+    public static bool CanMultipleShots(PlayerControl dyingTarget)
+    {
+        if (dyingTarget == CachedPlayer.LocalPlayer.PlayerControl)
+            return false;
+
+        if (HandleGuesser.isGuesser(CachedPlayer.LocalPlayer.PlayerId)
+            &&
+            HandleGuesser.remainingShots(CachedPlayer.LocalPlayer.PlayerId) > 1
+            &&
+            HandleGuesser.hasMultipleShotsPerMeeting
+           )
+            return true;
+
+        return CachedPlayer.LocalPlayer.PlayerControl == Doomsayer.doomsayer && Doomsayer.hasMultipleShotsPerMeeting &&
+               Doomsayer.CanShoot;
+    }
+
     public static readonly CustomRoleManager _RoleManager = CustomRoleManager.Instance;
     public static bool Is<T>(this PlayerControl player) where T: RoleBase =>
         _RoleManager.PlayerAndRoles[Get<T>()].Contains(player);

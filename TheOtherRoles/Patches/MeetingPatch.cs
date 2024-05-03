@@ -403,7 +403,7 @@ internal class MeetingHudPatch
                         // Reset the GUI
                         __instance.playerStates.ToList().ForEach(x => x.gameObject.SetActive(true));
                         Object.Destroy(container.gameObject);
-                        if (RoleHelpers.CanMultipleShots(dyingTarget))
+                        if (CanMultipleShots(dyingTarget))
                             __instance.playerStates.ToList().ForEach(x =>
                             {
                                 if (x.TargetPlayerId == dyingTarget.PlayerId &&
