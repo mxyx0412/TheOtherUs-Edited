@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TheOtherRoles.Objects;
 using TheOtherRoles.Roles;
-using TheOtherRoles.Roles.Neutral;
 using TheOtherRoles.Utilities;
 using UnityEngine;
 using static TheOtherRoles.Roles.RoleInfo;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using AmongUs.Data;
 using BepInEx;
 using BepInEx.Configuration;
@@ -11,7 +12,6 @@ using Reactor.Networking;
 using Reactor.Networking.Attributes;
 using TheOtherRoles.Modules;
 using TheOtherRoles.Modules.CustomHats;
-using TheOtherRoles.Patches;
 using TheOtherRoles.Roles;
 using TheOtherRoles.Utilities;
 using UnityEngine;
@@ -33,9 +33,11 @@ public class TheOtherRolesPlugin : BasePlugin
 
     public static Version Version = Version.Parse(VersionString);
 
-    public static TheOtherRolesPlugin Instance;
+    public static Main Instance;
 
     public static int optionsPage = 2;
+
+    public static Assembly _Assembly;
 
     public static IRegionInfo[] defaultRegions;
     public Harmony Harmony { get; } = new(Id);
@@ -122,7 +124,6 @@ public class TheOtherRolesPlugin : BasePlugin
         CustomColors.Load();
         CustomOptionHolder.Load();
         if (ToggleCursor.Value) Helpers.enableCursor(true);
-
 
         EventUtility.Load();
         SubmergedCompatibility.Initialize();

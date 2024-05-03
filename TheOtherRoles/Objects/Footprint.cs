@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using TheOtherRoles.Roles.Impostor;
 using UnityEngine;
 
 namespace TheOtherRoles.Objects
@@ -23,8 +22,8 @@ namespace TheOtherRoles.Objects
         private static Sprite _footprintSprite;
         private static Sprite FootprintSprite => _footprintSprite ??= Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Footprint.png", 600f);
 
-        private static bool AnonymousFootprints => TheOtherRoles.Detective.anonymousFootprints;
-        private static float FootprintDuration => TheOtherRoles.Detective.footprintDuration;
+        private static bool AnonymousFootprints => Detective.anonymousFootprints;
+        private static float FootprintDuration => Detective.footprintDuration;
 
         private class Footprint
         {

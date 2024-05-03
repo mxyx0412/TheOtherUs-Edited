@@ -10,21 +10,17 @@ using InnerNet;
 using PowerTools;
 using TheOtherRoles.CustomGameModes;
 using TheOtherRoles.Objects;
+using TheOtherRoles.Objects.Map;
 using TheOtherRoles.Patches;
+using TheOtherRoles.Roles;
 using TheOtherRoles.Utilities;
 using TMPro;
 using UnityEngine;
 using static TheOtherRoles.GameHistory;
 using static TheOtherRoles.HudManagerStartPatch;
-using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.MapOptions;
+using static TheOtherRoles.TheOtherRoles;
 using Object = UnityEngine.Object;
-using TheOtherRoles.Objects.Map;
-using TheOtherRoles.Roles.Modifier;
-using TheOtherRoles.Roles.Impostor;
-using TheOtherRoles.Roles.Crewmate;
-using TheOtherRoles.Roles.Neutral;
-using TheOtherRoles.Roles;
 
 namespace TheOtherRoles;
 

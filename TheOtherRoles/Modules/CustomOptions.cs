@@ -13,7 +13,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static TheOtherRoles.CustomOption;
-using static TheOtherRoles.TheOtherRoles;
 using Object = UnityEngine.Object;
 
 namespace TheOtherRoles;

@@ -6,18 +6,14 @@ using AmongUs.QuickChat;
 using Hazel;
 using Reactor.Utilities;
 using TheOtherRoles.Objects;
+using TheOtherRoles.Roles;
 using TheOtherRoles.Utilities;
 using TMPro;
 using UnityEngine;
-using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.MapOptions;
+using static TheOtherRoles.TheOtherRoles;
 using Object = UnityEngine.Object;
 using Random = System.Random;
-using TheOtherRoles.Roles.Modifier;
-using TheOtherRoles.Roles.Impostor;
-using TheOtherRoles.Roles.Crewmate;
-using TheOtherRoles.Roles.Neutral;
-using TheOtherRoles.Roles;
 
 namespace TheOtherRoles.Patches;
 

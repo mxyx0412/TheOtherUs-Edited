@@ -1,7 +1,4 @@
-﻿using TheOtherRoles.Roles.Crewmate;
-using TheOtherRoles.Roles.Neutral;
-using UnityEngine;
-using static TheOtherRoles.TheOtherRoles;
+﻿using UnityEngine;
 
 namespace TheOtherRoles.Roles.Modifier;
 

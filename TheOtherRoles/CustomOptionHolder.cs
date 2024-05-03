@@ -1,8 +1,4 @@
 using System.Collections.Generic;
-using TheOtherRoles.Roles.Crewmate;
-using TheOtherRoles.Roles.Impostor;
-using TheOtherRoles.Roles.Modifier;
-using TheOtherRoles.Roles.Neutral;
 using UnityEngine;
 using static TheOtherRoles.TheOtherRoles;
 using Types = TheOtherRoles.CustomOption.CustomOptionType;

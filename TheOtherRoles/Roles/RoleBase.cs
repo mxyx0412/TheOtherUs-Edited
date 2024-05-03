@@ -20,10 +20,6 @@ public abstract class RoleBase : IDisposable
         
     }
 
-    public virtual void OptionCreate()
-    {
-    }
-
     public virtual void ButtonCreate(HudManager _hudManager)
     {
     }
@@ -35,7 +31,7 @@ public abstract class RoleBase : IDisposable
 
     public abstract RoleInfo RoleInfo { get; protected set; }
     public abstract Type RoleType { get; protected set; }
-    public List<RoleControllerBase> Controllers { get; protected set; } = [];
+    //public List<RoleControllerBase> Controllers { get; protected set; } = [];
     
     #nullable enable
     public Type? PathType { get; protected set; } = null;

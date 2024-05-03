@@ -5,10 +5,6 @@ using Hazel;
 using TheOtherRoles.CustomGameModes;
 using TheOtherRoles.Objects;
 using TheOtherRoles.Patches;
-using TheOtherRoles.Roles.Crewmate;
-using TheOtherRoles.Roles.Impostor;
-using TheOtherRoles.Roles.Modifier;
-using TheOtherRoles.Roles.Neutral;
 using TheOtherRoles.Utilities;
 using TMPro;
 using UnityEngine;
@@ -1977,7 +1973,7 @@ internal static class HudManagerStartPatch
 
 
                 writer.WriteBytesAndSize(buff);
-
+        
 
                 writer.Write(0.01f);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
