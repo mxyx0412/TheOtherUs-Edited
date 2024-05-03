@@ -218,7 +218,6 @@ public class CustomOptionHolder
     public static CustomOption medicShowAttemptToShielded;
     public static CustomOption medicSetOrShowShieldAfterMeeting;
     public static CustomOption medicShowAttemptToMedic;
-    public static CustomOption medicSetShieldAfterMeeting;
     public static CustomOption medicBreakShield;
     public static CustomOption medicResetTargetAfterMeeting;
     public static CustomOption medicReportNameDuration;
@@ -325,14 +324,14 @@ public class CustomOptionHolder
     public static CustomOption escapistResetPlaceAfterMeeting;
     public static CustomOption escapistChargesGainOnMeeting;
     public static CustomOption escapistMaxCharges;
-    /*
+
     public static CustomOption MagicianSpawnRate;
     public static CustomOption MagicianCooldown;
     public static CustomOption MagicianTeleportTime;
     public static CustomOption MagicianProbabilityBlueCards;
     public static CustomOption MagicianProbabilityRedCards;
     public static CustomOption MagicianProbabilityPurpleCards;
-    */
+
     public static CustomOption werewolfSpawnRate;
     public static CustomOption werewolfRampageCooldown;
     public static CustomOption werewolfRampageDuration;
@@ -462,7 +461,6 @@ public class CustomOptionHolder
     public static CustomOption modifierRadar;
 
     public static CustomOption modifierSlueth;
-    //public static CustomOption modifierSwooper;
 
     public static CustomOption modifierCursed;
     public static CustomOption modifierShowCursed;
@@ -706,7 +704,7 @@ public class CustomOptionHolder
         preventTaskEnd = CustomOption.Create(43, Types.General, "preventTaskEnd", false);
 
         //Map options
-        enableMapOptions = CustomOption.Create(200, Types.General, "MapOptions", false, null, true);
+        enableMapOptions = CustomOption.Create(200, Types.General, "enableMapOptions", false, null, true);
 
         IsReactorDurationSetting = CustomOption.Create(201, Types.General, "IsReactorDurationSetting", false, enableMapOptions, true);
         SkeldReactorTimeLimit = CustomOption.Create(202, Types.General, "SkeldReactorTimeLimit", 30f, 15f, 60f, 2.5f, IsReactorDurationSetting);
@@ -741,7 +739,7 @@ public class CustomOptionHolder
         fungleElectrical = CustomOption.Create(101, Types.General, "fungleElectrical", false, enableFungleModify);
 
         enableCamoComms = CustomOption.Create(120, Types.General, cs(Palette.ImpostorRed, "enableCamoComms"), false, enableMapOptions, true);
-        restrictDevices = CustomOption.Create(121, Types.General, "restrictDevices", 
+        restrictDevices = CustomOption.Create(121, Types.General, "restrictDevices",
             ["OFF".Translate(), "restrictDevices2".Translate(), "restrictDevices3".Translate()], enableMapOptions);
         //restrictAdmin = CustomOption.Create(122, Types.General, "restrictAdmin", 30f, 0f, 600f, 5f, restrictDevices);
         restrictCameras = CustomOption.Create(123, Types.General, "restrictCameras", 30f, 0f, 600f, 5f, restrictDevices);
