@@ -286,13 +286,14 @@ public static class RPCProcedure
         clearAndReloadMapOptions();
         clearAndReloadRoles();
         clearGameHistory();
-        setCustomButtonCooldowns();
+        //setCustomButtonCooldowns();
         reloadPluginOptions();
         Helpers.toggleZoom(true);
         GameStartManagerPatch.GameStartManagerUpdatePatch.startingTimer = 0;
         SurveillanceMinigamePatch.nightVisionOverlays = null;
         EventUtility.clearAndReload();
         MapBehaviourPatch.clearAndReload();
+        CustomRoleManager.Instance._RoleBases.Do(n => n.ResetCustomButton());
     }
 
     public static void HandleShareOptions(byte numberOfOptions, MessageReader reader)
@@ -1355,7 +1356,7 @@ public static class RPCProcedure
             case RoleId.Engineer:
                 if (Amnisiac.resetRole) Engineer.clearAndReload();
                 Engineer.engineer = Mimic.mimic;
-                engineerRepairButton.PositionOffset = CustomButton.ButtonPositions.upperRowLeft;
+                Engineer.engineerRepairButton.PositionOffset = CustomButton.ButtonPositions.upperRowLeft;
                 Mimic.hasMimic = true;
                 break;
 

@@ -1,7 +1,7 @@
 ﻿using TheOtherRoles.Objects;
 using UnityEngine;
 
-namespace TheOtherRoles.Roles.Modifier;
+namespace TheOtherRoles.Roles.Neutral;
 
 public static class Swooper
 {

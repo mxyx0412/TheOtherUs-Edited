@@ -5,6 +5,7 @@ using Hazel;
 using TheOtherRoles.CustomGameModes;
 using TheOtherRoles.Objects;
 using TheOtherRoles.Patches;
+using TheOtherRoles.Roles;
 using TheOtherRoles.Utilities;
 using TMPro;
 using UnityEngine;
@@ -17,8 +18,6 @@ namespace TheOtherRoles;
 [HarmonyPatch(typeof(HudManager), nameof(HudManager.Start))]
 internal static class HudManagerStartPatch
 {
-    private static bool initialized;
-
     private static float defaultMaxTimer = 2.5f;
     public static CustomButton engineerRepairButton;
     private static CustomButton janitorCleanButton;
@@ -122,7 +121,7 @@ internal static class HudManagerStartPatch
     public static TMP_Text huntedShieldCountText;
     public static TMP_Text akujoTimeRemainingText;
     public static TMP_Text akujoBackupLeftText;
-
+    
     public static void setCustomButtonCooldowns()
     {
         if (!initialized)
@@ -247,6 +246,42 @@ internal static class HudManagerStartPatch
         zoomOutButton.MaxTimer = 0f;
         //changeChatButton.MaxTimer = 0f;
     }
+    private static bool Loaded;
+    private static bool initialized;
+    /*
+    [HarmonyPatch(typeof(RoleBehaviour), nameof(RoleBehaviour.Initialize)), HarmonyPostfix]
+    private static void OnRoleBehaviour_Initialize()
+    {
+        if (initialized)
+            return;
+
+        foreach (var role in CustomRoleManager.Instance._AllActiveRole.Where(role => role.PathType != null))
+        {
+            Main.Instance.Harmony.PatchAll(role.PathType);
+        }
+
+        initialized = true;
+    }
+
+    [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update)), HarmonyPostfix]
+    private static void OnHudManagerUpdate(HudManager __instance)
+    {
+        if (!initialized || Loaded) return;
+        try
+        {
+            foreach (var role in CustomRoleManager.Instance.LocalRoleBases)
+            {
+                role.ButtonCreate(__instance);
+                role.ResetCustomButton();
+            }
+            Loaded = true;
+        }
+        catch
+        {
+            Warn("Button cooldowns not set, either the gamemode does not require them or there's something wrong.");
+            Loaded = false;
+        }
+    }*/
 
     public static void showTargetNameOnButton(PlayerControl target, CustomButton button, string defaultText)
     {
@@ -485,7 +520,7 @@ internal static class HudManagerStartPatch
             {
                 if (Engineer.resetFixAfterMeeting) Engineer.resetFixes();
             },
-            Engineer.getButtonSprite(),
+            Engineer.buttonSprite,
             CustomButton.ButtonPositions.upperRowRight,
             __instance,
             KeyCode.F,
