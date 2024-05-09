@@ -56,6 +56,7 @@ public static class TheOtherRoles
         Hacker.clearAndReload();
         Tracker.clearAndReload();
         Vampire.clearAndReload();
+        Grenadier.clearAndReload();
         Snitch.clearAndReload();
         Jackal.clearAndReload();
         Sidekick.clearAndReload();
@@ -1257,6 +1258,53 @@ public static class Tracker
     }
 }
 
+public static class Grenadier
+{
+    public static PlayerControl grenadier;
+    public static Color color = Palette.ImpostorRed;
+
+    public static float cooldown = 30f;
+    public static float Duration = 5f;
+    public static float FlashRadius = 65f;
+    public static bool IndicatorsFlashed = true;
+
+    public static bool Enabled;
+    public static DateTime LastFlashed;
+    public static List<PlayerControl> flashedPlayers = new();
+    public static bool Flashed => Duration > 0f;
+
+    public static readonly Color normalVision = new Color(0.6f, 0.6f, 0.6f, 0f);
+    public static readonly Color dimVision = new Color(0.6f, 0.6f, 0.6f, 0.2f);
+    public static readonly Color blindVision = new Color(0.6f, 0.6f, 0.6f, 1f);
+
+    private static Sprite buttonSprite;
+
+    public static Sprite getButtonSprite()
+    {
+        if (buttonSprite) return buttonSprite;
+        buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.VampireButton.png", 115f);
+        return buttonSprite;
+    }
+
+    public static void UnFlash()
+    {
+        Enabled = false;
+        LastFlashed = DateTime.UtcNow;
+        ((Renderer)DestroyableSingleton<HudManager>.Instance.FullScreen).enabled = true;
+        DestroyableSingleton<HudManager>.Instance.FullScreen.color = normalVision;
+        flashedPlayers.Clear();
+    }
+
+    public static void clearAndReload()
+    {
+        grenadier = null;
+        cooldown = CustomOptionHolder.GrenadierCooldown.getFloat();
+        Duration = CustomOptionHolder.GrenadierDuration.getFloat();
+        FlashRadius = CustomOptionHolder.GrenadierFlashRadius.getFloat();
+        IndicatorsFlashed = CustomOptionHolder.GrenadierIndicatorsFlashed.getBool();
+    }
+}
+
 public static class Vampire
 {
     public static PlayerControl vampire;
@@ -1305,6 +1353,7 @@ public static class Vampire
         garlicButton = CustomOptionHolder.vampireGarlicButton.getBool();
     }
 }
+
 /*
 public static class Snitch
 {

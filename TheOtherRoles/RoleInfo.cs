@@ -26,6 +26,7 @@ public class RoleInfo
     public static RoleInfo cleaner = new("清理者", Cleaner.color, "要留清白在人间...吗", "清理尸体", RoleId.Cleaner);
     public static RoleInfo undertaker = new("送葬者", Undertaker.color, "您需要夺命丧葬一条龙服务吗", "拖拽尸体，掩埋命案", RoleId.Undertaker);
     public static RoleInfo escapist = new("逃逸者", Escapist.color, "拜拜了您嘞", "放置锚点并传送", RoleId.Escapist);
+    public static RoleInfo grenadier = new("逃逸者", Grenadier.color, "拜拜了您嘞", "放置锚点并传送", RoleId.Grenadier);
     public static RoleInfo warlock = new("术士", Warlock.color, "给其他玩家下咒击杀第三者", "使用术法击杀第三人", RoleId.Warlock);
     public static RoleInfo trickster = new("骗术师", Trickster.color, "黑夜是咱的伪装", "放置惊吓盒并使黑暗降临", RoleId.Trickster);
     public static RoleInfo bountyHunter = new("赏金猎人", BountyHunter.color, "追捕你的赏金目标", "追捕你的赏金目标", RoleId.BountyHunter);
@@ -126,6 +127,7 @@ public class RoleInfo
         vampire,
         undertaker,
         escapist,
+        grenadier,
         warlock,
         trickster,
         bountyHunter,

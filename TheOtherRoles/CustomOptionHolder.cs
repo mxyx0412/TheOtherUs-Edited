@@ -53,6 +53,12 @@ public class CustomOptionHolder
     public static CustomOption undertakerDragingAfterVelocity;
     public static CustomOption undertakerCanDragAndVent;
 
+    public static CustomOption GrenadierSpawnRate;
+    public static CustomOption GrenadierCooldown;
+    public static CustomOption GrenadierDuration;
+    public static CustomOption GrenadierFlashRadius;
+    public static CustomOption GrenadierIndicatorsFlashed;
+
     public static CustomOption camouflagerSpawnRate;
     public static CustomOption camouflagerCooldown;
     public static CustomOption camouflagerDuration;
@@ -800,6 +806,12 @@ public class CustomOptionHolder
         escapistMaxCharges = Create(10185, Types.Impostor, "可传送次数", 3, 1, 10, 1, escapistSpawnRate);
         escapistResetPlaceAfterMeeting = Create(10183, Types.Impostor, "会议后重置目标地点", false, escapistSpawnRate);
         escapistChargesGainOnMeeting = Create(10184, Types.Impostor, "会议后增加次数", 2, 0, 10, 1, escapistSpawnRate);
+
+        GrenadierSpawnRate = Create(10290, Types.Impostor, cs(Grenadier.color, "掷弹兵"), rates, null, true);
+        GrenadierCooldown = Create(10291, Types.Impostor, "掷弹冷却", 25f, 0f, 60f, 2.5f, GrenadierSpawnRate);
+        GrenadierDuration = Create(10292, Types.Impostor, "闪光时长", 5f, 1f, 10f, 0.5f, GrenadierSpawnRate);
+        GrenadierFlashRadius = Create(10293, Types.Impostor, "技能范围", 65f, 25f, 120f, 5f, GrenadierSpawnRate);
+        GrenadierIndicatorsFlashed = Create(10294, Types.Impostor, "显示被影响的玩家", true, GrenadierSpawnRate);
 
         cultistSpawnRate = Create(10190, Types.Impostor, cs(Cultist.color, "传教士"), rates, null, true);
 

@@ -38,6 +38,7 @@ public enum RoleId
     Vampire,
     Undertaker,
     Escapist,
+    Grenadier,
     Warlock,
     Trickster,
     BountyHunter,
