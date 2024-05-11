@@ -421,6 +421,8 @@ public class CustomOptionHolder
 
     public static CustomOption modifierTieBreaker;
 
+    public static CustomOption modifierAftermath;
+
     public static CustomOption modifierSunglasses;
     public static CustomOption modifierSunglassesQuantity;
     public static CustomOption modifierSunglassesVision;
@@ -1140,6 +1142,8 @@ public class CustomOptionHolder
         modifierAntiTeleportQuantity = Create(1021, Types.Modifier, cs(Color.yellow, "通讯兵数量"), ratesModifier, modifierAntiTeleport);
 
         modifierTieBreaker = Create(1030, Types.Modifier, cs(Color.yellow, "破平者"), rates, null, true);
+
+        modifierAftermath = Create(1250, Types.Modifier, cs(Color.yellow, "余波"), rates, null, true);
 
         modifierBait = Create(1040, Types.Modifier, cs(Color.yellow, "诱饵"), rates, null, true);
         modifierBaitSwapCrewmate = Create(1041, Types.Modifier, "只分配给船员阵营", false, modifierBait);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AmongUs.Data;
 using Hazel;
+using Reactor.Utilities;
 using TheOtherRoles.CustomGameModes;
 using TheOtherRoles.Objects;
 using TheOtherRoles.Objects.Map;
@@ -95,6 +96,7 @@ public static class TheOtherRoles
         Bloody.clearAndReload();
         AntiTeleport.clearAndReload();
         Tiebreaker.clearAndReload();
+        Aftermath.clearAndReload();
         Sunglasses.clearAndReload();
         Torch.clearAndReload();
         Flash.clearAndReload();
@@ -3174,6 +3176,19 @@ public static class Tiebreaker
     {
         tiebreaker = null;
         isTiebreak = false;
+    }
+}
+
+public static class Aftermath
+{
+    public static PlayerControl aftermath;
+    public static Color color = new Color32(0, 247, 255, byte.MaxValue);
+
+
+    public static bool isTiebreak;
+    public static void clearAndReload()
+    {
+        aftermath = null;
     }
 }
 

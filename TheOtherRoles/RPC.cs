@@ -103,6 +103,7 @@ public enum RoleId
     Bloody,
     AntiTeleport,
     Tiebreaker,
+    Aftermath,
     Bait,
     Flash,
     Torch,
@@ -593,6 +594,9 @@ public static class RPCProcedure
                 break;
             case RoleId.Tiebreaker:
                 Tiebreaker.tiebreaker = player;
+                break;
+            case RoleId.Aftermath:
+                Aftermath.aftermath = player;
                 break;
             case RoleId.Sunglasses:
                 Sunglasses.sunglasses.Add(player);
@@ -1784,6 +1788,7 @@ public static class RPCProcedure
             if (Multitasker.multitasker.Any(x => x.PlayerId == player.PlayerId))
                 Multitasker.multitasker.RemoveAll(x => x.PlayerId == player.PlayerId);
             if (player == Tiebreaker.tiebreaker) Tiebreaker.clearAndReload();
+            if (player == Aftermath.aftermath) Aftermath.clearAndReload();
             if (player == Mini.mini) Mini.clearAndReload();
             if (player == Watcher.watcher) Watcher.clearAndReload();
             if (player == Radar.radar) Radar.clearAndReload();

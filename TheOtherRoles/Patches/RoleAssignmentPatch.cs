@@ -585,6 +585,7 @@ internal class RoleManagerSelectRolesPatch
         allModifiers.AddRange(new List<RoleId>
         {
             RoleId.Tiebreaker,
+            RoleId.Aftermath,
             RoleId.Mini,
             RoleId.Bait,
             RoleId.Bloody,
@@ -919,6 +920,14 @@ internal class RoleManagerSelectRolesPatch
 
             modifiers.RemoveAll(x => x == RoleId.Torch);
         }
+        
+        if (modifiers.Contains(RoleId.Aftermath))
+        {
+            playerId = setModifierToRandomPlayer((byte)RoleId.Aftermath, crewPlayer);
+            crewPlayer.RemoveAll(x => x.PlayerId == playerId);
+            playerList.RemoveAll(x => x.PlayerId == playerId);
+            modifiers.RemoveAll(x => x == RoleId.Aftermath);
+        }
 
         if (modifiers.Contains(RoleId.ButtonBarry))
         {
@@ -979,6 +988,9 @@ internal class RoleManagerSelectRolesPatch
                 break;
             case RoleId.Tiebreaker:
                 selection = CustomOptionHolder.modifierTieBreaker.getSelection();
+                break;
+            case RoleId.Aftermath:
+                selection = CustomOptionHolder.modifierAftermath.getSelection();
                 break;
             case RoleId.Indomitable:
                 selection = CustomOptionHolder.modifierIndomitable.getSelection();

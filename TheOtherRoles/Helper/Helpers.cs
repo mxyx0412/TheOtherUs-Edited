@@ -7,6 +7,7 @@ using System.Reflection;
 using AmongUs.GameOptions;
 using Hazel;
 using InnerNet;
+using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
 using TheOtherRoles.CustomGameModes;
 using TheOtherRoles.Modules;
@@ -458,8 +459,7 @@ public static class Helpers
     public static PlayerControl playerById(byte id)
     {
         foreach (PlayerControl player in CachedPlayer.AllPlayers)
-            if (player.PlayerId == id)
-                return player;
+            if (player.PlayerId == id) return player;
         return null;
     }
 
@@ -1470,5 +1470,36 @@ public static class Helpers
     internal static int flipBitwise(int chatTarget)
     {
         throw new NotImplementedException();
+    }
+
+    public static void ForceAbility(PlayerControl player, PlayerControl corpse)
+    {
+        if (!player.AmOwner) return;
+        DeadBody db = null;
+        var bodies = Object.FindObjectsOfType<DeadBody>();
+        foreach (var body in bodies)
+        {
+            try
+            {
+                if (body?.ParentId == corpse.PlayerId) { db = body; break; }
+            }
+            catch
+            {
+            }
+        }
+        Coroutines.Start(delay(player, corpse, db));
+    }
+
+    private static IEnumerator delay(PlayerControl player, PlayerControl corpse, DeadBody db)
+    {
+        yield return new WaitForSecondsRealtime(0.2f);
+        if (player == Blackmailer.blackmailer)
+        {
+            var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.BlackmailPlayer, SendOption.Reliable);
+            writer.Write(Blackmailer.blackmailed.PlayerId);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            RPCProcedure.blackmailPlayer(Blackmailer.blackmailed.PlayerId);
+            HudManagerStartPatch.blackmailerButton.Timer = HudManagerStartPatch.blackmailerButton.MaxTimer;
+        }
     }
 }

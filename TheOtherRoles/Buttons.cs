@@ -3421,6 +3421,7 @@ internal static class HudManagerStartPatch
                 {
                     if (Helpers.checkAndDoVetKill(Blackmailer.currentTarget)) return;
                     Helpers.checkWatchFlash(Blackmailer.currentTarget);
+                    if(Blackmailer.currentTarget == Aftermath.aftermath) Helpers.ForceAbility(Blackmailer.blackmailed, Blackmailer.currentTarget);
                     var writer = AmongUsClient.Instance.StartRpcImmediately(
                         CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.BlackmailPlayer,
                         SendOption.Reliable);

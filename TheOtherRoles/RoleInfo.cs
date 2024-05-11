@@ -91,6 +91,7 @@ public class RoleInfo
     public static RoleInfo bloody = new("溅血者", Color.yellow, "以吾之血咒汝之身", "用你的血留下死亡信息", RoleId.Bloody, false, true);
     public static RoleInfo antiTeleport = new("通讯兵", Color.yellow, "你不会被传送!", "你不会被传送!", RoleId.AntiTeleport, false, true);
     public static RoleInfo tiebreaker = new("破平者", Color.yellow, "你说得对...但是，规则就是用来打破的", "打破平局", RoleId.Tiebreaker, false, true);
+    public static RoleInfo aftermath = new("余波", Color.yellow, "余波", "余波", RoleId.Aftermath, false, true);
     public static RoleInfo bait = new("诱饵", Color.yellow, "大奖小奖，能记住就是好奖", "击杀你的人会立即报警", RoleId.Bait, false, true);
     public static RoleInfo sunglasses = new("太阳镜", Color.yellow, "这真是，泰酷辣", "你的视野变得更小", RoleId.Sunglasses, false, true);
     public static RoleInfo torch = new("火炬", Color.yellow, "心中有光，照耀四方", "视野增加，无视熄灯", RoleId.Torch, false, true);
@@ -187,6 +188,7 @@ public class RoleInfo
         bloody,
         antiTeleport,
         tiebreaker,
+        aftermath,
         bait,
         flash,
         torch,
@@ -264,6 +266,7 @@ public class RoleInfo
             if (p == Watcher.watcher) infos.Add(watcher);
             if (p == Radar.radar) infos.Add(radar);
             if (p == Tunneler.tunneler) infos.Add(tunneler);
+            if (p == Aftermath.aftermath) infos.Add(aftermath);
             if (p == ButtonBarry.buttonBarry) infos.Add(buttonBarry);
             if (p == Slueth.slueth) infos.Add(slueth);
             if (p == Disperser.disperser) infos.Add(disperser);
