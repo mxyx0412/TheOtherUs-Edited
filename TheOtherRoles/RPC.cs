@@ -238,6 +238,7 @@ public enum CustomRPC
     //ShareRoom,
     YoyoMarkLocation,
     YoyoBlink,
+    AddMayorVoteBank,
 
     // Gamemode
     SetGuesserGm,
@@ -3433,6 +3434,9 @@ internal class RPCHandlerPatch
             case CustomRPC.YoyoBlink:
                 RPCProcedure.yoyoBlink(reader.ReadByte() == byte.MaxValue, reader.ReadBytesAndSize());
                 break;
+            case CustomRPC.AddMayorVoteBank:
+                break;
+
         }
 
         return false;

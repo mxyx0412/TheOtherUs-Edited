@@ -541,7 +541,7 @@ internal class MeetingHudPatch
                 if (Witch.futureSpelled.Any(x => x.PlayerId == pva.TargetPlayerId))
                 {
                     var local = CachedPlayer.LocalPlayer.PlayerControl;
-                    SpriteRenderer rend = (new GameObject()).AddComponent<SpriteRenderer>();
+                    SpriteRenderer rend = new GameObject().AddComponent<SpriteRenderer>();
                     rend.transform.SetParent(pva.transform);
                     rend.gameObject.layer = pva.Megaphone.gameObject.layer;
                     rend.transform.localPosition = new Vector3(-0.5f, -0.03f, -1f);
@@ -659,10 +659,7 @@ internal class MeetingHudPatch
                                       Mayor.mayor.PlayerId == playerVoteArea.TargetPlayerId && Mayor.voteTwice
                     ? 2
                     : 1; // Mayor vote
-                if (dictionary.TryGetValue(playerVoteArea.VotedFor, out var currentVotes))
-                    dictionary[playerVoteArea.VotedFor] = currentVotes + additionalVotes;
-                else
-                    dictionary[playerVoteArea.VotedFor] = additionalVotes;
+                dictionary[playerVoteArea.VotedFor] = dictionary.TryGetValue(playerVoteArea.VotedFor, out var currentVotes) ? currentVotes + additionalVotes : additionalVotes;
             }
 
             // Swapper swap votes
@@ -716,7 +713,7 @@ internal class MeetingHudPatch
                     tb = __instance.playerStates.ToArray()
                         .FirstOrDefault(x => x.TargetPlayerId == Tiebreaker.tiebreaker.PlayerId);
 
-                var isTiebreakerSkip = tb == null || tb.VotedFor == 253 || tb != null && tb.AmDead;
+                var isTiebreakerSkip = tb == null || tb.VotedFor == 253 || (tb != null && tb.AmDead);
 
                 foreach (var pair in self.Where(pair => pair.Value == maxVoteValue && !isTiebreakerSkip))
                 {
@@ -960,7 +957,7 @@ internal class MeetingHudPatch
             }
             */
             // Resett Bait list
-            Bait.active = new Dictionary<DeadPlayer, float>();
+            Bait.active = [];
             // Save AntiTeleport position, if the player is able to move (i.e. not on a ladder or a gap thingy)
             if (CachedPlayer.LocalPlayer.PlayerPhysics.enabled && (CachedPlayer.LocalPlayer.PlayerControl.moveable ||
                                                                    CachedPlayer.LocalPlayer.PlayerControl.inVent
@@ -1156,7 +1153,7 @@ internal class MeetingHudPatch
             Snitch.playerRoomMap = new Dictionary<byte, byte>();
             */
 
-            Trapper.playersOnMap = new List<PlayerControl>();
+            Trapper.playersOnMap = [];
 
             // Remove revealed traps
             Trap.clearRevealedTraps();
@@ -1234,11 +1231,7 @@ internal class MeetingHudPatch
     {
         public static bool Prefix(QuickChatMenu __instance)
         {
-            if (Blackmailer.blackmailer != null && Blackmailer.blackmailed != null && Blackmailer.blackmailed == CachedPlayer.LocalPlayer.PlayerControl)
-            {
-                return false;
-            }
-            return true;
+            return Blackmailer.blackmailer == null || Blackmailer.blackmailed == null || Blackmailer.blackmailed != CachedPlayer.LocalPlayer.PlayerControl;
         }
     }
 
