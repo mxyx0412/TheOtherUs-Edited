@@ -4,10 +4,8 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using Object = UnityEngine.Object;
-using AmongUs.GameOptions;
 using Hazel;
 using InnerNet;
-using Reactor.Utilities;
 using static TheOtherRoles.TheOtherRoles;
 using TheOtherRoles.Utilities;
 
@@ -18,6 +16,7 @@ public static class AddAbstain
 {
     public static void UpdateButton(PlayerControl p, MeetingHud __instance)
     {
+        if (CachedPlayer.LocalPlayer.PlayerControl != Mayor.mayor) return;
         var skip = __instance.SkipVoteButton;
         Mayor.Abstain.gameObject.SetActive(skip.gameObject.active && !Mayor.VotedOnce);
         Mayor.Abstain.voteComplete = skip.voteComplete;
@@ -31,6 +30,7 @@ public static class AddAbstain
     {
         public static void GenButton(PlayerControl p, MeetingHud __instance)
         {
+            if (CachedPlayer.LocalPlayer.PlayerControl != Mayor.mayor) return;
             var skip = __instance.SkipVoteButton;
             Mayor.Abstain = Object.Instantiate(skip, skip.transform.parent);
             Mayor.Abstain.Parent = __instance;
@@ -53,8 +53,7 @@ public static class AddAbstain
     {
         public static void Postfix(MeetingHud __instance)
         {
-            if (!CachedPlayer.LocalPlayer.PlayerControl == Mayor.mayor) return;
-            UpdateButton(Mayor.mayor, __instance);
+            if (CachedPlayer.LocalPlayer.PlayerControl == Mayor.mayor) UpdateButton(Mayor.mayor, __instance);
         }
     }
 
@@ -366,8 +365,7 @@ public class RegisterExtraVotes
                     var playerInfo = GameData.Instance.GetPlayerById(voteState.VoterId);
                     if (playerInfo == null)
                     {
-                        Error(string.Format("Couldn't find player info for voter: {0}",
-                            voteState.VoterId));
+                        Error(string.Format("Couldn't find player info for voter: {0}", voteState.VoterId));
                     }
                     else if (i == 0 && voteState.SkippedVote)
                     {
@@ -385,10 +383,7 @@ public class RegisterExtraVotes
             foreach (var role in RoleInfo.getRoleInfoForPlayer(Mayor.mayor))
             {
                 var playerInfo = GameData.Instance.GetPlayerById(Mayor.mayor.PlayerId);
-                /*
-                var anonVotesOption = PlayerControl.GameOptions.AnonymousVotes;
-                PlayerControl.GameOptions.AnonymousVotes = true;
-                */
+
                 foreach (var extraVote in Mayor.ExtraVotes)
                 {
                     if (extraVote == PlayerVoteArea.HasNotVoted ||
@@ -414,8 +409,6 @@ public class RegisterExtraVotes
                         }
                     }
                 }
-
-                //PlayerControl.GameOptions.AnonymousVotes = anonVotesOption;
             }
 
             return false;

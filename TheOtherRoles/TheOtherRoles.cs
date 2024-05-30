@@ -350,12 +350,12 @@ public static class TheOtherRoles
         public static bool voteTwice = true;
         public static bool SabotageRemoteMeetings = true;
 
-        public static int VoteBank { get; set; }
-        public static bool SelfVote { get; set; }
+        public static int VoteBank;
+        public static bool SelfVote;
 
-        public static bool VotedOnce { get; set; }
+        public static bool VotedOnce;
         public static List<byte> ExtraVotes = new List<byte>();
-        public static PlayerVoteArea Abstain { get; set; }
+        public static PlayerVoteArea Abstain;
         public static bool CanVote => VoteBank > 0 && !SelfVote;
 
         public static Sprite getMeetingSprite()
