@@ -554,67 +554,54 @@ internal static class HudManagerStartPatch
                 var murderAttemptResult = checkMuderAttempt(Sheriff.sheriff, Sheriff.currentTarget);
                 if (murderAttemptResult == MurderAttemptResult.SuppressKill) return;
                 var target = Sheriff.currentTarget;
+                DeadPlayer.CustomDeathReason deathReason = DeadPlayer.CustomDeathReason.SheriffKill;
                 if (murderAttemptResult == MurderAttemptResult.PerformKill)
                 {
                     byte targetId = 0;
-                    if ((target != Mini.mini || Mini.isGrownUp()) &&
-                        (target.Data.Role.IsImpostor ||
-                         Jackal.jackal == target ||
-                         Sidekick.sidekick == target ||
-                         Juggernaut.juggernaut == target ||
-                         Werewolf.werewolf == target ||
-                         Swooper.swooper == target ||
-                         Pavlovsdogs.pavlovsowner == target ||
-                         Pavlovsdogs.pavlovsdogs.Any(p => p == target) ||
-                         (Sheriff.spyCanDieToSheriff && Spy.spy == target) ||
-                         (Sheriff.canKillNeutrals &&
-                         (Akujo.akujo == target || isKiller(target) ||
-                           (Survivor.survivor.Contains(target) && Sheriff.canKillSurvivor) ||
-                           (Jester.jester == target && Sheriff.canKillJester) ||
-                           (Vulture.vulture == target && Sheriff.canKillVulture) ||
-                           (Thief.thief == target && Sheriff.canKillThief) ||
-                           (Amnisiac.amnisiac == target && Sheriff.canKillAmnesiac) ||
-                           (Lawyer.lawyer == target && Sheriff.canKillLawyer) ||
-                           (Executioner.executioner == target && Sheriff.canKillExecutioner) ||
-                           (Pursuer.pursuer.Contains(target) && Sheriff.canKillPursuer) ||
-                           (Doomsayer.doomsayer == target && Sheriff.canKillDoomsayer)))))
+
+                    if (Sheriff.sheriffCanKillNeutral(target))
                     {
                         targetId = target.PlayerId;
                     }
-                    else if (Sheriff.misfireKills == 0)
+                    else
                     {
-                        targetId = CachedPlayer.LocalPlayer.PlayerId;
-                    }
-                    else if (Sheriff.misfireKills == 1)
+                        switch (Sheriff.misfireKills)
                     {
+                            case 0:
+                                targetId = CachedPlayer.LocalPlayer.PlayerId;
+                                deathReason = DeadPlayer.CustomDeathReason.SheriffMisfire;
+                                break;
+                            case 1:
                         targetId = target.PlayerId;
-                    }
-                    else if (Sheriff.misfireKills == 2)
-                    {
+                                deathReason = DeadPlayer.CustomDeathReason.SheriffMisadventure;
+                                break;
+                            case 2:
                         targetId = target.PlayerId;
-                        var killWriter2 = AmongUsClient.Instance.StartRpcImmediately(
-                            CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.UncheckedMurderPlayer,
-                            SendOption.Reliable);
+                                var killWriter2 = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
+                                    (byte)CustomRPC.UncheckedMurderPlayer, SendOption.Reliable);
                         killWriter2.Write(Sheriff.sheriff.Data.PlayerId);
                         killWriter2.Write(CachedPlayer.LocalPlayer.PlayerId);
                         killWriter2.Write(byte.MaxValue);
                         AmongUsClient.Instance.FinishRpcImmediately(killWriter2);
-                        RPCProcedure.uncheckedMurderPlayer(Sheriff.sheriff.Data.PlayerId,
-                            CachedPlayer.LocalPlayer.PlayerId, byte.MaxValue);
+                                RPCProcedure.uncheckedMurderPlayer(Sheriff.sheriff.Data.PlayerId, CachedPlayer.LocalPlayer.PlayerId, byte.MaxValue);
+                                deathReason = DeadPlayer.CustomDeathReason.SheriffMisfire;
+                                break;
+                    }
                     }
 
-                    var killWriter = AmongUsClient.Instance.StartRpcImmediately(
-                        CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.UncheckedMurderPlayer,
-                        SendOption.Reliable);
+                    var killWriter = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
+                        (byte)CustomRPC.UncheckedMurderPlayer, SendOption.Reliable
+                    );
                     killWriter.Write(Sheriff.sheriff.Data.PlayerId);
                     killWriter.Write(targetId);
                     killWriter.Write(byte.MaxValue);
                     AmongUsClient.Instance.FinishRpcImmediately(killWriter);
                     RPCProcedure.uncheckedMurderPlayer(Sheriff.sheriff.Data.PlayerId, targetId, byte.MaxValue);
+                    GameHistory.overrideDeathReasonAndKiller(target, deathReason, Sheriff.sheriff);
                 }
 
-                if (murderAttemptResult == MurderAttemptResult.BodyGuardKill)
-                    checkMurderAttemptAndKill(Sheriff.sheriff, target);
+
+                if (murderAttemptResult == MurderAttemptResult.BodyGuardKill) checkMurderAttemptAndKill(Sheriff.sheriff, target);
 
                 sheriffKillButton.Timer = sheriffKillButton.MaxTimer;
                 Sheriff.currentTarget = null;
@@ -2226,8 +2213,8 @@ internal static class HudManagerStartPatch
                 /* On Use */
                 if (checkAndDoVetKill(Bomber.currentTarget)) return;
                 checkWatchFlash(Bomber.currentTarget);
-                var bombWriter = AmongUsClient.Instance.StartRpcImmediately(
-                    CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.GiveBomb, SendOption.Reliable);
+                var bombWriter = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
+                    (byte)CustomRPC.GiveBomb, SendOption.Reliable);
                 bombWriter.Write(Bomber.currentTarget.PlayerId);
                 AmongUsClient.Instance.FinishRpcImmediately(bombWriter);
                 RPCProcedure.giveBomb(Bomber.currentTarget.PlayerId);

@@ -323,17 +323,24 @@ public static class PlayerControlFixedUpdatePatch
     {
         if (Vampire.vampire == null || Vampire.vampire != CachedPlayer.LocalPlayer.PlayerControl) return;
 
-        var target = Spy.spy != null || Sidekick.wasSpy || Jackal.wasSpy
-            ? Spy.impostorsCanKillAnyone
-                ? setTarget(false, true)
-                : setTarget(true, true,
-                    [
-                        Spy.spy, Sidekick.wasTeamRed ? Sidekick.sidekick : null,
-                        Jackal.wasTeamRed ? Jackal.jackal : null
-                    ])
-            : setTarget(true, true,
-                [Sidekick.wasImpostor ? Sidekick.sidekick : null, Jackal.wasImpostor ? Jackal.jackal : null]);
-        var targetNearGarlic = false;
+        PlayerControl target = null;
+        if (Spy.spy != null || Sidekick.wasSpy || Jackal.wasSpy)
+        {
+            if (Spy.impostorsCanKillAnyone)
+            {
+                target = setTarget(false, true);
+            }
+            else
+            {
+                target = setTarget(true, true, [Spy.spy, Sidekick.wasTeamRed ? Sidekick.sidekick : null, Jackal.wasTeamRed ? Jackal.jackal : null]);
+            }
+        }
+        else
+        {
+            target = setTarget(true, true, [Sidekick.wasImpostor ? Sidekick.sidekick : null, Jackal.wasImpostor ? Jackal.jackal : null]);
+        }
+
+        bool targetNearGarlic = false;
         if (target != null)
             foreach (var garlic in Garlic.garlics)
                 if (Vector2.Distance(garlic.garlic.transform.position, target.transform.position) <= 1.91f)
@@ -471,18 +478,24 @@ public static class PlayerControlFixedUpdatePatch
             return;
         }
 
-        PlayerControl target = Spy.spy != null || Sidekick.wasSpy || Jackal.wasSpy
-            ? Spy.impostorsCanKillAnyone
-                ? setTarget(false, true)
-                : setTarget(true, true,
-                    [
-                        Spy.spy, Sidekick.wasTeamRed ? Sidekick.sidekick : null,
-                        Jackal.wasTeamRed ? Jackal.jackal : null
-                    ])
-            : setTarget(true, true,
-                [Sidekick.wasImpostor ? Sidekick.sidekick : null, Jackal.wasImpostor ? Jackal.jackal : null]);
-        FastDestroyableSingleton<HudManager>.Instance.KillButton
-            .SetTarget(target); // Includes setPlayerOutline(target, Palette.ImpstorRed);
+        PlayerControl target;
+        if (Spy.spy != null || Sidekick.wasSpy || Jackal.wasSpy)
+        {
+            if (Spy.impostorsCanKillAnyone)
+            {
+                target = setTarget(false, true);
+            }
+            else
+            {
+                target = setTarget(true, true, [Spy.spy, Sidekick.wasTeamRed ? Sidekick.sidekick : null, Jackal.wasTeamRed ? Jackal.jackal : null]);
+            }
+        }
+        else
+        {
+            target = setTarget(true, true, [Sidekick.wasImpostor ? Sidekick.sidekick : null, Jackal.wasImpostor ? Jackal.jackal : null]);
+        }
+
+        FastDestroyableSingleton<HudManager>.Instance.KillButton.SetTarget(target); // Includes setPlayerOutline(target, Palette.ImpstorRed);
     }
 
     private static void warlockSetTarget()
@@ -630,8 +643,8 @@ public static class PlayerControlFixedUpdatePatch
                         }
                     }
 
-                    if (Tracker.trackingMode == 1 || Tracker.trackingMode == 2) Arrow.UpdateProximity(position);
-                    if (Tracker.trackingMode == 0 || Tracker.trackingMode == 2)
+                    if (Tracker.trackingMode is 1 or 2) Arrow.UpdateProximity(position);
+                    if (Tracker.trackingMode is 0 or 2)
                     {
                         Tracker.arrow.Update(position);
                         Tracker.arrow.arrow.SetActive(trackedOnMap);
@@ -640,7 +653,7 @@ public static class PlayerControlFixedUpdatePatch
                 }
                 else
                 {
-                    if (Tracker.trackingMode == 0 || Tracker.trackingMode == 2) Tracker.arrow.Update();
+                    if (Tracker.trackingMode is 0 or 2) Tracker.arrow.Update();
                 }
             }
             else if (Tracker.tracker.Data.IsDead)

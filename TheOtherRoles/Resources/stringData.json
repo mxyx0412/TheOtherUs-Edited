@@ -2544,6 +2544,10 @@
         "0": "DOUSE",
         "13": "\u6d47\u6cb9"
     },
+    "IgniteText": {
+        "0": "LGNITE",
+        "13": "\u70b9\u706b"
+    },
     "EraserText": {
         "0": "EARSE",
         "13": "\u62b9\u9664"
@@ -2555,10 +2559,6 @@
     "HackerText": {
         "0": "HARK",
         "13": "\u9ed1\u5165"
-    },
-    "IgniteText": {
-        "0": "LGNITE",
-        "13": "\u7eb5\u706b"
     },
     "LighterText": {
         "0": "LIGET",
@@ -3248,7 +3248,7 @@
     },
     "Arsonist": {
         "0": "Arsonist",
-        "13": "\u7eb5\u706b\u72af"
+        "13": "\u7eb5\u706b\u72c2"
     },
     "ArsonistIntroDesc": {
         "13": "\u706b\u7130\u554a\u8d50\u4e88\u6211\u529b\u91cf\uff01"

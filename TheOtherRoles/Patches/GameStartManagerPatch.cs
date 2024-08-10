@@ -252,7 +252,7 @@ public class GameStartManagerPatch
 
             if (AmongUsClient.Instance.AmHost)
             {
-                var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, 
+                var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
                     (byte)CustomRPC.ShareGamemode, SendOption.Reliable, -1);
                 writer.Write((byte)MapOption.gameMode);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);

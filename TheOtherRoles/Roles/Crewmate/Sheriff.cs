@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 
 namespace TheOtherRoles.Roles.Crewmate;
 
@@ -32,6 +33,32 @@ public static class Sheriff
         sheriff = deputy;
         currentTarget = null;
         cooldown = CustomOptionHolder.sheriffCooldown.getFloat();
+    }
+
+    public static bool sheriffCanKillNeutral(PlayerControl target)
+    {
+        return (target != Mini.mini || Mini.isGrownUp()) &&
+               (target.Data.Role.IsImpostor ||
+                Jackal.jackal == target ||
+                Sidekick.sidekick == target ||
+                Juggernaut.juggernaut == target ||
+                Werewolf.werewolf == target ||
+                Swooper.swooper == target ||
+                Pavlovsdogs.pavlovsowner == target ||
+                Pavlovsdogs.pavlovsdogs.Any(p => p == target) ||
+                (spyCanDieToSheriff && Spy.spy == target) ||
+                (canKillNeutrals &&
+                    (Akujo.akujo == target ||
+                     isKiller(target) ||
+                     (Survivor.survivor.Contains(target) && canKillSurvivor) ||
+                     (Jester.jester == target && canKillJester) ||
+                     (Vulture.vulture == target && canKillVulture) ||
+                     (Thief.thief == target && canKillThief) ||
+                     (Amnisiac.amnisiac == target && canKillAmnesiac) ||
+                     (Lawyer.lawyer == target && canKillLawyer) ||
+                     (Executioner.executioner == target && canKillExecutioner) ||
+                     (Pursuer.pursuer.Contains(target) && canKillPursuer) ||
+                     (Doomsayer.doomsayer == target && canKillDoomsayer))));
     }
 
     public static void clearAndReload()

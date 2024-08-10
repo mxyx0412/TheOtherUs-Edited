@@ -104,7 +104,7 @@ public class CustomColors
         var shadowlist = Palette.ShadowColors.ToList();
 
         var id = 50000;
-        foreach (var entry in CustomColorData)
+        foreach (var entry in CustomColorData.OrderBy(entry => (int)entry.Key))
         {
             var colorType = entry.Key;
             var (color, shadow, isLighterColor) = entry.Value;

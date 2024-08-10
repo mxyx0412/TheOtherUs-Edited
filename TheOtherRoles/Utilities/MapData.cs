@@ -239,7 +239,7 @@ public class MapData
             newPosition = MapSpawnPosition()[rnd.Next(MapSpawnPosition().Count)];
             CachedPlayer.LocalPlayer.PlayerControl.NetTransform.RpcSnapTo(MapSpawnPosition()[rnd.Next(MapSpawnPosition().Count)]);
         }
-        Debug($"Span to Vector3: {newPosition}");
+        Message($"Span to Vector3: {newPosition.x}, {newPosition.y}, {newPosition.z}");
     }
 
     public static readonly Dictionary<PlayerControl, Vent> PlayerVentDic = new();
