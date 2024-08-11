@@ -24,7 +24,7 @@ public class CameraPatch
     {
         // Don't waste network traffic if we're out of time.
         if (MapOption.restrictDevices > 0 && MapOption.restrictCamerasTime > 0f &&
-            CachedPlayer.LocalPlayer.PlayerControl.isAlive() &&
+            CachedPlayer.LocalPlayer.PlayerControl.IsAlive() &&
             CachedPlayer.LocalPlayer.PlayerControl != Hacker.hacker &&
             CachedPlayer.LocalPlayer.PlayerControl != SecurityGuard.securityGuard)
         {

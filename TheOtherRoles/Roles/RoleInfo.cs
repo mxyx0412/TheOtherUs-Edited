@@ -246,8 +246,6 @@ public class RoleInfo
         shifter,
     ];
 
-    private static string ReadmePage = "";
-
     public static List<RoleInfo> getRoleInfoForPlayer(PlayerControl p, bool showModifier = true)
     {
         var infos = new List<RoleInfo>();
@@ -528,22 +526,4 @@ public class RoleInfo
         }
         return null;
     }
-
-    public static async Task loadReadme()
-    {
-        if (ReadmePage == "")
-        {
-            var client = new HttpClient();
-            var response = await client.GetAsync("https://raw.githubusercontent.com/mxyx-club/TheOtherUs-Edited/Beta/README.md".GithubUrl());
-            response.EnsureSuccessStatusCode();
-            var httpres = await response.Content.ReadAsStringAsync();
-            ReadmePage = httpres;
-        }
-    }
-
-    public static string GetRoleDescription(RoleInfo roleInfo)
-    {
-        return roleInfo.fullDescription;
-    }
-
 }

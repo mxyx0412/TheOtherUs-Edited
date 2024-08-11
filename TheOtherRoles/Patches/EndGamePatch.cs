@@ -101,8 +101,9 @@ public class OnGameEndPatch
 
     public static void Postfix(AmongUsClient __instance, [HarmonyArgument(0)] ref EndGameResult endGameResult)
     {
-        AdditionalTempData.clear();
+        Message("游戏结束");
 
+        AdditionalTempData.clear();
         foreach (var playerControl in CachedPlayer.AllPlayers)
         {
             var roles = RoleInfo.getRoleInfoForPlayer(playerControl);

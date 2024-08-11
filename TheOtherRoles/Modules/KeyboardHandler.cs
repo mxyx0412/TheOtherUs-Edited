@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Hazel;
+using TheOtherRoles.Helper;
 using TheOtherRoles.Objects;
 using TheOtherRoles.Utilities;
 using UnityEngine;
@@ -14,13 +15,14 @@ public class CommandHandler
 {
     //private static readonly string passwordHash = "d1f51dfdfd8d38027fd2ca9dfeb299399b5bdee58e6c0b3b5e9a45cd4e502848";
     private static readonly Random random = new((int)DateTime.Now.Ticks);
-    private static readonly List<PlayerControl> bots = new();
+    private static readonly List<PlayerControl> bots = [];
     private static void Postfix(KeyboardJoystick __instance)
     {
         if (AmongUsClient.Instance && (AmongUsClient.Instance.AmHost || MapOption.DebugMode))
         {
             // 生成假人
-            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.F) && Input.GetKeyDown(KeyCode.Return))
+            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.F) && Input.GetKeyDown(KeyCode.Return)
+                && AmongUsClient.Instance.NetworkMode != NetworkModes.OnlineGame && InGame)
             {
                 var playerControl = UnityEngine.Object.Instantiate(AmongUsClient.Instance.PlayerPrefab);
                 _ = playerControl.PlayerId = (byte)GameData.Instance.GetAvailableId();
@@ -36,16 +38,8 @@ public class CommandHandler
                 playerControl.SetColor((byte)random.Next(Palette.PlayerColors.Length));
                 GameData.Instance.RpcSetTasks(playerControl.PlayerId, Array.Empty<byte>());
             }
-            // 结束游戏
-            if (InGame && Input.GetKey(KeyCode.L) && Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Return))
-            {
-                var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
-                    (byte)CustomRPC.ForceEnd, SendOption.Reliable);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCProcedure.forceEnd();
-            }
             // 强制开始会议或结束会议
-            if (Input.GetKey(KeyCode.M) && Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Return))
+            if (Input.GetKey(KeyCode.M) && Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Return) && InGame)
             {
                 if (IsMeeting) MeetingHud.Instance.RpcClose();
                 else CachedPlayer.LocalPlayer.PlayerControl.NoCheckStartMeeting(null, true);

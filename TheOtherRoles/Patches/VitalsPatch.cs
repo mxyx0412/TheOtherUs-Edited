@@ -31,7 +31,7 @@ public class VitalsPatch
     {
         // Don't waste network traffic if we're out of time.
         if (MapOption.restrictDevices > 0 && MapOption.restrictVitalsTime > 0f &&
-            CachedPlayer.LocalPlayer.PlayerControl.isAlive() && CachedPlayer.LocalPlayer.PlayerControl != Hacker.hacker)
+            CachedPlayer.LocalPlayer.PlayerControl.IsAlive() && CachedPlayer.LocalPlayer.PlayerControl != Hacker.hacker)
         {
             var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
                 (byte)CustomRPC.UseVitalsTime, SendOption.Reliable);

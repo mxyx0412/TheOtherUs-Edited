@@ -554,7 +554,6 @@ internal static class HudManagerStartPatch
                 var murderAttemptResult = checkMuderAttempt(Sheriff.sheriff, Sheriff.currentTarget);
                 if (murderAttemptResult == MurderAttemptResult.SuppressKill) return;
                 var target = Sheriff.currentTarget;
-                DeadPlayer.CustomDeathReason deathReason = DeadPlayer.CustomDeathReason.SheriffKill;
                 if (murderAttemptResult == MurderAttemptResult.PerformKill)
                 {
                     byte targetId = 0;
@@ -566,27 +565,24 @@ internal static class HudManagerStartPatch
                     else
                     {
                         switch (Sheriff.misfireKills)
-                    {
+                        {
                             case 0:
                                 targetId = CachedPlayer.LocalPlayer.PlayerId;
-                                deathReason = DeadPlayer.CustomDeathReason.SheriffMisfire;
                                 break;
                             case 1:
-                        targetId = target.PlayerId;
-                                deathReason = DeadPlayer.CustomDeathReason.SheriffMisadventure;
+                                targetId = target.PlayerId;
                                 break;
                             case 2:
-                        targetId = target.PlayerId;
+                                targetId = target.PlayerId;
                                 var killWriter2 = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
                                     (byte)CustomRPC.UncheckedMurderPlayer, SendOption.Reliable);
-                        killWriter2.Write(Sheriff.sheriff.Data.PlayerId);
-                        killWriter2.Write(CachedPlayer.LocalPlayer.PlayerId);
-                        killWriter2.Write(byte.MaxValue);
-                        AmongUsClient.Instance.FinishRpcImmediately(killWriter2);
+                                killWriter2.Write(Sheriff.sheriff.Data.PlayerId);
+                                killWriter2.Write(CachedPlayer.LocalPlayer.PlayerId);
+                                killWriter2.Write(byte.MaxValue);
+                                AmongUsClient.Instance.FinishRpcImmediately(killWriter2);
                                 RPCProcedure.uncheckedMurderPlayer(Sheriff.sheriff.Data.PlayerId, CachedPlayer.LocalPlayer.PlayerId, byte.MaxValue);
-                                deathReason = DeadPlayer.CustomDeathReason.SheriffMisfire;
                                 break;
-                    }
+                        }
                     }
 
                     var killWriter = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
@@ -597,7 +593,6 @@ internal static class HudManagerStartPatch
                     killWriter.Write(byte.MaxValue);
                     AmongUsClient.Instance.FinishRpcImmediately(killWriter);
                     RPCProcedure.uncheckedMurderPlayer(Sheriff.sheriff.Data.PlayerId, targetId, byte.MaxValue);
-                    GameHistory.overrideDeathReasonAndKiller(target, deathReason, Sheriff.sheriff);
                 }
 
 
@@ -3958,9 +3953,8 @@ internal static class HudManagerStartPatch
                 // Steal role if survived.
                 if (!Thief.thief.Data.IsDead && result == MurderAttemptResult.PerformKill)
                 {
-                    var writer = AmongUsClient.Instance.StartRpcImmediately(
-                        CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ThiefStealsRole,
-                        SendOption.Reliable);
+                    var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
+                        (byte)CustomRPC.ThiefStealsRole, SendOption.Reliable);
                     writer.Write(target.PlayerId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     RPCProcedure.thiefStealsRole(target.PlayerId);

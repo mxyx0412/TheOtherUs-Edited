@@ -143,10 +143,9 @@ public static class ChatCommands
             if (chat.StartsWith("/m") && InGame)
             {
                 var localRole = RoleInfo.getRoleInfoForPlayer(CachedPlayer.LocalPlayer.PlayerControl);
-                var roleInfo = "";
                 for (var i = 0; i < localRole.Count; i++)
                 {
-                    roleInfo = RoleInfo.GetRoleDescription(localRole[i]);
+                    var roleInfo = RoleInfo.getRoleDescription(localRole[i].name);
 
                     __instance.AddChat(CachedPlayer.LocalPlayer.PlayerControl, $"{localRole[i].name}:\n {roleInfo}\n");
 

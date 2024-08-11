@@ -69,8 +69,6 @@ public enum LogLevel
 public static class Helpers
 {
     public static Dictionary<string, Sprite> CachedSprites = new();
-    public static Sprite teamCultistChat;
-    public static Sprite teamLoverChat;
 
     public static bool zoomOutStatus;
 
@@ -322,17 +320,11 @@ public static class Helpers
         else if (!player.Data.Role.IsImpostor && !isNeutral(player)) killerTeam = "CrewmateRolesText".Translate();
         return killerTeam;
     }
+
     public static bool ShowButtons =>
         !(MapBehaviour.Instance && MapBehaviour.Instance.IsOpen) &&
         !MeetingHud.Instance &&
         !ExileController.Instance;
-
-    public static bool canAlwaysBeGuessed(RoleId roleId)
-    {
-        var guessable = false;
-        if (roleId == RoleId.Cursed) guessable = true;
-        return guessable;
-    }
 
     public static bool flipBitwise(bool bit)
     {
@@ -393,7 +385,6 @@ public static class Helpers
         return roleCouldUse;
     }
 
-
     public static SabatageTypes getActiveSabo()
     {
         foreach (var task in CachedPlayer.LocalPlayer.PlayerControl.myTasks.GetFastEnumerator())
@@ -431,6 +422,7 @@ public static class Helpers
         var sabSystem = ShipStatus.Instance.Systems[SystemTypes.Sabotage].CastFast<SabotageSystemType>();
         return sabSystem.Timer;
     }
+
     public static bool canUseSabotage()
     {
         var sabSystem = ShipStatus.Instance.Systems[SystemTypes.Sabotage].CastFast<SabotageSystemType>();
@@ -549,7 +541,6 @@ public static class Helpers
         }
     }
 
-
     public static void showTargetNameOnButtonExplicit(PlayerControl target, CustomButton button, string defaultText)
     {
         var text = defaultText;
@@ -557,12 +548,6 @@ public static class Helpers
         else text = target.Data.PlayerName; // Set text to playername
         button.actionButton.OverrideText(text);
         button.showButtonText = true;
-    }
-
-    public static bool isInvisible(PlayerControl player)
-    {
-        if (Swooper.swooper != null && Swooper.swooper == player && Swooper.isInvisable) return true;
-        return false;
     }
 
     public static Sprite loadSpriteFromResources(string path, float pixelsPerUnit, bool cache = true)
@@ -714,6 +699,13 @@ public static class Helpers
         return role;
     }
 
+    public static PlayerControl GetHost()
+    {
+        var host = GameData.Instance.GetHost();
+        if (host != null) return playerById(host.PlayerId);
+        return null;
+    }
+
     public static PlayerControl playerById(byte id)
     {
         foreach (PlayerControl player in CachedPlayer.AllPlayers)
@@ -805,7 +797,6 @@ public static class Helpers
         return cs(roleInfo.color, $"{roleInfo.name}: {roleInfo.shortDescription}");
     }
 
-
     public static bool isDark(byte playerId)
     {
         return playerId % 2 == 0;
@@ -814,9 +805,8 @@ public static class Helpers
     public static bool isLighterColor(PlayerControl target)
     {
         if (!MapOption.randomLigherPlayer) return CustomColors.lighterColors.Contains(target.Data.DefaultOutfit.ColorId);
-        return isDark(target.PlayerId);
+        return !isDark(target.PlayerId);
     }
-
 
     public static TextMeshPro getFirst(this TextMeshPro[] text)
     {
@@ -885,21 +875,6 @@ public static class Helpers
         return count;
     }
 
-    private static Sprite roleSummaryBackground;
-    public static Sprite getRoleSummaryBackground()
-    {
-        if (roleSummaryBackground != null) return roleSummaryBackground;
-        roleSummaryBackground = loadSpriteFromResources("TheOtherRoles.Resources.LobbyRoleInfo.TeamScreen.png", 110f);
-        return roleSummaryBackground;
-    }
-
-    private static Sprite menuBackground;
-    public static Sprite getMenuBackground()
-    {
-        if (menuBackground != null) return menuBackground;
-        menuBackground = loadSpriteFromResources("TheOtherRoles.Resources.LobbyRoleInfo.RoleListScreen.png", 110f);
-        return menuBackground;
-    }
     public static bool isCustomServer()
     {
         if (FastDestroyableSingleton<ServerManager>.Instance == null) return false;
@@ -907,9 +882,24 @@ public static class Helpers
         return n is not StringNames.ServerNA and not StringNames.ServerEU and not StringNames.ServerAS;
     }
 
-    public static bool isDead(this PlayerControl player)
+    public static bool IsAlive(this GameData.PlayerInfo player)
     {
-        return player == null || player?.Data?.IsDead == true || player?.Data?.Disconnected == true;
+        return player != null && !player.Disconnected && !player.IsDead;
+    }
+
+    public static bool IsDead(this GameData.PlayerInfo player)
+    {
+        return player == null || player.Disconnected || player.IsDead;
+    }
+
+    public static bool IsAlive(this PlayerControl player)
+    {
+        return player != null && !player.Data.Disconnected && !player.Data.IsDead;
+    }
+
+    public static bool IsDead(this PlayerControl player)
+    {
+        return player == null || player.Data.Disconnected || player.Data.IsDead;
     }
 
     public static void setInvisable(PlayerControl player)
@@ -920,23 +910,6 @@ public static class Helpers
         invisibleWriter.Write(byte.MinValue);
         AmongUsClient.Instance.FinishRpcImmediately(invisibleWriter);
         RPCProcedure.setInvisibleGen(player.PlayerId, byte.MinValue);
-    }
-
-    public static bool isAlive(this PlayerControl player)
-    {
-        return !isDead(player);
-    }
-
-    public static bool canBeErased(this PlayerControl player)
-    {
-        return player != Jackal.jackal
-            && player != Juggernaut.juggernaut
-            && player != Swooper.swooper
-            && player != Sidekick.sidekick
-            && !Jackal.formerJackals.Any(x => x == player)
-            && player != Werewolf.werewolf
-            && player != Pavlovsdogs.pavlovsowner
-            && !Pavlovsdogs.pavlovsdogs.Any(x => x == player);
     }
 
     public static bool shouldShowGhostInfo()
@@ -985,24 +958,24 @@ public static class Helpers
         shipStatus.RpcUpdateSystem(systemType, amount);
     }
 
-    public static bool isMira()
-    {
-        return GameOptionsManager.Instance.CurrentGameOptions.MapId == 1;
-    }
-
-    public static bool isAirship()
-    {
-        return GameOptionsManager.Instance.CurrentGameOptions.MapId == 4;
-    }
-
     public static bool isSkeld()
     {
         return GameOptionsManager.Instance.CurrentGameOptions.MapId == 0;
     }
 
+    public static bool isMira()
+    {
+        return GameOptionsManager.Instance.CurrentGameOptions.MapId == 1;
+    }
+
     public static bool isPolus()
     {
         return GameOptionsManager.Instance.CurrentGameOptions.MapId == 2;
+    }
+
+    public static bool isAirship()
+    {
+        return GameOptionsManager.Instance.CurrentGameOptions.MapId == 4;
     }
 
     public static bool isFungle()
@@ -1084,9 +1057,8 @@ public static class Helpers
         if (Ninja.isInvisble && Ninja.ninja == target) return true;
         if (Jackal.isInvisable && Jackal.jackal == target) return true;
         if (Swooper.isInvisable && Swooper.swooper == target) return true;
-        if (MapOption.hideOutOfSightNametags && InGame && !source.Data.IsDead && GameOptionsManager.Instance.currentNormalGameOptions.MapId != 5 &&
-            PhysicsHelpers.AnythingBetween(localPlayer.GetTruePosition(), target.GetTruePosition(),
-                Constants.ShadowMask, false)) return true;
+        if (MapOption.hideOutOfSightNametags && InGame && !source.Data.IsDead && isFungle()
+            && PhysicsHelpers.AnythingBetween(localPlayer.GetTruePosition(), target.GetTruePosition(), Constants.ShadowMask, false)) return true;
         /*
         {
             float num = (isLightsActive() ? 2f : 1.25f);
@@ -1183,8 +1155,7 @@ public static class Helpers
         Chameleon.update(); // so that morphling and camo wont make the chameleons visible
     }
 
-    public static void showFlash(Color color, float duration = 1f, string message = "", bool fade = true,
-        float opacity = 100f)
+    public static void showFlash(Color color, float duration = 1f, string message = "")
     {
         if (FastDestroyableSingleton<HudManager>.Instance == null ||
             FastDestroyableSingleton<HudManager>.Instance.FullScreen == null) return;
@@ -1218,8 +1189,8 @@ public static class Helpers
         })));
     }
 
-    // From TownOfUs
-    public static IEnumerator FlashCoroutine(Color color, float waitfor = 1f, float alpha = 0.3f)
+    // From TownOfUs-R
+    public static IEnumerator showFlashCoroutine(Color color, float waitfor = 1f, float alpha = 0.3f)
     {
         color.a = alpha;
         if (HudManager.InstanceExists && HudManager.Instance.FullScreen)
@@ -1250,8 +1221,7 @@ public static class Helpers
 
         // Modified vanilla checks
         if (AmongUsClient.Instance.IsGameOver) return MurderAttemptResult.SuppressKill;
-        if (killer == null || killer.Data == null || (killer.Data.IsDead && !ignoreIfKillerIsDead) ||
-            killer.Data.Disconnected)
+        if (killer == null || killer.Data == null || (killer.Data.IsDead && !ignoreIfKillerIsDead) || killer.Data.Disconnected)
             return MurderAttemptResult.SuppressKill; // Allow non Impostor kills compared to vanilla code
         if (target == null || target.Data == null || target.Data.IsDead || target.Data.Disconnected)
             return MurderAttemptResult.SuppressKill; // Allow killing players in vents compared to vanilla code
@@ -1293,7 +1263,7 @@ public static class Helpers
 
         // Kill the Body Guard and the killer if the target is guarded
 
-        if (BodyGuard.bodyguard != null && target == BodyGuard.guarded && isAlive(BodyGuard.bodyguard))
+        if (BodyGuard.bodyguard != null && target == BodyGuard.guarded && IsAlive(BodyGuard.bodyguard))
         {
             if (Medic.shielded != null && Medic.shielded == target)
             {
@@ -1397,7 +1367,7 @@ public static class Helpers
         }
 
         // Thief if hit crew only kill if setting says so, but also kill the thief.
-        else if (Thief.isFailedThiefKill(target, killer, targetRole))
+        else if (Thief.thief != null && killer == Thief.thief && !Thief.tiefCanKill(target, killer))
         {
             Thief.suicideFlag = true;
             return MurderAttemptResult.SuppressKill;
@@ -1505,18 +1475,6 @@ public static class Helpers
         return murder;
     }
 
-    public static List<PlayerControl> getKillerTeamMembers(PlayerControl player)
-    {
-        var team = new List<PlayerControl>();
-        foreach (PlayerControl p in CachedPlayer.AllPlayers)
-            if (player.Data.Role.IsImpostor && p.Data.Role.IsImpostor && player.PlayerId != p.PlayerId &&
-                team.All(x => x.PlayerId != p.PlayerId)) team.Add(p);
-            else if (player == Jackal.jackal && p == Sidekick.sidekick) team.Add(p);
-            else if (player == Sidekick.sidekick && p == Jackal.jackal) team.Add(p);
-
-        return team;
-    }
-
     public static void SetKillTimerUnchecked(this PlayerControl player, float time, float max = float.NegativeInfinity)
     {
         if (max == float.NegativeInfinity) max = time;
@@ -1525,12 +1483,12 @@ public static class Helpers
         FastDestroyableSingleton<HudManager>.Instance.KillButton.SetCoolDown(time, max);
     }
 
-    public static bool isRoleAlive(PlayerControl role)
+    public static bool isRoleAlive(PlayerControl player)
     {
         if (Mimic.mimic != null)
-            if (role == Mimic.mimic)
+            if (player == Mimic.mimic)
                 return false;
-        return role != null && isAlive(role);
+        return player != null && IsAlive(player);
     }
 
     public static bool isPlayerLover(PlayerControl player)
@@ -1545,32 +1503,6 @@ public static class Helpers
 
     public static PlayerControl getChatPartner(this PlayerControl player)
     {
-        /*
-        if (!Jackal.hasChat || Sidekick.sidekick == null) return Lovers.getPartner(player);
-
-        if (isPlayerLover(player) && !isTeamJackal(player))
-            return Lovers.getPartner(player);
-        if (isTeamJackal(player) && !isPlayerLover(player))
-        {
-            if (Jackal.jackal == player) return Sidekick.sidekick;
-            if (Sidekick.sidekick == player) return Jackal.jackal;
-        }
-        if (isPlayerLover(player) && isTeamJackal(player))
-        {
-            if (Jackal.jackal == player)
-            {
-                if (Jackal.chatTarget == 1) return Sidekick.sidekick;
-                else return Lovers.getPartner(player);
-            }
-
-            if (Sidekick.sidekick == player)
-            {
-                if (Sidekick.chatTarget == 1) return Jackal.jackal;
-                else return Lovers.getPartner(player);
-            }
-        }
-        return null;
-        */
         if (!player.isLover()) return player.getCultistPartner();
         if (!player.isTeamCultist()) return player.getPartner();
         if (player == Cultist.cultist)
@@ -1629,30 +1561,4 @@ public static class Helpers
         return AccessTools.Method(self.GetType(), nameof(Il2CppObjectBase.TryCast)).MakeGenericMethod(type)
             .Invoke(self, Array.Empty<object>());
     }
-
-    internal static int flipBitwise(int chatTarget)
-    {
-        throw new NotImplementedException();
-    }
-
-    /*
-    public static Sprite getTeamCultistChatButtonSprite()
-    {
-        if (teamCultistChat != null)
-        {
-            return teamCultistChat;
-        }
-        teamCultistChat = loadSpriteFromResources("TheOtherRoles.Resources.TeamJackalChat.png", 115f);
-        return teamCultistChat;
-    }
-
-    public static Sprite getLoversChatButtonSprite()
-    {
-        if (teamLoverChat != null)
-        {
-            return teamLoverChat;
-        }
-        teamLoverChat = loadSpriteFromResources("TheOtherRoles.Resources.LoversChat.png", 150f);
-        return teamLoverChat;
-    }*/
 }

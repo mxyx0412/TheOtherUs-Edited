@@ -1,20 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using TheOtherRoles.Modules;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 namespace TheOtherRoles.Patches;
-
-public enum Team
-{
-    Impostor,
-    Neutral,
-    Crewmate,
-    Modifier,
-    Null
-}
 
 public static class LobbyRoleInfo
 {
@@ -44,7 +36,7 @@ public static class LobbyRoleInfo
         if (RolesSummaryUI != null) return;
 
         SpriteRenderer container = new GameObject("RoleSummaryMenuContainer").AddComponent<SpriteRenderer>();
-        container.sprite = getRoleSummaryBackground();
+        container.sprite = new ResourceSprite("LobbyRoleInfo.TeamScreen.png", 110f);
         container.transform.SetParent(HudManager.Instance.transform);
         container.gameObject.transform.SetLocalZ(-200);
         container.transform.localPosition = new Vector3(0, -0.2f, -50f);
@@ -59,7 +51,7 @@ public static class LobbyRoleInfo
         TextMeshPro newtitle = Object.Instantiate(textTemplate, container.transform);
         newtitle.text = getString("lobbyInfoSummary");
         newtitle.color = Color.white;
-        newtitle.outlineWidth = .25f;
+        newtitle.outlineWidth = 0.01f;
         newtitle.transform.localPosition = new Vector3(1f, 0.17f, -2f);
         newtitle.transform.localScale = Vector3.one * 2.5f;
 
@@ -68,24 +60,24 @@ public static class LobbyRoleInfo
         for (int i = 0; i < Teams.Count; i++)
         {
             string team = "";
-            Team teamid = Team.Null;
+            RoleTeam teamid = RoleTeam.Crewmate;
             switch (Teams[i])
             {
                 case "Impostors":
-                    team = cs(Palette.ImpostorRed, getString("lobbyInfoImpostor"));
-                    teamid = Team.Impostor;
+                    team = cs(Palette.ImpostorRed, getString("ImpostorRolesText"));
+                    teamid = RoleTeam.Impostor;
                     break;
                 case "Neutrals":
-                    team = cs(new Color32(76, 84, 78, 255), getString("lobbyInfoNeutral"));
-                    teamid = Team.Neutral;
+                    team = cs(new Color32(76, 84, 78, 255), getString("NeutralRolesText"));
+                    teamid = RoleTeam.Neutral;
                     break;
                 case "Crewmates":
-                    team = cs(Palette.CrewmateBlue, getString("lobbyInfoCrewmate"));
-                    teamid = Team.Crewmate;
+                    team = cs(Palette.CrewmateBlue, getString("CrewmateRolesText"));
+                    teamid = RoleTeam.Crewmate;
                     break;
                 case "Modifiers":
-                    team = cs(Color.yellow, getString("lobbyInfoModifier"));
-                    teamid = Team.Modifier;
+                    team = cs(Color.yellow, getString("ModifierRolesText"));
+                    teamid = RoleTeam.Modifier;
                     break;
             }
 
@@ -126,10 +118,10 @@ public static class LobbyRoleInfo
         }
     }
 
-    public static void roleInfosOnclick(string team, Team teamId)
+    public static void roleInfosOnclick(string team, RoleTeam teamId)
     {
         SpriteRenderer container = new GameObject("RoleListMenuContainer").AddComponent<SpriteRenderer>();
-        container.sprite = getMenuBackground();
+        container.sprite = new ResourceSprite("LobbyRoleInfo.RoleListScreen.png", 110f);
         container.transform.SetParent(HudManager.Instance.transform);
         container.transform.localPosition = new Vector3(0, 0.12f, -75f);
         container.transform.localScale = new Vector3(.7f, .7f, 1f);
@@ -141,7 +133,7 @@ public static class LobbyRoleInfo
 
         TextMeshPro newtitle = Object.Instantiate(textTemplate, container.transform);
         newtitle.text = team;
-        newtitle.outlineWidth = .25f;
+        newtitle.outlineWidth = 0.01f;
         newtitle.transform.localPosition = new Vector3(0f, 2.7f, -2f);
         newtitle.transform.localScale = Vector3.one * 2.5f;
 
@@ -150,10 +142,10 @@ public static class LobbyRoleInfo
         bool gameStarted = AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started;
         foreach (RoleInfo roleInfo in RoleInfo.allRoleInfos)
         {
-            if (roleInfo.roleTeam == RoleTeam.Modifier && teamId != Team.Modifier) continue;
-            else if (roleInfo.roleTeam == RoleTeam.Neutral && teamId != Team.Neutral) continue;
-            else if (roleInfo.roleTeam == RoleTeam.Impostor && teamId != Team.Impostor) continue;
-            else if (roleInfo.roleTeam == RoleTeam.Crewmate && teamId != Team.Crewmate) continue;
+            if (roleInfo.roleTeam == RoleTeam.Modifier && teamId != RoleTeam.Modifier) continue;
+            else if (roleInfo.roleTeam == RoleTeam.Neutral && teamId != RoleTeam.Neutral) continue;
+            else if (roleInfo.roleTeam == RoleTeam.Impostor && teamId != RoleTeam.Impostor) continue;
+            else if (roleInfo.roleTeam == RoleTeam.Crewmate && teamId != RoleTeam.Crewmate) continue;
 
             Transform buttonTransform = Object.Instantiate(buttonTemplate, container.transform);
             buttonTransform.name = cs(roleInfo.color, roleInfo.name) + " Button";
@@ -167,7 +159,7 @@ public static class LobbyRoleInfo
             label.text = cs(roleInfo.color, roleInfo.name);
             label.alignment = TextAlignmentOptions.Center;
             label.transform.localPosition = new Vector3(0, 0, label.transform.localPosition.z);
-            label.transform.localScale *= 1.55f;
+            label.transform.localScale *= 1.5f;
             PassiveButton button = buttonTransform.GetComponent<PassiveButton>();
             button.OnClick.RemoveAllListeners();
             Button.ButtonClickedEvent onClick = button.OnClick = new Button.ButtonClickedEvent();

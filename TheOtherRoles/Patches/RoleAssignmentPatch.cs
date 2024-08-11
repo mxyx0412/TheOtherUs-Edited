@@ -24,7 +24,7 @@ internal class GameOptionsDataGetAdjustedNumImpostorsPatch
 {
     public static void Postfix(ref int __result)
     {
-        if (MapOption.gameMode == CustomGamemodes.HideNSeek || MapOption.gameMode == CustomGamemodes.PropHunt)
+        if (MapOption.gameMode is CustomGamemodes.HideNSeek or CustomGamemodes.PropHunt)
         {
             var impCount = MapOption.gameMode == CustomGamemodes.HideNSeek
                 ? Mathf.RoundToInt(CustomOptionHolder.hideNSeekHunterCount.getFloat())
@@ -367,13 +367,18 @@ internal class RoleManagerSelectRolesPatch
             data.maxCrewmateRoles--;
         }
         /*
-        if (!isGuesserGamemode) {
-            if (!isEvilGuesser && isGuesser && Guesser.niceGuesser == null && data.crewmates.Count > 0 && data.maxCrewmateRoles > 0 && guesserFlag) { // Set Nice Guesser cause he won the lottery
+        if (!isGuesserGamemode) 
+        {
+            // Set Nice Guesser cause he won the lottery
+            if (!isEvilGuesser && isGuesser && Guesser.niceGuesser == null && data.crewmates.Count > 0 && data.maxCrewmateRoles > 0 && guesserFlag) 
+            {
                 byte niceGuesser = setRoleToRandomPlayer((byte)RoleId.NiceGuesser, data.crewmates);
                 data.crewmates.ToList().RemoveAll(x => x.PlayerId == niceGuesser);
                 data.maxCrewmateRoles--;
             }
-            else if (isEvilGuesser && isGuesser && Guesser.evilGuesser == null && data.impostors.Count > 0 && data.maxImpostorRoles > 0 && guesserFlag) { // Set Evil Guesser cause he won the lottery
+            // Set Evil Guesser cause he won the lottery
+            else if (isEvilGuesser && isGuesser && Guesser.evilGuesser == null && data.impostors.Count > 0 && data.maxImpostorRoles > 0 && guesserFlag) 
+            {
                 byte evilGuesser = setRoleToRandomPlayer((byte)RoleId.EvilGuesser, data.impostors);
                 data.impostors.ToList().RemoveAll(x => x.PlayerId == evilGuesser);
                 data.maxImpostorRoles--;
@@ -402,27 +407,37 @@ internal class RoleManagerSelectRolesPatch
 
         if (!data.crewSettings.ContainsKey((byte)RoleId.Sheriff)) data.crewSettings.Add((byte)RoleId.Sheriff, 0);
         /*
-                    if (!isGuesserGamemode) {
-                        if (!isEvilGuesser && Guesser.niceGuesser != null) { // Other Guesser (evil)
-                            if (CustomOptionHolder.guesserSpawnBothRate.getSelection() == 10 && data.impostors.Count > 0 && data.maxImpostorRoles > 0) { // Force other guesser (evil)
-                                byte bothGuesser = setRoleToRandomPlayer((byte)RoleId.EvilGuesser, data.impostors);
-                                data.impostors.ToList().RemoveAll(x => x.PlayerId == bothGuesser);
-                                data.maxImpostorRoles--;
-                            }
-                            else if (CustomOptionHolder.guesserSpawnBothRate.getSelection() < 10) // Dont force, add Guesser (evil) to the ticket system
-                                data.impSettings.Add((byte)RoleId.EvilGuesser, CustomOptionHolder.guesserSpawnBothRate.getSelection());
-                        }
-                        else if (isEvilGuesser && Guesser.evilGuesser != null) { // ELSE other Guesser (nice)
-                            if (CustomOptionHolder.guesserSpawnBothRate.getSelection() == 10 && data.crewmates.Count > 0 && data.maxCrewmateRoles > 0) { // Force other guesser (nice)
-                                byte bothGuesser = setRoleToRandomPlayer((byte)RoleId.NiceGuesser, data.crewmates);
-                                data.crewmates.ToList().RemoveAll(x => x.PlayerId == bothGuesser);
-                                data.maxCrewmateRoles--;
-                            }
-                            else if (CustomOptionHolder.guesserSpawnBothRate.getSelection() < 10) // Dont force, add Guesser (nice) to the ticket system
-                                data.crewSettings.Add((byte)RoleId.NiceGuesser, CustomOptionHolder.guesserSpawnBothRate.getSelection());
-                        }
-                    }
-                    */
+        if (!isGuesserGamemode)
+        {
+            // Other Guesser (evil)
+            if (!isEvilGuesser && Guesser.niceGuesser != null)
+            {
+                // Forceother guesser (evil)
+                if (CustomOptionHolder.guesserSpawnBothRate.getSelection() == 10 && data.impostors.Count > 0 && data.maxImpostorRoles > 0)
+                {
+                    byte bothGuesser = setRoleToRandomPlayer((byte)RoleId.EvilGuesser, data.impostors);
+                    data.impostors.ToList().RemoveAll(x => x.PlayerId == bothGuesser);
+                    data.maxImpostorRoles--;
+                }
+                // Dont force, add Guesser (evil) to the ticket system
+                else if (CustomOptionHolder.guesserSpawnBothRate.getSelection() < 10)
+                    data.impSettings.Add((byte)RoleId.EvilGuesser, CustomOptionHolder.guesserSpawnBothRate.getSelection());
+            }
+            // ELSE other Guesser (nice)
+            else if (isEvilGuesser && Guesser.evilGuesser != null) {
+                // Forceother guesser (nice)
+                if (CustomOptionHolder.guesserSpawnBothRate.getSelection() == 10 && data.crewmates.Count > 0 && data.maxCrewmateRoles > 0)
+                {
+                    byte bothGuesser = setRoleToRandomPlayer((byte)RoleId.NiceGuesser, data.crewmates);
+                    data.crewmates.ToList().RemoveAll(x => x.PlayerId == bothGuesser);
+                    data.maxCrewmateRoles--;
+                }
+                // Dont force, add Guesser (nice) to the ticket system
+                else if (CustomOptionHolder.guesserSpawnBothRate.getSelection() < 10)
+                    data.crewSettings.Add((byte)RoleId.NiceGuesser, CustomOptionHolder.guesserSpawnBothRate.getSelection());
+            }
+        }
+        */
     }
 
     private static void assignChanceRoles(RoleAssignmentData data)
@@ -578,8 +593,8 @@ internal class RoleManagerSelectRolesPatch
         var impModifiers = new List<RoleId>();
         var ensuredImpModifiers = new List<RoleId>();
         var chanceImpModifiers = new List<RoleId>();
-        allModifiers.AddRange(new List<RoleId>
-        {
+        allModifiers.AddRange(
+        [
             RoleId.Aftermath,
             RoleId.Tiebreaker,
             RoleId.Mini,
@@ -606,12 +621,12 @@ internal class RoleManagerSelectRolesPatch
             RoleId.Cursed,
             RoleId.Chameleon,
             RoleId.Shifter,
-        });
+        ]);
 
-        impModifiers.AddRange(new List<RoleId>
-        {
+        impModifiers.AddRange(
+        [
             RoleId.EvilGuesser
-        });
+        ]);
 
         if (rnd.Next(1, 101) <= CustomOptionHolder.modifierLover.getSelection() * 10)
         {
@@ -708,7 +723,7 @@ internal class RoleManagerSelectRolesPatch
         var crewPlayer = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
         impPlayer.RemoveAll(x => !x.Data.Role.IsImpostor);
         neutralPlayer.RemoveAll(x => !isNeutral(x));
-        neutralPlayer.RemoveAll(x => Doomsayer.doomsayer);
+        neutralPlayer.RemoveAll(x => x == Doomsayer.doomsayer);
         crewPlayer.RemoveAll(x => x.Data.Role.IsImpostor || isNeutral(x));
         assignGuesserGamemodeToPlayers(crewPlayer,
             Mathf.RoundToInt(CustomOptionHolder.guesserGamemodeCrewNumber.getFloat()));
@@ -793,8 +808,7 @@ internal class RoleManagerSelectRolesPatch
         return playerId;
     }
 
-    private static void assignModifiersToPlayers(List<RoleId> modifiers, List<PlayerControl> playerList,
-        int modifierCount)
+    private static void assignModifiersToPlayers(List<RoleId> modifiers, List<PlayerControl> playerList, int modifierCount)
     {
         modifiers = modifiers.OrderBy(x => rnd.Next()).ToList(); // randomize list
 
@@ -806,8 +820,15 @@ internal class RoleManagerSelectRolesPatch
 
         byte playerId;
 
-        var impPlayer = new List<PlayerControl>(playerList); //testing
+        var impPlayer = new List<PlayerControl>(playerList);
         impPlayer.RemoveAll(x => !x.Data.Role.IsImpostor);
+
+        var crewPlayer = new List<PlayerControl>(playerList);
+        crewPlayer.RemoveAll(x => x.Data.Role.IsImpostor || isNeutral(x));
+
+        var noImpPlayer = new List<PlayerControl>(playerList);
+        noImpPlayer.RemoveAll(x => x.Data.Role.IsImpostor);
+
 
         if (modifiers.Contains(RoleId.EvilGuesser))
         {
@@ -815,7 +836,6 @@ internal class RoleManagerSelectRolesPatch
             while (assassinCount < modifiers.FindAll(x => x == RoleId.EvilGuesser).Count)
             {
                 playerId = setModifierToRandomPlayer((byte)RoleId.EvilGuesser, impPlayer);
-                //   crewPlayer.RemoveAll(x => x.PlayerId == playerId);
                 playerList.RemoveAll(x => x.PlayerId == playerId);
                 assassinCount++;
             }
@@ -832,21 +852,21 @@ internal class RoleManagerSelectRolesPatch
 
         if (modifiers.Contains(RoleId.Specoality))
         {
-            var GuesserList = new List<PlayerControl>();
+            var GuesserList = new List<PlayerControl>(playerList);
 
             if (isGuesserGamemode)
             {
-                for (int i = 0; i < GuesserGM.guessers.Count; i++)
+                foreach (var player in GuesserGM.guessers)
                 {
-                    GuesserList.Add(GuesserGM.guessers[i].guesser);
+                    GuesserList.Add(player.guesser);
                     GuesserList.RemoveAll(x => !x.Data.Role.IsImpostor);
                 }
             }
             else
             {
-                for (int i = 0; i < Guesser.evilGuesser.Count; i++)
+                foreach (var player in Guesser.evilGuesser)
                 {
-                    GuesserList.Add(Guesser.evilGuesser[i]);
+                    GuesserList.Add(player);
                 }
 
             }
@@ -892,27 +912,23 @@ internal class RoleManagerSelectRolesPatch
             modifiers.RemoveAll(x => x == RoleId.Watcher);
         }
 
-        //交换师
-        var crewPlayer = new List<PlayerControl>(playerList);
-        crewPlayer.RemoveAll(x => x.Data.Role.IsImpostor || isNeutral(x));
-
         if (modifiers.Contains(RoleId.Shifter))
         {
-            var crewPlayerS = new List<PlayerControl>(playerList);
+            var shifterCrewPlayer = new List<PlayerControl>(playerList);
             if (Shifter.shiftALLNeutra)
             {
-                crewPlayerS.RemoveAll(x => x.Data.Role.IsImpostor
-                                           || x == Jackal.jackal
-                                           || x == Sidekick.sidekick
-                                           || x == Lawyer.lawyer
-                                           || Pavlovsdogs.pavlovsowner
-                                           || Pavlovsdogs.pavlovsdogs.Any(p => p.PlayerId == x.PlayerId));
+                shifterCrewPlayer.RemoveAll(x => x.Data.Role.IsImpostor
+                                        || x == Jackal.jackal
+                                        || x == Sidekick.sidekick
+                                        || x == Lawyer.lawyer
+                                        || Pavlovsdogs.pavlovsowner
+                                        || Pavlovsdogs.pavlovsdogs.Any(p => p.PlayerId == x.PlayerId));
             }
             else
             {
-                crewPlayerS.RemoveAll(x => x.Data.Role.IsImpostor || isNeutral(x));
+                shifterCrewPlayer.RemoveAll(x => x.Data.Role.IsImpostor || isNeutral(x));
             }
-            playerId = setModifierToRandomPlayer((byte)RoleId.Shifter, crewPlayerS);
+            playerId = setModifierToRandomPlayer((byte)RoleId.Shifter, shifterCrewPlayer);
             crewPlayer.RemoveAll(x => x.PlayerId == playerId);
             playerList.RemoveAll(x => x.PlayerId == playerId);
             modifiers.RemoveAll(x => x == RoleId.Shifter);
@@ -921,13 +937,13 @@ internal class RoleManagerSelectRolesPatch
         if (modifiers.Contains(RoleId.Sunglasses))
         {
             var sunglassesCount = 0;
-            var crewPlayerS = new List<PlayerControl>(playerList);
-            crewPlayerS.RemoveAll(x => x == Mayor.mayor);
+            var sunglassesCrewPlayer = new List<PlayerControl>(crewPlayer);
+            sunglassesCrewPlayer.RemoveAll(x => x == Mayor.mayor);
             while (sunglassesCount < modifiers.FindAll(x => x == RoleId.Sunglasses).Count)
             {
-                playerId = setModifierToRandomPlayer((byte)RoleId.Sunglasses, crewPlayerS);
+                playerId = setModifierToRandomPlayer((byte)RoleId.Sunglasses, sunglassesCrewPlayer);
                 crewPlayer.RemoveAll(x => x.PlayerId == playerId);
-                crewPlayerS.RemoveAll(x => x.PlayerId == playerId);
+                sunglassesCrewPlayer.RemoveAll(x => x.PlayerId == playerId);
                 playerList.RemoveAll(x => x.PlayerId == playerId);
                 sunglassesCount++;
             }
@@ -936,10 +952,8 @@ internal class RoleManagerSelectRolesPatch
         }
         if (modifiers.Contains(RoleId.Aftermath))
         {
-            var Player = new List<PlayerControl>(playerList);
-            Player.RemoveAll(x => x.Data.Role.IsImpostor);
-            playerId = setModifierToRandomPlayer((byte)RoleId.Aftermath, Player);
-            Player.RemoveAll(x => x.PlayerId == playerId);
+            playerId = setModifierToRandomPlayer((byte)RoleId.Aftermath, noImpPlayer);
+            noImpPlayer.RemoveAll(x => x.PlayerId == playerId);
             playerList.RemoveAll(x => x.PlayerId == playerId);
             modifiers.RemoveAll(x => x == RoleId.Aftermath);
         }
@@ -972,7 +986,7 @@ internal class RoleManagerSelectRolesPatch
             buttonPlayer.RemoveAll(x => x == Mayor.mayor);
 
             playerId = setModifierToRandomPlayer((byte)RoleId.ButtonBarry, buttonPlayer);
-            crewPlayer.RemoveAll(x => x.PlayerId == playerId);
+            buttonPlayer.RemoveAll(x => x.PlayerId == playerId);
             playerList.RemoveAll(x => x.PlayerId == playerId);
             modifiers.RemoveAll(x => x == RoleId.ButtonBarry);
         }
@@ -998,9 +1012,9 @@ internal class RoleManagerSelectRolesPatch
             while (chameleonCount < modifiers.FindAll(x => x == RoleId.Chameleon).Count)
             {
                 playerId = setModifierToRandomPlayer((byte)RoleId.Chameleon, chameleonPlayer);
+                chameleonPlayer.RemoveAll(x => x.PlayerId == playerId);
                 crewPlayer.RemoveAll(x => x.PlayerId == playerId);
                 playerList.RemoveAll(x => x.PlayerId == playerId);
-                chameleonPlayer.RemoveAll(x => x.PlayerId == playerId);
                 chameleonCount++;
             }
             modifiers.RemoveAll(x => x == RoleId.Chameleon);

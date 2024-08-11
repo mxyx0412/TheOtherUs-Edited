@@ -29,7 +29,7 @@ public static class CredentialsPatch
             DeltaTime += (Time.deltaTime - DeltaTime) * 0.1f;
             var fps = Mathf.Ceil(1f / DeltaTime);
             var PingText = $"<size=80%>Ping: {AmongUsClient.Instance.Ping}ms{(MapOption.showFPS ? $"  FPS: {fps}" : "")}</size>";
-
+            __instance.text.SetOutlineThickness(0.1f);
             var host = $"<size=80%>{"Host".Translate()}: {GameData.Instance?.GetHost()?.PlayerName}</size>";
 
             __instance.text.alignment = TextAlignmentOptions.TopRight;
@@ -46,12 +46,12 @@ public static class CredentialsPatch
             if (AmongUsClient.Instance.GameState == InnerNetClient.GameStates.Started)
             {
                 __instance.text.text = $"<size=110%>{getString("TouTitle")}</size>  v{Main.Version + "\n" + getString("inGameTitle")}\n{PingText}\n{gameModeText}";
-                position.DistanceFromEdge = new Vector3(2.25f, 0.11f, 0);
+                position.DistanceFromEdge = new Vector3(2.25f, 0.1f, 0);
             }
             else
             {
                 __instance.text.text = $"{fullCredentialsVersion}\n {PingText}\n  {gameModeText + fullCredentials}\n {host}";
-                position.DistanceFromEdge = new Vector3(3.5f, 0.1f, 0);
+                position.DistanceFromEdge = new Vector3(2.85f, 0.1f, 0);
             }
             position.AdjustPosition();
         }

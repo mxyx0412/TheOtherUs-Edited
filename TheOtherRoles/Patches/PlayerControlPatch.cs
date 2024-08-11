@@ -1833,7 +1833,7 @@ public static class PlayerControlFixedUpdatePatch
         if (Akujo.honmei == null || Akujo.keepsLeft > 0) setPlayerOutline(Akujo.currentTarget, Akujo.color);
     }
 
-    private static void pavlovsownerTarget()
+    private static void pavlovsownerSetTarget()
     {
         if (Pavlovsdogs.pavlovsowner == null || Pavlovsdogs.pavlovsowner != CachedPlayer.LocalPlayer.PlayerControl) return;
         var untargetablePlayers = new List<PlayerControl>();
@@ -1967,7 +1967,7 @@ public static class PlayerControlFixedUpdatePatch
             // Sidekick
             sidekickSetTarget();
             // Pavlovsdogs
-            pavlovsownerTarget();
+            pavlovsownerSetTarget();
             pavlovsdogsSetTarget();
             pavlovsownerUpdate();
             // Impostor
@@ -2217,6 +2217,16 @@ public static class MurderPlayerPatch
             }
         }
 
+        // Bait
+        if (Bait.bait.FindAll(x => x.PlayerId == target.PlayerId).Count > 0)
+        {
+            float reportDelay = rnd.Next((int)Bait.reportDelayMin, (int)Bait.reportDelayMax + 1);
+            Bait.active.Add(deadPlayer, reportDelay);
+
+            if (Bait.showKillFlash && __instance == CachedPlayer.LocalPlayer.PlayerControl)
+                showFlash(new Color(204f / 255f, 102f / 255f, 0f / 255f));
+        }
+
         if (target.Data.Role.IsImpostor && AmongUsClient.Instance.AmHost)
         {
             LastImpostor.promoteToLastImpostor();
@@ -2271,19 +2281,20 @@ public static class MurderPlayerPatch
             Medium.futureDeadBodies.Add(new Tuple<DeadPlayer, Vector3>(deadPlayer, target.transform.position));
         }
 
-        if (Gambler.gambler != null && __instance == Gambler.gambler)
-        {
-            var cooldown = Gambler.GetSuc() ? Gambler.minCooldown : Gambler.maxCooldown;
-            Gambler.gambler.SetKillTimer(cooldown);
-        }
-
         // LastImpostor cooldown
         if (LastImpostor.lastImpostor != null && __instance == LastImpostor.lastImpostor && CachedPlayer.LocalPlayer.PlayerControl == __instance)
         {
-            LastImpostor.lastImpostor.SetKillTimer(Mathf.Max(1f, MapOption.KillCooddown - LastImpostor.deduce));
+            LastImpostor.lastImpostor.SetKillTimer(Mathf.Max(0f, MapOption.KillCooddown - LastImpostor.deduce));
 
-            if (Vampire.vampire.PlayerId == LastImpostor.lastImpostor.PlayerId)
+            if (Vampire.vampire != null && Vampire.vampire.PlayerId == LastImpostor.lastImpostor.PlayerId)
                 HudManagerStartPatch.vampireKillButton.MaxTimer = Vampire.cooldown - LastImpostor.deduce;
+        }
+
+        // Set Gambler cooldown
+        if (Gambler.gambler != null && __instance == Gambler.gambler && CachedPlayer.LocalPlayer.PlayerControl == __instance)
+        {
+            var cooldown = Gambler.GetSuc() ? Gambler.minCooldown : Gambler.maxCooldown;
+            Gambler.gambler.SetKillTimer(cooldown);
         }
 
         // Set bountyHunter cooldown
@@ -2358,16 +2369,6 @@ public static class MurderPlayerPatch
                 RPCProcedure.clearTrap();
             }
             EvilTrapper.isTrapKill = false;
-        }
-
-        // Bait
-        if (Bait.bait.FindAll(x => x.PlayerId == target.PlayerId).Count > 0)
-        {
-            float reportDelay = rnd.Next((int)Bait.reportDelayMin, (int)Bait.reportDelayMax + 1);
-            Bait.active.Add(deadPlayer, reportDelay);
-
-            if (Bait.showKillFlash && __instance == CachedPlayer.LocalPlayer.PlayerControl)
-                showFlash(new Color(204f / 255f, 102f / 255f, 0f / 255f));
         }
 
         // Add Bloody Modifier
@@ -2452,8 +2453,10 @@ internal class PlayerControlSetCoolDownPatch
             multiplier = Mini.isGrownUp() ? 0.66f : 2f;
         if (BountyHunter.bountyHunter != null && CachedPlayer.LocalPlayer.PlayerControl == BountyHunter.bountyHunter)
             addition = BountyHunter.punishmentTime;
+        if (Gambler.gambler != null && CachedPlayer.LocalPlayer.PlayerControl == Gambler.gambler)
+            addition = Gambler.maxCooldown - GameOptionsManager.Instance.currentNormalGameOptions.KillCooldown;
         if (LastImpostor.lastImpostor != null && CachedPlayer.LocalPlayer.PlayerControl == LastImpostor.lastImpostor)
-            addition = -LastImpostor.deduce;
+            addition -= LastImpostor.deduce;
 
         __instance.killTimer = Mathf.Clamp(time, 0f,
             (GameOptionsManager.Instance.currentNormalGameOptions.KillCooldown * multiplier) + addition);

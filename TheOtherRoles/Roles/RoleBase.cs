@@ -36,8 +36,8 @@ public abstract class RoleBase<T> : Role where T : RoleBase<T>, new()
     public static RoleId RoleType;
     public static T local => players.FirstOrDefault(x => x.player == CachedPlayer.LocalPlayer.PlayerControl);
     public static List<PlayerControl> allPlayers => players.Select(x => x.player).ToList();
-    public static List<PlayerControl> livingPlayers => players.Select(x => x.player).Where(x => x.isAlive()).ToList();
-    public static List<PlayerControl> deadPlayers => players.Select(x => x.player).Where(x => !x.isAlive()).ToList();
+    public static List<PlayerControl> livingPlayers => players.Select(x => x.player).Where(x => x.IsAlive()).ToList();
+    public static List<PlayerControl> deadPlayers => players.Select(x => x.player).Where(x => !x.IsDead()).ToList();
     //public static bool exists => Helpers.RolesEnabled && players.Count > 0;
 
 

@@ -140,7 +140,6 @@ public enum CustomRPC
 
     ResetVaribles = 60,
     ShareOptions,
-    ForceEnd,
     WorkaroundSetRoles,
     SetRole,
     SetModifier,
@@ -339,22 +338,6 @@ public static class RPCProcedure
         {
             Error("Error while deserializing options: " + e.Message);
         }
-    }
-
-    public static void forceEnd()
-    {
-        if (AmongUsClient.Instance.GameState != InnerNetClient.GameStates.Started) return;
-        foreach (PlayerControl player in CachedPlayer.AllPlayers)
-            if (!player.Data.Role.IsImpostor)
-            {
-                GameData.Instance
-                    .GetPlayerById(player
-                        .PlayerId); // player.RemoveInfected(); (was removed in 2022.12.08, no idea if we ever need that part again, replaced by these 2 lines.) 
-                player.SetRole(RoleTypes.Crewmate);
-
-                player.MurderPlayer(player);
-                player.Data.IsDead = true;
-            }
     }
 
     public static void shareGameMode(byte gm)
@@ -921,7 +904,7 @@ public static class RPCProcedure
     public static void impostorPromotesToLastImpostor(byte targetId)
     {
         var target = playerById(targetId);
-        if (target == null || (Gambler.gambler != null && targetId == Gambler.gambler.PlayerId)) return;
+        if (target == null) return;
         LastImpostor.lastImpostor = target;
     }
 
@@ -2172,9 +2155,9 @@ public static class RPCProcedure
 
     public static void jackalCreatesSidekick(byte targetId)
     {
-        var player = playerById(targetId);
-        if (player == null) return;
-        if (Executioner.target == player && Executioner.executioner != null && !Executioner.executioner.Data.IsDead)
+        var target = playerById(targetId);
+        if (target == null) return;
+        if (Executioner.target == target && Executioner.executioner != null && !Executioner.executioner.Data.IsDead)
         {
             if (Lawyer.lawyer == null && Executioner.promotesToLawyer)
             {
@@ -2189,26 +2172,27 @@ public static class RPCProcedure
             }
         }
 
-        if (Jackal.killFakeImpostor && player.Data.Role.IsImpostor)
+        if (Jackal.killFakeImpostor && target.Data.Role.IsImpostor)
         {
-            uncheckedMurderPlayer(Jackal.jackal.PlayerId, player.PlayerId, 1);
-            overrideDeathReasonAndKiller(player, DeadPlayer.CustomDeathReason.FakeSK, Jackal.jackal);
+            //uncheckedMurderPlayer(Jackal.jackal.PlayerId, player.PlayerId, 1);
+            Jackal.jackal.MurderPlayer(target, MurderResultFlags.Succeeded);
+            overrideDeathReasonAndKiller(target, DeadPlayer.CustomDeathReason.FakeSK, Jackal.jackal);
             return;
         }
 
-        var wasSpy = Spy.spy != null && player == Spy.spy;
-        var wasImpostor = player.Data.Role.IsImpostor; // This can only be reached if impostors can be sidekicked.
-        FastDestroyableSingleton<RoleManager>.Instance.SetRole(player, RoleTypes.Crewmate);
-        if (player == Lawyer.lawyer && Lawyer.target != null)
+        var wasSpy = Spy.spy != null && target == Spy.spy;
+        var wasImpostor = target.Data.Role.IsImpostor; // This can only be reached if impostors can be sidekicked.
+        FastDestroyableSingleton<RoleManager>.Instance.SetRole(target, RoleTypes.Crewmate);
+        if (target == Lawyer.lawyer && Lawyer.target != null)
         {
             var playerInfoTransform = Lawyer.target.cosmetics.nameText.transform.parent.FindChild("Info");
             var playerInfo = playerInfoTransform?.GetComponent<TextMeshPro>();
             if (playerInfo != null) playerInfo.text = "";
         }
 
-        erasePlayerRoles(player.PlayerId);
-        Sidekick.sidekick = player;
-        if (player.PlayerId == CachedPlayer.LocalPlayer.PlayerId)
+        erasePlayerRoles(target.PlayerId);
+        Sidekick.sidekick = target;
+        if (target.PlayerId == CachedPlayer.LocalPlayer.PlayerId)
             CachedPlayer.LocalPlayer.PlayerControl.moveable = true;
         if ((wasSpy || wasImpostor) && !Jackal.CanImpostorFindSidekick)
         {
@@ -2216,7 +2200,7 @@ public static class RPCProcedure
             Sidekick.wasSpy = wasSpy;
             Sidekick.wasImpostor = wasImpostor;
         }
-        if (player == CachedPlayer.LocalPlayer.PlayerControl) SoundEffectsManager.play("jackalSidekick");
+        if (target == CachedPlayer.LocalPlayer.PlayerControl) SoundEffectsManager.play("jackalSidekick");
         if (HandleGuesser.isGuesserGm && CustomOptionHolder.guesserGamemodeSidekickIsAlwaysGuesser.getBool() && !HandleGuesser.isGuesser(targetId))
             setGuesserGm(targetId);
 
@@ -2506,7 +2490,7 @@ public static class RPCProcedure
             new Action<float>(p =>
             {
                 // Delayed action
-                if (!Bomber.hasBomb.isAlive()) return;
+                if (!Bomber.hasBomb.IsAlive()) return;
                 if (p == 1f && Bomber.bombActive)
                 {
                     // Perform kill if possible and reset bitten (regardless whether the kill was successful or not)
@@ -2525,7 +2509,7 @@ public static class RPCProcedure
                     {
                         if (Bomber.timeLeft != timeLeft)
                         {
-                            new CustomMessage("你手中的炸弹将在 " + timeLeft + " 秒后引爆!", 1f);
+                            _ = new CustomMessage("你手中的炸弹将在 " + timeLeft + " 秒后引爆!", 1f);
                             Bomber.timeLeft = timeLeft;
                         }
 
@@ -3007,7 +2991,7 @@ public static class RPCProcedure
         if (Thief.thief != null && Thief.thief.PlayerId == killerId && Thief.canStealWithGuess)
         {
             var roleInfo = RoleInfo.allRoleInfos.FirstOrDefault(x => (byte)x.roleId == guessedRoleId);
-            if (!Thief.thief.Data.IsDead && !Thief.isFailedThiefKill(dyingTarget, guesser, roleInfo))
+            if (Thief.thief.IsAlive() && Thief.tiefCanKill(dyingTarget, guesser))
                 thiefStealsRole(dyingTarget.PlayerId);
         }
 
@@ -3628,9 +3612,6 @@ internal class RPCHandlerPatch
                 break;
             case CustomRPC.ShareOptions:
                 RPCProcedure.HandleShareOptions(reader.ReadByte(), reader);
-                break;
-            case CustomRPC.ForceEnd:
-                RPCProcedure.forceEnd();
                 break;
             case CustomRPC.WorkaroundSetRoles:
                 RPCProcedure.workaroundSetRoles(reader.ReadByte(), reader);

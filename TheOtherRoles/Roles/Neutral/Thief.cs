@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace TheOtherRoles.Roles.Neutral;
@@ -36,19 +37,18 @@ public static class Thief
         canStealWithGuess = CustomOptionHolder.thiefCanStealWithGuess.getBool();
     }
 
-    public static bool isFailedThiefKill(PlayerControl target, PlayerControl killer, RoleInfo targetRole)
+    public static bool tiefCanKill(PlayerControl target, PlayerControl killer)
     {
-        return killer == thief && !target.Data.Role.IsImpostor && !new List<RoleInfo>
-        {   RoleInfo.jackal,
-            RoleInfo.sidekick,
-            RoleInfo.werewolf,
-            RoleInfo.juggernaut,
-            RoleInfo.swooper,
-            RoleInfo.pavlovsdogs,
-            RoleInfo.pavlovsowner,
-            canKillSheriff ? RoleInfo.sheriff : null,
-            canKillDeputy ? RoleInfo.deputy : null,
-            canKillVeteran ? RoleInfo.veteran : null
-        }.Contains(targetRole);
+        return killer == thief && (target.Data.Role.IsImpostor ||
+            target == Jackal.jackal ||
+            target == Sidekick.sidekick ||
+            target == Werewolf.werewolf ||
+            target == Juggernaut.juggernaut ||
+            target == Swooper.swooper ||
+            Pavlovsdogs.pavlovsdogs.Any(p => p == target) ||
+            target == Pavlovsdogs.pavlovsowner ||
+            (canKillSheriff && target == Sheriff.sheriff) ||
+            (canKillDeputy && target == Deputy.deputy) ||
+            (canKillVeteran && target == Veteran.veteran));
     }
 }

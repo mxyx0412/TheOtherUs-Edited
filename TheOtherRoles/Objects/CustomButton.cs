@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TheOtherRoles.Utilities;
 using TMPro;
 using UnityEngine;
@@ -172,13 +173,13 @@ public class CustomButton
         if (killerbutton.TryGetValue(p, out var button))
         {
             if (time == 0f) time = button.MaxTimer;
-            button.Timer = time;
+            else button.Timer = time;
         }
-        else if (Pavlovsdogs.pavlovsdogs.Contains(p))
+        else if (Pavlovsdogs.pavlovsdogs.Any(x => x == p))
         {
             button = HudManagerStartPatch.pavlovsdogsKillButton;
             if (time == 0f) time = button.MaxTimer;
-            button.Timer = time;
+            else button.Timer = time;
         }
     }
 

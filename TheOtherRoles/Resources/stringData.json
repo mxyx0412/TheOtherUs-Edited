@@ -2231,29 +2231,9 @@
         "0": "Host",
         "13": "\u623f\u4e3b"
     },
-    "lobbyInfoImpostor": {
-        "0": "Impostor",
-        "11": "\u30a4\u30f3\u30dd\u30b9\u30bf\u30fc",
-        "13": "\u4f2a\u88c5\u8005\u9635\u8425"
-    },
-    "lobbyInfoCrewmate": {
-        "0": "Crewmate",
-        "11": "\u30af\u30eb\u30fc\u30e1\u30a4\u30c8",
-        "13": "\u8239\u5458\u9635\u8425"
-    },
-    "lobbyInfoNeutral": {
-        "0": "Neutral",
-        "11": "\u30cb\u30e5\u30fc\u30c8\u30e9\u30eb",
-        "13": "\u4e2d\u7acb\u9635\u8425"
-    },
-    "lobbyInfoModifier": {
-        "0": "Modifier",
-        "11": "\u5c5e\u6027",
-        "13": "\u9644\u52a0\u80fd\u529b"
-    },
     "lobbyInfoSummary": {
         "0": "Role Summary",
-        "11": "\u5f79\u8077\u306e\u6982\u8981"
+        "13": "\u804c\u4e1a\u89e3\u91ca\u4e00\u89c8"
     },
     "seerShowInfoText": {
         "0": "Seer Info: Someone Died",

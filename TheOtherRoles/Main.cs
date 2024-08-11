@@ -112,7 +112,6 @@ public class TheOtherRolesPlugin : BasePlugin
 
         SubmergedCompatibility.Initialize();
         MainMenuPatch.addSceneChangeCallbacks();
-        _ = RoleInfo.loadReadme();
         AddToKillDistanceSetting.addKillDistance();
         Info($"\n Loading TOU completed!\n TheOtherUs-Edited v{VersionString}");
     }
