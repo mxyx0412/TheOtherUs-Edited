@@ -306,7 +306,7 @@ public static class PlayerControlFixedUpdatePatch
 
     private static void detectiveUpdateFootPrints()
     {
-        if (Detective.detective == null || Detective.detective != CachedPlayer.LocalPlayer.PlayerControl) return;
+        if (Detective.detective == null || Detective.detective != CachedPlayer.LocalPlayer.PlayerControl || Detective.detective.IsDead()) return;
 
         Detective.timer -= Time.fixedDeltaTime;
         if (Detective.timer <= 0f)
