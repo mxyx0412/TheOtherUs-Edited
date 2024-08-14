@@ -574,13 +574,13 @@ internal class RoleManagerSelectRolesPatch
             players.RemoveAll(x => GuesserGM.isGuesser(x.PlayerId));
 
         var impPlayer = new List<PlayerControl>(players);
-        //List<PlayerControl> neutralPlayer = new List<PlayerControl>(players);
+        var neutralPlayer = new List<PlayerControl>(players);
         var impPlayerL = new List<PlayerControl>(players);
         var crewPlayer = new List<PlayerControl>(players);
         impPlayer.RemoveAll(x => !x.Data.Role.IsImpostor);
-        //neutralPlayer.RemoveAll(x => !Helpers.isNeutral(x));
+        neutralPlayer.RemoveAll(x => !isNeutral(x));
         impPlayerL.RemoveAll(x => !x.Data.Role.IsImpostor);
-        crewPlayer.RemoveAll(x => x.Data.Role.IsImpostor);
+        crewPlayer.RemoveAll(x => x.Data.Role.IsImpostor || isNeutral(x));
 
         var modifierCount = Mathf.Min(players.Count, modifierCountSettings);
 
@@ -633,12 +633,6 @@ internal class RoleManagerSelectRolesPatch
             // Assign lover
             var isEvilLover = rnd.Next(1, 101) <= CustomOptionHolder.modifierLoverImpLoverRate.getSelection() * 10;
             byte firstLoverId;
-            //List<PlayerControl> impPlayer = new List<PlayerControl>(players);
-            //List<PlayerControl> impPlayerL = new List<PlayerControl>(players);
-            //List<PlayerControl> crewPlayer = new List<PlayerControl>(players);
-            impPlayer.RemoveAll(x => !x.Data.Role.IsImpostor);
-            impPlayerL.RemoveAll(x => !x.Data.Role.IsImpostor);
-            crewPlayer.RemoveAll(x => x.Data.Role.IsImpostor || x == Lawyer.lawyer || x == Akujo.akujo);
 
             if (!Cultist.isCultistGame)
             {
@@ -852,7 +846,7 @@ internal class RoleManagerSelectRolesPatch
 
         if (modifiers.Contains(RoleId.Specoality))
         {
-            var GuesserList = new List<PlayerControl>(playerList);
+            List<PlayerControl> GuesserList = [];
 
             if (isGuesserGamemode)
             {
@@ -921,8 +915,7 @@ internal class RoleManagerSelectRolesPatch
                                         || x == Jackal.jackal
                                         || x == Sidekick.sidekick
                                         || x == Lawyer.lawyer
-                                        || Pavlovsdogs.pavlovsowner
-                                        || Pavlovsdogs.pavlovsdogs.Any(p => p.PlayerId == x.PlayerId));
+                                        || x == Pavlovsdogs.pavlovsowner);
             }
             else
             {

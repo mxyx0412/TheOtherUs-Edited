@@ -1702,7 +1702,7 @@ public static class RPCProcedure
             }
             terroristButton.Timer = terroristButton.MaxTimer;
         }
-        else if (Morphling.morphling)
+        else if (Morphling.morphling == killer)
         {
             var writer = AmongUsClient.Instance.StartRpcImmediately(killer.NetId,
                 (byte)CustomRPC.MorphlingMorph, SendOption.Reliable);
@@ -3602,7 +3602,7 @@ internal class RPCHandlerPatch
         if (!RpcNames!.ContainsKey(packetId))
             return true;
 
-        if (enableDebugLogMode) Info($"接收 PlayerControl CustomRpc RpcId{callId} Rpc Name{RpcNames?[(CustomRPC)callId] ?? nameof(packetId)} Message Size {reader.Length}");
+        if (enableDebugLogMode && callId != 73) Info($"接收 PlayerControl CustomRpc RpcId{callId} Rpc Name{RpcNames?[(CustomRPC)callId] ?? nameof(packetId)} Message Size {reader.Length}");
         switch (packetId)
         {
             // Main Controls

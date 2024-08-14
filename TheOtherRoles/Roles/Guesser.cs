@@ -171,7 +171,7 @@ public static class Guesser
             Teambutton.FindChild("ControllerHighlight").gameObject.SetActive(false);
             Transform TeambuttonMask = Object.Instantiate(maskTemplate, TeambuttonParent);
             TextMeshPro Teamlabel = Object.Instantiate(textTemplate, Teambutton);
-            //Teambutton.GetComponent<SpriteRenderer>().sprite = FastDestroyableSingleton<HatManager>.Instance.GetNamePlateById("nameplate_NoPlate")?.viewData?.viewData?.Image;
+            //Teambutton.GetComponent<SpriteRenderer>().sprite = ShipStatus.Instance.CosmeticsCache.GetNameplate("nameplate_NoPlate").Image;
             RoleSelectButtons.Add((RoleTeam)index, Teambutton.GetComponent<SpriteRenderer>());
             TeambuttonParent.localPosition = new(-2.75f + (index * 1.75f), 2.225f, -200);
             TeambuttonParent.localScale = new(0.55f, 0.55f, 1f);
@@ -228,7 +228,7 @@ public static class Guesser
             Pagebutton.FindChild("ControllerHighlight").gameObject.SetActive(false);
             Transform PagebuttonMask = Object.Instantiate(maskTemplate, PagebuttonParent);
             TextMeshPro Pagelabel = Object.Instantiate(textTemplate, Pagebutton);
-            // Pagebutton.GetComponent<SpriteRenderer>().sprite = FastDestroyableSingleton<HatManager>.Instance.GetNamePlateById("nameplate_NoPlate")?.viewData?.viewData?.Image;
+            //Pagebutton.GetComponent<SpriteRenderer>().sprite = ShipStatus.Instance.CosmeticsCache.GetNameplate("nameplate_NoPlate").Image;
             PagebuttonParent.localPosition = IsNext ? new(3.535f, -2.2f, -200) : new(-3.475f, -2.2f, -200);
             PagebuttonParent.localScale = new(0.55f, 0.55f, 1f);
             Pagelabel.color = Color.white;
@@ -325,13 +325,14 @@ public static class Guesser
             string NameKey = roleInfo?.name ?? "Crewmate";
             RoleId role = roleInfo?.roleId ?? RoleId.Crewmate;
 
-            Transform buttonParent = new GameObject().transform;
+            var buttonParent = new GameObject().transform;
             buttonParent.SetParent(container);
-            Transform button = Object.Instantiate(buttonTemplate, buttonParent);
+            var button = Object.Instantiate(buttonTemplate, buttonParent);
             button.FindChild("ControllerHighlight").gameObject.SetActive(false);
-            Transform buttonMask = Object.Instantiate(maskTemplate, buttonParent);
-            TextMeshPro label = Object.Instantiate(textTemplate, button);
-            // button.GetComponent<SpriteRenderer>().sprite = FastDestroyableSingleton<HatManager>.Instance.GetNamePlateById("nameplate_NoPlate")?.viewData?.viewData?.Image;
+            var buttonMask = Object.Instantiate(maskTemplate, buttonParent);
+            var label = Object.Instantiate(textTemplate, button);
+            button.GetComponent<SpriteRenderer>().sprite = ShipStatus.Instance.CosmeticsCache.GetNameplate("nameplate_NoPlate").Image;
+            //button.GetComponent<SpriteRenderer>().sprite = FastDestroyableSingleton<HatManager>.Instance.GetNamePlateById("nameplate_NoPlate")?.viewData?.viewData?.Image;
             if (!RoleButtons.ContainsKey(team))
             {
                 RoleButtons.Add(team, new());

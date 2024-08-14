@@ -275,7 +275,7 @@ public static class Helpers
                        player == Juggernaut.juggernaut ||
                        player == Akujo.akujo ||
                        player == Pavlovsdogs.pavlovsowner ||
-                       Pavlovsdogs.pavlovsdogs.Contains(player) ||
+                       Pavlovsdogs.pavlovsdogs.Any(x => x == player) ||
                        player == Swooper.swooper);
         }
         else
