@@ -115,7 +115,7 @@ public static class Helpers
         if (isRoleAlive(Mayor.mayor)) powerCrewAlive = true;
         if (isRoleAlive(Swapper.swapper)) powerCrewAlive = true;
         if (isRoleAlive(Prosecutor.prosecutor)) powerCrewAlive = true;
-        if (isRoleAlive(Guesser.niceGuesser)) powerCrewAlive = true;
+        if (isRoleAlive(Vigilante.vigilante)) powerCrewAlive = true;
 
         return powerCrewAlive;
     }
@@ -136,21 +136,6 @@ public static class Helpers
                || (Thief.thief != null && Thief.thief.PlayerId == player.PlayerId && Thief.hasImpostorVision)
                || (Swooper.swooper != null && Swooper.swooper.PlayerId == player.PlayerId && Swooper.hasImpVision)
                || (Werewolf.werewolf != null && Werewolf.werewolf.PlayerId == player.PlayerId && Werewolf.hasImpostorVision);
-    }
-
-    /// <summary>
-    /// 触发观察者的探测
-    /// </summary>
-    public static void checkWatchFlash(PlayerControl target)
-    {
-        if (CachedPlayer.LocalPlayer.PlayerControl == PrivateInvestigator.watching)
-        {
-            var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
-                (byte)CustomRPC.PrivateInvestigatorWatchFlash, SendOption.Reliable);
-            writer.Write(target.PlayerId);
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
-            RPCProcedure.privateInvestigatorWatchFlash(target.PlayerId);
-        }
     }
 
     public static void handleTrapperTrapOnBodyReport()
@@ -785,16 +770,16 @@ public static class Helpers
 
     internal static string getRoleString(RoleInfo roleInfo)
     {
-        if (roleInfo.name == "Jackal")
+        if (roleInfo.Name == "Jackal")
         {
             var getSidekickText = Jackal.canCreateSidekick ? " and recruit a Sidekick" : "";
-            return cs(roleInfo.color, $"{roleInfo.name}: Kill everyone{getSidekickText}");
+            return cs(roleInfo.color, $"{roleInfo.Name}: Kill everyone{getSidekickText}");
         }
 
-        if (roleInfo.name == "Invert")
-            return cs(roleInfo.color, $"{roleInfo.name}: {roleInfo.shortDescription} ({Invert.meetings})");
+        if (roleInfo.Name == "Invert")
+            return cs(roleInfo.color, $"{roleInfo.Name}: {roleInfo.ShortDescription} ({Invert.meetings})");
 
-        return cs(roleInfo.color, $"{roleInfo.name}: {roleInfo.shortDescription}");
+        return cs(roleInfo.color, $"{roleInfo.Name}: {roleInfo.ShortDescription}");
     }
 
     public static bool isDark(byte playerId)

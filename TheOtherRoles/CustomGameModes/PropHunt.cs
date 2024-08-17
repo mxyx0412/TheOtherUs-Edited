@@ -752,10 +752,11 @@ public static class PropSpeedFix
     {
         if (__instance != null
             && __instance.AmOwner
-            && GameData.Instance
+            && InGame
+            && CachedPlayer.LocalPlayer.PlayerPhysics != null
+            && PropHunt.isPropHuntGM
             && !CachedPlayer.LocalPlayer.Data.IsDead
-            && __instance.myPlayer.CanMove
-            && PropHunt.isPropHuntGM)
+            && __instance.myPlayer.CanMove)
         {
             var players = CachedPlayer.LocalPlayer.PlayerControl;
             if (players.Data.Role.IsImpostor) __instance.body.velocity *= PropHunt.hunterSpeed;

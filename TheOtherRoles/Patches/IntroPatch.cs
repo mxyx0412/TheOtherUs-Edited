@@ -298,9 +298,9 @@ internal class IntroPatch
             __instance.RoleBlurbText.text = "";
             if (roleInfo != null)
             {
-                __instance.RoleText.text = roleInfo.name;
+                __instance.RoleText.text = roleInfo.Name;
                 __instance.RoleText.color = roleInfo.color;
-                __instance.RoleBlurbText.text = roleInfo.introDescription;
+                __instance.RoleBlurbText.text = roleInfo.IntroDescription;
                 __instance.RoleBlurbText.color = roleInfo.color;
             }
 
@@ -309,7 +309,7 @@ internal class IntroPatch
                 if (modifierInfo.roleId != RoleId.Lover)
                 {
                     __instance.RoleBlurbText.text +=
-                        cs(modifierInfo.color, $"\n{modifierInfo.introDescription}");
+                        cs(modifierInfo.color, $"\n{modifierInfo.IntroDescription}");
                 }
                 else
                 {

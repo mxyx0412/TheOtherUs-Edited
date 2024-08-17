@@ -19,6 +19,23 @@ public class CachedPlayer
     public PlayerPhysics PlayerPhysics;
     public Transform transform;
 
+    public string PlayerName => Data.PlayerName;
+    public float PlayerSpeed => PlayerPhysics.Speed;
+    public float TrueSpeed => PlayerPhysics.TrueSpeed;
+    public float SpeedMod => PlayerPhysics.SpeedMod;
+    public float GhostSpeed => PlayerPhysics.GhostSpeed;
+
+    public bool Disconnected => Data.Disconnected;
+    public bool CanMove => PlayerControl.CanMove;
+    public bool IsAlive => !PlayerControl.Data.IsDead;
+    public bool IsDead => PlayerControl.Data.IsDead;
+    public bool IsDummy => PlayerControl.isDummy;
+    public bool InVent => PlayerControl.inVent;
+
+    public Vector2 LastPosition => NetTransform.lastPosition;
+    public Vector2 TruePosition => PlayerControl.GetTruePosition();
+    public Vector2 ControlOffset => PlayerControl.Collider.offset;
+
     public static implicit operator bool(CachedPlayer player)
     {
         return player != null && player.PlayerControl;
@@ -108,8 +125,7 @@ public static class CachedPlayerPatches
         [HarmonyTargetMethod]
         public static MethodBase TargetMethod()
         {
-            var type = typeof(PlayerControl).GetNestedTypes(AccessTools.all)
-                .FirstOrDefault(t => t.Name.Contains("Start"));
+            var type = typeof(PlayerControl).GetNestedTypes(AccessTools.all).FirstOrDefault(t => t.Name.Contains("Start"));
             return AccessTools.Method(type, nameof(IEnumerator.MoveNext));
         }
 

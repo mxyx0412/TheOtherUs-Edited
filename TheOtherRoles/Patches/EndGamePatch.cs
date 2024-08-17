@@ -549,7 +549,7 @@ public class EndGameManagerSetUpPatch
             foreach (var roles in from data in AdditionalTempData.playerRoles
                                   where data.PlayerName == winningPlayerData2.PlayerName
                                   select poolablePlayer.cosmetics.nameText.text +=
-                         $"\n{string.Join("\n", data.Roles.Select(x => cs(x.color, x.name)))}")
+                         $"\n{string.Join("\n", data.Roles.Select(x => cs(x.color, x.Name)))}")
             {
             }
         }

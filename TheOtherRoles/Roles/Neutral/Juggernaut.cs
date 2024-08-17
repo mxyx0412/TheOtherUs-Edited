@@ -13,12 +13,6 @@ public static class Juggernaut
     public static bool hasImpostorVision;
     public static bool canUseVents;
 
-    public static void setkill()
-    {
-        cooldown -= reducedkill;
-        if (cooldown <= 0f) cooldown = 0f;
-    }
-
     public static void clearAndReload()
     {
         juggernaut = null;

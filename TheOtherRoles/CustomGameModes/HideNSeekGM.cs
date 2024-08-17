@@ -163,10 +163,11 @@ public static class HideSpeedFix
     {
         if (__instance != null
             && __instance.AmOwner
-            && GameData.Instance
+            && InGame
+            && CachedPlayer.LocalPlayer.PlayerPhysics != null
+            && HideNSeek.isHideNSeekGM
             && !CachedPlayer.LocalPlayer.Data.IsDead
-            && __instance.myPlayer.CanMove
-            && HideNSeek.isHideNSeekGM)
+            && __instance.myPlayer.CanMove)
         {
             var players = CachedPlayer.LocalPlayer.PlayerControl;
             if (players.Data.Role.IsImpostor) __instance.body.velocity *= HideNSeek.hunterSpeed;

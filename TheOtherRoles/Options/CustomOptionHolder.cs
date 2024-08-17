@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using TheOtherRoles.Modules;
 using UnityEngine;
 using static TheOtherRoles.Options.CustomOption;
@@ -221,9 +220,6 @@ public class CustomOptionHolder
     public static CustomOption engineerNumberOfFixes;
     public static CustomOption engineerHighlightForImpostors;
     public static CustomOption engineerHighlightForTeamJackal;
-
-    public static CustomOption privateInvestigatorSpawnRate;
-    public static CustomOption privateInvestigatorSeeColor;
 
     public static CustomOption sheriffSpawnRate;
     public static CustomOption sheriffMisfireKills;
@@ -844,7 +840,7 @@ public class CustomOptionHolder
 
         //-------------------------- Impostor Options 10000-19999 -------------------------- //
 
-        modifierAssassin = Create(10000, Types.Impostor, cs(Palette.ImpostorRed, "modifierAssassin"), rates, null, true);
+        modifierAssassin = Create(10000, Types.Impostor, cs(Assassin.color, "modifierAssassin"), rates, null, true);
         modifierAssassinQuantity = Create(10001, Types.Impostor, "modifierAssassinQuantity", ratesModifier, modifierAssassin);
         modifierAssassinNumberOfShots = Create(10002, Types.Impostor, "modifierAssassinNumberOfShots", 3f, 1f, 15f, 1f, modifierAssassin);
         modifierAssassinMultipleShotsPerMeeting = Create(10003, Types.Impostor, "modifierAssassinMultipleShotsPerMeeting", true, modifierAssassin);
@@ -1099,7 +1095,7 @@ public class CustomOptionHolder
 
         //-------------------------- Crewmate Options 30000-39999 -------------------------- //
 
-        guesserSpawnRate = Create(30100, Types.Crewmate, cs(Guesser.color, "Vigilante"), rates, null, true);
+        guesserSpawnRate = Create(30100, Types.Crewmate, cs(Vigilante.color, "Vigilante"), rates, null, true);
         guesserNumberOfShots = Create(30101, Types.Crewmate, "guesserNumberOfShots", 3f, 1f, 15f, 1f, guesserSpawnRate);
         guesserHasMultipleShotsPerMeeting = Create(30102, Types.Crewmate, "guesserHasMultipleShotsPerMeeting", true, guesserSpawnRate);
         guesserShowInfoInGhostChat = Create(30103, Types.Crewmate, "guesserShowInfoInGhostChat", true, guesserSpawnRate);
@@ -1148,9 +1144,6 @@ public class CustomOptionHolder
         //engineerExpertRepairs = Create(30124, Types.Crewmate, "高级修复模式", false, engineerSpawnRate);
         engineerHighlightForImpostors = Create(30125, Types.Crewmate, "engineerHighlightForImpostors", true, engineerSpawnRate);
         engineerHighlightForTeamJackal = Create(30126, Types.Crewmate, "engineerHighlightForTeamJackal", true, engineerSpawnRate);
-
-        privateInvestigatorSpawnRate = Create(30130, Types.Crewmate, cs(PrivateInvestigator.color, "PrivateInvestigator"), rates, null, true);
-        privateInvestigatorSeeColor = Create(30131, Types.Crewmate, "privateInvestigatorSeeColor", true, privateInvestigatorSpawnRate);
 
         detectiveSpawnRate = Create(30190, Types.Crewmate, cs(Detective.color, "Detective"), rates, null, true);
         detectiveAnonymousFootprints = Create(30191, Types.Crewmate, "detectiveAnonymousFootprints",
@@ -1383,9 +1376,9 @@ public class CustomOptionHolder
 
         //-------------------------- Guesser Gamemode 2000 - 2999 -------------------------- //
 
-        guesserGamemodeCrewNumber = Create(2001, Types.Guesser, cs(Guesser.color, "guesserGamemodeCrewNumber"), 3f, 0f, 15f, 1f, null, true);
-        guesserGamemodeNeutralNumber = Create(2002, Types.Guesser, cs(Guesser.color, "guesserGamemodeNeutralNumber"), 3f, 0f, 15f, 1f);
-        guesserGamemodeImpNumber = Create(2003, Types.Guesser, cs(Guesser.color, "guesserGamemodeImpNumber"), 3f, 0f, 15f, 1f);
+        guesserGamemodeCrewNumber = Create(2001, Types.Guesser, cs(Color.yellow, "guesserGamemodeCrewNumber"), 3f, 0f, 15f, 1f, null, true);
+        guesserGamemodeNeutralNumber = Create(2002, Types.Guesser, cs(Color.yellow, "guesserGamemodeNeutralNumber"), 3f, 0f, 15f, 1f);
+        guesserGamemodeImpNumber = Create(2003, Types.Guesser, cs(Color.yellow, "guesserGamemodeImpNumber"), 3f, 0f, 15f, 1f);
         guesserForceJackalGuesser = Create(2007, Types.Guesser, "guesserForceJackalGuesser", false, null, true);
         guesserGamemodeSidekickIsAlwaysGuesser = Create(2012, Types.Guesser, "guesserGamemodeSidekickIsAlwaysGuesser", false);
         guesserForcePavlovsGuesser = Create(2013, Types.Guesser, "guesserForcePavlovsGuesser", false);

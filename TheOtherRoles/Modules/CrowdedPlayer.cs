@@ -4,7 +4,6 @@ using System.Linq;
 using AmongUs.GameOptions;
 using Reactor.Utilities.Attributes;
 using Reactor.Utilities.Extensions;
-using TheOtherRoles.Patches;
 using TMPro;
 using UnityEngine;
 using Object = UnityEngine.Object;

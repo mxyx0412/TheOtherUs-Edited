@@ -260,14 +260,6 @@ public static class PlayerControlFixedUpdatePatch
         setPlayerOutline(Morphling.currentTarget, Morphling.color);
     }
 
-    private static void privateInvestigatorSetTarget()
-    {
-        if (PrivateInvestigator.privateInvestigator == null ||
-            PrivateInvestigator.privateInvestigator != CachedPlayer.LocalPlayer.PlayerControl) return;
-        PrivateInvestigator.currentTarget = setTarget();
-        setPlayerOutline(PrivateInvestigator.currentTarget, PrivateInvestigator.color);
-    }
-
     private static void sheriffSetTarget()
     {
         if (Sheriff.sheriff == null || Sheriff.sheriff != CachedPlayer.LocalPlayer.PlayerControl) return;
@@ -1924,8 +1916,6 @@ public static class PlayerControlFixedUpdatePatch
             bendTimeUpdate();
             // Morphling
             morphlingSetTarget();
-            // PrivateInvestigator
-            privateInvestigatorSetTarget();
             // Medic
             medicSetTarget();
             // Bomber
@@ -2131,7 +2121,7 @@ internal class BodyReportPatch
                 {
                     if (timeSinceDeath < Detective.reportNameDuration * 1000)
                     {
-                        msg = $"尸检报告: 凶手的职业似乎是 {RoleInfo.getRoleInfoForPlayer(killer).First(x => !x.isModifier).name} !\n尸体在 {Math.Round(timeSinceDeath / 1000)} 秒前死亡";
+                        msg = $"尸检报告: 凶手的职业似乎是 {RoleInfo.getRoleInfoForPlayer(killer).First(x => !x.isModifier).Name} !\n尸体在 {Math.Round(timeSinceDeath / 1000)} 秒前死亡";
                     }
                     else if (timeSinceDeath < Detective.reportColorDuration * 1000)
                     {

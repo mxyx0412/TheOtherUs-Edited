@@ -1,4 +1,3 @@
-extern alias JetBrains;
 global using HarmonyLib;
 global using Il2CppInterop.Runtime;
 global using Il2CppInterop.Runtime.Attributes;
@@ -17,4 +16,3 @@ global using static TheOtherRoles.Helper.LogHelper;
 global using static TheOtherRoles.Modules.ModTranslation;
 global using static TheOtherRoles.Roles.RoleHelpers;
 global using Main = TheOtherRoles.TheOtherRolesPlugin;
-global using MeansImplicitUse = JetBrains::JetBrains.Annotations.MeansImplicitUseAttribute;

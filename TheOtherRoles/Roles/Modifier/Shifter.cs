@@ -17,10 +17,10 @@ public static class Shifter
 
     public static void shiftRole(PlayerControl player1, PlayerControl player2, bool repeat = true)
     {
-        if (Guesser.niceGuesser != null && Guesser.niceGuesser == player2)
+        if (Vigilante.vigilante != null && Vigilante.vigilante == player2)
         {
             if (repeat) shiftRole(player2, player1, false);
-            Guesser.niceGuesser = player1;
+            Vigilante.vigilante = player1;
         }
         else if (Mayor.mayor != null && Mayor.mayor == player2)
         {
@@ -36,11 +36,6 @@ public static class Shifter
         {
             if (repeat) shiftRole(player2, player1, false);
             Engineer.engineer = player1;
-        }
-        else if (PrivateInvestigator.privateInvestigator != null && PrivateInvestigator.privateInvestigator == player2)
-        {
-            if (repeat) shiftRole(player2, player1, false);
-            PrivateInvestigator.privateInvestigator = player1;
         }
         else if (Sheriff.sheriff != null && Sheriff.sheriff == player2)
         {

@@ -180,7 +180,6 @@ internal class RoleManagerSelectRolesPatch
         crewSettings.Add((byte)RoleId.Prosecutor, CustomOptionHolder.prosecutorSpawnRate.getSelection());
         crewSettings.Add((byte)RoleId.Portalmaker, CustomOptionHolder.portalmakerSpawnRate.getSelection());
         crewSettings.Add((byte)RoleId.Engineer, CustomOptionHolder.engineerSpawnRate.getSelection());
-        crewSettings.Add((byte)RoleId.PrivateInvestigator, CustomOptionHolder.privateInvestigatorSpawnRate.getSelection());
         crewSettings.Add((byte)RoleId.BodyGuard, CustomOptionHolder.bodyGuardSpawnRate.getSelection());
         crewSettings.Add((byte)RoleId.Detective, CustomOptionHolder.detectiveSpawnRate.getSelection());
         crewSettings.Add((byte)RoleId.TimeMaster, CustomOptionHolder.timeMasterSpawnRate.getSelection());
@@ -196,7 +195,7 @@ internal class RoleManagerSelectRolesPatch
         crewSettings.Add((byte)RoleId.Prophet, CustomOptionHolder.prophetSpawnRate.getSelection());
         //crewSettings.Add((byte)RoleId.Magician, CustomOptionHolder.magicianSpawnRate.getSelection());
         if (!isGuesserGamemode)
-            crewSettings.Add((byte)RoleId.NiceGuesser, CustomOptionHolder.guesserSpawnRate.getSelection());
+            crewSettings.Add((byte)RoleId.Vigilante, CustomOptionHolder.guesserSpawnRate.getSelection());
         crewSettings.Add((byte)RoleId.Trapper, CustomOptionHolder.trapperSpawnRate.getSelection());
         if (impostors.Count > 1)
             // Only add Spy if more than 1 impostor as the spy role is otherwise useless
@@ -625,7 +624,7 @@ internal class RoleManagerSelectRolesPatch
 
         impModifiers.AddRange(
         [
-            RoleId.EvilGuesser
+            RoleId.Assassin
         ]);
 
         if (rnd.Next(1, 101) <= CustomOptionHolder.modifierLover.getSelection() * 10)
@@ -824,16 +823,16 @@ internal class RoleManagerSelectRolesPatch
         noImpPlayer.RemoveAll(x => x.Data.Role.IsImpostor);
 
 
-        if (modifiers.Contains(RoleId.EvilGuesser))
+        if (modifiers.Contains(RoleId.Assassin))
         {
             var assassinCount = 0;
-            while (assassinCount < modifiers.FindAll(x => x == RoleId.EvilGuesser).Count)
+            while (assassinCount < modifiers.FindAll(x => x == RoleId.Assassin).Count)
             {
-                playerId = setModifierToRandomPlayer((byte)RoleId.EvilGuesser, impPlayer);
+                playerId = setModifierToRandomPlayer((byte)RoleId.Assassin, impPlayer);
                 playerList.RemoveAll(x => x.PlayerId == playerId);
                 assassinCount++;
             }
-            modifiers.RemoveAll(x => x == RoleId.EvilGuesser);
+            modifiers.RemoveAll(x => x == RoleId.Assassin);
         }
 
         if (modifiers.Contains(RoleId.Disperser))
@@ -858,7 +857,7 @@ internal class RoleManagerSelectRolesPatch
             }
             else
             {
-                foreach (var player in Guesser.evilGuesser)
+                foreach (var player in Assassin.assassin)
                 {
                     GuesserList.Add(player);
                 }
@@ -881,27 +880,27 @@ internal class RoleManagerSelectRolesPatch
 
         if (modifiers.Contains(RoleId.Cursed))
         {
-            var crewPlayerC = new List<PlayerControl>(playerList);
-            crewPlayerC.RemoveAll(x => x.Data.Role.IsImpostor || isNeutral(x));
-            playerId = setModifierToRandomPlayer((byte)RoleId.Cursed, crewPlayerC);
+            playerId = setModifierToRandomPlayer((byte)RoleId.Cursed, crewPlayer);
+            crewPlayer.RemoveAll(x => x.PlayerId == playerId);
             playerList.RemoveAll(x => x.PlayerId == playerId);
             modifiers.RemoveAll(x => x == RoleId.Cursed);
         }
 
         if (modifiers.Contains(RoleId.Tunneler))
         {
-            var crewPlayerT = new List<PlayerControl>(playerList);
-            crewPlayerT.RemoveAll(x => x.Data.Role.IsImpostor || isNeutral(x) || x == Engineer.engineer);
-            playerId = setModifierToRandomPlayer((byte)RoleId.Tunneler, crewPlayerT);
+            var TunnelerPlayer = new List<PlayerControl>(crewPlayer);
+            TunnelerPlayer.RemoveAll(x => x == Engineer.engineer);
+            playerId = setModifierToRandomPlayer((byte)RoleId.Tunneler, TunnelerPlayer);
+            crewPlayer.RemoveAll(x => x.PlayerId == playerId);
             playerList.RemoveAll(x => x.PlayerId == playerId);
             modifiers.RemoveAll(x => x == RoleId.Tunneler);
         }
 
         if (modifiers.Contains(RoleId.Watcher))
         {
-            var crewPlayerW = new List<PlayerControl>(playerList);
-            crewPlayerW.RemoveAll(x => x.Data.Role.IsImpostor || x == Prosecutor.prosecutor);
-            playerId = setModifierToRandomPlayer((byte)RoleId.Watcher, crewPlayerW);
+            var WatcherPlayer = new List<PlayerControl>(playerList);
+            WatcherPlayer.RemoveAll(x => x.Data.Role.IsImpostor || x == Prosecutor.prosecutor);
+            playerId = setModifierToRandomPlayer((byte)RoleId.Watcher, WatcherPlayer);
             playerList.RemoveAll(x => x.PlayerId == playerId);
             modifiers.RemoveAll(x => x == RoleId.Watcher);
         }
@@ -1117,7 +1116,7 @@ internal class RoleManagerSelectRolesPatch
             case RoleId.Shifter:
                 selection = CustomOptionHolder.modifierShifter.getSelection();
                 break;
-            case RoleId.EvilGuesser:
+            case RoleId.Assassin:
                 if (!isGuesserGamemode)
                 {
                     selection = CustomOptionHolder.modifierAssassin.getSelection();

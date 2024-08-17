@@ -46,7 +46,6 @@ internal static class HudManagerStartPatch
     public static CustomButton hackerAdminTableButton;
     public static CustomButton trackerTrackPlayerButton;
     public static CustomButton bodyGuardGuardButton;
-    public static CustomButton privateInvestigatorWatchButton;
     private static CustomButton trackerTrackCorpsesButton;
     public static CustomButton vampireKillButton;
     public static CustomButton garlicButton;
@@ -626,7 +625,6 @@ internal static class HudManagerStartPatch
                 var target = Sheriff.sheriff == CachedPlayer.LocalPlayer.PlayerControl
                     ? Sheriff.currentTarget
                     : Deputy.currentTarget; // If the deputy is now the sheriff, sheriffs target, else deputies target
-                checkWatchFlash(target);
                 targetId = target.PlayerId;
                 if (checkAndDoVetKill(target)) return;
                 var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
@@ -744,7 +742,6 @@ internal static class HudManagerStartPatch
             () =>
             {
                 if (checkAndDoVetKill(Medic.currentTarget)) return;
-                checkWatchFlash(Medic.currentTarget);
 
                 medicShieldButton.Timer = 0f;
 
@@ -786,7 +783,6 @@ internal static class HudManagerStartPatch
             () =>
             {
                 if (checkAndDoVetKill(Doomsayer.currentTarget)) return;
-                checkWatchFlash(Doomsayer.currentTarget);
 
                 doomsayerButton.Timer = doomsayerButton.MaxTimer;
                 /*
@@ -938,7 +934,6 @@ internal static class HudManagerStartPatch
             () =>
             {
                 if (checkAndDoVetKill(Shifter.currentTarget)) return;
-                checkWatchFlash(Shifter.currentTarget);
 
                 var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
                     (byte)CustomRPC.SetFutureShifted, SendOption.Reliable);
@@ -1104,7 +1099,6 @@ internal static class HudManagerStartPatch
                 if (Morphling.sampledTarget != null)
                 {
                     if (checkAndDoVetKill(Morphling.currentTarget)) return;
-                    checkWatchFlash(Morphling.currentTarget);
                     var writer = AmongUsClient.Instance.StartRpcImmediately(
                         CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.MorphlingMorph,
                         SendOption.Reliable);
@@ -1380,7 +1374,6 @@ internal static class HudManagerStartPatch
             () =>
             {
                 if (checkAndDoVetKill(Tracker.currentTarget)) return;
-                checkWatchFlash(Tracker.currentTarget);
 
                 var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
                     (byte)CustomRPC.TrackerUsedTracker, SendOption.Reliable);
@@ -1441,7 +1434,6 @@ internal static class HudManagerStartPatch
             () =>
             {
                 if (checkAndDoVetKill(BodyGuard.currentTarget)) return;
-                checkWatchFlash(BodyGuard.currentTarget);
                 var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
                     (byte)CustomRPC.BodyGuardGuardPlayer, SendOption.Reliable);
                 writer.Write(BodyGuard.currentTarget.PlayerId);
@@ -1467,37 +1459,6 @@ internal static class HudManagerStartPatch
             },
             BodyGuard.getGuardButtonSprite(),
             ButtonPositions.lowerRowRight, //brb
-            __instance,
-            KeyCode.F
-        );
-
-        privateInvestigatorWatchButton = new CustomButton(
-            () =>
-            {
-                if (checkAndDoVetKill(PrivateInvestigator.currentTarget)) return;
-                var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
-                    (byte)CustomRPC.PrivateInvestigatorWatchPlayer, SendOption.Reliable);
-                writer.Write(PrivateInvestigator.currentTarget.PlayerId);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCProcedure.privateInvestigatorWatchPlayer(PrivateInvestigator.currentTarget.PlayerId);
-                // SoundEffectsManager.play("trackerTrackPlayer");
-            },
-            () =>
-            {
-                return PrivateInvestigator.privateInvestigator != null &&
-                       PrivateInvestigator.privateInvestigator == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
-            },
-            () =>
-            {
-                if (PrivateInvestigator.watching == null)
-                    showTargetNameOnButton(PrivateInvestigator.currentTarget, privateInvestigatorWatchButton, getString("PrivateInvestigatorWatchText"));
-                return CachedPlayer.LocalPlayer.PlayerControl.CanMove && PrivateInvestigator.currentTarget != null &&
-                       PrivateInvestigator.watching == null;
-            },
-            () => { PrivateInvestigator.watching = null; },
-            PrivateInvestigator.getButtonSprite(),
-            ButtonPositions.lowerRowRight,
             __instance,
             KeyCode.F
         );
@@ -1884,7 +1845,6 @@ internal static class HudManagerStartPatch
             () =>
             {
                 if (checkAndDoVetKill(Jackal.currentTarget)) return;
-                checkWatchFlash(Jackal.currentTarget);
                 var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
                     (byte)CustomRPC.JackalCreatesSidekick, SendOption.Reliable);
                 writer.Write(Jackal.currentTarget.PlayerId);
@@ -2116,7 +2076,6 @@ internal static class HudManagerStartPatch
             () =>
             {
                 if (checkAndDoVetKill(Pavlovsdogs.currentTarget)) return;
-                checkWatchFlash(Pavlovsdogs.currentTarget);
                 var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
                     (byte)CustomRPC.PavlovsCreateDog, SendOption.Reliable);
                 writer.Write(Pavlovsdogs.currentTarget.PlayerId);
@@ -2207,7 +2166,6 @@ internal static class HudManagerStartPatch
             {
                 /* On Use */
                 if (checkAndDoVetKill(Bomber.currentTarget)) return;
-                checkWatchFlash(Bomber.currentTarget);
                 var bombWriter = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
                     (byte)CustomRPC.GiveBomb, SendOption.Reliable);
                 bombWriter.Write(Bomber.currentTarget.PlayerId);
@@ -2373,11 +2331,9 @@ internal static class HudManagerStartPatch
                 if (checkAndDoVetKill(Juggernaut.currentTarget)) return;
                 if (checkMurderAttemptAndKill(Juggernaut.juggernaut, Juggernaut.currentTarget) ==
                     MurderAttemptResult.SuppressKill) return;
-                if (juggernautKillButton.MaxTimer >= 0f)
-                {
-                    Juggernaut.setkill();
-                    juggernautKillButton.MaxTimer = Juggernaut.cooldown;
-                }
+
+                Mathf.Max(0, Juggernaut.cooldown - Juggernaut.reducedkill);
+                juggernautKillButton.MaxTimer = Juggernaut.cooldown;
 
                 juggernautKillButton.Timer = juggernautKillButton.MaxTimer;
                 Juggernaut.currentTarget = null;
@@ -2405,7 +2361,6 @@ internal static class HudManagerStartPatch
             () =>
             {
                 if (checkAndDoVetKill(Eraser.currentTarget)) return;
-                checkWatchFlash(Eraser.currentTarget);
                 eraserButton.MaxTimer += 10;
                 eraserButton.Timer = eraserButton.MaxTimer;
 
@@ -2708,7 +2663,6 @@ internal static class HudManagerStartPatch
                 if (Warlock.curseVictim == null)
                 {
                     if (checkAndDoVetKill(Warlock.currentTarget)) return;
-                    checkWatchFlash(Warlock.currentTarget);
                     // Apply Curse
                     Warlock.curseVictim = Warlock.currentTarget;
                     warlockCurseButton.Sprite = Warlock.getCurseKillButtonSprite();
@@ -2967,7 +2921,6 @@ internal static class HudManagerStartPatch
                 else if (Arsonist.currentTarget != null)
                 {
                     if (checkAndDoVetKill(Arsonist.currentTarget)) return;
-                    checkWatchFlash(Arsonist.currentTarget);
                     Arsonist.douseTarget = Arsonist.currentTarget;
                     arsonistButton.HasEffect = true;
                     SoundEffectsManager.play("arsonistDouse");
@@ -3240,7 +3193,6 @@ internal static class HudManagerStartPatch
                 if (Pursuer.target != null)
                 {
                     if (checkAndDoVetKill(Pursuer.target)) return;
-                    checkWatchFlash(Pursuer.target);
                     var writer = AmongUsClient.Instance.StartRpcImmediately(
                         CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.PursuerSetBlanked, SendOption.Reliable);
                     writer.Write(Pursuer.target.PlayerId);
@@ -3336,7 +3288,6 @@ internal static class HudManagerStartPatch
                 if (Survivor.target != null)
                 {
                     if (checkAndDoVetKill(Survivor.target)) return;
-                    checkWatchFlash(Survivor.target);
                     var writer = AmongUsClient.Instance.StartRpcImmediately(
                         CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.PursuerSetBlanked, SendOption.Reliable);
                     writer.Write(Survivor.target.PlayerId);
@@ -3386,7 +3337,6 @@ internal static class HudManagerStartPatch
                 if (Witch.currentTarget != null)
                 {
                     if (checkAndDoVetKill(Witch.currentTarget)) return;
-                    checkWatchFlash(Witch.currentTarget);
                     Witch.spellCastingTarget = Witch.currentTarget;
                     SoundEffectsManager.play("witchSpell");
                 }
@@ -3668,7 +3618,6 @@ internal static class HudManagerStartPatch
                 if (Ninja.currentTarget != null)
                 {
                     if (checkAndDoVetKill(Ninja.currentTarget)) return;
-                    checkWatchFlash(Witch.currentTarget);
                     Ninja.ninjaMarked = Ninja.currentTarget;
                     ninjaButton.Timer = 5f;
                     SoundEffectsManager.play("warlockCurse");
@@ -3718,7 +3667,6 @@ internal static class HudManagerStartPatch
                 if (Blackmailer.currentTarget != null)
                 {
                     if (checkAndDoVetKill(Blackmailer.currentTarget)) return;
-                    checkWatchFlash(Blackmailer.currentTarget);
                     var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
                         (byte)CustomRPC.BlackmailPlayer, SendOption.Reliable);
                     writer.Write(Blackmailer.currentTarget.PlayerId);
@@ -3759,7 +3707,6 @@ internal static class HudManagerStartPatch
             () =>
             {
                 if (checkAndDoVetKill(Cultist.currentTarget)) return;
-                checkWatchFlash(Cultist.currentTarget);
                 var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
                     (byte)CustomRPC.CultistCreateImposter, SendOption.Reliable);
                 writer.Write(Cultist.currentTarget.PlayerId);

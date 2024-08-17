@@ -55,9 +55,11 @@ public static class Doomsayer
             {
                 var info = allRoleInfo[temp[tempNum]];
 
-                message.Append(num == x ? roleInfoTarget.name : info.name);
+                message.Append(num == x ? roleInfoTarget.Name : info.Name);
                 message.Append(num < formation - 1 ? ", " : ';');
             }
+
+            AllMessage.Add(message.ToString());
 
             var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
                 (byte)CustomRPC.DoomsayerMeeting, SendOption.Reliable);
@@ -66,7 +68,6 @@ public static class Doomsayer
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             playerTargetinformation.Clear();
 
-            AllMessage.Add(message.ToString());
             return $"{message}";
         }
         catch

@@ -1,27 +1,21 @@
 ﻿using TheOtherRoles.CustomGameModes;
-using UnityEngine;
+using TheOtherRoles.Modules;
 
 namespace TheOtherRoles.Utilities;
 
 public static class HandleGuesser
 {
-    private static Sprite targetSprite;
     public static bool isGuesserGm;
     public static bool hasMultipleShotsPerMeeting;
     public static bool killsThroughShield = true;
     public static bool evilGuesserCanGuessSpy = true;
     public static bool guesserCantGuessSnitch;
 
-    public static Sprite getTargetSprite()
-    {
-        if (targetSprite) return targetSprite;
-        targetSprite = loadSpriteFromResources("TheOtherRoles.Resources.TargetIcon.png", 150f);
-        return targetSprite;
-    }
+    public static ResourceSprite targetSprite = new("TargetIcon.png", 150f);
 
     public static bool isGuesser(byte playerId)
     {
-        if (Doomsayer.doomsayer != null && Doomsayer.doomsayer.PlayerId == playerId) return true;
+        if (Doomsayer.doomsayer != null) return Doomsayer.doomsayer.PlayerId == playerId;
 
         return isGuesserGm ? GuesserGM.isGuesser(playerId) : Guesser.isGuesser(playerId);
     }
@@ -41,7 +35,6 @@ public static class HandleGuesser
 
     public static void clearAndReload()
     {
-        Guesser.clearAndReload();
         GuesserGM.clearAndReload();
         isGuesserGm = MapOption.gameMode == CustomGamemodes.Guesser;
         if (isGuesserGm)

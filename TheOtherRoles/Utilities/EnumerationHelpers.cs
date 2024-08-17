@@ -8,8 +8,7 @@ namespace TheOtherRoles.Utilities;
 
 public static class EnumerationHelpers
 {
-    public static IEnumerable<T> GetFastEnumerator<T>(this Il2CppSystem.Collections.Generic.List<T> list)
-        where T : Object
+    public static IEnumerable<T> GetFastEnumerator<T>(this Il2CppSystem.Collections.Generic.List<T> list) where T : Object
     {
         return new Il2CppListEnumerable<T>(list);
     }

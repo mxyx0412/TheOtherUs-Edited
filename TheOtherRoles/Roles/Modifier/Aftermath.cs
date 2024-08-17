@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace TheOtherRoles.Roles.Neutral;
+namespace TheOtherRoles.Roles.Modifier;
 
 public class Aftermath
 {

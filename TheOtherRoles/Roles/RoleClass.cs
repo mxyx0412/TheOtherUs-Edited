@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TheOtherRoles.CustomGameModes;
 using TheOtherRoles.Utilities;
 using UnityEngine;
@@ -11,6 +10,7 @@ public static class RoleClass
 {
     public static void clearAndReloadRoles()
     {
+        Vigilante.clearAndReload();
         Aftermath.clearAndReload();
         Jester.clearAndReload();
         Mayor.clearAndReload();
@@ -32,7 +32,6 @@ public static class RoleClass
         BodyGuard.clearAndReload();
         Veteran.clearAndReload();
         Medic.clearAndReload();
-        PrivateInvestigator.clearAndReload();
         Shifter.clearAndReload();
         Swapper.clearAndReload();
         Lovers.clearAndReload();
@@ -82,6 +81,7 @@ public static class RoleClass
         Survivor.clearAndReload();
 
         // Modifier
+        Assassin.clearAndReload();
         Bait.clearAndReload();
         Bloody.clearAndReload();
         AntiTeleport.clearAndReload();
@@ -112,30 +112,6 @@ public static class RoleClass
         PropHunt.clearAndReload();
 
         blockRole();
-    }
-
-    public static void FixedUpdate(PlayerControl player)
-    {
-        Role.allRoles.DoIf(x => x.player == player, x => x.FixedUpdate());
-    }
-
-    public static void OnMeetingStart()
-    {
-        Role.allRoles.Do(x => x.OnMeetingStart());
-
-        FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(3f, new Action<float>((p) =>
-        {
-            if (p == 1)
-            {
-                Camouflager.resetCamouflage();
-                Morphling.resetMorph();
-            }
-        })));
-    }
-
-    public static void OnMeetingEnd()
-    {
-        Role.allRoles.Do(x => x.OnMeetingEnd());
     }
 
     public static class Crew

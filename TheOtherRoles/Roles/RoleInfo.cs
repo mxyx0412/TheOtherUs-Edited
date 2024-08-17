@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
 using InnerNet;
 using TheOtherRoles.Modules;
 using TheOtherRoles.Utilities;
@@ -12,10 +9,10 @@ namespace TheOtherRoles.Roles;
 
 public class RoleInfo
 {
-    public string name { get { return getString(nameKey); } }
-    public string introDescription { get { return getString(nameKey + "IntroDesc"); } }
-    public string shortDescription { get { return getString(nameKey + "ShortDesc"); } }
-    public string fullDescription { get { return getString(nameKey + "FullDesc"); } }
+    public string Name => getString(nameKey);
+    public string IntroDescription => getString(nameKey + "IntroDesc");
+    public string ShortDescription => getString(nameKey + "ShortDesc");
+    public string FullDescription => getString(nameKey + "FullDesc");
 
     public Color color;
     public RoleId roleId;
@@ -33,7 +30,6 @@ public class RoleInfo
         this.isGuessable = isGuessable;
     }
     public static RoleInfo impostor = new("Impostor", Palette.ImpostorRed, RoleId.Impostor, RoleTeam.Impostor);
-    public static RoleInfo assassin = new("Assassin", Palette.ImpostorRed, RoleId.EvilGuesser, RoleTeam.Modifier, true);
     public static RoleInfo morphling = new("Morphling", Morphling.color, RoleId.Morphling, RoleTeam.Impostor);
     public static RoleInfo bomber = new("Bomber", Bomber.color, RoleId.Bomber, RoleTeam.Impostor);
     public static RoleInfo poucher = new("Poucher", Poucher.color, RoleId.Poucher, RoleTeam.Impostor);
@@ -79,12 +75,11 @@ public class RoleInfo
     public static RoleInfo akujo = new("Akujo", Akujo.color, RoleId.Akujo, RoleTeam.Neutral);
 
     public static RoleInfo crewmate = new("Crewmate", Color.white, RoleId.Crewmate, RoleTeam.Crewmate);
-    public static RoleInfo goodGuesser = new("Vigilante", Guesser.color, RoleId.NiceGuesser, RoleTeam.Crewmate);
+    public static RoleInfo vigilante = new("Vigilante", Vigilante.color, RoleId.Vigilante, RoleTeam.Crewmate);
     public static RoleInfo mayor = new("Mayor", Mayor.color, RoleId.Mayor, RoleTeam.Crewmate);
     public static RoleInfo prosecutor = new("Prosecutor", Prosecutor.color, RoleId.Prosecutor, RoleTeam.Crewmate);
     public static RoleInfo portalmaker = new("Portalmaker", Portalmaker.color, RoleId.Portalmaker, RoleTeam.Crewmate);
     public static RoleInfo engineer = new("Engineer", Engineer.color, RoleId.Engineer, RoleTeam.Crewmate);
-    public static RoleInfo privateInvestigator = new("PrivateInvestigator", PrivateInvestigator.color, RoleId.PrivateInvestigator, RoleTeam.Crewmate);
     public static RoleInfo sheriff = new("Sheriff", Sheriff.color, RoleId.Sheriff, RoleTeam.Crewmate);
     public static RoleInfo deputy = new("Deputy", Deputy.color, RoleId.Deputy, RoleTeam.Crewmate);
     public static RoleInfo bodyguard = new("BodyGuard", BodyGuard.color, RoleId.BodyGuard, RoleTeam.Crewmate);
@@ -107,6 +102,7 @@ public class RoleInfo
     public static RoleInfo trapper = new("Trapper", Trapper.color, RoleId.Trapper, RoleTeam.Crewmate);
 
     // Modifier
+    public static RoleInfo assassin = new("Assassin", Assassin.color, RoleId.Assassin, RoleTeam.Modifier, true);
     public static RoleInfo lover = new("Lover", Lovers.color, RoleId.Lover, RoleTeam.Modifier, true, true);
     public static RoleInfo disperser = new("Disperser", Disperser.color, RoleId.Disperser, RoleTeam.Modifier, true, true);
     public static RoleInfo specoality = new("Specoality", Specoality.color, RoleId.Specoality, RoleTeam.Modifier, true);
@@ -188,12 +184,11 @@ public class RoleInfo
         thief,
 
         crewmate,
-        goodGuesser,
+        vigilante,
         mayor,
         prosecutor,
         portalmaker,
         engineer,
-        privateInvestigator,
         sheriff,
         deputy,
         bodyguard,
@@ -287,7 +282,7 @@ public class RoleInfo
             if (Invert.invert.Any(x => x.PlayerId == p.PlayerId)) infos.Add(invert);
             if (Chameleon.chameleon.Any(x => x.PlayerId == p.PlayerId)) infos.Add(chameleon);
             if (p == Shifter.shifter) infos.Add(shifter);
-            if (Guesser.evilGuesser.Any(x => x.PlayerId == p.PlayerId)) infos.Add(assassin);
+            if (Assassin.assassin.Any(x => x.PlayerId == p.PlayerId)) infos.Add(assassin);
             if (p == LastImpostor.lastImpostor) infos.Add(lastImpostor);
         }
 
@@ -309,7 +304,6 @@ public class RoleInfo
         if (p == Trickster.trickster) infos.Add(trickster);
         if (p == Cleaner.cleaner) infos.Add(cleaner);
         if (p == Undertaker.undertaker) infos.Add(undertaker);
-        if (p == PrivateInvestigator.privateInvestigator) infos.Add(privateInvestigator);
         if (p == Warlock.warlock) infos.Add(warlock);
         if (p == Witch.witch) infos.Add(witch);
         if (p == Escapist.escapist) infos.Add(escapist);
@@ -338,7 +332,7 @@ public class RoleInfo
         if (p == Spy.spy) infos.Add(spy);
         if (p == SecurityGuard.securityGuard) infos.Add(securityGuard);
         if (p == Arsonist.arsonist) infos.Add(arsonist);
-        if (p == Guesser.niceGuesser) infos.Add(goodGuesser);
+        if (p == Vigilante.vigilante) infos.Add(vigilante);
         if (p == Mayor.mayor) infos.Add(mayor);
         if (p == Portalmaker.portalmaker) infos.Add(portalmaker);
         if (p == Engineer.engineer) infos.Add(engineer);
@@ -381,7 +375,7 @@ public class RoleInfo
     {
         string roleName;
         roleName = string.Join(" ",
-            getRoleInfoForPlayer(p, showModifier).Select(x => useColors ? cs(x.color, x.name) : x.name).ToArray());
+            getRoleInfoForPlayer(p, showModifier).Select(x => useColors ? cs(x.color, x.Name) : x.Name).ToArray());
         if (Lawyer.target != null && p.PlayerId == Lawyer.target.PlayerId &&
             CachedPlayer.LocalPlayer.PlayerControl != Lawyer.target) roleName += useColors ? cs(Lawyer.color, " §") : " §";
 
@@ -522,7 +516,7 @@ public class RoleInfo
     {
         foreach (var roleInfo in allRoleInfos)
         {
-            if (roleInfo.name == name) return $"{name}: \n{$"{roleInfo.nameKey}FullDesc".Translate()}";
+            if (roleInfo.Name == name) return $"{name}: \n{$"{roleInfo.nameKey}FullDesc".Translate()}";
         }
         return null;
     }

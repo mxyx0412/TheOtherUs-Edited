@@ -2,7 +2,6 @@
 using System.Linq;
 using AmongUs.GameOptions;
 using TheOtherRoles.CustomGameModes;
-using TheOtherRoles.Roles;
 using TheOtherRoles.Utilities;
 using UnityEngine;
 
@@ -19,7 +18,7 @@ public static class HauntMenuMinigamePatch
         if (GameOptionsManager.Instance.currentGameOptions.GameMode != GameModes.Normal) return;
         var target = __instance.HauntTarget;
         var roleInfo = RoleInfo.getRoleInfoForPlayer(target, false);
-        var roleString = roleInfo.Count > 0 && MapOption.ghostsSeeRoles ? roleInfo[0].name : "";
+        var roleString = roleInfo.Count > 0 && MapOption.ghostsSeeRoles ? roleInfo[0].Name : "";
         if (__instance.HauntTarget.Data.IsDead)
         {
             __instance.FilterText.text = roleString + " Ghost";

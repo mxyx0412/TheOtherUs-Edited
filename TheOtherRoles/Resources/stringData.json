@@ -1425,17 +1425,19 @@
         "13": "\u731c\u6d4b\u6210\u529f\u540e\u53ef\u7ee7\u7eed\u731c\u6d4b"
     },
     "doomsayerCanGuess": {
-        "0": "Doomsayer Can Guess",
+        "0": "Can Guess",
         "13": "\u53ef\u4ee5\u731c\u6d4b"
     },
     "doomsayerOnlineTarger": {
-        "13": "\u662f\u5426\u83b7\u53d6\u5df2\u6709\u804c\u4e1a"
+        "0": "Revealed The Roles Of Online Players",
+        "13": "\u4ec5\u83b7\u53d6\u5728\u7ebf\u73a9\u5bb6\u804c\u4e1a"
     },
     "doomsayerKillToWin": {
-        "0": "Number Of Doomsayer Kill To Win",
+        "0": "Number of Guesses Doomsayer Need To Win",
         "13": "\u9700\u8981\u6210\u529f\u731c\u6d4b\u51e0\u6b21\u83b7\u80dc"
     },
     "doomsayerDormationNum": {
+        "0": "Revealed Role Count",
         "13": "\u63ed\u793a\u7684\u804c\u4e1a\u6570\u91cf"
     },
     "akujoTimeLimit": {

@@ -407,7 +407,7 @@ internal class ExileControllerMessagePatch
                 if (player == null) return;
                 // Exile role text
                 if (id is StringNames.ExileTextPN or StringNames.ExileTextSN or StringNames.ExileTextPP or StringNames.ExileTextSP)
-                    __result = $"{player.Data.PlayerName} 的职业是 {string.Join(" ", RoleInfo.getRoleInfoForPlayer(player, false).Select(x => x.name).ToArray())}";
+                    __result = $"{player.Data.PlayerName} 的职业是 {string.Join(" ", RoleInfo.getRoleInfoForPlayer(player, false).Select(x => x.Name).ToArray())}";
                 // Hide number of remaining impostors on Jester win
                 if (id is StringNames.ImpostorsRemainP or StringNames.ImpostorsRemainS)
                     if (Jester.jester != null && player.PlayerId == Jester.jester.PlayerId)

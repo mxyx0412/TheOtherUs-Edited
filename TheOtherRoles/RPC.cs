@@ -75,12 +75,11 @@ public enum RoleId
 
     Crew,
     Crewmate,
-    NiceGuesser,
+    Vigilante,
     Mayor,
     Prosecutor,
     Portalmaker,
     Engineer,
-    PrivateInvestigator,
     Sheriff,
     Deputy,
     BodyGuard,
@@ -104,7 +103,7 @@ public enum RoleId
 
     // Modifier ---
     Lover,
-    EvilGuesser,
+    Assassin,
     Disperser,
     PoucherModifier,
     Specoality,
@@ -174,8 +173,6 @@ public enum CustomRPC
     TimeMasterRewindTime,
     TurnToImpostor,
     BodyGuardGuardPlayer,
-    PrivateInvestigatorWatchPlayer,
-    PrivateInvestigatorWatchFlash,
     VeteranAlert,
     VeteranKill,
     ShifterShift,
@@ -503,9 +500,6 @@ public static class RPCProcedure
                     case RoleId.Undertaker:
                         Undertaker.undertaker = player;
                         break;
-                    case RoleId.PrivateInvestigator:
-                        PrivateInvestigator.privateInvestigator = player;
-                        break;
                     case RoleId.Mimic:
                         Mimic.mimic = player;
                         break;
@@ -518,8 +512,8 @@ public static class RPCProcedure
                     case RoleId.Arsonist:
                         Arsonist.arsonist = player;
                         break;
-                    case RoleId.NiceGuesser:
-                        Guesser.niceGuesser = player;
+                    case RoleId.Vigilante:
+                        Vigilante.vigilante = player;
                         break;
                     case RoleId.BountyHunter:
                         BountyHunter.bountyHunter = player;
@@ -606,8 +600,8 @@ public static class RPCProcedure
         var player = playerById(playerId);
         switch ((RoleId)modifierId)
         {
-            case RoleId.EvilGuesser:
-                Guesser.evilGuesser.Add(player);
+            case RoleId.Assassin:
+                Assassin.assassin.Add(player);
                 break;
             case RoleId.Bait:
                 Bait.bait.Add(player);
@@ -1234,16 +1228,17 @@ public static class RPCProcedure
 
                 break;
 
-            case RoleId.EvilGuesser:
+            case RoleId.Assassin:
                 Helpers.turnToImpostor(Amnisiac.amnisiac);
                 // Never Reload Guesser
-                Guesser.evilGuesser.Add(amnisiac);
+                Assassin.assassin.Add(amnisiac);
                 Amnisiac.clearAndReload();
                 break;
 
-            case RoleId.NiceGuesser:
+            case RoleId.Vigilante:
                 // Never Reload Guesser
-                Guesser.niceGuesser = amnisiac;
+                if (Amnisiac.resetRole) Vigilante.clearAndReload();
+                Vigilante.vigilante = amnisiac;
                 Amnisiac.clearAndReload();
                 break;
 
@@ -1296,12 +1291,6 @@ public static class RPCProcedure
             case RoleId.Medium:
                 if (Amnisiac.resetRole) Medium.clearAndReload();
                 Medium.medium = amnisiac;
-                Amnisiac.clearAndReload();
-                break;
-
-            case RoleId.PrivateInvestigator:
-                if (Amnisiac.resetRole) PrivateInvestigator.clearAndReload();
-                PrivateInvestigator.privateInvestigator = amnisiac;
                 Amnisiac.clearAndReload();
                 break;
 
@@ -1579,7 +1568,7 @@ public static class RPCProcedure
         Follower.follower = player;
         Cultist.needsFollower = false;
 
-        if (Follower.getsAssassin) Guesser.evilGuesser.Add(player);
+        if (Follower.getsAssassin) Assassin.assassin.Add(player);
     }
 
     public static void turnToImpostor(byte targetId)
@@ -2279,14 +2268,13 @@ public static class RPCProcedure
         if (player == null) return;
 
         // Crewmate roles
-        if (Guesser.evilGuesser.Any(x => x.PlayerId == player.PlayerId))
-            Guesser.evilGuesser.RemoveAll(x => x.PlayerId == player.PlayerId);
+        if (Assassin.assassin.Any(x => x.PlayerId == player.PlayerId))
+            Assassin.assassin.RemoveAll(x => x.PlayerId == player.PlayerId);
         if (player == Swooper.swooper) Swooper.clearAndReload();
         if (player == Mayor.mayor) Mayor.clearAndReload();
         if (player == Prosecutor.prosecutor) Prosecutor.clearAndReload();
         if (player == Portalmaker.portalmaker) Portalmaker.clearAndReload();
         if (player == Engineer.engineer) Engineer.clearAndReload();
-        if (player == PrivateInvestigator.privateInvestigator) PrivateInvestigator.clearAndReload();
         //if (player == Sheriff.sheriff) Sheriff.clearAndReload();
         if (player == Sheriff.sheriff) Sheriff.sheriff = null;
         //if (player == Deputy.deputy) Deputy.clearAndReload();
@@ -2309,6 +2297,7 @@ public static class RPCProcedure
         if (player == Jumper.jumper) Jumper.clearAndReload();
         if (player == Trapper.trapper) Trapper.clearAndReload();
         if (player == Prophet.prophet) Prophet.clearAndReload();
+        if (player == Vigilante.vigilante) Vigilante.clearAndReload();
 
         // Impostor roles
         if (player == Morphling.morphling) Morphling.clearAndReload();
@@ -3136,7 +3125,7 @@ public static class RPCProcedure
         if (CachedPlayer.LocalPlayer.Data.IsDead)
         {
             var roleInfo = RoleInfo.allRoleInfos.FirstOrDefault(x => (byte)x.roleId == guessedRoleId);
-            var msg = $"{guesser.Data.PlayerName} 赌怪猜测 {guessedTarget.Data.PlayerName} 是 {roleInfo?.name ?? ""}!";
+            var msg = $"{guesser.Data.PlayerName} 赌怪猜测 {guessedTarget.Data.PlayerName} 是 {roleInfo?.Name ?? ""}!";
             if (AmongUsClient.Instance.AmClient && FastDestroyableSingleton<HudManager>.Instance)
                 FastDestroyableSingleton<HudManager>.Instance!.Chat.AddChat(guesser, msg);
             if (msg.Contains("who", StringComparison.OrdinalIgnoreCase))
@@ -3183,25 +3172,6 @@ public static class RPCProcedure
         var target = playerById(targetId);
         BodyGuard.usedGuard = true;
         BodyGuard.guarded = target;
-    }
-
-    public static void privateInvestigatorWatchPlayer(byte targetId)
-    {
-        var target = playerById(targetId);
-        PrivateInvestigator.watching = target;
-    }
-
-    public static void privateInvestigatorWatchFlash(byte targetId)
-    {
-        var target = playerById(targetId);
-        // GetDefaultOutfit().ColorId
-        if (CachedPlayer.LocalPlayer.PlayerControl == PrivateInvestigator.privateInvestigator)
-        {
-            if (PrivateInvestigator.seeFlashColor)
-                showFlash(Palette.PlayerColors[target.Data.DefaultOutfit.ColorId]);
-            else
-                showFlash(PrivateInvestigator.color);
-        }
     }
 
     public static void unblackmailPlayer()
@@ -3259,7 +3229,7 @@ public static class RPCProcedure
             rend.transform.SetParent(playerVoteArea.transform);
             rend.gameObject.layer = playerVoteArea.Megaphone.gameObject.layer;
             rend.transform.localPosition = new Vector3(-0.5f, 0.2f, -1f);
-            rend.sprite = loadSpriteFromResources("TheOtherRoles.Resources.ChatOverlay.png", 130f);
+            rend.sprite = new ResourceSprite("TheOtherRoles.Resources.ChatOverlay.png", 130f);
             if (playerControl.PlayerId != localPlayerId) rend.gameObject.SetActive(true);
             FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(2f,
                 (Action<float>)delegate (float p)
@@ -3312,7 +3282,6 @@ public static class RPCProcedure
         {
             Pavlovsdogs.pavlovsdogs.Add(thief);
         }
-        //if (target == Guesser.evilGuesser) Guesser.evilGuesser = thief;
         if (target == Poucher.poucher && !Poucher.spawnModifier) Poucher.poucher = thief;
         if (target == Butcher.butcher) Butcher.butcher = thief;
         if (target == Morphling.morphling) Morphling.morphling = thief;
@@ -3819,14 +3788,6 @@ internal class RPCHandlerPatch
 
             case CustomRPC.BodyGuardGuardPlayer:
                 RPCProcedure.bodyGuardGuardPlayer(reader.ReadByte());
-                break;
-
-            case CustomRPC.PrivateInvestigatorWatchPlayer:
-                RPCProcedure.privateInvestigatorWatchPlayer(reader.ReadByte());
-                break;
-
-            case CustomRPC.PrivateInvestigatorWatchFlash:
-                RPCProcedure.privateInvestigatorWatchFlash(reader.ReadByte());
                 break;
 
             case CustomRPC.DeputyUsedHandcuffs:
