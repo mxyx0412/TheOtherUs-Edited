@@ -17,14 +17,8 @@ public static class ChatCommands
 
     public static bool isTeamCultist(this PlayerControl player)
     {
-        return !(player == null) && (player == Cultist.cultist || player == Follower.follower) &&
+        return player != null && (player == Cultist.cultist || player == Follower.follower) &&
                Cultist.cultist != null && Follower.follower != null;
-    }
-
-    public static bool isTeamCultistAndLover(this PlayerControl player)
-    {
-        return !(player == null) && (player == Follower.follower || player == player.getPartner()) &&
-               player.getPartner() != null && Follower.follower != null;
     }
 
     [HarmonyPatch(typeof(ChatController), nameof(ChatController.SendChat))]
@@ -196,9 +190,9 @@ public static class ChatCommands
             if (chat.StartsWith("/team") && CachedPlayer.LocalPlayer.PlayerControl.isLover() && CachedPlayer.LocalPlayer.PlayerControl.isTeamCultist())
             {
                 if (Cultist.cultist == CachedPlayer.LocalPlayer.PlayerControl)
-                    Cultist.chatTarget = flipBitwise(Cultist.chatTarget);
+                    Cultist.chatTarget = !Cultist.chatTarget;
                 if (Follower.follower == CachedPlayer.LocalPlayer.PlayerControl)
-                    Follower.chatTarget = flipBitwise(Follower.chatTarget);
+                    Follower.chatTarget = !Follower.chatTarget;
                 handled = true;
             }
 
@@ -274,7 +268,7 @@ public static class ChatCommands
             if (!playerControl.isTeamCultist() && !playerControl.isLover()) return flag;
             if ((playerControl.isTeamCultist() && Follower.chatTarget) ||
                 (playerControl.isLover() && Lovers.enableChat) ||
-                (playerControl.isTeamCultistAndLover() && !Follower.chatTarget))
+                (playerControl.isTeamCultist() && playerControl.isLover() && !Follower.chatTarget))
                 return sourcePlayer.getChatPartner() == playerControl || playerControl.getChatPartner() == playerControl == (bool)sourcePlayer || flag;
             return flag;
         }

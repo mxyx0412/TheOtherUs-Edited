@@ -46,7 +46,7 @@ public class RoleInfo
     public static RoleInfo trickster = new("Trickster", Trickster.color, RoleId.Trickster, RoleTeam.Impostor);
     public static RoleInfo bountyHunter = new("BountyHunter", BountyHunter.color, RoleId.BountyHunter, RoleTeam.Impostor);
     public static RoleInfo cultist = new("Cultist", Cultist.color, RoleId.Cultist, RoleTeam.Impostor);
-    public static RoleInfo follower = new("Cleaner", Cleaner.color, RoleId.Follower, RoleTeam.Impostor, true);
+    public static RoleInfo follower = new("Follower", Follower.color, RoleId.Follower, RoleTeam.Impostor);
     public static RoleInfo terrorist = new("Terrorist", Terrorist.color, RoleId.Terrorist, RoleTeam.Impostor);
     public static RoleInfo blackmailer = new("Blackmailer", Blackmailer.color, RoleId.Blackmailer, RoleTeam.Impostor);
     public static RoleInfo witch = new("Witch", Witch.color, RoleId.Witch, RoleTeam.Impostor);

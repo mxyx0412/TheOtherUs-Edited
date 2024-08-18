@@ -198,6 +198,7 @@ public class CustomOptionHolder
     public static CustomOption mayorMeetingButton;
     public static CustomOption mayorMaxRemoteMeetings;
     public static CustomOption mayorSabotageRemoteMeetings;
+    public static CustomOption mayorVote;
     public static CustomOption mayorRevealVision;
 
     public static CustomOption prosecutorSpawnRate;
@@ -1129,6 +1130,7 @@ public class CustomOptionHolder
         mayorMeetingButton = Create(30113, Types.Crewmate, "mayorMeetingButton", true, mayorSpawnRate);
         mayorMaxRemoteMeetings = Create(30114, Types.Crewmate, "mayorMaxRemoteMeetings", 1f, 1f, 5f, 1f, mayorMeetingButton);
         mayorSabotageRemoteMeetings = Create(30115, Types.Crewmate, "mayorSabotageRemoteMeetings", false, mayorMeetingButton);
+        mayorVote = Create(30117, Types.Crewmate, "mayorVote", 2, 1, 4, 1, mayorMeetingButton);
         mayorRevealVision = Create(30116, Types.Crewmate, "mayorRevealVision", ["-20%", "-30%", "-40%", "-50%"], mayorMeetingButton);
 
         prosecutorSpawnRate = Create(30370, Types.Crewmate, cs(Prosecutor.color, "Prosecutor"), rates, null, true);
@@ -1141,7 +1143,7 @@ public class CustomOptionHolder
         engineerRemoteFix = Create(30121, Types.Crewmate, "engineerRemoteFix", true, engineerSpawnRate);
         engineerResetFixAfterMeeting = Create(30122, Types.Crewmate, "engineerResetFixAfterMeeting", true, engineerRemoteFix);
         engineerNumberOfFixes = Create(30123, Types.Crewmate, "engineerNumberOfFixes", 1f, 1f, 3f, 1f, engineerRemoteFix);
-        //engineerExpertRepairs = Create(30124, Types.Crewmate, "高级修复模式", false, engineerSpawnRate);
+        //engineerExpertRepairs = Create(30124, Types.Crewmate, "engineerExpertRepairs", false, engineerSpawnRate);
         engineerHighlightForImpostors = Create(30125, Types.Crewmate, "engineerHighlightForImpostors", true, engineerSpawnRate);
         engineerHighlightForTeamJackal = Create(30126, Types.Crewmate, "engineerHighlightForTeamJackal", true, engineerSpawnRate);
 

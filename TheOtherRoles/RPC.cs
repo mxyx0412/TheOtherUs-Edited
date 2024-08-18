@@ -553,8 +553,7 @@ public static class RPCProcedure
                         break;
                     case RoleId.Cultist:
                         Cultist.cultist = player;
-                        var impostors = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid())
-                            .ToList();
+                        var impostors = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
                         impostors.RemoveAll(x => !x.Data.Role.IsImpostor);
                         Helpers.turnToCrewmate(impostors, player);
                         break;

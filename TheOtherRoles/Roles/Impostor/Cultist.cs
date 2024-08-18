@@ -28,6 +28,14 @@ public static class Cultist
         return buttonSprite;
     }
 
+    public static PlayerControl getCultistPartner(this PlayerControl player)
+    {
+        if (player == null) return null;
+        if (Cultist.cultist == player) return Follower.follower;
+        if (Follower.follower == player) return Cultist.cultist;
+        return null;
+    }
+
     public static void clearAndReload()
     {
         if (localArrows != null)

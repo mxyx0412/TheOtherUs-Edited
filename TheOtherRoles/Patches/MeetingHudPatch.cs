@@ -439,7 +439,7 @@ internal class MeetingHudPatch
                     additionalVotes = Prosecutor.ProsecuteThisMeeting ? 15 : 1;
 
                 if (Mayor.mayor != null && Mayor.mayor.PlayerId == playerVoteArea.TargetPlayerId)
-                    additionalVotes = Mayor.Revealed ? 3 : 1;
+                    additionalVotes = Mayor.Revealed ? Mayor.Vote : 1;
 
                 if (Prosecutor.prosecutor != null && Prosecutor.ProsecuteThisMeeting && Prosecutor.prosecutor.PlayerId != playerVoteArea.TargetPlayerId)
                     additionalVotes = 0;
@@ -664,7 +664,7 @@ internal class MeetingHudPatch
 
                     // Mayor vote, redo this iteration to place a second vote
                     if (Mayor.mayor == null || voterState.VoterId != (sbyte)Mayor.mayor.PlayerId
-                        || mayorVotesDisplayed >= 2 || !Mayor.Revealed)
+                        || mayorVotesDisplayed > Mayor.Vote || !Mayor.Revealed)
                     {
                         mayorVotesDisplayed = 0;
                         continue;

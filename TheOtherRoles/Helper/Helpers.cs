@@ -311,12 +311,6 @@ public static class Helpers
         !MeetingHud.Instance &&
         !ExileController.Instance;
 
-    public static bool flipBitwise(bool bit)
-    {
-        if (!bit) return true;
-        return false;
-    }
-
     public static void NoCheckStartMeeting(this PlayerControl reporter, GameData.PlayerInfo target, bool force = false)
     {
         if (IsMeeting) return;
@@ -349,14 +343,6 @@ public static class Helpers
             var sprite = loadSpriteFromResources("TheOtherRoles.Resources.Cursor.png", 115f);
             Cursor.SetCursor(sprite.texture, Vector2.zero, CursorMode.Auto);
         }
-    }
-
-    public static PlayerControl getCultistPartner(this PlayerControl player)
-    {
-        if (player == null) return null;
-        if (Cultist.cultist == player) return Follower.follower;
-        if (Follower.follower == player) return Cultist.cultist;
-        return null;
     }
 
     public static bool roleCanSabotage(this PlayerControl player)

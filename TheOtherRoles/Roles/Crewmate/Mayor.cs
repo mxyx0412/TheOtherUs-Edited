@@ -11,6 +11,7 @@ public static class Mayor
     public static PlayerVoteArea Reveal;
     public static bool StartReveal;
     public static bool Revealed;
+    public static int Vote;
 
     public static bool meetingButton = true;
     public static int remoteMeetingsLeft = 1;
@@ -22,6 +23,7 @@ public static class Mayor
         mayor = null;
         StartReveal = false;
         Revealed = false;
+        Vote = CustomOptionHolder.mayorVote.GetInt();
         meetingButton = CustomOptionHolder.mayorMeetingButton.getBool();
         remoteMeetingsLeft = Mathf.RoundToInt(CustomOptionHolder.mayorMaxRemoteMeetings.getFloat());
         SabotageRemoteMeetings = CustomOptionHolder.mayorSabotageRemoteMeetings.getBool();
