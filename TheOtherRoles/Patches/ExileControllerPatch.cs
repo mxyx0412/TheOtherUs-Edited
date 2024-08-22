@@ -141,42 +141,42 @@ internal class ExileControllerBeginPatch
 
         // SecurityGuard vents and cameras
         var allCameras = MapUtilities.CachedShipStatus.AllCameras.ToList();
-        MapOption.camerasToAdd.ForEach(camera =>
+        ModOption.camerasToAdd.ForEach(camera =>
         {
             camera.gameObject.SetActive(true);
             camera.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
             allCameras.Add(camera);
         });
         MapUtilities.CachedShipStatus.AllCameras = allCameras.ToArray();
-        MapOption.camerasToAdd = new List<SurvCamera>();
+        ModOption.camerasToAdd = new List<SurvCamera>();
 
-        foreach (var vent in MapOption.ventsToSeal)
+        foreach (var vent in ModOption.ventsToSeal)
         {
             var animator = vent.GetComponent<SpriteAnim>();
             vent.EnterVentAnim = vent.ExitVentAnim = null;
             var newSprite = animator == null
-                ? SecurityGuard.getStaticVentSealedSprite()
+                ? SecurityGuard.staticVentSealedSprite
                 : SecurityGuard.getAnimatedVentSealedSprite();
             var rend = vent.myRend;
             if (isFungle())
             {
-                newSprite = SecurityGuard.getFungleVentSealedSprite();
+                newSprite = SecurityGuard.fungleVentSealedSprite;
                 rend = vent.transform.GetChild(3).GetComponent<SpriteRenderer>();
                 animator = vent.transform.GetChild(3).GetComponent<SpriteAnim>();
             }
 
             animator?.Stop();
             rend.sprite = newSprite;
-            if (SubmergedCompatibility.IsSubmerged && vent.Id == 0) vent.myRend.sprite = SecurityGuard.getSubmergedCentralUpperSealedSprite();
-            if (SubmergedCompatibility.IsSubmerged && vent.Id == 14) vent.myRend.sprite = SecurityGuard.getSubmergedCentralLowerSealedSprite();
+            if (SubmergedCompatibility.IsSubmerged && vent.Id == 0) vent.myRend.sprite = SecurityGuard.submergedCentralUpperVentSealedSprite;
+            if (SubmergedCompatibility.IsSubmerged && vent.Id == 14) vent.myRend.sprite = SecurityGuard.submergedCentralLowerVentSealedSprite;
             rend.color = Color.white;
             vent.name = "SealedVent_" + vent.name;
         }
 
-        MapOption.ventsToSeal = new List<Vent>();
+        ModOption.ventsToSeal = new List<Vent>();
         // 1 = reset per turn
-        if (MapOption.restrictDevices == 1)
-            MapOption.resetDeviceTimes();
+        if (ModOption.restrictDevices == 1)
+            ModOption.resetDeviceTimes();
     }
 }
 
@@ -251,7 +251,7 @@ internal class ExileControllerWrapUpPatch
                 soul.layer = 5;
                 var rend = soul.AddComponent<SpriteRenderer>();
                 soul.AddSubmergedComponent(SubmergedCompatibility.Classes.ElevatorMover);
-                rend.sprite = Seer.getSoulSprite();
+                rend.sprite = Seer.soulSprite;
 
                 if (Seer.limitSoulDuration)
                 {
@@ -293,14 +293,14 @@ internal class ExileControllerWrapUpPatch
             var BottomLeft = newBottomLeft + new Vector3(-0.25f, -0.25f, 0);
             foreach (PlayerControl p in CachedPlayer.AllPlayers)
             {
-                if (!MapOption.playerIcons.ContainsKey(p.PlayerId)) continue;
+                if (!ModOption.playerIcons.ContainsKey(p.PlayerId)) continue;
                 if (p.Data.IsDead || p.Data.Disconnected)
                 {
-                    MapOption.playerIcons[p.PlayerId].gameObject.SetActive(false);
+                    ModOption.playerIcons[p.PlayerId].gameObject.SetActive(false);
                 }
                 else
                 {
-                    MapOption.playerIcons[p.PlayerId].transform.localPosition =
+                    ModOption.playerIcons[p.PlayerId].transform.localPosition =
                         newBottomLeft + (Vector3.right * visibleCounter * 0.35f);
                     visibleCounter++;
                 }
@@ -333,7 +333,7 @@ internal class ExileControllerWrapUpPatch
                     s.layer = 5;
                     var rend = s.AddComponent<SpriteRenderer>();
                     s.AddSubmergedComponent(SubmergedCompatibility.Classes.ElevatorMover);
-                    rend.sprite = Medium.getSoulSprite();
+                    rend.sprite = Medium.soulSprite;
                     Medium.souls.Add(rend);
                 }
 

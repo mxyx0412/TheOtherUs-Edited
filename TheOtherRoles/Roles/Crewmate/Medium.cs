@@ -21,23 +21,9 @@ public static class Medium
     public static bool oneTimeUse;
     public static float chanceAdditionalInfo;
 
-    private static Sprite soulSprite;
+    public static ResourceSprite soulSprite = new("Soul.png", 500f);
 
-    private static Sprite question;
-
-    public static Sprite getSoulSprite()
-    {
-        if (soulSprite) return soulSprite;
-        soulSprite = loadSpriteFromResources("TheOtherRoles.Resources.Soul.png", 500f);
-        return soulSprite;
-    }
-
-    public static Sprite getQuestionSprite()
-    {
-        if (question) return question;
-        question = loadSpriteFromResources("TheOtherRoles.Resources.MediumButton.png", 115f);
-        return question;
-    }
+    public static ResourceSprite question = new("MediumButton.png");
 
     public static void clearAndReload()
     {

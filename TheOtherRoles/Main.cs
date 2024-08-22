@@ -6,7 +6,6 @@ using BepInEx.Unity.IL2CPP;
 using InnerNet;
 using Reactor.Networking;
 using Reactor.Networking.Attributes;
-using TheOtherRoles.Modules;
 using TheOtherRoles.Modules.CustomHats;
 using TheOtherRoles.Patches;
 using TheOtherRoles.Utilities;

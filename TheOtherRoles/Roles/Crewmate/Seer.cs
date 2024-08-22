@@ -13,14 +13,7 @@ public static class Seer
     public static bool limitSoulDuration;
     public static int mode;
 
-    private static Sprite soulSprite;
-
-    public static Sprite getSoulSprite()
-    {
-        if (soulSprite) return soulSprite;
-        soulSprite = loadSpriteFromResources("TheOtherRoles.Resources.Soul.png", 500f);
-        return soulSprite;
-    }
+    public static ResourceSprite soulSprite = new("Soul.png", 500f);
 
     public static void clearAndReload()
     {

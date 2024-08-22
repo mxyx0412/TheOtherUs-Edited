@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace TheOtherRoles.Roles.Modifier;
+﻿namespace TheOtherRoles.Roles.Modifier;
 
 public static class ButtonBarry
 {
@@ -8,14 +6,8 @@ public static class ButtonBarry
     public static int remoteMeetingsLeft = 1;
     public static bool SabotageRemoteMeetings;
 
-    private static Sprite buttonSprite;
+    public static ResourceSprite buttonSprite = new("EmergencyButton.png", 550);
 
-    public static Sprite getButtonSprite()
-    {
-        if (buttonSprite) return buttonSprite;
-        buttonSprite = loadSpriteFromResources("TheOtherRoles.Resources.EmergencyButton.png", 550f);
-        return buttonSprite;
-    }
     public static void clearAndReload()
     {
         buttonBarry = null;

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using TheOtherRoles.Modules;
 using UnityEngine;
 
 namespace TheOtherRoles.Roles.Neutral;

@@ -10,7 +10,6 @@ using InnerNet;
 using PowerTools;
 using Reactor.Utilities.Extensions;
 using TheOtherRoles.CustomGameModes;
-using TheOtherRoles.Modules;
 using TheOtherRoles.Objects;
 using TheOtherRoles.Objects.Map;
 using TheOtherRoles.Patches;
@@ -19,7 +18,7 @@ using TMPro;
 using UnityEngine;
 using static TheOtherRoles.GameHistory;
 using static TheOtherRoles.HudManagerStartPatch;
-using static TheOtherRoles.Options.MapOption;
+using static TheOtherRoles.Options.ModOption;
 using static TheOtherRoles.Roles.RoleClass;
 using Object = UnityEngine.Object;
 
@@ -2885,20 +2884,20 @@ public static class RPCProcedure
 
             vent.EnterVentAnim = vent.ExitVentAnim = null;
             var newSprite = animator == null
-                ? SecurityGuard.getStaticVentSealedSprite()
+                ? SecurityGuard.staticVentSealedSprite
                 : SecurityGuard.getAnimatedVentSealedSprite();
             var rend = vent.myRend;
             if (isFungle())
             {
-                newSprite = SecurityGuard.getFungleVentSealedSprite();
+                newSprite = SecurityGuard.fungleVentSealedSprite;
                 rend = vent.transform.GetChild(3).GetComponent<SpriteRenderer>();
                 animator = vent.transform.GetChild(3).GetComponent<SpriteAnim>();
             }
 
             animator?.Stop();
             rend.sprite = newSprite;
-            if (SubmergedCompatibility.IsSubmerged && vent.Id == 0) vent.myRend.sprite = SecurityGuard.getSubmergedCentralUpperSealedSprite();
-            if (SubmergedCompatibility.IsSubmerged && vent.Id == 14) vent.myRend.sprite = SecurityGuard.getSubmergedCentralLowerSealedSprite();
+            if (SubmergedCompatibility.IsSubmerged && vent.Id == 0) vent.myRend.sprite = SecurityGuard.submergedCentralUpperVentSealedSprite;
+            if (SubmergedCompatibility.IsSubmerged && vent.Id == 14) vent.myRend.sprite = SecurityGuard.submergedCentralLowerVentSealedSprite;
             rend.color = new Color(1f, 1f, 1f, 0.5f);
             vent.name = "FutureSealedVent_" + vent.name;
         }

@@ -8,29 +8,14 @@ public static class Werewolf
     public static PlayerControl currentTarget;
     public static Color color = new Color32(79, 56, 21, byte.MaxValue);
 
-    // Kill Button 
     public static float killCooldown = 3f;
-
-    // Rampage Button
     public static float rampageCooldown = 30f;
     public static float rampageDuration = 5f;
     public static bool canUseVents;
     public static bool canKill;
     public static bool hasImpostorVision;
 
-    public static Sprite buttonSprite;
-
-    public static Sprite getRampageButtonSprite()
-    {
-        if (buttonSprite) return buttonSprite;
-        buttonSprite = loadSpriteFromResources("TheOtherRoles.Resources.Rampage.png", 115f);
-        return buttonSprite;
-    }
-
-    public static Vector3 getRampageVector()
-    {
-        return new Vector3(-2.7f, -0.06f, 0);
-    }
+    public static ResourceSprite buttonSprite = new("Rampage.png");
 
     public static void clearAndReload()
     {

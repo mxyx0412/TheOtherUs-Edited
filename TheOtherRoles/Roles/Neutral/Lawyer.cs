@@ -7,7 +7,6 @@ public static class Lawyer
     public static PlayerControl lawyer;
     public static PlayerControl target;
     public static Color color = new Color32(134, 153, 25, byte.MaxValue);
-    public static Sprite targetSprite;
     public static bool canCallEmergency = true;
     public static bool targetKnows;
     public static bool stolenWin;
@@ -17,13 +16,6 @@ public static class Lawyer
     public static bool lawyerKnowsRole;
     public static bool targetCanBeJester;
     public static bool targetWasGuessed;
-
-    public static Sprite getTargetSprite()
-    {
-        if (targetSprite) return targetSprite;
-        targetSprite = loadSpriteFromResources("", 150f);
-        return targetSprite;
-    }
 
     public static void clearAndReload(bool clearTarget = true)
     {

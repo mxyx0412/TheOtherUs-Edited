@@ -13,14 +13,7 @@ public static class Camouflager
     public static float camouflageTimer;
     public static bool camoComms;
 
-    private static Sprite buttonSprite;
-
-    public static Sprite getButtonSprite()
-    {
-        if (buttonSprite) return buttonSprite;
-        buttonSprite = loadSpriteFromResources("TheOtherRoles.Resources.CamoButton.png", 115f);
-        return buttonSprite;
-    }
+    public static ResourceSprite buttonSprite = new("CamoButton.png");
 
     public static void resetCamouflage()
     {

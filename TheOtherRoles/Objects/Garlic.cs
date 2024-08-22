@@ -8,9 +8,9 @@ internal class Garlic
 {
     public static List<Garlic> garlics = [];
 
-    private static Sprite garlicSprite;
+    private static ResourceSprite garlicSprite = new("Garlic.png", 300);
 
-    private static Sprite backgroundSprite;
+    private static ResourceSprite backgroundSprite = new("GarlicBackground.png", 60);
     private readonly GameObject background;
 
     public readonly GameObject garlic;
@@ -26,27 +26,13 @@ internal class Garlic
         background.transform.localPosition = new Vector3(0, 0, -1f); // before player
 
         var garlicRenderer = garlic.AddComponent<SpriteRenderer>();
-        garlicRenderer.sprite = getGarlicSprite();
+        garlicRenderer.sprite = garlicSprite;
         var backgroundRenderer = background.AddComponent<SpriteRenderer>();
-        backgroundRenderer.sprite = getBackgroundSprite();
+        backgroundRenderer.sprite = backgroundSprite;
 
 
         garlic.SetActive(true);
         garlics.Add(this);
-    }
-
-    public static Sprite getGarlicSprite()
-    {
-        if (garlicSprite) return garlicSprite;
-        garlicSprite = loadSpriteFromResources("TheOtherRoles.Resources.Garlic.png", 300f);
-        return garlicSprite;
-    }
-
-    public static Sprite getBackgroundSprite()
-    {
-        if (backgroundSprite) return backgroundSprite;
-        backgroundSprite = loadSpriteFromResources("TheOtherRoles.Resources.GarlicBackground.png", 60f);
-        return backgroundSprite;
     }
 
     public static void clearGarlics()

@@ -1,5 +1,4 @@
 ﻿using TheOtherRoles.CustomGameModes;
-using TheOtherRoles.Modules;
 
 namespace TheOtherRoles.Utilities;
 
@@ -36,7 +35,7 @@ public static class HandleGuesser
     public static void clearAndReload()
     {
         GuesserGM.clearAndReload();
-        isGuesserGm = MapOption.gameMode == CustomGamemodes.Guesser;
+        isGuesserGm = ModOption.gameMode == CustomGamemodes.Guesser;
         if (isGuesserGm)
         {
             guesserCantGuessSnitch = CustomOptionHolder.guesserGamemodeCantGuessSnitchIfTaksDone.getBool();

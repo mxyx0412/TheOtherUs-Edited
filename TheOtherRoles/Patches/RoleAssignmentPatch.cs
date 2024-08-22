@@ -24,9 +24,9 @@ internal class GameOptionsDataGetAdjustedNumImpostorsPatch
 {
     public static void Postfix(ref int __result)
     {
-        if (MapOption.gameMode is CustomGamemodes.HideNSeek or CustomGamemodes.PropHunt)
+        if (ModOption.gameMode is CustomGamemodes.HideNSeek or CustomGamemodes.PropHunt)
         {
-            var impCount = MapOption.gameMode == CustomGamemodes.HideNSeek
+            var impCount = ModOption.gameMode == CustomGamemodes.HideNSeek
                 ? Mathf.RoundToInt(CustomOptionHolder.hideNSeekHunterCount.getFloat())
                 : CustomOptionHolder.propHuntNumberOfHunters.getQuantity();
             __result = impCount;
@@ -45,9 +45,9 @@ internal class GameOptionsDataValidatePatch
 {
     public static void Postfix(GameOptionsData __instance)
     {
-        if (MapOption.gameMode == CustomGamemodes.HideNSeek ||
+        if (ModOption.gameMode == CustomGamemodes.HideNSeek ||
             GameOptionsManager.Instance.CurrentGameOptions.GameMode != GameModes.Normal) return;
-        if (MapOption.gameMode == CustomGamemodes.PropHunt)
+        if (ModOption.gameMode == CustomGamemodes.PropHunt)
             __instance.NumImpostors = CustomOptionHolder.propHuntNumberOfHunters.getQuantity();
         __instance.NumImpostors = GameOptionsManager.Instance.CurrentGameOptions.NumImpostors;
     }
@@ -62,7 +62,7 @@ internal class RoleManagerSelectRolesPatch
 
     //private static bool isEvilGuesser;
     private static readonly List<Tuple<byte, byte>> playerRoleMap = new();
-    public static bool isGuesserGamemode => MapOption.gameMode == CustomGamemodes.Guesser;
+    public static bool isGuesserGamemode => ModOption.gameMode == CustomGamemodes.Guesser;
 
     public static void Postfix()
     {
@@ -71,7 +71,7 @@ internal class RoleManagerSelectRolesPatch
         AmongUsClient.Instance.FinishRpcImmediately(writer);
         RPCProcedure.resetVariables();
         // Don't assign Roles in Hide N Seek
-        if (MapOption.gameMode == CustomGamemodes.HideNSeek || MapOption.gameMode == CustomGamemodes.PropHunt ||
+        if (ModOption.gameMode == CustomGamemodes.HideNSeek || ModOption.gameMode == CustomGamemodes.PropHunt ||
             GameOptionsManager.Instance.currentGameOptions.GameMode == GameModes.HideNSeek) return;
         assignRoles();
     }

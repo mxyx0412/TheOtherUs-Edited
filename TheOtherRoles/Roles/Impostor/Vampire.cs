@@ -18,23 +18,9 @@ public static class Vampire
     public static PlayerControl bitten;
     public static bool targetNearGarlic;
 
-    private static Sprite buttonSprite;
+    public static ResourceSprite buttonSprite = new("VampireButton.png");
 
-    private static Sprite garlicButtonSprite;
-
-    public static Sprite getButtonSprite()
-    {
-        if (buttonSprite) return buttonSprite;
-        buttonSprite = loadSpriteFromResources("TheOtherRoles.Resources.VampireButton.png", 115f);
-        return buttonSprite;
-    }
-
-    public static Sprite getGarlicButtonSprite()
-    {
-        if (garlicButtonSprite) return garlicButtonSprite;
-        garlicButtonSprite = loadSpriteFromResources("TheOtherRoles.Resources.GarlicButton.png", 115f);
-        return garlicButtonSprite;
-    }
+    public static ResourceSprite garlicButtonSprite = new("GarlicButton.png");
 
     public static void clearAndReload()
     {

@@ -2,11 +2,11 @@
 
 namespace TheOtherRoles.Roles.Crewmate;
 
-public static class Engineer
+public class Engineer
 {
     public static PlayerControl engineer;
     public static Color color = new Color32(0, 40, 245, byte.MaxValue);
-    private static Sprite buttonSprite;
+    public static ResourceSprite buttonSprite = new("RepairButton.png");
 
     public static bool resetFixAfterMeeting;
 
@@ -17,13 +17,6 @@ public static class Engineer
     public static bool highlightForTeamJackal = true;
 
     public static bool usedFix;
-
-    public static Sprite getButtonSprite()
-    {
-        if (buttonSprite) return buttonSprite;
-        buttonSprite = loadSpriteFromResources("TheOtherRoles.Resources.RepairButton.png", 115f);
-        return buttonSprite;
-    }
 
     public static void resetFixes()
     {

@@ -12,32 +12,9 @@ public static class Trickster
     public static float lightsOutDuration = 10f;
     public static float lightsOutTimer;
 
-    private static Sprite placeBoxButtonSprite;
-    private static Sprite lightOutButtonSprite;
-    private static Sprite tricksterVentButtonSprite;
-
-    public static Sprite getPlaceBoxButtonSprite()
-    {
-        if (placeBoxButtonSprite) return placeBoxButtonSprite;
-        placeBoxButtonSprite =
-            loadSpriteFromResources("TheOtherRoles.Resources.PlaceJackInTheBoxButton.png", 115f);
-        return placeBoxButtonSprite;
-    }
-
-    public static Sprite getLightsOutButtonSprite()
-    {
-        if (lightOutButtonSprite) return lightOutButtonSprite;
-        lightOutButtonSprite = loadSpriteFromResources("TheOtherRoles.Resources.LightsOutButton.png", 115f);
-        return lightOutButtonSprite;
-    }
-
-    public static Sprite getTricksterVentButtonSprite()
-    {
-        if (tricksterVentButtonSprite) return tricksterVentButtonSprite;
-        tricksterVentButtonSprite =
-            loadSpriteFromResources("TheOtherRoles.Resources.TricksterVentButton.png", 115f);
-        return tricksterVentButtonSprite;
-    }
+    public static ResourceSprite placeBoxButtonSprite = new("PlaceJackInTheBoxButton.png");
+    public static ResourceSprite lightOutButtonSprite = new("LightsOutButton.png");
+    public static ResourceSprite tricksterVentButtonSprite = new("TricksterVentButton.png");
 
     public static void clearAndReload()
     {

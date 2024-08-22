@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using Hazel;
 using Reactor.Utilities.Extensions;
-using TheOtherRoles.Modules;
 using TheOtherRoles.Utilities;
 using UnityEngine;
 
@@ -140,7 +139,7 @@ public class GameStartManagerPatch
                     // Activate Stop-Button
                     copiedStartButton = UnityEngine.Object.Instantiate(__instance.StartButton.gameObject, __instance.StartButton.gameObject.transform.parent);
                     copiedStartButton.transform.localPosition = __instance.StartButton.transform.localPosition;
-                    copiedStartButton.GetComponent<SpriteRenderer>().sprite = loadSpriteFromResources("TheOtherRoles.Resources.StopClean.png", 180f);
+                    copiedStartButton.GetComponent<SpriteRenderer>().sprite = UnityHelper.loadSpriteFromResources("TheOtherRoles.Resources.StopClean.png", 180f);
                     copiedStartButton.SetActive(true);
                     var startButtonText = copiedStartButton.GetComponentInChildren<TMPro.TextMeshPro>();
                     startButtonText.text = getString("stopGameStartText");
@@ -203,7 +202,7 @@ public class GameStartManagerPatch
                     // Activate Stop-Button
                     copiedStartButton = UnityEngine.Object.Instantiate(__instance.StartButton.gameObject, __instance.StartButton.gameObject.transform.parent);
                     copiedStartButton.transform.localPosition = __instance.StartButton.transform.localPosition;
-                    copiedStartButton.GetComponent<SpriteRenderer>().sprite = loadSpriteFromResources("TheOtherRoles.Resources.StopClean.png", 180f);
+                    copiedStartButton.GetComponent<SpriteRenderer>().sprite = UnityHelper.loadSpriteFromResources("TheOtherRoles.Resources.StopClean.png", 180f);
                     copiedStartButton.SetActive(true);
                     var startButtonText = copiedStartButton.GetComponentInChildren<TMPro.TextMeshPro>();
                     startButtonText.text = "STOP";
@@ -254,9 +253,9 @@ public class GameStartManagerPatch
             {
                 var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
                     (byte)CustomRPC.ShareGamemode, SendOption.Reliable, -1);
-                writer.Write((byte)MapOption.gameMode);
+                writer.Write((byte)ModOption.gameMode);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCProcedure.shareGameMode((byte)MapOption.gameMode);
+                RPCProcedure.shareGameMode((byte)ModOption.gameMode);
             }
         }
     }
@@ -295,11 +294,11 @@ public class GameStartManagerPatch
                         break;
                     }
                 }
-                if (continueStart && (MapOption.gameMode == CustomGamemodes.HideNSeek || MapOption.gameMode == CustomGamemodes.PropHunt) && GameOptionsManager.Instance.CurrentGameOptions.MapId != 6)
+                if (continueStart && (ModOption.gameMode == CustomGamemodes.HideNSeek || ModOption.gameMode == CustomGamemodes.PropHunt) && GameOptionsManager.Instance.CurrentGameOptions.MapId != 6)
                 {
                     byte mapId = 0;
-                    if (MapOption.gameMode == CustomGamemodes.HideNSeek) mapId = (byte)CustomOptionHolder.hideNSeekMap.getSelection();
-                    else if (MapOption.gameMode == CustomGamemodes.PropHunt) mapId = (byte)CustomOptionHolder.propHuntMap.getSelection();
+                    if (ModOption.gameMode == CustomGamemodes.HideNSeek) mapId = (byte)CustomOptionHolder.hideNSeekMap.getSelection();
+                    else if (ModOption.gameMode == CustomGamemodes.PropHunt) mapId = (byte)CustomOptionHolder.propHuntMap.getSelection();
                     if (mapId >= 3) mapId++;
                     var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
                         (byte)CustomRPC.DynamicMapOption, SendOption.Reliable, -1);

@@ -23,7 +23,7 @@ public class FootprintHolder : MonoBehaviour
     }
 
     private static Sprite _footprintSprite;
-    private static Sprite FootprintSprite => _footprintSprite ??= loadSpriteFromResources("TheOtherRoles.Resources.Footprint.png", 600f);
+    private static Sprite FootprintSprite => _footprintSprite ??= UnityHelper.loadSpriteFromResources("TheOtherRoles.Resources.Footprint.png", 600f);
 
     private static bool AnonymousFootprints => Detective.anonymousFootprints == 2;
     private static bool SabotageActive => (isActiveCamoComms() || MushroomSabotageActive()) && Detective.anonymousFootprints == 1;

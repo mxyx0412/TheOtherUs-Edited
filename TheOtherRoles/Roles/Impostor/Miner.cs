@@ -9,7 +9,7 @@ public class Miner
     public static readonly List<Vent> Vents = new();
     public static PlayerControl miner;
     public static DateTime LastMined;
-    public static Sprite buttonSprite;
+    public static ResourceSprite buttonSprite = new("Mine.png");
 
     public static float cooldown = 30f;
     public static Color color = Palette.ImpostorRed;
@@ -22,12 +22,5 @@ public class Miner
     {
         miner = null;
         cooldown = CustomOptionHolder.minerCooldown.getFloat();
-    }
-
-    public static Sprite getMineButtonSprite()
-    {
-        if (buttonSprite) return buttonSprite;
-        buttonSprite = loadSpriteFromResources("TheOtherRoles.Resources.Mine.png", 115f);
-        return buttonSprite;
     }
 }

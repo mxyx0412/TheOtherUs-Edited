@@ -30,21 +30,9 @@ public static class Tracker
     public static GameObject DangerMeterParent;
     public static DangerMeter Meter;
 
-    private static Sprite trackCorpsesButtonSprite;
-    public static Sprite getTrackCorpsesButtonSprite()
-    {
-        if (trackCorpsesButtonSprite) return trackCorpsesButtonSprite;
-        trackCorpsesButtonSprite = loadSpriteFromResources("TheOtherRoles.Resources.PathfindButton.png", 115f);
-        return trackCorpsesButtonSprite;
-    }
+    public static ResourceSprite trackCorpsesButtonSprite = new("PathfindButton.png");
 
-    private static Sprite buttonSprite;
-    public static Sprite getButtonSprite()
-    {
-        if (buttonSprite) return buttonSprite;
-        buttonSprite = loadSpriteFromResources("TheOtherRoles.Resources.TrackerButton.png", 115f);
-        return buttonSprite;
-    }
+    public static ResourceSprite buttonSprite = new("TrackerButton.png");
 
     public static void resetTracked()
     {

@@ -23,15 +23,8 @@ public static class EvilTrapper
     public static bool isTrapKill;
     public static bool meetingFlag;
 
-    public static Sprite trapButtonSprite;
+    public static ResourceSprite trapButtonSprite = new("TrapperButton.png");
     public static DateTime placedTime;
-
-    public static Sprite getTrapButtonSprite()
-    {
-        if (trapButtonSprite) return trapButtonSprite;
-        trapButtonSprite = loadSpriteFromResources("TheOtherRoles.Resources.TrapperButton.png", 115f);
-        return trapButtonSprite;
-    }
 
     public static void setTrap()
     {

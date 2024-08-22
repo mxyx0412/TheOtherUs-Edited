@@ -156,7 +156,7 @@ ugackMiner53 - Idea and core code for the Prop Hunt game mode</size>";
         SceneManager.add_sceneLoaded((Action<Scene, LoadSceneMode>)((scene, _) =>
         {
             if (!scene.name.Equals("MatchMaking", StringComparison.Ordinal)) return;
-            MapOption.gameMode = CustomGamemodes.Classic;
+            ModOption.gameMode = CustomGamemodes.Classic;
             // Add buttons For Guesser Mode, Hide N Seek in this scene.
             // find "HostLocalGameButton"
             var template = Object.FindObjectOfType<HostLocalGameButton>();
@@ -171,7 +171,7 @@ ugackMiner53 - Idea and core code for the Prop Hunt game mode</size>";
             guesserButtonPassiveButton.OnClick = new ButtonClickedEvent();
             guesserButtonPassiveButton.OnClick.AddListener((Action)(() =>
             {
-                MapOption.gameMode = CustomGamemodes.Guesser;
+                ModOption.gameMode = CustomGamemodes.Guesser;
                 template.OnClick();
             }));
 
@@ -183,7 +183,7 @@ ugackMiner53 - Idea and core code for the Prop Hunt game mode</size>";
             HideNSeekButtonPassiveButton.OnClick = new ButtonClickedEvent();
             HideNSeekButtonPassiveButton.OnClick.AddListener((Action)(() =>
             {
-                MapOption.gameMode = CustomGamemodes.HideNSeek;
+                ModOption.gameMode = CustomGamemodes.HideNSeek;
                 template.OnClick();
             }));
 
@@ -195,7 +195,7 @@ ugackMiner53 - Idea and core code for the Prop Hunt game mode</size>";
             PropHuntButtonPassiveButton.OnClick = new ButtonClickedEvent();
             PropHuntButtonPassiveButton.OnClick.AddListener((Action)(() =>
             {
-                MapOption.gameMode = CustomGamemodes.PropHunt;
+                ModOption.gameMode = CustomGamemodes.PropHunt;
                 template.OnClick();
             }));
 

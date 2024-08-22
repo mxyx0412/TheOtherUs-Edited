@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace TheOtherRoles.Options;
 
-internal class MapOption
+internal class ModOption
 {
     public static float ButtonCooldown => CustomOptionHolder.resteButtonCooldown.getFloat();
     public static bool PreventTaskEnd => CustomOptionHolder.preventTaskEnd.getBool();

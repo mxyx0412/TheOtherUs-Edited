@@ -6,7 +6,6 @@ public static class Swapper
 {
     public static PlayerControl swapper;
     public static Color color = new Color32(134, 55, 86, byte.MaxValue);
-    private static Sprite spriteCheck;
     public static bool canCallEmergency;
     public static bool canOnlySwapOthers;
     public static int charges;
@@ -17,12 +16,7 @@ public static class Swapper
     public static byte playerId1 = byte.MaxValue;
     public static byte playerId2 = byte.MaxValue;
 
-    public static Sprite getCheckSprite()
-    {
-        if (spriteCheck) return spriteCheck;
-        spriteCheck = loadSpriteFromResources("TheOtherRoles.Resources.SwapperCheck.png", 150f);
-        return spriteCheck;
-    }
+    public static ResourceSprite spriteCheck = new("SwapperCheck.png", 150f);
 
     public static void clearAndReload()
     {

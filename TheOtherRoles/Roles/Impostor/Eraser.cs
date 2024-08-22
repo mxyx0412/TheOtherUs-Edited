@@ -16,14 +16,7 @@ public static class Eraser
     public static bool canEraseAnyone;
     public static bool canEraseGuess;
 
-    private static Sprite buttonSprite;
-
-    public static Sprite getButtonSprite()
-    {
-        if (buttonSprite) return buttonSprite;
-        buttonSprite = loadSpriteFromResources("TheOtherRoles.Resources.EraserButton.png", 115f);
-        return buttonSprite;
-    }
+    public static ResourceSprite buttonSprite = new("EraserButton.png");
 
     public static void clearAndReload()
     {

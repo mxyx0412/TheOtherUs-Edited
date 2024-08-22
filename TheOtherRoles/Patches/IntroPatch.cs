@@ -3,7 +3,6 @@ using System.Linq;
 using Hazel;
 using Il2CppSystem.Collections.Generic;
 using TheOtherRoles.CustomGameModes;
-using TheOtherRoles.Modules;
 using TheOtherRoles.Objects.Map;
 using TheOtherRoles.Utilities;
 using TMPro;
@@ -42,11 +41,11 @@ internal class IntroCutsceneOnDestroyPatch
                 player.cosmetics.SetHat(data.DefaultOutfit.HatId, data.DefaultOutfit.ColorId);
                 player.cosmetics.nameText.text = data.PlayerName;
                 player.SetFlipX(true);
-                MapOption.playerIcons[p.PlayerId] = player;
+                ModOption.playerIcons[p.PlayerId] = player;
                 player.gameObject.SetActive(false);
 
                 //游戏开始时重置cd
-                CachedPlayer.LocalPlayer.PlayerControl.SetKillTimer(MapOption.ButtonCooldown);
+                CachedPlayer.LocalPlayer.PlayerControl.SetKillTimer(ModOption.ButtonCooldown);
 
                 if (CachedPlayer.LocalPlayer.PlayerControl == Arsonist.arsonist && p != Arsonist.arsonist)
                 {
@@ -129,11 +128,11 @@ internal class IntroCutsceneOnDestroyPatch
         if (CustomOptionHolder.randomGameStartPosition.getBool()) MapData.RandomSpawnPlayers();
 
         // First kill
-        if (AmongUsClient.Instance.AmHost && MapOption.shieldFirstKill && MapOption.firstKillName != "" &&
+        if (AmongUsClient.Instance.AmHost && ModOption.shieldFirstKill && ModOption.firstKillName != "" &&
             !HideNSeek.isHideNSeekGM && !PropHunt.isPropHuntGM)
         {
             var target = PlayerControl.AllPlayerControls.ToArray().ToList()
-                .FirstOrDefault(x => x.Data.PlayerName.Equals(MapOption.firstKillName));
+                .FirstOrDefault(x => x.Data.PlayerName.Equals(ModOption.firstKillName));
             if (target != null)
             {
                 var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
@@ -144,7 +143,7 @@ internal class IntroCutsceneOnDestroyPatch
             }
         }
 
-        MapOption.firstKillName = "";
+        ModOption.firstKillName = "";
 
         if (HideNSeek.isHideNSeekGM)
         {

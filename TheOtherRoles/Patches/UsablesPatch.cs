@@ -9,7 +9,7 @@ using TheOtherRoles.Utilities;
 using TMPro;
 using UnityEngine;
 using static TheOtherRoles.GameHistory;
-using static TheOtherRoles.Options.MapOption;
+using static TheOtherRoles.Options.ModOption;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
@@ -215,7 +215,7 @@ internal class VentButtonSetTargetPatch
             if (defaultVentSprite == null) defaultVentSprite = __instance.graphic.sprite;
             var isSpecialVent = __instance.currentTarget != null && __instance.currentTarget.gameObject != null &&
                                 __instance.currentTarget.gameObject.name.StartsWith("JackInTheBoxVent_");
-            __instance.graphic.sprite = isSpecialVent ? Trickster.getTricksterVentButtonSprite() : defaultVentSprite;
+            __instance.graphic.sprite = isSpecialVent ? Trickster.tricksterVentButtonSprite : defaultVentSprite;
             __instance.buttonLabelText.enabled = !isSpecialVent;
         }
 
@@ -722,8 +722,7 @@ internal class SurveillanceMinigamePatch
 
     public static List<GameObject> nightVisionOverlays;
 
-    private static readonly Sprite overlaySprite =
-        loadSpriteFromResources("TheOtherRoles.Resources.NightVisionOverlay.png", 350f);
+    private static readonly ResourceSprite overlaySprite = new("TheOtherRoles.Resources.NightVisionOverlay.png", 350f);
 
     public static bool nightVisionIsActive;
     private static bool isLightsOut;

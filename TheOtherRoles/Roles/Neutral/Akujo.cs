@@ -22,21 +22,9 @@ public static class Akujo
     public static int keepsLeft;
     public static int numKeeps;
 
-    private static Sprite honmeiSprite;
-    public static Sprite getHonmeiSprite()
-    {
-        if (honmeiSprite) return honmeiSprite;
-        honmeiSprite = loadSpriteFromResources("TheOtherRoles.Resources.AkujoHonmeiButton.png", 115f);
-        return honmeiSprite;
-    }
+    public static ResourceSprite honmeiSprite = new("AkujoHonmeiButton.png");
+    public static ResourceSprite keepSprite = new("AkujoKeepButton.png");
 
-    private static Sprite keepSprite;
-    public static Sprite getKeepSprite()
-    {
-        if (keepSprite) return keepSprite;
-        keepSprite = loadSpriteFromResources("TheOtherRoles.Resources.AkujoKeepButton.png", 115f);
-        return keepSprite;
-    }
     public static bool existing()
     {
         return honmei != null && !honmei.Data.Disconnected;
@@ -44,18 +32,9 @@ public static class Akujo
 
     public static bool existingWithKiller()
     {
-        return existing() && (honmei == Jackal.jackal
-                           || honmei == Sidekick.sidekick
-                           || honmei == Werewolf.werewolf
-                           || honmei == Juggernaut.juggernaut
-                           || honmei == Arsonist.arsonist
-                           || honmei == Vulture.vulture
-                           || honmei == Lawyer.lawyer
-                           || honmei == Jester.jester
-                           || honmei == Thief.thief
-                           || honmei == Doomsayer.doomsayer
-                           || honmei.Data.Role.IsImpostor);
+        return existing() && isKiller(honmei);
     }
+
     public static void breakLovers(PlayerControl lover)
     {
         if ((Lovers.lover1 != null && lover == Lovers.lover1) || (Lovers.lover2 != null && lover == Lovers.lover2))

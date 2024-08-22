@@ -23,40 +23,25 @@ public static class SecurityGuard
     public static Vent ventTarget;
     public static Minigame minigame;
 
-    private static Sprite closeVentButtonSprite;
+    public static ResourceSprite closeVentButtonSprite = new("CloseVentButton.png");
 
-    private static Sprite placeCameraButtonSprite;
+    public static ResourceSprite placeCameraButtonSprite = new("PlaceCameraButton.png");
 
     private static Sprite animatedVentSealedSprite;
     private static float lastPPU;
 
-    private static Sprite staticVentSealedSprite;
+    public static ResourceSprite staticVentSealedSprite = new("StaticVentSealed.png", 160);
 
-    private static Sprite fungleVentSealedSprite;
+    public static ResourceSprite fungleVentSealedSprite = new("FungleVentSealed.png", 160);
 
 
-    private static Sprite submergedCentralUpperVentSealedSprite;
+    public static ResourceSprite submergedCentralUpperVentSealedSprite = new("CentralUpperBlocked.png", 145);
 
-    private static Sprite submergedCentralLowerVentSealedSprite;
+    public static ResourceSprite submergedCentralLowerVentSealedSprite = new("CentralLowerBlocked.png", 145);
 
     private static Sprite camSprite;
 
     private static Sprite logSprite;
-
-    public static Sprite getCloseVentButtonSprite()
-    {
-        if (closeVentButtonSprite) return closeVentButtonSprite;
-        closeVentButtonSprite = loadSpriteFromResources("TheOtherRoles.Resources.CloseVentButton.png", 115f);
-        return closeVentButtonSprite;
-    }
-
-    public static Sprite getPlaceCameraButtonSprite()
-    {
-        if (placeCameraButtonSprite) return placeCameraButtonSprite;
-        placeCameraButtonSprite =
-            loadSpriteFromResources("TheOtherRoles.Resources.PlaceCameraButton.png", 115f);
-        return placeCameraButtonSprite;
-    }
 
     public static Sprite getAnimatedVentSealedSprite()
     {
@@ -70,53 +55,21 @@ public static class SecurityGuard
 
         if (animatedVentSealedSprite) return animatedVentSealedSprite;
         animatedVentSealedSprite =
-            loadSpriteFromResources("TheOtherRoles.Resources.AnimatedVentSealed.png", ppu);
+            UnityHelper.loadSpriteFromResources("TheOtherRoles.Resources.AnimatedVentSealed.png", ppu);
         return animatedVentSealedSprite;
-    }
-
-    public static Sprite getStaticVentSealedSprite()
-    {
-        if (staticVentSealedSprite) return staticVentSealedSprite;
-        staticVentSealedSprite = loadSpriteFromResources("TheOtherRoles.Resources.StaticVentSealed.png", 160f);
-        return staticVentSealedSprite;
-    }
-
-    public static Sprite getFungleVentSealedSprite()
-    {
-        if (fungleVentSealedSprite) return fungleVentSealedSprite;
-        fungleVentSealedSprite = loadSpriteFromResources("TheOtherRoles.Resources.FungleVentSealed.png", 160f);
-        return fungleVentSealedSprite;
-    }
-
-    public static Sprite getSubmergedCentralUpperSealedSprite()
-    {
-        if (submergedCentralUpperVentSealedSprite) return submergedCentralUpperVentSealedSprite;
-        submergedCentralUpperVentSealedSprite =
-            loadSpriteFromResources("TheOtherRoles.Resources.CentralUpperBlocked.png", 145f);
-        return submergedCentralUpperVentSealedSprite;
-    }
-
-    public static Sprite getSubmergedCentralLowerSealedSprite()
-    {
-        if (submergedCentralLowerVentSealedSprite) return submergedCentralLowerVentSealedSprite;
-        submergedCentralLowerVentSealedSprite =
-            loadSpriteFromResources("TheOtherRoles.Resources.CentralLowerBlocked.png", 145f);
-        return submergedCentralLowerVentSealedSprite;
     }
 
     public static Sprite getCamSprite()
     {
         if (camSprite) return camSprite;
-        camSprite = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.CamsButton]
-            .Image;
+        camSprite = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.CamsButton].Image;
         return camSprite;
     }
 
     public static Sprite getLogSprite()
     {
         if (logSprite) return logSprite;
-        logSprite = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.DoorLogsButton]
-            .Image;
+        logSprite = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.DoorLogsButton].Image;
         return logSprite;
     }
 

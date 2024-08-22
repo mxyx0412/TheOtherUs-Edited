@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using InnerNet;
-using TheOtherRoles.Modules;
 using TheOtherRoles.Utilities;
 using UnityEngine;
 
@@ -362,9 +361,9 @@ public class RoleInfo
         if (infos.Count == count)
         {
             if (p.Data.Role.IsImpostor)
-                infos.Add(MapOption.gameMode is CustomGamemodes.HideNSeek or CustomGamemodes.PropHunt ? hunter : impostor);
+                infos.Add(ModOption.gameMode is CustomGamemodes.HideNSeek or CustomGamemodes.PropHunt ? hunter : impostor);
             else
-                infos.Add(MapOption.gameMode == CustomGamemodes.HideNSeek ? hunted : MapOption.gameMode == CustomGamemodes.PropHunt ? prop : crewmate);
+                infos.Add(ModOption.gameMode == CustomGamemodes.HideNSeek ? hunted : ModOption.gameMode == CustomGamemodes.PropHunt ? prop : crewmate);
         }
 
         return infos;

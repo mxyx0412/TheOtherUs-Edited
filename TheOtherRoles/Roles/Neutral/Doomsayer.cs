@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Text;
 using Hazel;
-using TheOtherRoles.Modules;
 using TheOtherRoles.Utilities;
 using UnityEngine;
 using Random = System.Random;

@@ -9,7 +9,6 @@ using Hazel;
 using InnerNet;
 using Reactor.Utilities.Extensions;
 using TheOtherRoles.CustomGameModes;
-using TheOtherRoles.Modules;
 using TheOtherRoles.Objects;
 using TheOtherRoles.Patches;
 using TheOtherRoles.Utilities;
@@ -329,7 +328,7 @@ public static class Helpers
     {
         if (initalSetCursor)
         {
-            var sprite = loadSpriteFromResources("TheOtherRoles.Resources.Cursor.png", 115f);
+            var sprite = UnityHelper.loadSpriteFromResources("TheOtherRoles.Resources.Cursor.png", 115f);
             Cursor.SetCursor(sprite.texture, Vector2.zero, CursorMode.Auto);
             return;
         }
@@ -340,7 +339,7 @@ public static class Helpers
         }
         else
         {
-            var sprite = loadSpriteFromResources("TheOtherRoles.Resources.Cursor.png", 115f);
+            var sprite = UnityHelper.loadSpriteFromResources("TheOtherRoles.Resources.Cursor.png", 115f);
             Cursor.SetCursor(sprite.texture, Vector2.zero, CursorMode.Auto);
         }
     }
@@ -376,7 +375,7 @@ public static class Helpers
 
     public static bool isCommsActive() => getActiveSabo() == SabatageTypes.Comms;
 
-    public static bool isCamoComms() => isCommsActive() && MapOption.camoComms;
+    public static bool isCamoComms() => isCommsActive() && ModOption.camoComms;
 
     public static bool isActiveCamoComms() => isCamoComms() && Camouflager.camoComms;
 
@@ -521,26 +520,6 @@ public static class Helpers
         button.showButtonText = true;
     }
 
-    public static Sprite loadSpriteFromResources(string path, float pixelsPerUnit, bool cache = true)
-    {
-        try
-        {
-            if (cache && CachedSprites.TryGetValue(path + pixelsPerUnit, out var sprite)) return sprite;
-            var texture = loadTextureFromResources(path);
-            sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f),
-                pixelsPerUnit);
-            if (cache) sprite.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
-            if (!cache) return sprite;
-            return CachedSprites[path + pixelsPerUnit] = sprite;
-        }
-        catch
-        {
-            Error("Error loading sprite from path: " + path);
-        }
-
-        return null;
-    }
-
     public static void AddUnique<T>(this Il2CppSystem.Collections.Generic.List<T> self, T item)
             where T : IDisconnectHandler
     {
@@ -555,85 +534,6 @@ public static class Helpers
     public static void ForEach<T>(this Il2CppArrayBase<T> list, Action<T> func)
     {
         foreach (T obj in list) func(obj);
-    }
-
-    public static unsafe Texture2D loadTextureFromResources(string path)
-    {
-        try
-        {
-            var texture = new Texture2D(2, 2, TextureFormat.ARGB32, true);
-            var assembly = Assembly.GetExecutingAssembly();
-            var stream = assembly.GetManifestResourceStream(path);
-            var length = stream.Length;
-            var byteTexture = new Il2CppStructArray<byte>(length);
-            stream.Read(new Span<byte>(IntPtr.Add(byteTexture.Pointer, IntPtr.Size * 4).ToPointer(), (int)length));
-            if (path.Contains("HorseHats")) byteTexture = new Il2CppStructArray<byte>(byteTexture.Reverse().ToArray());
-            ImageConversion.LoadImage(texture, byteTexture, false);
-            return texture;
-        }
-        catch
-        {
-            //Error("Error loading texture from resources: " + path);
-        }
-
-        return null;
-    }
-
-    public static Texture2D loadTextureFromDisk(string path)
-    {
-        try
-        {
-            if (File.Exists(path))
-            {
-                var texture = new Texture2D(2, 2, TextureFormat.ARGB32, true);
-                var byteTexture = Il2CppSystem.IO.File.ReadAllBytes(path);
-                ImageConversion.LoadImage(texture, byteTexture, false);
-                return texture;
-            }
-        }
-        catch
-        {
-            //Error("Error loading texture from disk: " + path);
-        }
-
-        return null;
-    }
-
-    public static AudioClip loadAudioClipFromResources(string path, string clipName = "UNNAMED_TOR_AUDIO_CLIP")
-    {
-        // must be "raw (headerless) 2-channel signed 32 bit pcm (le)" (can e.g. use Audacity® to export)
-        try
-        {
-            var assembly = Assembly.GetExecutingAssembly();
-            var stream = assembly.GetManifestResourceStream(path);
-            var byteAudio = new byte[stream.Length];
-            _ = stream.Read(byteAudio, 0, (int)stream.Length);
-            var samples = new float[byteAudio.Length / 4]; // 4 bytes per sample
-            int offset;
-            for (var i = 0; i < samples.Length; i++)
-            {
-                offset = i * 4;
-                samples[i] = (float)BitConverter.ToInt32(byteAudio, offset) / int.MaxValue;
-            }
-
-            var channels = 2;
-            var sampleRate = 48000;
-            var audioClip = AudioClip.Create(clipName, samples.Length / 2, channels, sampleRate, false);
-            audioClip.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
-            audioClip.SetData(samples, 0);
-            return audioClip;
-        }
-        catch
-        {
-            Error("Error loading AudioClip from resources: " + path);
-        }
-
-        return null;
-
-        /* Usage example:
-        AudioClip exampleClip = Helpers.loadAudioClipFromResources("TheOtherRoles.Resources.exampleClip.raw");
-        if (Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(exampleClip, false, 0.8f);
-        */
     }
 
     public static string readTextFromResources(string path)
@@ -670,7 +570,7 @@ public static class Helpers
         return role;
     }
 
-    public static PlayerControl GetHost()
+    public static PlayerControl GetHostPlayer()
     {
         var host = GameData.Instance.GetHost();
         if (host != null) return playerById(host.PlayerId);
@@ -775,7 +675,7 @@ public static class Helpers
 
     public static bool isLighterColor(PlayerControl target)
     {
-        if (!MapOption.randomLigherPlayer) return CustomColors.lighterColors.Contains(target.Data.DefaultOutfit.ColorId);
+        if (!ModOption.randomLigherPlayer) return CustomColors.lighterColors.Contains(target.Data.DefaultOutfit.ColorId);
         return !isDark(target.PlayerId);
     }
 
@@ -846,13 +746,6 @@ public static class Helpers
         return count;
     }
 
-    public static bool isCustomServer()
-    {
-        if (FastDestroyableSingleton<ServerManager>.Instance == null) return false;
-        var n = FastDestroyableSingleton<ServerManager>.Instance.CurrentRegion.TranslateName;
-        return n is not StringNames.ServerNA and not StringNames.ServerEU and not StringNames.ServerAS;
-    }
-
     public static bool IsAlive(this GameData.PlayerInfo player)
     {
         return player != null && !player.Disconnected && !player.IsDead;
@@ -886,7 +779,7 @@ public static class Helpers
     public static bool shouldShowGhostInfo()
     {
         return (CachedPlayer.LocalPlayer.PlayerControl != null && CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead &&
-                MapOption.ghostsSeeInformation) ||
+                ModOption.ghostsSeeInformation) ||
                AmongUsClient.Instance.GameState == InnerNetClient.GameStates.Ended;
     }
 
@@ -1028,7 +921,7 @@ public static class Helpers
         if (Ninja.isInvisble && Ninja.ninja == target) return true;
         if (Jackal.isInvisable && Jackal.jackal == target) return true;
         if (Swooper.isInvisable && Swooper.swooper == target) return true;
-        if (MapOption.hideOutOfSightNametags && InGame && !source.Data.IsDead && isFungle()
+        if (ModOption.hideOutOfSightNametags && InGame && !source.Data.IsDead && isFungle()
             && PhysicsHelpers.AnythingBetween(localPlayer.GetTruePosition(), target.GetTruePosition(), Constants.ShadowMask, false)) return true;
         /*
         {
@@ -1040,7 +933,7 @@ public static class Helpers
             }
         }
         */
-        if (!MapOption.hidePlayerNames) return false; // All names are visible
+        if (!ModOption.hidePlayerNames) return false; // All names are visible
         if (source == null || target == null) return true;
         if (source == target) return false; // Player sees his own name
         if (source.Data.Role.IsImpostor && (target.Data.Role.IsImpostor || target == Spy.spy ||
@@ -1200,7 +1093,7 @@ public static class Helpers
             return MurderAttemptResult.PerformKill;
 
         // Handle first kill attempt
-        if (MapOption.shieldFirstKill && MapOption.firstKillPlayer == target)
+        if (ModOption.shieldFirstKill && ModOption.firstKillPlayer == target)
             return MurderAttemptResult.SuppressKill;
 
         // Handle blank shot
@@ -1505,8 +1398,8 @@ public static class Helpers
         if (HudManagerStartPatch.zoomOutButton != null)
         {
             HudManagerStartPatch.zoomOutButton.Sprite = zoomOutStatus
-                ? loadSpriteFromResources("TheOtherRoles.Resources.PlusButton.png", 60f)
-                : loadSpriteFromResources("TheOtherRoles.Resources.MinusButton.png", 150f);
+                ? UnityHelper.loadSpriteFromResources("TheOtherRoles.Resources.PlusButton.png", 60f)
+                : UnityHelper.loadSpriteFromResources("TheOtherRoles.Resources.MinusButton.png", 150f);
             HudManagerStartPatch.zoomOutButton.PositionOffset =
                 zoomOutStatus ? new Vector3(0f, 3f, 0) : new Vector3(0.4f, 2.8f, 0);
         }

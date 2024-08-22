@@ -9,14 +9,7 @@ public static class Cleaner
 
     public static float cooldown = 30f;
 
-    private static Sprite buttonSprite;
-
-    public static Sprite getButtonSprite()
-    {
-        if (buttonSprite) return buttonSprite;
-        buttonSprite = loadSpriteFromResources("TheOtherRoles.Resources.CleanButton.png", 115f);
-        return buttonSprite;
-    }
+    public static ResourceSprite buttonSprite = new("CleanButton.png");
 
     public static void clearAndReload()
     {

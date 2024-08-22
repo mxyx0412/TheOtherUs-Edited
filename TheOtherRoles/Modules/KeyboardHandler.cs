@@ -16,7 +16,7 @@ public class CommandHandler
     private static readonly List<PlayerControl> bots = [];
     private static void Postfix(KeyboardJoystick __instance)
     {
-        if (AmongUsClient.Instance && (AmongUsClient.Instance.AmHost || MapOption.DebugMode))
+        if (AmongUsClient.Instance && (AmongUsClient.Instance.AmHost || ModOption.DebugMode))
         {
             // 生成假人
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.F) && Input.GetKeyDown(KeyCode.Return)
@@ -45,7 +45,7 @@ public class CommandHandler
             // 强制结束游戏
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.T) && Input.GetKeyDown(KeyCode.Return) && InGame)
             {
-                MapOption.isCanceled = true;
+                ModOption.isCanceled = true;
             }
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.V) && Input.GetKeyDown(KeyCode.Return) && InGame)
             {

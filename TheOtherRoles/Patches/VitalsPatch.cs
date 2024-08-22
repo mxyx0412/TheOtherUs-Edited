@@ -30,7 +30,7 @@ public class VitalsPatch
     private static void UseVitalsTime()
     {
         // Don't waste network traffic if we're out of time.
-        if (MapOption.restrictDevices > 0 && MapOption.restrictVitalsTime > 0f &&
+        if (ModOption.restrictDevices > 0 && ModOption.restrictVitalsTime > 0f &&
             CachedPlayer.LocalPlayer.PlayerControl.IsAlive() && CachedPlayer.LocalPlayer.PlayerControl != Hacker.hacker)
         {
             var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
@@ -75,7 +75,7 @@ public class VitalsPatch
             if (vitalsTimer > 0.1f)
                 UseVitalsTime();
 
-            if (MapOption.restrictDevices > 0)
+            if (ModOption.restrictDevices > 0)
             {
                 if (TimeRemaining == null)
                 {
@@ -87,14 +87,14 @@ public class VitalsPatch
                     TimeRemaining.color = Palette.White;
                 }
 
-                if (MapOption.restrictVitalsTime <= 0f && CachedPlayer.LocalPlayer.PlayerControl != Hacker.hacker &&
+                if (ModOption.restrictVitalsTime <= 0f && CachedPlayer.LocalPlayer.PlayerControl != Hacker.hacker &&
                     !CachedPlayer.LocalPlayer.Data.IsDead)
                 {
                     __instance.Close();
                     return false;
                 }
 
-                var timeString = TimeSpan.FromSeconds(MapOption.restrictVitalsTime).ToString(@"mm\:ss\.ff");
+                var timeString = TimeSpan.FromSeconds(ModOption.restrictVitalsTime).ToString(@"mm\:ss\.ff");
                 TimeRemaining.text = string.Format("Remaining: {0}", timeString);
                 TimeRemaining.gameObject.SetActive(true);
             }

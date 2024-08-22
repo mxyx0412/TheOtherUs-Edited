@@ -14,13 +14,7 @@ public class Silhouette
     public static List<Silhouette> silhouettes = new List<Silhouette>();
 
 
-    private static Sprite SilhouetteSprite;
-    public static Sprite getSilhouetteSprite()
-    {
-        if (SilhouetteSprite) return SilhouetteSprite;
-        SilhouetteSprite = loadSpriteFromResources("TheOtherRoles.Resources.Silhouette.png", 225f);
-        return SilhouetteSprite;
-    }
+    private static ResourceSprite SilhouetteSprite = new("Silhouette.png", 225f);
 
     public Silhouette(Vector3 p, float duration = 1f, bool visibleForEveryOne = true)
     {
@@ -38,7 +32,7 @@ public class Silhouette
         gameObject.transform.localPosition = position;
 
         renderer = gameObject.AddComponent<SpriteRenderer>();
-        renderer.sprite = getSilhouetteSprite();
+        renderer.sprite = SilhouetteSprite;
 
         timeRemaining = duration;
 

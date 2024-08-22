@@ -16,14 +16,7 @@ public static class Vulture
     public static bool triggerVultureWin;
     public static bool canUseVents = true;
     public static bool showArrows = true;
-    private static Sprite buttonSprite;
-
-    public static Sprite getButtonSprite()
-    {
-        if (buttonSprite) return buttonSprite;
-        buttonSprite = loadSpriteFromResources("TheOtherRoles.Resources.VultureButton.png", 115f);
-        return buttonSprite;
-    }
+    public static ResourceSprite buttonSprite = new("VultureButton.png");
 
     public static void clearAndReload()
     {

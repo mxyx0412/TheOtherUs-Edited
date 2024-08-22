@@ -9,7 +9,6 @@ using BepInEx.Unity.IL2CPP;
 using Hazel;
 using Il2CppSystem.Linq;
 using Reactor.Utilities.Extensions;
-using TheOtherRoles.Modules;
 using TheOtherRoles.Utilities;
 using TMPro;
 using UnityEngine;
@@ -352,7 +351,7 @@ internal class GameOptionsMenuStartPatch
 {
     public static void Postfix(GameOptionsMenu __instance)
     {
-        switch (MapOption.gameMode)
+        switch (ModOption.gameMode)
         {
             case CustomGamemodes.Classic:
                 createClassicTabs(__instance);
@@ -374,7 +373,7 @@ internal class GameOptionsMenuStartPatch
         copyButton.transform.localPosition += Vector3.down * 0.8f;
         var copyButtonPassive = copyButton.GetComponent<PassiveButton>();
         var copyButtonRenderer = copyButton.GetComponent<SpriteRenderer>();
-        copyButtonRenderer.sprite = loadSpriteFromResources("TheOtherRoles.Resources.CopyButton.png", 175f);
+        copyButtonRenderer.sprite = UnityHelper.loadSpriteFromResources("TheOtherRoles.Resources.CopyButton.png", 175f);
         copyButtonPassive.OnClick.RemoveAllListeners();
         copyButtonPassive.OnClick = new Button.ButtonClickedEvent();
         copyButtonPassive.OnClick.AddListener((Action)(() =>
@@ -391,7 +390,7 @@ internal class GameOptionsMenuStartPatch
         pasteButton.transform.localPosition += Vector3.down * 1.6f;
         var pasteButtonPassive = pasteButton.GetComponent<PassiveButton>();
         var pasteButtonRenderer = pasteButton.GetComponent<SpriteRenderer>();
-        pasteButtonRenderer.sprite = loadSpriteFromResources("TheOtherRoles.Resources.PasteButton.png", 175f);
+        pasteButtonRenderer.sprite = UnityHelper.loadSpriteFromResources("TheOtherRoles.Resources.PasteButton.png", 175f);
         pasteButtonPassive.OnClick.RemoveAllListeners();
         pasteButtonPassive.OnClick = new Button.ButtonClickedEvent();
         pasteButtonPassive.OnClick.AddListener((Action)(() =>
@@ -934,7 +933,7 @@ internal class GameOptionsMenuStartPatch
         var tabHighlight = tab.transform.FindChild("Hat Button").FindChild("Tab Background")
             .GetComponent<SpriteRenderer>();
         tab.transform.FindChild("Hat Button").FindChild("Icon").GetComponent<SpriteRenderer>().sprite =
-            loadSpriteFromResources(tabSpritePath, 100f);
+            UnityHelper.loadSpriteFromResources(tabSpritePath, 100f);
         tab.name = "tabName";
 
         return tabHighlight;
@@ -1160,24 +1159,24 @@ internal class GameOptionsDataPatch
     {
         var sb = new StringBuilder("\n");
         var options = CustomOption.options.Where(o => o.type == type);
-        if (MapOption.gameMode == CustomGamemodes.Guesser)
+        if (ModOption.gameMode == CustomGamemodes.Guesser)
         {
             if (type == CustomOptionType.General)
                 options = CustomOption.options.Where(o => o.type == type || o.type == CustomOptionType.Guesser);
             var remove = new List<int> { 7, 10000, 10001, 10002, 10003, 10004, 10005, 10006, 10007, 10008, 30100, 30101, 30102, 30103, 30104 };
             options = options.Where(x => !remove.Contains(x.id));
         }
-        else if (MapOption.gameMode == CustomGamemodes.Classic)
+        else if (ModOption.gameMode == CustomGamemodes.Classic)
         {
             options = options.Where(x =>
                 !(x.type == CustomOptionType.Guesser || x == CustomOptionHolder.crewmateRolesFill));
         }
-        else if (MapOption.gameMode == CustomGamemodes.HideNSeek)
+        else if (ModOption.gameMode == CustomGamemodes.HideNSeek)
         {
             options = options.Where(x =>
                 x.type == CustomOptionType.HideNSeekMain || x.type == CustomOptionType.HideNSeekRoles);
         }
-        else if (MapOption.gameMode == CustomGamemodes.PropHunt)
+        else if (ModOption.gameMode == CustomGamemodes.PropHunt)
         {
             options = options.Where(x => x.type == CustomOptionType.PropHunt);
         }
@@ -1204,9 +1203,9 @@ internal class GameOptionsDataPatch
 
         foreach (var option in options)
         {
-            if (MapOption.gameMode == CustomGamemodes.HideNSeek && option.type != CustomOptionType.HideNSeekMain &&
+            if (ModOption.gameMode == CustomGamemodes.HideNSeek && option.type != CustomOptionType.HideNSeekMain &&
                 option.type != CustomOptionType.HideNSeekRoles) continue;
-            if (MapOption.gameMode == CustomGamemodes.PropHunt &&
+            if (ModOption.gameMode == CustomGamemodes.PropHunt &&
                 option.type != CustomOptionType.PropHunt) continue;
             if (option.parent != null)
             {
@@ -1298,7 +1297,7 @@ internal class GameOptionsDataPatch
             ? cs(DateTime.Now.Second % 2 == 0 ? Color.white : Color.red, "useScrollWheel".Translate())
             : "";
 
-        if (MapOption.gameMode == CustomGamemodes.HideNSeek)
+        if (ModOption.gameMode == CustomGamemodes.HideNSeek)
         {
             if (Main.optionsPage > 1) Main.optionsPage = 0;
             maxPage = 2;
@@ -1312,7 +1311,7 @@ internal class GameOptionsDataPatch
                     break;
             }
         }
-        else if (MapOption.gameMode == CustomGamemodes.PropHunt)
+        else if (ModOption.gameMode == CustomGamemodes.PropHunt)
         {
             maxPage = 1;
             switch (counter)
@@ -1663,7 +1662,7 @@ public class HudManagerUpdate
             toggleSettingsButtonObject = Object.Instantiate(__instance.MapButton.gameObject, __instance.MapButton.transform.parent);
             toggleSettingsButtonObject.transform.localPosition = __instance.MapButton.transform.localPosition + new Vector3(0, -0.66f, -500f);
             var renderer = toggleSettingsButtonObject.GetComponent<SpriteRenderer>();
-            renderer.sprite = loadSpriteFromResources("TheOtherRoles.Resources.CurrentSettingsButton.png", 180f);
+            renderer.sprite = UnityHelper.loadSpriteFromResources("TheOtherRoles.Resources.CurrentSettingsButton.png", 180f);
             toggleSettingsButton = toggleSettingsButtonObject.GetComponent<PassiveButton>();
             toggleSettingsButton.OnClick.RemoveAllListeners();
             toggleSettingsButton.OnClick.AddListener((Action)(() => ToggleSettings(__instance)));

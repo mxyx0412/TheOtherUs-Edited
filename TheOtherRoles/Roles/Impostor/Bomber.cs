@@ -22,14 +22,7 @@ public static class Bomber
     public static PlayerControl hasBomb;
 
 
-    private static Sprite buttonSprite;
-
-    public static Sprite getButtonSprite()
-    {
-        if (buttonSprite) return buttonSprite;
-        buttonSprite = loadSpriteFromResources("TheOtherRoles.Resources.Bomber2.png", 115f);
-        return buttonSprite;
-    }
+    public static ResourceSprite buttonSprite = new("Bomber2.png");
 
     public static void clearAndReload()
     {

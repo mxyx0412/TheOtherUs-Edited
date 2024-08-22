@@ -70,7 +70,7 @@ public class CustomButton
         button.OnClick = new Button.ButtonClickedEvent();
         button.OnClick.AddListener((UnityAction)onClickEvent);
 
-        Timer = MapOption.ButtonCooldown + 8.5f;
+        Timer = ModOption.ButtonCooldown + 8.5f;
 
         setActive(false);
     }
@@ -155,7 +155,7 @@ public class CustomButton
         if (p == null) return;
         if (p.Data.Role.IsImpostor && p != Vampire.vampire)
         {
-            if (time == 0f) time = MapOption.KillCooddown;
+            if (time == 0f) time = ModOption.KillCooddown;
             p.SetKillTimer(time);
             return;
         }

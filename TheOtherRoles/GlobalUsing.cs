@@ -5,6 +5,7 @@ global using Il2CppInterop.Runtime.Injection;
 global using Il2CppInterop.Runtime.InteropTypes;
 global using Il2CppInterop.Runtime.InteropTypes.Arrays;
 global using TheOtherRoles.Helper;
+global using TheOtherRoles.Modules;
 global using TheOtherRoles.Options;
 global using TheOtherRoles.Roles;
 global using TheOtherRoles.Roles.Crewmate;

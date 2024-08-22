@@ -14,22 +14,8 @@ public static class Warlock
     public static float cooldown = 30f;
     public static float rootTime = 5f;
 
-    private static Sprite curseButtonSprite;
-    private static Sprite curseKillButtonSprite;
-
-    public static Sprite getCurseButtonSprite()
-    {
-        if (curseButtonSprite) return curseButtonSprite;
-        curseButtonSprite = loadSpriteFromResources("TheOtherRoles.Resources.CurseButton.png", 115f);
-        return curseButtonSprite;
-    }
-
-    public static Sprite getCurseKillButtonSprite()
-    {
-        if (curseKillButtonSprite) return curseKillButtonSprite;
-        curseKillButtonSprite = loadSpriteFromResources("TheOtherRoles.Resources.CurseKillButton.png", 115f);
-        return curseKillButtonSprite;
-    }
+    public static ResourceSprite curseButtonSprite = new("CurseButton.png");
+    public static ResourceSprite curseKillButtonSprite = new("CurseKillButton.png");
 
     public static void clearAndReload()
     {
@@ -44,7 +30,7 @@ public static class Warlock
     public static void resetCurse()
     {
         HudManagerStartPatch.warlockCurseButton.Timer = HudManagerStartPatch.warlockCurseButton.MaxTimer;
-        HudManagerStartPatch.warlockCurseButton.Sprite = getCurseButtonSprite();
+        HudManagerStartPatch.warlockCurseButton.Sprite = curseButtonSprite;
         HudManagerStartPatch.warlockCurseButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
         currentTarget = null;
         curseVictim = null;

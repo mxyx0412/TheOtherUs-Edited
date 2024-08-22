@@ -11,21 +11,13 @@ public static class BodyGuard
     public static bool usedGuard;
     public static bool guardFlash;
     public static bool showShielded;
-    private static Sprite guardButtonSprite;
+    public static ResourceSprite guardButtonSprite = new("Shield.png");
     public static PlayerControl currentTarget;
 
     public static void resetGuarded()
     {
         currentTarget = guarded = null;
         usedGuard = false;
-    }
-
-
-    public static Sprite getGuardButtonSprite()
-    {
-        if (guardButtonSprite) return guardButtonSprite;
-        guardButtonSprite = loadSpriteFromResources("TheOtherRoles.Resources.Shield.png", 115f);
-        return guardButtonSprite;
     }
 
     public static void clearAndReload()

@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using InnerNet;
-using TheOtherRoles.Modules;
 using TMPro;
 using UnityEngine;
 
@@ -28,20 +26,20 @@ public static class CredentialsPatch
 
             DeltaTime += (Time.deltaTime - DeltaTime) * 0.1f;
             var fps = Mathf.Ceil(1f / DeltaTime);
-            var PingText = $"<size=80%>Ping: {AmongUsClient.Instance.Ping}ms{(MapOption.showFPS ? $"  FPS: {fps}" : "")}</size>";
+            var PingText = $"<size=80%>Ping: {AmongUsClient.Instance.Ping}ms{(ModOption.showFPS ? $"  FPS: {fps}" : "")}</size>";
             __instance.text.SetOutlineThickness(0.1f);
             var host = $"<size=80%>{"Host".Translate()}: {GameData.Instance?.GetHost()?.PlayerName}</size>";
 
             __instance.text.alignment = TextAlignmentOptions.TopRight;
             var position = __instance.GetComponent<AspectPosition>();
-            var gameModeText = MapOption.gameMode switch
+            var gameModeText = ModOption.gameMode switch
             {
                 CustomGamemodes.HideNSeek => getString("isHideNSeekGM"),
                 CustomGamemodes.Guesser => getString("isGuesserGm"),
                 CustomGamemodes.PropHunt => getString("isPropHuntGM"),
                 _ => ""
             };
-            if (MapOption.DebugMode) gameModeText += "(Debug Mode)";
+            if (ModOption.DebugMode) gameModeText += "(Debug Mode)";
             if (gameModeText != "") gameModeText = cs(Color.yellow, gameModeText) + "\n";
             if (AmongUsClient.Instance.GameState == InnerNetClient.GameStates.Started)
             {
@@ -62,8 +60,6 @@ public static class CredentialsPatch
     {
         public static SpriteRenderer renderer;
         public static Sprite bannerSprite;
-        public static Sprite horseBannerSprite;
-        public static Sprite banner2Sprite;
         private static PingTracker instance;
 
         public static GameObject motdObject;
@@ -76,11 +72,9 @@ public static class CredentialsPatch
             torLogo.transform.localPosition = new Vector3(-0.4f, 1f, 5f);
 
             renderer = torLogo.AddComponent<SpriteRenderer>();
-            loadSprites();
-            renderer.sprite = loadSpriteFromResources("TheOtherRoles.Resources.Banner.png", 300f);
+            renderer.sprite = UnityHelper.loadSpriteFromResources("TheOtherRoles.Resources.Banner.png", 300f);
 
             instance = __instance;
-            loadSprites();
             // renderer.sprite = TORMapOptions.enableHorseMode ? horseBannerSprite : bannerSprite;
             renderer.sprite = bannerSprite;
             var credentialObject = new GameObject("credentialsTOR");
@@ -108,36 +102,6 @@ public static class CredentialsPatch
             mat.shaderKeywords = new[] { "OUTLINE_ON" };
             motdText.SetOutlineColor(Color.white);
             motdText.SetOutlineThickness(0.025f);
-        }
-
-        public static void loadSprites()
-        {
-            if (bannerSprite == null)
-                bannerSprite = loadSpriteFromResources("TheOtherRoles.Resources.Banner.png", 300f);
-            if (banner2Sprite == null)
-                banner2Sprite = loadSpriteFromResources("TheOtherRoles.Resources.Banner2.png", 300f);
-            if (horseBannerSprite == null)
-                horseBannerSprite =
-                    loadSpriteFromResources("TheOtherRoles.Resources.bannerTheHorseRoles.png", 300f);
-        }
-
-        public static void updateSprite()
-        {
-            loadSprites();
-            if (renderer != null)
-            {
-                var fadeDuration = 1f;
-                instance.StartCoroutine(Effects.Lerp(fadeDuration, new Action<float>(p =>
-                {
-                    renderer.color = new Color(1, 1, 1, 1 - p);
-                    if (p == 1)
-                    {
-                        renderer.sprite = bannerSprite;
-                        instance.StartCoroutine(Effects.Lerp(fadeDuration,
-                            new Action<float>(p => { renderer.color = new Color(1, 1, 1, p); })));
-                    }
-                })));
-            }
         }
     }
 

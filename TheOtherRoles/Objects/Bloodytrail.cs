@@ -55,9 +55,9 @@ internal class Bloodytrail
     public static List<Sprite> getBloodySprites()
     {
         if (sprites.Count > 0) return sprites;
-        sprites.Add(loadSpriteFromResources("TheOtherRoles.Resources.Blood1.png", 700));
-        sprites.Add(loadSpriteFromResources("TheOtherRoles.Resources.Blood2.png", 500));
-        sprites.Add(loadSpriteFromResources("TheOtherRoles.Resources.Blood3.png", 300));
+        sprites.Add(UnityHelper.loadSpriteFromResources("TheOtherRoles.Resources.Blood1.png", 700));
+        sprites.Add(UnityHelper.loadSpriteFromResources("TheOtherRoles.Resources.Blood2.png", 500));
+        sprites.Add(UnityHelper.loadSpriteFromResources("TheOtherRoles.Resources.Blood3.png", 300));
         return sprites;
     }
 

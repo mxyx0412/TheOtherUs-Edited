@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Reactor.Utilities.Extensions;
-using TheOtherRoles.Modules;
 using TheOtherRoles.Objects;
 using TheOtherRoles.Utilities;
 using UnityEngine;
@@ -96,12 +95,12 @@ internal static class MapBehaviourPatch
 
         foreach (var vent in MapUtilities.CachedShipStatus.AllVents)
         {
-            if (MapOption.ShowVentsOnMeetingMap && MeetingHud.Instance == null && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead) return;
+            if (ModOption.ShowVentsOnMeetingMap && MeetingHud.Instance == null && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead) return;
             if (vent.name.StartsWith("JackInTheBox") && !(PlayerControl.LocalPlayer == Trickster.trickster ||
                                                        PlayerControl.LocalPlayer.Data.IsDead))
                 continue; //for trickster vents
 
-            if (!MapOption.ShowVentsOnMap)
+            if (!ModOption.ShowVentsOnMap)
             {
                 if (mapIcons.Count > 0)
                 {

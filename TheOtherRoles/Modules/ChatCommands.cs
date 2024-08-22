@@ -91,7 +91,7 @@ public static class ChatCommands
                 //  强制结束游戏
                 if (chat.StartsWith("/end"))
                 {
-                    MapOption.isCanceled = true;
+                    ModOption.isCanceled = true;
                     handled = true;
                 }
                 // 强制紧急会议或结束会议
@@ -211,12 +211,12 @@ public static class ChatCommands
     {
         public static void Postfix(HudManager __instance)
         {
-            if (!__instance.Chat.isActiveAndEnabled && (AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay || MapOption.DebugMode ||
+            if (!__instance.Chat.isActiveAndEnabled && (AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay || ModOption.DebugMode ||
                                                         (CachedPlayer.LocalPlayer.PlayerControl.isLover() && Lovers.enableChat) ||
                                                         CachedPlayer.LocalPlayer.PlayerControl.isTeamCultist()))
                 __instance.Chat.SetVisible(true);
 
-            if (Multitasker.multitasker.FindAll(x => x.PlayerId == CachedPlayer.LocalPlayer.PlayerId).Count > 0 || MapOption.transparentTasks)
+            if (Multitasker.multitasker.FindAll(x => x.PlayerId == CachedPlayer.LocalPlayer.PlayerId).Count > 0 || ModOption.transparentTasks)
             {
                 if (PlayerControl.LocalPlayer.Data.IsDead || PlayerControl.LocalPlayer.Data.Disconnected) return;
                 if (!Minigame.Instance) return;
@@ -264,7 +264,7 @@ public static class ChatCommands
                        || sourcePlayer.PlayerId == CachedPlayer.LocalPlayer.PlayerId;
             if (__instance != FastDestroyableSingleton<HudManager>.Instance.Chat) return true;
             if (playerControl == null) return true;
-            if (MapOption.DebugMode) return flag;
+            if (ModOption.DebugMode) return flag;
             if (!playerControl.isTeamCultist() && !playerControl.isLover()) return flag;
             if ((playerControl.isTeamCultist() && Follower.chatTarget) ||
                 (playerControl.isLover() && Lovers.enableChat) ||

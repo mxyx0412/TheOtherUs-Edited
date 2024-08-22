@@ -16,7 +16,7 @@ public class Trap
 
     private static int instanceCounter;
 
-    private static Sprite trapSprite;
+    private static ResourceSprite trapSprite = new("Trapper_Trap_Ingame.png", 300);
     private readonly Arrow arrow = new(Color.blue);
     private readonly int neededCount;
     public readonly int instanceId;
@@ -35,7 +35,7 @@ public class Trap
         neededCount = Trapper.trapCountToReveal;
 
         var trapRenderer = trap.AddComponent<SpriteRenderer>();
-        trapRenderer.sprite = getTrapSprite();
+        trapRenderer.sprite = trapSprite;
         trap.SetActive(false);
         if (CachedPlayer.LocalPlayer.PlayerId == Trapper.trapper.PlayerId) trap.SetActive(true);
         trapRenderer.color = Color.white * new Vector4(1, 1, 1, 0.5f);
@@ -48,13 +48,6 @@ public class Trap
             if ((int)x == 1) triggerable = true;
             trapRenderer.color = Color.white;
         })));
-    }
-
-    public static Sprite getTrapSprite()
-    {
-        if (trapSprite) return trapSprite;
-        trapSprite = loadSpriteFromResources("TheOtherRoles.Resources.Trapper_Trap_Ingame.png", 300f);
-        return trapSprite;
     }
 
     public static void clearTraps()
@@ -161,8 +154,8 @@ public class Trap
 public class KillTrap
 {
     public GameObject killtrap;
-    public static Sprite trapSprite;
-    public static Sprite trapActiveSprite;
+    public static ResourceSprite trapSprite = new("Trap.png", 300);
+    public static ResourceSprite trapActiveSprite = new("TrapActive.png", 300);
     public static AudioClip place;
     public static AudioClip activate;
     public static AudioClip disable;
@@ -175,15 +168,6 @@ public class KillTrap
     public bool isActive;
     public PlayerControl target;
     public DateTime placedTime;
-
-    public static void loadSprite()
-    {
-        if (trapSprite == null)
-            trapSprite = loadSpriteFromResources("TheOtherRoles.Resources.Trap.png", 300f);
-        if (trapActiveSprite == null)
-            trapActiveSprite = loadSpriteFromResources("TheOtherRoles.Resources.TrapActive.png", 300f);
-
-    }
 
     private static byte getAvailableId()
     {
@@ -425,7 +409,6 @@ public class KillTrap
 
     public static void clearAllTraps()
     {
-        loadSprite();
         foreach (var trap in traps.Values)
         {
             if (trap.killtrap != null)

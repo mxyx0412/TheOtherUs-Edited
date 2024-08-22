@@ -1,5 +1,4 @@
-﻿using TheOtherRoles.Modules;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace TheOtherRoles.Roles.Impostor;
 

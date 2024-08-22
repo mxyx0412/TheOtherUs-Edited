@@ -127,7 +127,7 @@ public static class Guesser
         Transform selectedButton = null;
 
         // From SuperNewRoles
-        var teamCount = MapOption.allowModGuess ? 4 : 3;
+        var teamCount = ModOption.allowModGuess ? 4 : 3;
         for (int index = 0; index < teamCount; index++)
         {
             Transform TeambuttonParent = new GameObject().transform;
@@ -245,7 +245,7 @@ public static class Guesser
             if (roleInfo.roleTeam == RoleTeam.Modifier)
             {
                 // Allow Guessing the following mods: Bait, TieBreaker, Bloody, and VIP
-                if (MapOption.allowModGuess && !roleInfo.isGuessable) continue;
+                if (ModOption.allowModGuess && !roleInfo.isGuessable) continue;
             }
 
             if (roleInfo.roleId == guesserRole ||

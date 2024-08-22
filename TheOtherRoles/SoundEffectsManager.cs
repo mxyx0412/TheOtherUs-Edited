@@ -20,7 +20,7 @@ public static class SoundEffectsManager
         var resourceNames = assembly.GetManifestResourceNames();
         foreach (var resourceName in resourceNames)
             if (resourceName.Contains("TheOtherRoles.Resources.SoundEffects.") && resourceName.Contains(".raw"))
-                soundEffects.Add(resourceName, loadAudioClipFromResources(resourceName));
+                soundEffects.Add(resourceName, UnityHelper.loadAudioClipFromResources(resourceName));
     }
 
     public static AudioClip get(string path)
@@ -33,7 +33,7 @@ public static class SoundEffectsManager
 
     public static void play(string path, float volume = 0.8f, bool loop = false)
     {
-        if (!MapOption.enableSoundEffects) return;
+        if (!ModOption.enableSoundEffects) return;
         var clipToPlay = get(path);
         stop(path);
         if (Constants.ShouldPlaySfx() && clipToPlay != null)
@@ -46,7 +46,7 @@ public static class SoundEffectsManager
     public static void playAtPosition(string path, Vector2 position, float maxDuration = 15f, float range = 5f,
         bool loop = false)
     {
-        if (!MapOption.enableSoundEffects || !Constants.ShouldPlaySfx()) return;
+        if (!ModOption.enableSoundEffects || !Constants.ShouldPlaySfx()) return;
         var clipToPlay = get(path);
 
         var source = SoundManager.Instance.PlaySound(clipToPlay, false);

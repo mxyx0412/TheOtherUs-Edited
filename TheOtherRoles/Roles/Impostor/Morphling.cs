@@ -6,8 +6,8 @@ public static class Morphling
 {
     public static PlayerControl morphling;
     public static Color color = Palette.ImpostorRed;
-    private static Sprite sampleSprite;
-    private static Sprite morphSprite;
+    public static ResourceSprite sampleSprite = new("SampleButton.png");
+    public static ResourceSprite morphSprite = new("MorphButton.png");
 
     public static float cooldown = 30f;
     public static float duration = 10f;
@@ -35,19 +35,5 @@ public static class Morphling
         morphTimer = 0f;
         cooldown = CustomOptionHolder.morphlingCooldown.getFloat();
         duration = CustomOptionHolder.morphlingDuration.getFloat();
-    }
-
-    public static Sprite getSampleSprite()
-    {
-        if (sampleSprite) return sampleSprite;
-        sampleSprite = loadSpriteFromResources("TheOtherRoles.Resources.SampleButton.png", 115f);
-        return sampleSprite;
-    }
-
-    public static Sprite getMorphSprite()
-    {
-        if (morphSprite) return morphSprite;
-        morphSprite = loadSpriteFromResources("TheOtherRoles.Resources.MorphButton.png", 115f);
-        return morphSprite;
     }
 }

@@ -17,16 +17,8 @@ public static class Cultist
 
     public static bool needsFollower = true;
 
-    //      public static PlayerControl currentFollower;
-    public static Sprite buttonSprite;
-
-
-    public static Sprite getSidekickButtonSprite()
-    {
-        if (buttonSprite) return buttonSprite;
-        buttonSprite = loadSpriteFromResources("TheOtherRoles.Resources.SidekickButton.png", 115f);
-        return buttonSprite;
-    }
+    //public static PlayerControl currentFollower;
+    public static ResourceSprite buttonSprite = new("SidekickButton.png");
 
     public static PlayerControl getCultistPartner(this PlayerControl player)
     {

@@ -491,7 +491,7 @@ public class OnGameEndPatch
             (HideNSeek.isHideNSeekGM ? HideNSeek.startTime : PropHunt.startTime)).TotalMilliseconds / 1000;
 
         // Reset Settings
-        if (MapOption.gameMode == CustomGamemodes.HideNSeek) ShipStatusPatch.resetVanillaSettings();
+        if (ModOption.gameMode == CustomGamemodes.HideNSeek) ShipStatusPatch.resetVanillaSettings();
         RPCProcedure.resetVariables();
     }
 }
@@ -698,7 +698,7 @@ public class EndGameManagerSetUpPatch
             textRenderer.text += $"\n{combinedText}";
         }
 
-        if (MapOption.showRoleSummary || HideNSeek.isHideNSeekGM || PropHunt.isPropHuntGM)
+        if (ModOption.showRoleSummary || HideNSeek.isHideNSeekGM || PropHunt.isPropHuntGM)
         {
             if (Camera.main != null)
             {
@@ -757,7 +757,7 @@ internal class CheckEndCriteriaPatch
         if (DestroyableSingleton<TutorialManager>.InstanceExists) return true;
         var statistics = new PlayerStatistics(__instance);
         if (CheckAndEndGameForHost(__instance)) return false;
-        if (MapOption.DebugMode) return false;
+        if (ModOption.DebugMode) return false;
         if (CheckAndEndGameForTaskWin(__instance)) return false;
         if (CheckAndEndGameForMiniLose(__instance)) return false;
         if (CheckAndEndGameForJesterWin(__instance)) return false;
@@ -780,7 +780,7 @@ internal class CheckEndCriteriaPatch
 
     private static bool CheckAndEndGameForHost(ShipStatus __instance)
     {
-        if (MapOption.isCanceled)
+        if (ModOption.isCanceled)
         {
             GameManager.Instance.RpcEndGame((GameOverReason)CustomGameOverReason.Draw, false);
             return true;
@@ -879,7 +879,7 @@ internal class CheckEndCriteriaPatch
 
     private static bool CheckAndEndGameForTaskWin(ShipStatus __instance)
     {
-        if (MapOption.PreventTaskEnd || (HideNSeek.isHideNSeekGM && !HideNSeek.taskWinPossible) || PropHunt.isPropHuntGM) return false;
+        if (ModOption.PreventTaskEnd || (HideNSeek.isHideNSeekGM && !HideNSeek.taskWinPossible) || PropHunt.isPropHuntGM) return false;
         if (GameData.Instance.TotalTasks > 0 && GameData.Instance.TotalTasks <= GameData.Instance.CompletedTasks)
         {
             //__instance.enabled = false;

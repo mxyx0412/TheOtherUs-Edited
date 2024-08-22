@@ -7,9 +7,9 @@ namespace TheOtherRoles.Objects;
 
 public class Bomb
 {
-    private static Sprite bombSprite;
-    private static Sprite backgroundSprite;
-    private static Sprite defuseSprite;
+    private static ResourceSprite bombSprite = new("Bomb.png", 300f);
+    private static ResourceSprite backgroundSprite = new("BombBackground.png", 110f);
+    public static ResourceSprite defuseSprite = new("Bomb_Button_Defuse.png");
     public static bool canDefuse;
     public readonly GameObject background;
     public readonly GameObject bomb;
@@ -27,9 +27,9 @@ public class Bomb
         background.transform.position = position;
 
         var bombRenderer = bomb.AddComponent<SpriteRenderer>();
-        bombRenderer.sprite = getBombSprite();
+        bombRenderer.sprite = bombSprite;
         var backgroundRenderer = background.AddComponent<SpriteRenderer>();
-        backgroundRenderer.sprite = getBackgroundSprite();
+        backgroundRenderer.sprite = backgroundSprite;
 
         bomb.SetActive(false);
         background.SetActive(false);
@@ -59,28 +59,6 @@ public class Bomb
                         if ((int)f == 1) explode(this);
                     })));
             })));
-    }
-
-    public static Sprite getBombSprite()
-    {
-        if (bombSprite) return bombSprite;
-        bombSprite = loadSpriteFromResources("TheOtherRoles.Resources.Bomb.png", 300f);
-        return bombSprite;
-    }
-
-    public static Sprite getBackgroundSprite()
-    {
-        if (backgroundSprite) return backgroundSprite;
-        backgroundSprite =
-            loadSpriteFromResources("TheOtherRoles.Resources.BombBackground.png", 110f / Terrorist.hearRange);
-        return backgroundSprite;
-    }
-
-    public static Sprite getDefuseSprite()
-    {
-        if (defuseSprite) return defuseSprite;
-        defuseSprite = loadSpriteFromResources("TheOtherRoles.Resources.Bomb_Button_Defuse.png", 115f);
-        return defuseSprite;
     }
 
     public static void explode(Bomb b)

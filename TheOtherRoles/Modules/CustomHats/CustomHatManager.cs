@@ -141,9 +141,9 @@ public static class CustomHatManager
 
     private static Sprite CreateHatSprite(string path)
     {
-        var texture = loadTextureFromDisk(Path.Combine(HatsDirectory, path));
+        var texture = UnityHelper.loadTextureFromDisk(Path.Combine(HatsDirectory, path));
         if (texture == null)
-            texture = loadTextureFromResources(path);
+            texture = UnityHelper.loadTextureFromResources(path);
         if (texture == null) return null;
         var sprite = Sprite.Create(texture,
             new Rect(0, 0, texture.width, texture.height),

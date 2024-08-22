@@ -19,24 +19,9 @@ public static class Witch
     public static bool triggerBothCooldowns = true;
     public static bool witchVoteSavesTargets = true;
 
-    private static Sprite buttonSprite;
+    public static ResourceSprite buttonSprite = new("SpellButton.png");
 
-    private static Sprite spelledOverlaySprite;
-
-    public static Sprite getButtonSprite()
-    {
-        if (buttonSprite) return buttonSprite;
-        buttonSprite = loadSpriteFromResources("TheOtherRoles.Resources.SpellButton.png", 115f);
-        return buttonSprite;
-    }
-
-    public static Sprite getSpelledOverlaySprite()
-    {
-        if (spelledOverlaySprite) return spelledOverlaySprite;
-        spelledOverlaySprite = loadSpriteFromResources("TheOtherRoles.Resources.SpellButtonMeeting.png", 225f);
-        return spelledOverlaySprite;
-    }
-
+    public static ResourceSprite spelledOverlaySprite = new("SpellButtonMeeting.png", 225f);
 
     public static void clearAndReload()
     {

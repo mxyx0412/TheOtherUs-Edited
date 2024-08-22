@@ -1,4 +1,3 @@
-using TheOtherRoles.Modules;
 using UnityEngine;
 using static TheOtherRoles.Options.CustomOption;
 using Types = TheOtherRoles.Options.CustomOption.CustomOptionType;
@@ -1351,7 +1350,7 @@ public class CustomOptionHolder
         modifierTunneler = Create(40270, Types.Modifier, cs(Color.yellow, "Tunneler"), rates, null, true);
 
         modifierButtonBarry = Create(40280, Types.Modifier, cs(Color.yellow, "ButtonBarry"), rates, null, true);
-        modifierButtonSabotageRemoteMeetings = Create(40281, Types.Modifier, "modifierButtonSabotageRemoteMeetings", false, modifierButtonBarry);
+        modifierButtonSabotageRemoteMeetings = Create(40281, Types.Modifier, "modifierButtonSabotageRemoteMeetings", true, modifierButtonBarry);
 
         modifierSlueth = Create(40290, Types.Modifier, cs(Color.yellow, "Slueth"), rates, null, true);
 

@@ -19,14 +19,7 @@ public static class Trapper
     public static int infoType; // 0 = Role, 1 = Good/Evil, 2 = Name
     public static float trapDuration = 5f;
 
-    private static Sprite trapButtonSprite;
-
-    public static Sprite getButtonSprite()
-    {
-        if (trapButtonSprite) return trapButtonSprite;
-        trapButtonSprite = loadSpriteFromResources("TheOtherRoles.Resources.Trapper_Place_Button.png", 115f);
-        return trapButtonSprite;
-    }
+    public static ResourceSprite trapButtonSprite = new("Trapper_Place_Button.png");
 
     public static void clearAndReload()
     {

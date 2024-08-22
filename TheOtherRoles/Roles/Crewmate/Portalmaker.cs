@@ -14,51 +14,8 @@ public static class Portalmaker
     public static bool logShowsTime;
     public static bool canPortalFromAnywhere;
 
-    private static Sprite placePortalButtonSprite;
-    private static Sprite usePortalButtonSprite;
-    private static Sprite usePortalSpecialButtonSprite1;
-    private static Sprite usePortalSpecialButtonSprite2;
-    private static Sprite logSprite;
-
-    public static Sprite getPlacePortalButtonSprite()
-    {
-        if (placePortalButtonSprite) return placePortalButtonSprite;
-        placePortalButtonSprite =
-            loadSpriteFromResources("TheOtherRoles.Resources.PlacePortalButton.png", 115f);
-        return placePortalButtonSprite;
-    }
-
-    public static Sprite getUsePortalButtonSprite()
-    {
-        if (usePortalButtonSprite) return usePortalButtonSprite;
-        usePortalButtonSprite =
-            loadSpriteFromResources("TheOtherRoles.Resources.UsePortalButton.png", 115f);
-        return usePortalButtonSprite;
-    }
-
-    public static Sprite getUsePortalSpecialButtonSprite(bool first)
-    {
-        if (first)
-        {
-            if (usePortalSpecialButtonSprite1) return usePortalSpecialButtonSprite1;
-            usePortalSpecialButtonSprite1 =
-                loadSpriteFromResources("TheOtherRoles.Resources.UsePortalSpecialButton1.png", 115f);
-            return usePortalSpecialButtonSprite1;
-        }
-
-        if (usePortalSpecialButtonSprite2) return usePortalSpecialButtonSprite2;
-        usePortalSpecialButtonSprite2 =
-            loadSpriteFromResources("TheOtherRoles.Resources.UsePortalSpecialButton2.png", 115f);
-        return usePortalSpecialButtonSprite2;
-    }
-
-    public static Sprite getLogSprite()
-    {
-        if (logSprite) return logSprite;
-        logSprite = FastDestroyableSingleton<HudManager>.Instance.UseButton
-            .fastUseSettings[ImageNames.DoorLogsButton].Image;
-        return logSprite;
-    }
+    public static ResourceSprite placePortalButtonSprite = new("PlacePortalButton.png");
+    public static ResourceSprite usePortalButtonSprite = new("UsePortalButton.png");
 
     public static void clearAndReload()
     {

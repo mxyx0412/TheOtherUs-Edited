@@ -121,6 +121,6 @@ internal static class LogListener
     [HarmonyPostfix]
     internal static void OnRpc(InnerNetObject __instance, [HarmonyArgument(0)] byte callId, [HarmonyArgument(1)] Hazel.MessageReader reader)
     {
-        if (MapOption.enableDebugLogMode) Info($"{__instance.name} {callId} {reader.Length} {reader.Tag}");
+        if (ModOption.enableDebugLogMode) Info($"{__instance.name} {callId} {reader.Length} {reader.Tag}");
     }
 }

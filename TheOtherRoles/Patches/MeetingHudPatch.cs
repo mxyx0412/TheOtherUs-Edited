@@ -4,12 +4,11 @@ using System.Linq;
 using AmongUs.QuickChat;
 using Hazel;
 using Reactor.Utilities;
-using TheOtherRoles.Modules;
 using TheOtherRoles.Objects;
 using TheOtherRoles.Utilities;
 using TMPro;
 using UnityEngine;
-using static TheOtherRoles.Options.MapOption;
+using static TheOtherRoles.Options.ModOption;
 using Object = UnityEngine.Object;
 
 namespace TheOtherRoles.Patches;
@@ -198,7 +197,7 @@ internal class MeetingHudPatch
                 if (HandleGuesser.isGuesserGm && HandleGuesser.isGuesser(CachedPlayer.LocalPlayer.PlayerId))
                     checkbox.transform.localPosition = new Vector3(-0.5f, 0.03f, -1.3f);
                 var renderer = checkbox.GetComponent<SpriteRenderer>();
-                renderer.sprite = Swapper.getCheckSprite();
+                renderer.sprite = Swapper.spriteCheck;
                 renderer.color = Color.red;
 
                 if (Swapper.charges <= 0) renderer.color = Color.gray;
@@ -295,7 +294,7 @@ internal class MeetingHudPatch
                     rend.gameObject.layer = pva.Megaphone.gameObject.layer;
                     rend.transform.localPosition = new Vector3(-0.5f, -0.03f, -1f);
                     if (local == Swapper.swapper && (isGuesser || Swapper.swapper.PlayerId == Mimic.mimic.PlayerId)) rend.transform.localPosition = new Vector3(-0.725f, -0.15f, -1f);
-                    rend.sprite = Witch.getSpelledOverlaySprite();
+                    rend.sprite = Witch.spelledOverlaySprite;
                 }
             }
         }
@@ -889,7 +888,7 @@ internal class MeetingHudPatch
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Update))]
     private class MeetingHudUpdatePatch
     {
-        public static Sprite Overlay => Blackmailer.getBlackmailOverlaySprite();
+        public static Sprite Overlay => Blackmailer.overlaySprite;
 
         private static void Postfix(MeetingHud __instance)
         {
@@ -958,7 +957,7 @@ internal class MeetingHudPatch
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Start))]
     public class MeetingHudStart
     {
-        public static Sprite Letter => Blackmailer.getBlackmailOverlaySprite();
+        public static Sprite Letter => Blackmailer.overlaySprite;
 
         public static void Postfix(MeetingHud __instance)
         {

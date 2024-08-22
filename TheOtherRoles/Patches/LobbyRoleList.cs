@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using TheOtherRoles.Modules;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -84,7 +83,7 @@ public static class LobbyRoleInfo
             Transform buttonTransform = Object.Instantiate(buttonTemplate, container.transform);
             buttonTransform.name = team + " Button";
             buttonTransform.GetComponent<BoxCollider2D>().size = new Vector2(2.5f, 0.55f);
-            buttonTransform.GetComponent<SpriteRenderer>().sprite = loadSpriteFromResources("TheOtherRoles.Resources.LobbyRoleInfo.RolePlate.png", 215f);
+            buttonTransform.GetComponent<SpriteRenderer>().sprite = UnityHelper.loadSpriteFromResources("TheOtherRoles.Resources.LobbyRoleInfo.RolePlate.png", 215f);
             buttons.Add(buttonTransform);
             buttonTransform.localPosition = new Vector3(0, 2.2f - (i * 1f), -5);
             buttonTransform.localScale = new Vector3(2f, 1.5f, 1f);
@@ -151,7 +150,7 @@ public static class LobbyRoleInfo
             buttonTransform.name = cs(roleInfo.color, roleInfo.Name) + " Button";
             buttonTransform.GetComponent<BoxCollider2D>().size = new Vector2(2.5f, 0.55f);
             TextMeshPro label = Object.Instantiate(textTemplate, buttonTransform);
-            buttonTransform.GetComponent<SpriteRenderer>().sprite = loadSpriteFromResources("TheOtherRoles.Resources.LobbyRoleInfo.RolePlate2.png", 215f);
+            buttonTransform.GetComponent<SpriteRenderer>().sprite = UnityHelper.loadSpriteFromResources("TheOtherRoles.Resources.LobbyRoleInfo.RolePlate2.png", 215f);
             buttons.Add(buttonTransform);
             int row = count / 3, col = count % 3;
             buttonTransform.localPosition = new Vector3(-3.205f + (col * 3.2f), 2.9f - (row * 0.75f), -5);
@@ -193,7 +192,7 @@ public static class LobbyRoleInfo
         roleCard.transform.localScale = new Vector3(0.68f, 0.68f, 1f);
         RolesSummaryUI = roleCard.gameObject;
 
-        roleCardRend.sprite = loadSpriteFromResources("TheOtherRoles.Resources.LobbyRoleInfo.SummaryScreen.png", 110f);
+        roleCardRend.sprite = UnityHelper.loadSpriteFromResources("TheOtherRoles.Resources.LobbyRoleInfo.SummaryScreen.png", 110f);
 
         infoButtonText = Object.Instantiate(HudManager.Instance.TaskPanel.taskText, roleCard.transform);
         infoButtonText.color = Color.white;

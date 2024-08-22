@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Il2CppInterop.Generator.Passes;
+using UnityEngine;
 
 namespace TheOtherRoles.Roles.Impostor;
 
@@ -15,14 +16,7 @@ public static class Undertaker
 
     public static float velocity = 1;
 
-    private static Sprite buttonSprite;
-
-    public static Sprite getButtonSprite()
-    {
-        if (buttonSprite) return buttonSprite;
-        buttonSprite = loadSpriteFromResources("TheOtherRoles.Resources.UndertakerDragButton.png", 115f);
-        return buttonSprite;
-    }
+    public static ResourceSprite buttonSprite = new("UndertakerDragButton.png");
 
     public static void clearAndReload()
     {

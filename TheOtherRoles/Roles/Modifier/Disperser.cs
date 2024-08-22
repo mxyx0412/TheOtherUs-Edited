@@ -8,15 +8,7 @@ public static class Disperser
     public static Color color = Palette.ImpostorRed;
     public static int remainingDisperses = 1;
     public static bool DispersesToVent;
-    private static Sprite buttonSprite;
-
-    public static Sprite getButtonSprite()
-    {
-        if (buttonSprite) return buttonSprite;
-        buttonSprite = loadSpriteFromResources("TheOtherRoles.Resources.Disperse.png", 115f);
-        return buttonSprite;
-    }
-
+    public static ResourceSprite buttonSprite = new("Disperse.png");
 
     public static void clearAndReload()
     {

@@ -18,7 +18,7 @@ public static class HauntMenuMinigamePatch
         if (GameOptionsManager.Instance.currentGameOptions.GameMode != GameModes.Normal) return;
         var target = __instance.HauntTarget;
         var roleInfo = RoleInfo.getRoleInfoForPlayer(target, false);
-        var roleString = roleInfo.Count > 0 && MapOption.ghostsSeeRoles ? roleInfo[0].Name : "";
+        var roleString = roleInfo.Count > 0 && ModOption.ghostsSeeRoles ? roleInfo[0].Name : "";
         if (__instance.HauntTarget.Data.IsDead)
         {
             __instance.FilterText.text = roleString + " Ghost";
@@ -48,7 +48,7 @@ public static class HauntMenuMinigamePatch
     public static bool StartPrefix(HauntMenuMinigame __instance)
     {
         if (GameOptionsManager.Instance.currentGameOptions.GameMode != GameModes.Normal ||
-            !MapOption.ghostsSeeRoles) return true;
+            !ModOption.ghostsSeeRoles) return true;
         __instance.FilterButtons[0].gameObject.SetActive(true);
         var numActive = 0;
         var numButtons = __instance.FilterButtons.Count(s => s.isActiveAndEnabled);

@@ -44,7 +44,7 @@ public class ResourceSprite(string pathName = "", float pixel = 115f, bool cache
         if (_sprite != null && _sprite.pixelsPerUnit == _pixel)
             return _sprite;
 
-        _sprite = loadSpriteFromResources(GetPath(), _pixel, _cache);
+        _sprite = UnityHelper.loadSpriteFromResources(GetPath(), _pixel, _cache);
         return _sprite;
     }
 

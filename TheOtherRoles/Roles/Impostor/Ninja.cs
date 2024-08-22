@@ -18,23 +18,9 @@ public static class Ninja
 
     public static float invisibleTimer;
     public static bool isInvisble;
-    private static Sprite markButtonSprite;
-    private static Sprite killButtonSprite;
+    public static ResourceSprite markButtonSprite = new("NinjaMarkButton.png");
+    public static ResourceSprite killButtonSprite = new("NinjaAssassinateButton.png");
     public static Arrow arrow = new(Color.black);
-
-    public static Sprite getMarkButtonSprite()
-    {
-        if (markButtonSprite) return markButtonSprite;
-        markButtonSprite = loadSpriteFromResources("TheOtherRoles.Resources.NinjaMarkButton.png", 115f);
-        return markButtonSprite;
-    }
-
-    public static Sprite getKillButtonSprite()
-    {
-        if (killButtonSprite) return killButtonSprite;
-        killButtonSprite = loadSpriteFromResources("TheOtherRoles.Resources.NinjaAssassinateButton.png", 115f);
-        return killButtonSprite;
-    }
 
     public static void clearAndReload()
     {

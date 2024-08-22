@@ -15,14 +15,7 @@ public static class TimeMaster
     public static bool shieldActive;
     public static bool isRewinding;
 
-    private static Sprite buttonSprite;
-
-    public static Sprite getButtonSprite()
-    {
-        if (buttonSprite) return buttonSprite;
-        buttonSprite = loadSpriteFromResources("TheOtherRoles.Resources.TimeShieldButton.png", 115f);
-        return buttonSprite;
-    }
+    public static ResourceSprite buttonSprite = new("TimeShieldButton.png");
 
     public static void clearAndReload()
     {

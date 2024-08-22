@@ -298,7 +298,7 @@ internal class HudManagerUpdatePatch
         }
 
         // Display lighter / darker color for all alive players
-        if (CachedPlayer.LocalPlayer != null && MeetingHud.Instance != null && MapOption.showLighterDarker)
+        if (CachedPlayer.LocalPlayer != null && MeetingHud.Instance != null && ModOption.showLighterDarker)
             foreach (var player in MeetingHud.Instance.playerStates)
             {
                 var target = playerById(player.TargetPlayerId);
@@ -413,8 +413,8 @@ internal class HudManagerUpdatePatch
 
     private static void updateSabotageButton(HudManager __instance)
     {
-        if (MeetingHud.Instance || MapOption.gameMode == CustomGamemodes.HideNSeek ||
-            MapOption.gameMode == CustomGamemodes.PropHunt) __instance.SabotageButton.Hide();
+        if (MeetingHud.Instance || ModOption.gameMode == CustomGamemodes.HideNSeek ||
+            ModOption.gameMode == CustomGamemodes.PropHunt) __instance.SabotageButton.Hide();
         if (PlayerControl.LocalPlayer.Data.IsDead && CustomOptionHolder.deadImpsBlockSabotage.getBool()) __instance.SabotageButton.Hide();
     }
 

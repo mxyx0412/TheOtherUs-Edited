@@ -56,12 +56,6 @@ internal class PropHunt
     public static bool enableInvis = true;
 
     public static bool propBecomesHunterWhenFound;
-    private static Sprite disguiseButtonSprite;
-    private static Sprite unstuckButtonSprite;
-    private static Sprite revealButtonSprite;
-    private static Sprite invisButtonSprite;
-    private static Sprite speedboostButtonSprite;
-    private static Sprite findButtonSprite;
     private static Sprite poolablesBackgroundSprite;
     public static DateTime startTime = DateTime.UtcNow;
     public static TMP_Text timerText;
@@ -82,10 +76,16 @@ internal class PropHunt
     private static List<GameObject> duplicatedCollider = new();
     private static GameObject introObject;
 
+    public static ResourceSprite unstuckButtonSprite = new("UnStuck.png");
+    public static ResourceSprite revealButtonSprite = new("Reveal.png");
+    public static ResourceSprite invisButtonSprite = new("InvisButton.png");
+    public static ResourceSprite findButtonSprite = new("FindButton.png");
+    public static ResourceSprite speedboostButtonSprite = new("SpeedboostButton.png");
+
     public static void clearAndReload()
     {
         remainingShots.Clear();
-        isPropHuntGM = MapOption.gameMode == CustomGamemodes.PropHunt;
+        isPropHuntGM = ModOption.gameMode == CustomGamemodes.PropHunt;
         numberOfHunters = CustomOptionHolder.propHuntNumberOfHunters.getQuantity();
         initialBlackoutTime = CustomOptionHolder.hunterInitialBlackoutTime.getFloat();
         //maxMissesBeforeDeath = CustomOptionHolder.hunterMaxMissesBeforeDeath.getQuantity();
@@ -127,8 +127,7 @@ internal class PropHunt
 
     public static Sprite getIntroSprite(int index)
     {
-        return loadSpriteFromResources($"TheOtherRoles.Resources.IntroAnimation.intro_{index + 1000}.png", 150f,
-            false);
+        return UnityHelper.loadSpriteFromResources($"TheOtherRoles.Resources.IntroAnimation.intro_{index + 1000}.png", 150f, false);
     }
 
     public static void updateWhitelistedObjects()
@@ -192,7 +191,7 @@ internal class PropHunt
             poolablesBackground.AddComponent<SpriteRenderer>();
             if (poolablesBackgroundSprite == null)
                 poolablesBackgroundSprite =
-                    loadSpriteFromResources("TheOtherRoles.Resources.poolablesBackground.jpg", 200f);
+                    UnityHelper.loadSpriteFromResources("TheOtherRoles.Resources.poolablesBackground.jpg", 200f);
         }
 
         poolablesBackground.transform.SetParent(HudManager.Instance.transform);
@@ -208,8 +207,8 @@ internal class PropHunt
 
         foreach (var pc in PlayerControl.AllPlayerControls)
         {
-            if (!MapOption.playerIcons.ContainsKey(pc.PlayerId)) continue;
-            var poolablePlayer = MapOption.playerIcons[pc.PlayerId];
+            if (!ModOption.playerIcons.ContainsKey(pc.PlayerId)) continue;
+            var poolablePlayer = ModOption.playerIcons[pc.PlayerId];
             if (pc.Data.IsDead)
             {
                 poolablePlayer.setSemiTransparent(true);
@@ -391,49 +390,6 @@ internal class PropHunt
             }
         }
     }
-
-    public static Sprite getDisguiseButtonSprite()
-    {
-        if (disguiseButtonSprite) return disguiseButtonSprite;
-        disguiseButtonSprite = loadSpriteFromResources("TheOtherRoles.Resources.DisguiseButton.png", 115f);
-        return disguiseButtonSprite;
-    }
-
-    public static Sprite getUnstuckButtonSprite()
-    {
-        if (unstuckButtonSprite) return unstuckButtonSprite;
-        unstuckButtonSprite = loadSpriteFromResources("TheOtherRoles.Resources.UnStuck.png", 115f);
-        return unstuckButtonSprite;
-    }
-
-    public static Sprite getRevealButtonSprite()
-    {
-        if (revealButtonSprite) return revealButtonSprite;
-        revealButtonSprite = loadSpriteFromResources("TheOtherRoles.Resources.Reveal.png", 115f);
-        return revealButtonSprite;
-    }
-
-    public static Sprite getInvisButtonSprite()
-    {
-        if (invisButtonSprite) return invisButtonSprite;
-        invisButtonSprite = loadSpriteFromResources("TheOtherRoles.Resources.InvisButton.png", 115f);
-        return invisButtonSprite;
-    }
-
-    public static Sprite getFindButtonSprite()
-    {
-        if (findButtonSprite) return findButtonSprite;
-        findButtonSprite = loadSpriteFromResources("TheOtherRoles.Resources.FindButton.png", 115f);
-        return findButtonSprite;
-    }
-
-    public static Sprite getSpeedboostButtonSprite()
-    {
-        if (speedboostButtonSprite) return speedboostButtonSprite;
-        speedboostButtonSprite = loadSpriteFromResources("TheOtherRoles.Resources.SpeedboostButton.png", 115f);
-        return speedboostButtonSprite;
-    }
-
 
     public static GameObject FindClosestDisguiseObject(GameObject origin, float radius, bool verbose = false)
     {
@@ -626,14 +582,14 @@ internal class PropHunt
     public static void MapSetPostfix()
     {
         // Make sure the map in the settings is in sync with the map from li
-        if ((MapOption.gameMode != CustomGamemodes.PropHunt &&
-             MapOption.gameMode != CustomGamemodes.HideNSeek) || AmongUsClient.Instance.IsGameStarted) return;
+        if ((ModOption.gameMode != CustomGamemodes.PropHunt &&
+             ModOption.gameMode != CustomGamemodes.HideNSeek) || AmongUsClient.Instance.IsGameStarted) return;
         int map = GameOptionsManager.Instance.currentGameOptions.MapId;
         if (map > 3) map--;
-        if (MapOption.gameMode == CustomGamemodes.HideNSeek)
+        if (ModOption.gameMode == CustomGamemodes.HideNSeek)
             if (CustomOptionHolder.hideNSeekMap.selection != map)
                 CustomOptionHolder.hideNSeekMap.updateSelection(map);
-        if (MapOption.gameMode == CustomGamemodes.PropHunt)
+        if (ModOption.gameMode == CustomGamemodes.PropHunt)
             if (CustomOptionHolder.propHuntMap.selection != map)
                 CustomOptionHolder.propHuntMap.updateSelection(map);
     }

@@ -15,7 +15,7 @@ public static class LastImpostor
 
     public static void promoteToLastImpostor()
     {
-        if (!isEnable || (MapOption.NumImpostors == 1 && !MapOption.DebugMode)) return;
+        if (!isEnable || (ModOption.NumImpostors == 1 && !ModOption.DebugMode)) return;
         var impList = new List<PlayerControl>();
         foreach (var p in PlayerControl.AllPlayerControls.GetFastEnumerator())
         {
