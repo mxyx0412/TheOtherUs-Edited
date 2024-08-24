@@ -990,7 +990,7 @@ internal class MeetingHudPatch
                 FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(CachedPlayer.LocalPlayer.PlayerControl, $"{msg}");
                 var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
                     (byte)CustomRPC.ShareGhostInfo, SendOption.Reliable);
-                writer.Write(InfoSleuth.target.PlayerId);
+                writer.Write(InfoSleuth.infoSleuth.PlayerId);
                 writer.Write((byte)RPCProcedure.GhostInfoTypes.MediumInfo);
                 writer.Write(msg);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);

@@ -199,7 +199,7 @@ internal static class MapBehaviourPatch
     {
         if (VentNetworks.Count != 0) return;
 
-        if (isMira())
+        if (isMira)
         {
             var vents = MapUtilities.CachedShipStatus.AllVents.Where(x => !x.name.Contains("JackInTheBoxVent_"));
             VentNetworks.Add(vents.ToList());

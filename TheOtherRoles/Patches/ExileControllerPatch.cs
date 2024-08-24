@@ -158,7 +158,7 @@ internal class ExileControllerBeginPatch
                 ? SecurityGuard.staticVentSealedSprite
                 : SecurityGuard.getAnimatedVentSealedSprite();
             var rend = vent.myRend;
-            if (isFungle())
+            if (isFungle)
             {
                 newSprite = SecurityGuard.fungleVentSealedSprite;
                 rend = vent.transform.GetChild(3).GetComponent<SpriteRenderer>();

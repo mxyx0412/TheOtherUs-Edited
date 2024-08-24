@@ -23,25 +23,17 @@ public static class SecurityGuard
     public static Vent ventTarget;
     public static Minigame minigame;
 
-    public static ResourceSprite closeVentButtonSprite = new("CloseVentButton.png");
-
-    public static ResourceSprite placeCameraButtonSprite = new("PlaceCameraButton.png");
-
-    private static Sprite animatedVentSealedSprite;
     private static float lastPPU;
 
-    public static ResourceSprite staticVentSealedSprite = new("StaticVentSealed.png", 160);
-
-    public static ResourceSprite fungleVentSealedSprite = new("FungleVentSealed.png", 160);
-
-
-    public static ResourceSprite submergedCentralUpperVentSealedSprite = new("CentralUpperBlocked.png", 145);
-
-    public static ResourceSprite submergedCentralLowerVentSealedSprite = new("CentralLowerBlocked.png", 145);
-
+    private static Sprite animatedVentSealedSprite;
     private static Sprite camSprite;
-
     private static Sprite logSprite;
+    public static ResourceSprite closeVentButtonSprite = new("CloseVentButton.png");
+    public static ResourceSprite placeCameraButtonSprite = new("PlaceCameraButton.png");
+    public static ResourceSprite staticVentSealedSprite = new("StaticVentSealed.png", 160);
+    public static ResourceSprite fungleVentSealedSprite = new("FungleVentSealed.png", 160);
+    public static ResourceSprite submergedCentralUpperVentSealedSprite = new("CentralUpperBlocked.png", 145);
+    public static ResourceSprite submergedCentralLowerVentSealedSprite = new("CentralLowerBlocked.png", 145);
 
     public static Sprite getAnimatedVentSealedSprite()
     {
@@ -54,8 +46,7 @@ public static class SecurityGuard
         }
 
         if (animatedVentSealedSprite) return animatedVentSealedSprite;
-        animatedVentSealedSprite =
-            UnityHelper.loadSpriteFromResources("TheOtherRoles.Resources.AnimatedVentSealed.png", ppu);
+        animatedVentSealedSprite = UnityHelper.loadSpriteFromResources("TheOtherRoles.Resources.AnimatedVentSealed.png", ppu);
         return animatedVentSealedSprite;
     }
 

@@ -45,16 +45,16 @@ public class Hacker
         var mapId = GameOptionsManager.Instance.currentNormalGameOptions.MapId;
         // Polus
         var button = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.PolusAdminButton];
-        if (isSkeld() || mapId == 3)
+        if (isSkeld || mapId == 3)
             // Skeld || Dleks
             button = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.AdminMapButton];
-        else if (isMira())
+        else if (isMira)
             // Mira HQ
             button = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.MIRAAdminButton];
-        else if (isAirship())
+        else if (isAirship)
             // Airship
             button = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.AirshipAdminButton];
-        else if (isFungle())
+        else if (isFungle)
             // Hacker can Access the Admin panel on Fungle
             button = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.AdminMapButton];
         adminSprite = button.Image;

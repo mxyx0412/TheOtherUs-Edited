@@ -252,7 +252,7 @@ public class GameStartManagerPatch
             if (AmongUsClient.Instance.AmHost)
             {
                 var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
-                    (byte)CustomRPC.ShareGamemode, SendOption.Reliable, -1);
+                    (byte)CustomRPC.ShareGameMode, SendOption.Reliable, -1);
                 writer.Write((byte)ModOption.gameMode);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.shareGameMode((byte)ModOption.gameMode);
@@ -312,7 +312,9 @@ public class GameStartManagerPatch
                     GameOptionsManager.Instance.currentNormalGameOptions.NumImpostors = 2;
                     Cultist.isCultistGame = false;
                 }
-                bool cultistCheck = CustomOptionHolder.cultistSpawnRate.getSelection() != 0 && (rnd.Next(1, 101) <= CustomOptionHolder.cultistSpawnRate.getSelection() * 10);
+
+                bool cultistCheck = CustomOptionHolder.cultistSpawnRate.getSelection() != 0
+                                    && (rnd.Next(1, 101) <= CustomOptionHolder.cultistSpawnRate.getSelection() * 10);
                 if (cultistCheck)
                 {
                     // We should have Custist (Cultist is only supported on 2 Impostors)

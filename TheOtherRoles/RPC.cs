@@ -135,7 +135,6 @@ public enum RoleId
 public enum CustomRPC
 {
     // Main Controls
-
     ResetVaribles = 60,
     ShareOptions,
     WorkaroundSetRoles,
@@ -148,12 +147,11 @@ public enum CustomRPC
     UncheckedExilePlayer,
     DynamicMapOption,
     SetGameStarting,
-    ShareGamemode,
     StopStart,
+    ShareGameMode = 75,
 
     // Role functionality
-
-    EngineerFixLights = 101,
+    EngineerFixLights = 100,
     EngineerFixSubmergedOxygen,
     EngineerUsedRepair,
     CleanBody,
@@ -186,9 +184,8 @@ public enum CustomRPC
     BarryMeeting,
     ProphetExamine,
     ImpostorPromotesToLastImpostor,
-
     //CamoComms,
-    TrackerUsedTracker = 150,
+    TrackerUsedTracker,
     VampireSetBitten,
     PlaceGarlic,
     GiveBomb,
@@ -249,7 +246,7 @@ public enum CustomRPC
     MayorRevealed,
     SurvivorVestActive,
 
-    // SetSwooper,
+    //SetSwooper,
     SetInvisible,
     ThiefStealsRole,
     SetTrap,
@@ -340,6 +337,7 @@ public static class RPCProcedure
     {
         gameMode = (CustomGamemodes)gm;
     }
+
     public static void stopStart(byte playerId)
     {
         if (AmongUsClient.Instance.AmHost && CustomOptionHolder.anyPlayerCanStopStart.getBool())
@@ -348,6 +346,7 @@ public static class RPCProcedure
             PlayerControl.LocalPlayer.RpcSendChat($"{playerById(playerId).Data.PlayerName} 阻止游戏开始");
         }
     }
+
     public static void workaroundSetRoles(byte numberOfRoles, MessageReader reader)
     {
         for (var i = 0; i < numberOfRoles; i++)
@@ -2887,7 +2886,7 @@ public static class RPCProcedure
                 ? SecurityGuard.staticVentSealedSprite
                 : SecurityGuard.getAnimatedVentSealedSprite();
             var rend = vent.myRend;
-            if (isFungle())
+            if (isFungle)
             {
                 newSprite = SecurityGuard.fungleVentSealedSprite;
                 rend = vent.transform.GetChild(3).GetComponent<SpriteRenderer>();
@@ -3569,7 +3568,7 @@ internal class RPCHandlerPatch
         if (!RpcNames!.ContainsKey(packetId))
             return true;
 
-        if (enableDebugLogMode && callId != 73) Info($"接收 PlayerControl CustomRpc RpcId{callId} Rpc Name{RpcNames?[(CustomRPC)callId] ?? nameof(packetId)} Message Size {reader.Length}");
+        if (enableDebugLogMode && callId != 75) Info($"接收 PlayerControl CustomRpc RpcId{callId} Rpc Name{RpcNames?[(CustomRPC)callId] ?? nameof(packetId)} Message Size {reader.Length}");
         switch (packetId)
         {
             // Main Controls
@@ -4000,7 +3999,7 @@ internal class RPCHandlerPatch
                 RPCProcedure.defuseBomb();
                 break;
 
-            case CustomRPC.ShareGamemode:
+            case CustomRPC.ShareGameMode:
                 var gm = reader.ReadByte();
                 RPCProcedure.shareGameMode(gm);
                 break;

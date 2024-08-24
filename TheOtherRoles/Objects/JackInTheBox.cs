@@ -47,7 +47,7 @@ public class JackInTheBox
         vent.GetComponent<SpriteAnim>()?.Stop();
         vent.Id = MapUtilities.CachedShipStatus.AllVents.Select(x => x.Id).Max() + 1; // Make sure we have a unique id
         ventRenderer = vent.GetComponent<SpriteRenderer>();
-        if (isFungle())
+        if (isFungle)
         {
             ventRenderer = vent.transform.GetChild(3).GetComponent<SpriteRenderer>();
             var animator = vent.transform.GetChild(3).GetComponent<SpriteAnim>();

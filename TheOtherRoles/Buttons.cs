@@ -819,7 +819,7 @@ internal static class HudManagerStartPatch
                 // Ghost Info
                 var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
                     (byte)CustomRPC.ShareGhostInfo, SendOption.Reliable);
-                writer.Write(Doomsayer.currentTarget.PlayerId);
+                writer.Write(Doomsayer.doomsayer.PlayerId);
                 writer.Write((byte)RPCProcedure.GhostInfoTypes.MediumInfo);
                 writer.Write(msg);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -1330,8 +1330,8 @@ internal static class HudManagerStartPatch
                 if (hackerVitalsChargesText != null)
                     hackerVitalsChargesText.text = $"{Hacker.chargesVitals} / {Hacker.toolsNumber}";
                 hackerVitalsButton.actionButton.graphic.sprite =
-                    isMira() ? Hacker.getLogSprite() : Hacker.getVitalsSprite();
-                hackerVitalsButton.actionButton.OverrideText(isMira() ? getString("hackerDoorLogText") : getString("hackerVitalText"));
+                    isMira ? Hacker.getLogSprite() : Hacker.getVitalsSprite();
+                hackerVitalsButton.actionButton.OverrideText(isMira ? getString("hackerDoorLogText") : getString("hackerVitalText"));
                 return Hacker.chargesVitals > 0;
             },
             () =>
@@ -1352,12 +1352,12 @@ internal static class HudManagerStartPatch
                 if (!hackerAdminTableButton.isEffectActive) CachedPlayer.LocalPlayer.PlayerControl.moveable = true;
                 if (Minigame.Instance)
                 {
-                    if (isMira()) Hacker.doorLog.ForceClose();
+                    if (isMira) Hacker.doorLog.ForceClose();
                     else Hacker.vitals.ForceClose();
                 }
             },
             false,
-            isMira() ? getString("hackerDoorLogText") : getString("hackerVitalText")
+            isMira ? getString("hackerDoorLogText") : getString("hackerVitalText")
         );
 
         // Hacker Vitals Charges
@@ -2754,7 +2754,7 @@ internal static class HudManagerStartPatch
                     RPCProcedure.sealVent(SecurityGuard.ventTarget.Id);
                     SecurityGuard.ventTarget = null;
                 }
-                else if (!isMira() && !isFungle() && !SubmergedCompatibility.IsSubmerged)
+                else if (!isMira && !isFungle && !SubmergedCompatibility.IsSubmerged)
                 {
                     // Place camera if there's no vent and it's not MiraHQ or Submerged
                     var pos = CachedPlayer.LocalPlayer.transform.position;
@@ -2782,7 +2782,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 securityGuardButton.actionButton.graphic.sprite =
-                    SecurityGuard.ventTarget == null && !isMira() && !isFungle() &&
+                    SecurityGuard.ventTarget == null && !isMira && !isFungle &&
                     !SubmergedCompatibility.IsSubmerged
                         ? SecurityGuard.placeCameraButtonSprite
                         : SecurityGuard.closeVentButtonSprite;
@@ -2792,7 +2792,7 @@ internal static class HudManagerStartPatch
                 if (SecurityGuard.ventTarget != null)
                     return SecurityGuard.remainingScrews >= SecurityGuard.ventPrice &&
                            CachedPlayer.LocalPlayer.PlayerControl.CanMove;
-                return !isMira() && !isFungle() && !SubmergedCompatibility.IsSubmerged &&
+                return !isMira && !isFungle && !SubmergedCompatibility.IsSubmerged &&
                        SecurityGuard.remainingScrews >= SecurityGuard.camPrice &&
                        CachedPlayer.LocalPlayer.PlayerControl.CanMove;
             },
@@ -2814,7 +2814,7 @@ internal static class HudManagerStartPatch
         securityGuardCamButton = new CustomButton(
             () =>
             {
-                if (!isMira())
+                if (!isMira)
                 {
                     if (SecurityGuard.minigame == null)
                     {
@@ -2822,10 +2822,10 @@ internal static class HudManagerStartPatch
                         var e = Object.FindObjectsOfType<SystemConsole>().FirstOrDefault(x =>
                             x.gameObject.name.Contains("Surv_Panel") || x.name.Contains("Cam") ||
                             x.name.Contains("BinocularsSecurityConsole"));
-                        if (isSkeld() || mapId == 3)
+                        if (isSkeld || mapId == 3)
                             e = Object.FindObjectsOfType<SystemConsole>()
                                 .FirstOrDefault(x => x.gameObject.name.Contains("SurvConsole"));
-                        else if (isAirship())
+                        else if (isAirship)
                             e = Object.FindObjectsOfType<SystemConsole>()
                                 .FirstOrDefault(x => x.gameObject.name.Contains("task_cams"));
                         if (e == null || Camera.main == null) return;
@@ -2869,8 +2869,8 @@ internal static class HudManagerStartPatch
                 if (securityGuardChargesText != null)
                     securityGuardChargesText.text = $"{SecurityGuard.charges} / {SecurityGuard.maxCharges}";
                 securityGuardCamButton.actionButton.graphic.sprite =
-                    isMira() ? SecurityGuard.getLogSprite() : SecurityGuard.getCamSprite();
-                securityGuardCamButton.actionButton.OverrideText(isMira() ?
+                    isMira ? SecurityGuard.getLogSprite() : SecurityGuard.getCamSprite();
+                securityGuardCamButton.actionButton.OverrideText(isMira ?
                     getString("hackerDoorLogText") : getString("CamButtonText"));
                 return CachedPlayer.LocalPlayer.PlayerControl.CanMove && SecurityGuard.charges > 0;
             },
@@ -2893,7 +2893,7 @@ internal static class HudManagerStartPatch
                 CachedPlayer.LocalPlayer.PlayerControl.moveable = true;
             },
             false,
-            isMira() ? getString("hackerDoorLogText") : getString("CamButtonText")
+            isMira ? getString("hackerDoorLogText") : getString("CamButtonText")
         );
 
         // Security Guard cam button charges

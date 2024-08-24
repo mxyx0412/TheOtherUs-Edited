@@ -75,6 +75,13 @@ public static class Helpers
     public static bool IsCountDown => GameStartManager.InstanceExists && GameStartManager.Instance.startState == GameStartManager.StartingStates.Countdown;
     public static bool IsMeeting => InGame && MeetingHud.Instance;
 
+    public static bool isSkeld => GameOptionsManager.Instance.CurrentGameOptions.MapId == 0;
+    public static bool isMira => GameOptionsManager.Instance.CurrentGameOptions.MapId == 1;
+    public static bool isPolus => GameOptionsManager.Instance.CurrentGameOptions.MapId == 2;
+    public static bool isDleks => GameOptionsManager.Instance.CurrentGameOptions.MapId == 3;
+    public static bool isAirship => GameOptionsManager.Instance.CurrentGameOptions.MapId == 4;
+    public static bool isFungle => GameOptionsManager.Instance.CurrentGameOptions.MapId == 5;
+
     /// <summary>
     /// 假任务
     /// </summary>
@@ -822,31 +829,6 @@ public static class Helpers
         shipStatus.RpcUpdateSystem(systemType, amount);
     }
 
-    public static bool isSkeld()
-    {
-        return GameOptionsManager.Instance.CurrentGameOptions.MapId == 0;
-    }
-
-    public static bool isMira()
-    {
-        return GameOptionsManager.Instance.CurrentGameOptions.MapId == 1;
-    }
-
-    public static bool isPolus()
-    {
-        return GameOptionsManager.Instance.CurrentGameOptions.MapId == 2;
-    }
-
-    public static bool isAirship()
-    {
-        return GameOptionsManager.Instance.CurrentGameOptions.MapId == 4;
-    }
-
-    public static bool isFungle()
-    {
-        return GameOptionsManager.Instance.CurrentGameOptions.MapId == 5;
-    }
-
     public static bool IsCN()
     {
         return (int)AmongUs.Data.DataManager.Settings.Language.CurrentLanguage == 13;
@@ -921,7 +903,7 @@ public static class Helpers
         if (Ninja.isInvisble && Ninja.ninja == target) return true;
         if (Jackal.isInvisable && Jackal.jackal == target) return true;
         if (Swooper.isInvisable && Swooper.swooper == target) return true;
-        if (ModOption.hideOutOfSightNametags && InGame && !source.Data.IsDead && isFungle()
+        if (ModOption.hideOutOfSightNametags && InGame && !source.Data.IsDead && isFungle
             && PhysicsHelpers.AnythingBetween(localPlayer.GetTruePosition(), target.GetTruePosition(), Constants.ShadowMask, false)) return true;
         /*
         {

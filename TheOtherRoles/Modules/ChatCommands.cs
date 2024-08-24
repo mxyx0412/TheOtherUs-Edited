@@ -43,7 +43,7 @@ public static class ChatCommands
                     if (AmongUsClient.Instance.AmHost)
                     {
                         var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
-                            (byte)CustomRPC.ShareGamemode, SendOption.Reliable);
+                            (byte)CustomRPC.ShareGameMode, SendOption.Reliable);
                         writer.Write((byte)gameMode);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         RPCProcedure.shareGameMode((byte)gameMode);
