@@ -2331,7 +2331,7 @@ internal static class HudManagerStartPatch
                 if (checkMurderAttemptAndKill(Juggernaut.juggernaut, Juggernaut.currentTarget) ==
                     MurderAttemptResult.SuppressKill) return;
 
-                Mathf.Max(0, Juggernaut.cooldown - Juggernaut.reducedkill);
+                Juggernaut.cooldown = Mathf.Max(0, Juggernaut.cooldown - Juggernaut.reducedkill);
                 juggernautKillButton.MaxTimer = Juggernaut.cooldown;
 
                 juggernautKillButton.Timer = juggernautKillButton.MaxTimer;
