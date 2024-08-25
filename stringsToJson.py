@@ -42,8 +42,8 @@ def stringToJson(in_files):
                     stringData[name] = data
   
     with open(OUT_FILE, "w", encoding='utf-8', newline="\n") as f:
-        json.dump(stringData, f, indent=4)
-        # json.dump(stringData, f, ensure_ascii=False, indent=4)
+        # json.dump(stringData, f, indent=4)
+        json.dump(stringData, f, ensure_ascii=False, indent=4)
 
 if __name__ == "__main__":
     in_files = [
