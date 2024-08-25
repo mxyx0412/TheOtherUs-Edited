@@ -382,13 +382,6 @@ public class CustomOptionHolder
     public static CustomOption escapistChargesGainOnMeeting;
     public static CustomOption escapistMaxCharges;
 
-    public static CustomOption MagicianSpawnRate;
-    public static CustomOption MagicianCooldown;
-    public static CustomOption MagicianTeleportTime;
-    public static CustomOption MagicianProbabilityBlueCards;
-    public static CustomOption MagicianProbabilityRedCards;
-    public static CustomOption MagicianProbabilityPurpleCards;
-
     public static CustomOption werewolfSpawnRate;
     public static CustomOption werewolfRampageCooldown;
     public static CustomOption werewolfRampageDuration;
@@ -1266,12 +1259,7 @@ public class CustomOptionHolder
         jumperResetPlaceAfterMeeting = Create(30323, Types.Crewmate, "jumperResetPlaceAfterMeeting", false, jumperSpawnRate);
         jumperChargesGainOnMeeting = Create(30324, Types.Crewmate, "jumperChargesGainOnMeeting", 2, 0, 10, 1, jumperSpawnRate);
         /*
-        magicianSpawnRate = CustomOption.Create(30330, Types.Crewmate, cs(Magician.color, "Magician"), rates, null, true);
-        magicianCooldown = CustomOption.Create(30331, Types.Crewmate, "放置冷却", 15f, 0f, 60f, 2.5f, magicianSpawnRate);
-        magicianTeleportTime = CustomOption.Create(30332, Types.Crewmate, "传送冷却", 15f, 0f, 60f, 2.5f, magicianSpawnRate);
-        magicianProbabilityBlueCards = CustomOption.Create(30333, Types.Crewmate, "抽到蓝牌的概率", rates, magicianSpawnRate);
-        magicianProbabilityRedCards = CustomOption.Create(30334, Types.Crewmate, "抽到红牌的概率", rates, magicianSpawnRate);
-        magicianProbabilityPurpleCards = CustomOption.Create(30335, Types.Crewmate, "抽到紫牌的概率", rates, magicianSpawnRate);
+         * 30330
         */
         trapperSpawnRate = Create(30350, Types.Crewmate, cs(Trapper.color, "Trapper"), rates, null, true);
         trapperCooldown = Create(30351, Types.Crewmate, "trapperCooldown", 20f, 5f, 120f, 2.5f, trapperSpawnRate);

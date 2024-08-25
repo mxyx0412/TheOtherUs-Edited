@@ -83,7 +83,6 @@ public class RoleInfo
     public static RoleInfo deputy = new("Deputy", Deputy.color, RoleId.Deputy, RoleTeam.Crewmate);
     public static RoleInfo bodyguard = new("BodyGuard", BodyGuard.color, RoleId.BodyGuard, RoleTeam.Crewmate);
     public static RoleInfo jumper = new("Jumper", Jumper.color, RoleId.Jumper, RoleTeam.Crewmate);
-    public static RoleInfo magician = new("Magician", Magician.color, RoleId.Magician, RoleTeam.Crewmate);
     public static RoleInfo detective = new("Detective", Detective.color, RoleId.Detective, RoleTeam.Crewmate);
     public static RoleInfo timeMaster = new("TimeMaster", TimeMaster.color, RoleId.TimeMaster, RoleTeam.Crewmate);
     public static RoleInfo veteran = new("Veteran", Veteran.color, RoleId.Veteran, RoleTeam.Crewmate);
@@ -207,7 +206,6 @@ public class RoleInfo
         securityGuard,
         medium,
         trapper,
-        //magician,
 
         lover,
         assassin,
@@ -337,7 +335,6 @@ public class RoleInfo
         if (p == Engineer.engineer) infos.Add(engineer);
         if (p == Sheriff.sheriff || p == Sheriff.formerSheriff) infos.Add(sheriff);
         if (p == Deputy.deputy) infos.Add(deputy);
-        if (p == Magician.magician) infos.Add(magician);
         if (p == BountyHunter.bountyHunter) infos.Add(bountyHunter);
         if (p == Vulture.vulture) infos.Add(vulture);
         if (p == Medium.medium) infos.Add(medium);

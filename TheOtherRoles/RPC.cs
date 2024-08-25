@@ -98,7 +98,6 @@ public enum RoleId
     SecurityGuard,
     Medium,
     Trapper,
-    Magician,
 
     // Modifier ---
     Lover,
@@ -413,9 +412,6 @@ public static class RPCProcedure
                         break;
                     case RoleId.Detective:
                         Detective.detective = player;
-                        break;
-                    case RoleId.Magician:
-                        Magician.magician = player;
                         break;
                     case RoleId.InfoSleuth:
                         InfoSleuth.infoSleuth = player;
@@ -955,12 +951,6 @@ public static class RPCProcedure
             case RoleId.Engineer:
                 if (Amnisiac.resetRole) Engineer.clearAndReload();
                 Engineer.engineer = amnisiac;
-                Amnisiac.clearAndReload();
-                break;
-
-            case RoleId.Magician:
-                if (Amnisiac.resetRole) Magician.clearAndReload();
-                Magician.magician = amnisiac;
                 Amnisiac.clearAndReload();
                 break;
 
