@@ -17,8 +17,8 @@
 
 | 游戏版本            | 模组版本 | 发布日期  | 链接                                                         |
 | ------------------- | -------- | --------- | ------------------------------------------------------------ |
+| 2024.3.5 ~ 2024.6.4 | v1.0.6.6 | 2024.8.14 | [下载](https://github.com/mxyx-club/TheOtherUs-Edited/releases/download/v1.0.6.2/TheOtherUs.zip) |
 | 2024.3.5 ~ 2024.6.4 | v1.0.6.2 | 2024.7.26 | [下载](https://github.com/mxyx-club/TheOtherUs-Edited/releases/download/v1.0.6.2/TheOtherUs.zip) |
-| 2024.3.5 ~ 2024.6.4 | v1.0.6.1 | 2024.7.26 | [下载](https://github.com/mxyx-club/TheOtherUs-Edited/releases/download/v1.0.6.1/TheOtherUs.zip) |
 | 2024.3.5 ~ 2024.6.4 | v1.0.5.3 | 2024.7.8  | [下载](https://github.com/mxyx-club/TheOtherUs-Edited/releases/download/v1.0.5.3/TheOtherUs.zip) |
 | 2024.3.5 ~ 2024.6.4 | v1.0.4.6 | 2024.6.29 | [下载](https://github.com/mxyx-club/TheOtherUs-Edited/releases/download/v1.0.4.6/TheOtherUs.zip) |
 | 2024.3.5 ~ 2024.6.4 | v1.0.4.2 | 2024.6.16 | [下载](https://github.com/mxyx-club/TheOtherUs-Edited/releases/download/v1.0.4.2/TheOtherUs.zip) |
