@@ -35,7 +35,6 @@ internal class ModOption
     public static bool ShowVentsOnMap;
     public static bool ShowVentsOnMeetingMap;
     public static bool randomLigherPlayer;
-    public static bool enableDebugLogMode;
     public static bool disableMedscanWalking;
     public static bool isCanceled;
 
@@ -129,7 +128,6 @@ internal class ModOption
         showRoleSummary = Main.ShowRoleSummary.Value;
         toggleCursor = Main.ToggleCursor.Value;
         enableSoundEffects = Main.EnableSoundEffects.Value;
-        enableDebugLogMode = Main.enableDebugLogMode.Value;
 
         //Patches.ShouldAlwaysHorseAround.isHorseMode = TheOtherRolesPlugin.EnableHorseMode.Value;
     }

@@ -1,5 +1,4 @@
-﻿using Il2CppInterop.Generator.Passes;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace TheOtherRoles.Roles.Impostor;
 

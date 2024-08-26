@@ -298,15 +298,17 @@ public static class PlayerControlFixedUpdatePatch
 
     private static void detectiveUpdateFootPrints()
     {
-        if (Detective.detective == null || Detective.detective != CachedPlayer.LocalPlayer.PlayerControl || Detective.detective.IsDead()) return;
+        if (Detective.detective == null
+            || Detective.detective != CachedPlayer.LocalPlayer.PlayerControl
+            || IsMeeting
+            || Detective.detective.IsDead()) return;
 
         Detective.timer -= Time.fixedDeltaTime;
         if (Detective.timer <= 0f)
         {
             Detective.timer = Detective.footprintIntervall;
             foreach (PlayerControl player in CachedPlayer.AllPlayers)
-                if (player != null && player != CachedPlayer.LocalPlayer.PlayerControl && !player.Data.IsDead &&
-                    !player.inVent)
+                if (player != null && player != CachedPlayer.LocalPlayer.PlayerControl && !player.Data.IsDead && !player.inVent)
                     FootprintHolder.Instance.MakeFootprint(player);
         }
     }

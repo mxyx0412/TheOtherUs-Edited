@@ -3546,7 +3546,7 @@ internal class RPCHandlerPatch
     {
         var packetId = (CustomRPC)callId;
         if (RpcNames!.ContainsKey(packetId)) return;
-        if (enableDebugLogMode) Info($"接收 PlayerControl 原版Rpc RpcId{callId} Message Size {reader.Length}");
+        if (DebugMode) Info($"接收 PlayerControl 原版Rpc RpcId{callId} Message Size {reader.Length}");
     }
 
     private static bool Prefix([HarmonyArgument(0)] byte callId, [HarmonyArgument(1)] MessageReader reader)
@@ -3558,7 +3558,7 @@ internal class RPCHandlerPatch
         if (!RpcNames!.ContainsKey(packetId))
             return true;
 
-        if (enableDebugLogMode && callId != 75) Info($"接收 PlayerControl CustomRpc RpcId{callId} Rpc Name{RpcNames?[(CustomRPC)callId] ?? nameof(packetId)} Message Size {reader.Length}");
+        if (DebugMode && callId != 75) Info($"接收 PlayerControl CustomRpc RpcId{callId} Rpc Name{RpcNames?[(CustomRPC)callId] ?? nameof(packetId)} Message Size {reader.Length}");
         switch (packetId)
         {
             // Main Controls
@@ -3625,7 +3625,7 @@ internal class RPCHandlerPatch
                 var exileTarget = reader.ReadByte();
                 RPCProcedure.uncheckedExilePlayer(exileTarget);
                 break;
-
+                
             case CustomRPC.UncheckedCmdReportDeadBody:
                 var reportSource = reader.ReadByte();
                 var reportTarget = reader.ReadByte();

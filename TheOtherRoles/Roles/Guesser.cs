@@ -22,24 +22,24 @@ public static class Guesser
     public static void clear(byte playerId)
     {
         if (Vigilante.vigilante != null && Vigilante.vigilante.PlayerId == playerId) Vigilante.vigilante = null;
-        foreach (var item in Assassin.assassin.Where(item => item.PlayerId == playerId && Assassin.assassin != null))
-            Assassin.assassin = null;
+        Assassin.assassin.RemoveAll(p => p.PlayerId == playerId);
     }
 
     public static int remainingShots(byte playerId, bool shoot = false)
     {
-        var result = Assassin.remainingShotsEvilGuesser;
         if (Vigilante.vigilante != null && Vigilante.vigilante.PlayerId == playerId)
         {
-            result = Vigilante.remainingShotsNiceGuesser;
-            if (shoot) Vigilante.remainingShotsNiceGuesser = Mathf.Max(0, Vigilante.remainingShotsNiceGuesser - 1);
+            return shoot ? Mathf.Max(0, --Vigilante.remainingShotsNiceGuesser) : Vigilante.remainingShotsNiceGuesser;
         }
-        else if (shoot)
+
+        if (Assassin.assassin != null && Assassin.assassin.Any(x => x.PlayerId == playerId))
         {
-            Assassin.remainingShotsEvilGuesser = Mathf.Max(0, Assassin.remainingShotsEvilGuesser - 1);
+            return shoot ? Mathf.Max(0, --Assassin.remainingShotsEvilGuesser) : Assassin.remainingShotsEvilGuesser;
         }
-        return result;
+
+        return 0;
     }
+
 
     public const int MaxOneScreenRole = 40;
     private static Dictionary<RoleTeam, List<Transform>> RoleButtons;

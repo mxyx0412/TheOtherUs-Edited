@@ -69,16 +69,14 @@ public static class CachedPlayerPatches
         };
         CachedPlayer.AllPlayers.Add(player);
         CachedPlayer.PlayerPtrs[__instance.Pointer] = player;
-        if (ModOption.enableDebugLogMode)
+        // Debug
+        foreach (var cachedPlayer in CachedPlayer.AllPlayers)
         {
-            foreach (var cachedPlayer in CachedPlayer.AllPlayers)
+            if (!cachedPlayer.PlayerControl || !cachedPlayer.PlayerPhysics || !cachedPlayer.NetTransform || !cachedPlayer.transform)
             {
-                if (!cachedPlayer.PlayerControl || !cachedPlayer.PlayerPhysics || !cachedPlayer.NetTransform || !cachedPlayer.transform)
-                {
-                    Error($"CachedPlayer {cachedPlayer.PlayerControl.name} has null fields");
-                }
+                Error($"CachedPlayer {cachedPlayer.PlayerControl.name} has null fields");
             }
-        };
+        }
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.OnDestroy))]

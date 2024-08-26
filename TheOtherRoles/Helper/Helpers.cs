@@ -354,9 +354,8 @@ public static class Helpers
     public static bool roleCanSabotage(this PlayerControl player)
     {
         var roleCouldUse = false;
-        if (Jackal.canSabotage)
-            if (player == Jackal.jackal || player == Sidekick.sidekick || Jackal.formerJackals.Contains(player))
-                roleCouldUse = true;
+        if (Jackal.canSabotage && (player == Jackal.jackal || player == Sidekick.sidekick || Jackal.formerJackals.Contains(player)))
+            roleCouldUse = true;
         if (player.Data?.Role != null && player.Data.Role.IsImpostor)
             roleCouldUse = true;
         return roleCouldUse;
@@ -527,8 +526,7 @@ public static class Helpers
         button.showButtonText = true;
     }
 
-    public static void AddUnique<T>(this Il2CppSystem.Collections.Generic.List<T> self, T item)
-            where T : IDisconnectHandler
+    public static void AddUnique<T>(this Il2CppSystem.Collections.Generic.List<T> self, T item) where T : IDisconnectHandler
     {
         if (!self.Contains(item)) self.Add(item);
     }

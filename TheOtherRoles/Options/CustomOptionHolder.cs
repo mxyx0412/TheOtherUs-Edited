@@ -1167,7 +1167,7 @@ public class CustomOptionHolder
         timeMasterSpawnRate = Create(30210, Types.Crewmate, cs(TimeMaster.color, "TimeMaster"), rates, null, true);
         timeMasterCooldown = Create(30211, Types.Crewmate, "timeMasterCooldown", 20f, 10f, 60f, 2.5f, timeMasterSpawnRate);
         timeMasterRewindTime = Create(30212, Types.Crewmate, "timeMasterRewindTime", 8f, 1f, 10f, 1f, timeMasterSpawnRate);
-        timeMasterShieldDuration = Create(30213, Types.Crewmate, "timeMasterShieldDuration", 12.5f, 1f, 20f, 1f, timeMasterSpawnRate);
+        timeMasterShieldDuration = Create(30213, Types.Crewmate, "timeMasterShieldDuration", 12.5f, 1f, 20f, 2.5f, timeMasterSpawnRate);
 
         veteranSpawnRate = Create(30220, Types.Crewmate, cs(Veteran.color, "Veteran"), rates, null, true);
         veteranCooldown = Create(30221, Types.Crewmate, "veteranCooldown", 25f, 10f, 120f, 2.5f, veteranSpawnRate);

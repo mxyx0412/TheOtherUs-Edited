@@ -98,32 +98,28 @@ internal class ExileControllerBeginPatch
                 {
                     if (target == Lawyer.target && Lawyer.lawyer != null)
                     {
-                        var writer2 = AmongUsClient.Instance.StartRpcImmediately(
-                            CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.LawyerPromotesToPursuer,
-                            SendOption.Reliable);
+                        var writer2 = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
+                            (byte)CustomRPC.LawyerPromotesToPursuer, SendOption.Reliable);
                         AmongUsClient.Instance.FinishRpcImmediately(writer2);
                         RPCProcedure.lawyerPromotesToPursuer();
                     }
 
                     if (target == Executioner.target && Executioner.executioner != null)
                     {
-                        var writer2 = AmongUsClient.Instance.StartRpcImmediately(
-                            CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ExecutionerPromotesRole,
-                            SendOption.Reliable);
+                        var writer2 = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
+                            (byte)CustomRPC.ExecutionerPromotesRole, SendOption.Reliable);
                         AmongUsClient.Instance.FinishRpcImmediately(writer2);
                         RPCProcedure.executionerPromotesRole();
                     }
 
-                    var writer = AmongUsClient.Instance.StartRpcImmediately(
-                        CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.UncheckedExilePlayer,
-                        SendOption.Reliable);
+                    var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
+                        (byte)CustomRPC.UncheckedExilePlayer, SendOption.Reliable);
                     writer.Write(target.PlayerId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     RPCProcedure.uncheckedExilePlayer(target.PlayerId);
 
-                    var writer3 = AmongUsClient.Instance.StartRpcImmediately(
-                        CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ShareGhostInfo,
-                        SendOption.Reliable);
+                    var writer3 = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
+                        (byte)CustomRPC.ShareGhostInfo, SendOption.Reliable);
                     writer3.Write(CachedPlayer.LocalPlayer.PlayerId);
                     writer3.Write((byte)RPCProcedure.GhostInfoTypes.DeathReasonAndKiller);
                     writer3.Write(target.PlayerId);

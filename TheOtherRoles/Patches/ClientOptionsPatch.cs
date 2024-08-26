@@ -30,8 +30,6 @@ public static class ClientOptionsPatch
             () => ModOption.enableSoundEffects = Main.EnableSoundEffects.Value = !Main.EnableSoundEffects.Value, Main.EnableSoundEffects.Value),
         new SelectionBehaviour("ShowFPS",
             () => ModOption.showFPS = Main.ShowFPS.Value = !Main.ShowFPS.Value, Main.ShowFPS.Value),
-        new SelectionBehaviour("EnableDebugLogModeText",
-            () => ModOption.enableDebugLogMode = Main.enableDebugLogMode.Value = !Main.enableDebugLogMode.Value, Main.enableDebugLogMode.Value),
     ];
 
     private static GameObject popUp;
