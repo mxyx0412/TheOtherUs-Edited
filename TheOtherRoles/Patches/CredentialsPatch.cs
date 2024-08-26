@@ -59,7 +59,6 @@ public static class CredentialsPatch
     public static class LogoPatch
     {
         public static SpriteRenderer renderer;
-        public static Sprite bannerSprite;
         private static PingTracker instance;
 
         public static GameObject motdObject;
@@ -75,8 +74,6 @@ public static class CredentialsPatch
             renderer.sprite = UnityHelper.loadSpriteFromResources("TheOtherRoles.Resources.Banner.png", 300f);
 
             instance = __instance;
-            // renderer.sprite = TORMapOptions.enableHorseMode ? horseBannerSprite : bannerSprite;
-            renderer.sprite = bannerSprite;
             var credentialObject = new GameObject("credentialsTOR");
             var credentials = credentialObject.AddComponent<TextMeshPro>();
             credentials.SetText(
