@@ -1626,9 +1626,7 @@ public static class PlayerControlFixedUpdatePatch
             HudManagerStartPatch.sidekickKillButton.MaxTimer = Sidekick.cooldown * multiplier;
             HudManagerStartPatch.warlockCurseButton.MaxTimer = Warlock.cooldown * multiplier;
             HudManagerStartPatch.pavlovsdogsKillButton.MaxTimer = Pavlovsdogs.cooldown * multiplier;
-            HudManagerStartPatch.cleanerCleanButton.MaxTimer = Cleaner.cooldown * multiplier;
-            HudManagerStartPatch.witchSpellButton.MaxTimer =
-                (Witch.cooldown + Witch.currentCooldownAddition) * multiplier;
+            HudManagerStartPatch.witchSpellButton.MaxTimer = (Witch.cooldown + Witch.currentCooldownAddition) * multiplier;
             HudManagerStartPatch.ninjaButton.MaxTimer = Ninja.cooldown * multiplier;
             HudManagerStartPatch.thiefKillButton.MaxTimer = Thief.cooldown * multiplier;
             HudManagerStartPatch.swooperKillButton.MaxTimer = Swooper.cooldown * multiplier;
