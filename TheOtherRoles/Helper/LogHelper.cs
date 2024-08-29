@@ -122,6 +122,6 @@ internal static class LogListener
     internal static void OnRpc(InnerNetObject __instance, [HarmonyArgument(0)] byte callId, [HarmonyArgument(1)] Hazel.MessageReader reader)
     {
         // Debug
-        Info($"{__instance.name} {callId} {reader.Length} {reader.Tag}");
+        if (ModOption.DebugMode) Info($"OnRpc: {__instance.name} {callId} {reader.Length} {reader.Tag}");
     }
 }

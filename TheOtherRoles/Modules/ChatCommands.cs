@@ -140,8 +140,8 @@ public static class ChatCommands
                 foreach (var roleInfo in localRole)
                 {
                     if (roleInfo.roleId == RoleId.Cursed) continue;
-                    var role = RoleInfo.getRoleDescription(roleInfo.Name);
-                    __instance.AddChat(CachedPlayer.LocalPlayer.PlayerControl, $"{roleInfo.Name}:\n {roleInfo}\n");
+                    var roleText = RoleInfo.getRoleDescription(roleInfo.Name);
+                    __instance.AddChat(CachedPlayer.LocalPlayer.PlayerControl, roleText);
                 }
                 handled = true;
             }
