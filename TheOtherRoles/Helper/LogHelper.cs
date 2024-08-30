@@ -1,11 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using System.Text;
 using BepInEx;
 using BepInEx.Logging;
-using InnerNet;
 
 namespace TheOtherRoles.Helper;
 
@@ -105,7 +101,7 @@ internal static class LogHelper
         FastLog(LogLevel.Error, @object);
     }
 }
-
+/*
 [HarmonyPatch]
 internal static class LogListener
 {
@@ -125,3 +121,4 @@ internal static class LogListener
         if (ModOption.DebugMode) Info($"OnRpc: {__instance.name} {callId} {reader.Length} {reader.Tag}");
     }
 }
+*/

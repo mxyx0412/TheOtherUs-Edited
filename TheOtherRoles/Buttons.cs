@@ -973,7 +973,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return Disperser.disperser != null && Disperser.disperser == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.Data.IsDead && Disperser.remainingDisperses != 0;
             },
             () => { return Disperser.remainingDisperses > 0 && CachedPlayer.LocalPlayer.PlayerControl.CanMove; },
             () => { if (Disperser.remainingDisperses > 0) disperserDisperseButton.Timer = disperserDisperseButton.MaxTimer; },

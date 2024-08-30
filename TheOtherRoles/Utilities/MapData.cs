@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using Reactor.Utilities.Extensions;
 using UnityEngine;
 
 namespace TheOtherRoles.Utilities;
@@ -220,26 +222,57 @@ public class MapData
         {
             var Transform = vent.transform;
             var position = Transform.position;
-            poss.Add(new Vector3(position.x, position.y + 0.3f, position.z = 0.0f));
+            poss.Add(new Vector3(position.x, position.y, position.z = 0.0f));
         }
 
         return poss;
     }
 
-    public static void RandomSpawnPlayers()
+    public static void RandomSpawnAllPlayers()
     {
-        Vector3 newPosition;
-        if (CustomOptionHolder.randomGameStartToVents.getBool())
+        RandomSpawnPlayers(CachedPlayer.AllPlayers.Select(n => n.PlayerControl));
+    }
+
+    public static void RandomSpawnAllPlayersToVent()
+    {
+        RandomSpawnToVent(CachedPlayer.AllPlayers.Select(n => n.PlayerControl));
+    }
+
+    public static void RandomSpawnAllPlayersToMap()
+    {
+        RandomSpawnToMap(CachedPlayer.AllPlayers.Select(n => n.PlayerControl));
+    }
+
+    public static void RandomSpawnPlayers(IEnumerable<PlayerControl> players)
+    {
+        if (CustomOptionHolder.randomGameStartToVents.getBool()) RandomSpawnToVent(players);
+        else RandomSpawnToMap(players);
+    }
+
+    public static void RandomSpawnToVent(IEnumerable<PlayerControl> spawnPlayer)
+    {
+        var players = spawnPlayer.Where(player => !AntiTeleport.antiTeleport.Contains(player));
+
+        var poss = FindVentSpawnPositions();
+        foreach (var p in players)
         {
-            newPosition = FindVentSpawnPositions()[rnd.Next(FindVentSpawnPositions().Count)];
-            CachedPlayer.LocalPlayer.PlayerControl.NetTransform.RpcSnapTo(FindVentSpawnPositions()[rnd.Next(FindVentSpawnPositions().Count)]);
+            var defPos = p.transform.position;
+            var newPos = poss.Any() ? poss.Random() - (Vector3)p.Collider.offset : defPos;
+            p.NetTransform.RpcSnapTo(newPos);
         }
-        else
+    }
+
+    public static void RandomSpawnToMap(IEnumerable<PlayerControl> spawnPlayer)
+    {
+        var players = spawnPlayer.Where(player => !AntiTeleport.antiTeleport.Contains(player));
+
+        var newPositions = MapSpawnPosition();
+        foreach (var p in players)
         {
-            newPosition = MapSpawnPosition()[rnd.Next(MapSpawnPosition().Count)];
-            CachedPlayer.LocalPlayer.PlayerControl.NetTransform.RpcSnapTo(MapSpawnPosition()[rnd.Next(MapSpawnPosition().Count)]);
+            var defPos = p.transform.position;
+            var newPos = newPositions.Any() ? newPositions.Random() : defPos;
+            p.NetTransform.RpcSnapTo(newPos);
         }
-        Message($"Span to Vector3: {newPosition.x}, {newPosition.y}, {newPosition.z}");
     }
 
     public static readonly Dictionary<PlayerControl, Vent> PlayerVentDic = new();

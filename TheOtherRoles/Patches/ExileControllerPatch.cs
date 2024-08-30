@@ -339,11 +339,12 @@ internal class ExileControllerWrapUpPatch
         }
 
         // AntiTeleport set position
-        AntiTeleport.setPosition();
+        //AntiTeleport.setPosition();
 
-        if (CustomOptionHolder.randomGameStartPosition.getBool()
-            && AntiTeleport.antiTeleport.FindAll(x => x.PlayerId == CachedPlayer.LocalPlayer.PlayerControl.PlayerId).Count == 0)
-            MapData.RandomSpawnPlayers();
+        if (AmongUsClient.Instance.AmHost)
+        {
+            if (CustomOptionHolder.randomGameStartPosition.getBool()) MapData.RandomSpawnAllPlayers();
+        }
 
         // Invert add meeting
         if (Invert.meetings > 0) Invert.meetings--;

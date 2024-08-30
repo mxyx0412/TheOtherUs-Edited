@@ -2409,34 +2409,26 @@ public static class RPCProcedure
     public static void disperse()
     {
         // AntiTeleport set position
-        AntiTeleport.setPosition();
+        //AntiTeleport.setPosition();
 
         showFlash(Palette.ImpostorRed);
 
-        if (AntiTeleport.antiTeleport.FindAll(x => x.PlayerId == CachedPlayer.LocalPlayer.PlayerControl.PlayerId).Count == 0 && !CachedPlayer.LocalPlayer.Data.IsDead)
+        if (AntiTeleport.antiTeleport.Any(x => x == CachedPlayer.LocalPlayer.PlayerControl) || CachedPlayer.LocalPlayer.Data.IsDead) return;
+
+        MapData.AllPlayerExitVent();
+
+        if (MapBehaviour.Instance)
+            MapBehaviour.Instance.Close();
+        if (Minigame.Instance)
+            Minigame.Instance.ForceClose();
+
+        if (Disperser.disperser.PlayerId == CachedPlayer.LocalPlayer.PlayerId)
         {
-            foreach (PlayerControl player in CachedPlayer.AllPlayers)
-            {
-                if (MapBehaviour.Instance)
-                    MapBehaviour.Instance.Close();
-                if (Minigame.Instance)
-                    Minigame.Instance.ForceClose();
-
-                MapData.AllPlayerExitVent();
-
-                if (Disperser.DispersesToVent)
-                {
-                    CachedPlayer.LocalPlayer.PlayerControl.NetTransform.RpcSnapTo
-                    (MapData.FindVentSpawnPositions()[rnd.Next(MapData.FindVentSpawnPositions().Count)]);
-                }
-                else
-                {
-                    CachedPlayer.LocalPlayer.PlayerControl.NetTransform.RpcSnapTo
-                    (MapData.MapSpawnPosition()[rnd.Next(MapData.MapSpawnPosition().Count)]);
-                }
-            }
-            Disperser.remainingDisperses--;
+            if (Disperser.DispersesToVent) MapData.RandomSpawnAllPlayersToVent();
+            else MapData.RandomSpawnAllPlayersToMap();
         }
+
+        Disperser.remainingDisperses--;
     }
 
     public static void setFutureShielded(byte playerId)
@@ -3625,7 +3617,7 @@ internal class RPCHandlerPatch
                 var exileTarget = reader.ReadByte();
                 RPCProcedure.uncheckedExilePlayer(exileTarget);
                 break;
-                
+
             case CustomRPC.UncheckedCmdReportDeadBody:
                 var reportSource = reader.ReadByte();
                 var reportTarget = reader.ReadByte();

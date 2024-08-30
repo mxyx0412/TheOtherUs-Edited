@@ -541,6 +541,67 @@ public static class Helpers
         foreach (T obj in list) func(obj);
     }
 
+    public static List<T> ToList<T>(this Il2CppSystem.Collections.Generic.List<T> list)
+    {
+        List<T> newList = [.. list];
+        return newList;
+    }
+
+    public static T FirstOrDefault<T>(this Il2CppArrayBase<T> list)
+    {
+        foreach (T obj in list)
+            return obj;
+        return default;
+    }
+
+    public static T FirstOrDefault<T>(this List<T> list)
+    {
+        if (list.Count > 0)
+            return list[0];
+        return default;
+    }
+
+    public static Il2CppSystem.Collections.Generic.List<T> ToIl2CppList<T>(this IEnumerable<T> list)
+    {
+        Il2CppSystem.Collections.Generic.List<T> newList = new(list.Count());
+        foreach (T item in list)
+        {
+            newList.Add(item);
+        }
+        return newList;
+    }
+
+    public static T Find<T>(this Il2CppSystem.Collections.Generic.List<T> data, Predicate<T> match)
+    {
+        return data.ToList().Find(match);
+    }
+
+    public static KeyValuePair<TKey, TValue> FirstOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> list, Func<KeyValuePair<TKey, TValue>, bool> func)
+    {
+        foreach (KeyValuePair<TKey, TValue> obj in list)
+            if (func(obj))
+                return obj;
+        return default;
+    }
+
+    public static bool Any<TKey, TValue>(this Dictionary<TKey, TValue> dict, Func<KeyValuePair<TKey, TValue>, bool> func)
+    {
+        foreach (KeyValuePair<TKey, TValue> obj in dict)
+            if (func(obj))
+                return true;
+        return false;
+    }
+
+    public static bool Any<T>(this List<T> list, Func<T, bool> func)
+    {
+        if (list == null)
+            return false;
+        foreach (T obj in list)
+            if (func(obj))
+                return true;
+        return false;
+    }
+
     public static string readTextFromResources(string path)
     {
         var assembly = Assembly.GetExecutingAssembly();

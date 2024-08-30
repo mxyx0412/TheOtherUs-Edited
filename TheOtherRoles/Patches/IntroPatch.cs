@@ -107,6 +107,7 @@ internal class IntroCutsceneOnDestroyPatch
         if (AmongUsClient.Instance.AmHost)
         {
             LastImpostor.promoteToLastImpostor();
+            if (CustomOptionHolder.randomGameStartPosition.getBool()) MapData.RandomSpawnAllPlayers();
         }
 
         // Force Bounty Hunter to load a new Bounty when the Intro is over
@@ -124,8 +125,6 @@ internal class IntroCutsceneOnDestroyPatch
                 BountyHunter.cooldownText.gameObject.SetActive(true);
             }
         }
-
-        if (CustomOptionHolder.randomGameStartPosition.getBool()) MapData.RandomSpawnPlayers();
 
         // First kill
         if (AmongUsClient.Instance.AmHost && ModOption.shieldFirstKill && ModOption.firstKillName != "" &&
@@ -303,6 +302,26 @@ internal class IntroPatch
                 __instance.RoleBlurbText.color = roleInfo.color;
             }
 
+            if (Deputy.knowsSheriff && Deputy.deputy != null && Sheriff.sheriff != null)
+            {
+                if (infos.Any(info => info.roleId == RoleId.Sheriff))
+                    __instance.RoleBlurbText.text = cs(Sheriff.color, $"\n你的捕快是 {Deputy.deputy?.Data?.PlayerName ?? ""}");
+                else if (infos.Any(info => info.roleId == RoleId.Deputy))
+                    __instance.RoleBlurbText.text = cs(Sheriff.color, $"\n你的警长是 {Sheriff.sheriff?.Data?.PlayerName ?? ""}");
+            }
+            else if (Executioner.executioner != null && Executioner.target != null)
+            {
+                if (infos.Any(info => info.roleId == RoleId.Executioner))
+                    __instance.RoleBlurbText.text = cs(Executioner.color, $"\n把 {Executioner.target?.Data?.PlayerName ?? ""} 投出去!");
+
+            }
+            else if (Lawyer.lawyer != null && Lawyer.target != null)
+            {
+                if (infos.Any(info => info.roleId == RoleId.Lawyer))
+                    __instance.RoleBlurbText.text = cs(Lawyer.color, $"\n你的辩护目标是 {Lawyer.target?.Data?.PlayerName ?? ""}");
+
+            }
+
             if (modifierInfo != null)
             {
                 if (modifierInfo.roleId != RoleId.Lover)
@@ -315,34 +334,11 @@ internal class IntroPatch
                     var otherLover = CachedPlayer.LocalPlayer.PlayerControl == Lovers.lover1
                         ? Lovers.lover2
                         : Lovers.lover1;
-                    __instance.RoleBlurbText.text += cs(Lovers.color,
-                        $"\n♥ 你和 {otherLover?.Data?.PlayerName ?? ""} 坠入了爱河♥");
+                    __instance.RoleBlurbText.text +=
+                        cs(Lovers.color, $"\n♥ 你和 {otherLover?.Data?.PlayerName ?? ""} 坠入了爱河♥");
                 }
             }
 
-            if (Deputy.knowsSheriff && Deputy.deputy != null && Sheriff.sheriff != null)
-            {
-                if (infos.Any(info => info.roleId == RoleId.Sheriff))
-                    __instance.RoleBlurbText.text +=
-                        cs(Sheriff.color, $"\n你的捕快是 {Deputy.deputy?.Data?.PlayerName ?? ""}");
-                else if (infos.Any(info => info.roleId == RoleId.Deputy))
-                    __instance.RoleBlurbText.text += cs(Sheriff.color,
-                        $"\n你的警长是 {Sheriff.sheriff?.Data?.PlayerName ?? ""}");
-            }
-            else if (Executioner.executioner != null && Executioner.target != null)
-            {
-                if (infos.Any(info => info.roleId == RoleId.Executioner))
-                    __instance.RoleBlurbText.text +=
-                        cs(Executioner.color, $"\n把 {Executioner.target?.Data?.PlayerName ?? ""} 投出去!");
-
-            }
-            else if (Lawyer.lawyer != null && Lawyer.target != null)
-            {
-                if (infos.Any(info => info.roleId == RoleId.Executioner))
-                    __instance.RoleBlurbText.text +=
-                        cs(Lawyer.color, $"\n你的辩护目标是 {Lawyer.target?.Data?.PlayerName ?? ""}");
-
-            }
         }
 
         public static bool Prefix(IntroCutscene __instance)
