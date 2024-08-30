@@ -25,7 +25,7 @@ internal class NinjaTrace
         trace.transform.localPosition = position;
 
         var traceRenderer = trace.AddComponent<SpriteRenderer>();
-        traceRenderer.sprite = TraceSprite;
+        traceRenderer.sprite = getTraceSprite();
 
         timeRemaining = duration;
 

@@ -665,7 +665,7 @@ internal class GameOptionsMenuStartPatch
         };
         var optionBehaviours = new List<List<OptionBehaviour>>
             { torOptions, impostorOptions, neutralOptions, crewmateOptions, modifierOptions, guesserOptions };
-        var exludedIds = new List<int> { 7, 10000, 10001, 10002, 10003, 10004, 10005, 10006, 10007, 10008, 30100, 30101, 30102, 30103, 30104 };
+        var exludedIds = new List<int> { 10000, 10001, 10002, 10003, 10004, 10005, 10006, 10007, 10008, 30100, 30101, 30102, 30103, 30104 };
 
         for (var i = 0; i < options.Count; i++)
         {
@@ -1163,7 +1163,7 @@ internal class GameOptionsDataPatch
         {
             if (type == CustomOptionType.General)
                 options = CustomOption.options.Where(o => o.type == type || o.type == CustomOptionType.Guesser);
-            var remove = new List<int> { 7, 10000, 10001, 10002, 10003, 10004, 10005, 10006, 10007, 10008, 30100, 30101, 30102, 30103, 30104 };
+            var remove = new List<int> { 10000, 10001, 10002, 10003, 10004, 10005, 10006, 10007, 10008, 30100, 30101, 30102, 30103, 30104 };
             options = options.Where(x => !remove.Contains(x.id));
         }
         else if (ModOption.gameMode == CustomGamemodes.Classic)

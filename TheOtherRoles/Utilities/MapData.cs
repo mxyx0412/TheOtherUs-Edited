@@ -228,20 +228,11 @@ public class MapData
         return poss;
     }
 
-    public static void RandomSpawnAllPlayers()
-    {
-        RandomSpawnPlayers(CachedPlayer.AllPlayers.Select(n => n.PlayerControl));
-    }
+    public static void RandomSpawnAllPlayers() => RandomSpawnPlayers(CachedPlayer.AllPlayers.Select(n => n.PlayerControl));
 
-    public static void RandomSpawnAllPlayersToVent()
-    {
-        RandomSpawnToVent(CachedPlayer.AllPlayers.Select(n => n.PlayerControl));
-    }
+    public static void RandomSpawnAllPlayersToVent() => RandomSpawnToVent(CachedPlayer.AllPlayers.Select(n => n.PlayerControl));
 
-    public static void RandomSpawnAllPlayersToMap()
-    {
-        RandomSpawnToMap(CachedPlayer.AllPlayers.Select(n => n.PlayerControl));
-    }
+    public static void RandomSpawnAllPlayersToMap() => RandomSpawnToMap(CachedPlayer.AllPlayers.Select(n => n.PlayerControl));
 
     public static void RandomSpawnPlayers(IEnumerable<PlayerControl> players)
     {
@@ -257,7 +248,7 @@ public class MapData
         foreach (var p in players)
         {
             var defPos = p.transform.position;
-            var newPos = poss.Any() ? poss.Random() - (Vector3)p.Collider.offset : defPos;
+            var newPos = poss.Random() - (Vector3)p.Collider.offset;
             p.NetTransform.RpcSnapTo(newPos);
         }
     }
@@ -266,11 +257,11 @@ public class MapData
     {
         var players = spawnPlayer.Where(player => !AntiTeleport.antiTeleport.Contains(player));
 
-        var newPositions = MapSpawnPosition();
+        var poss = MapSpawnPosition();
         foreach (var p in players)
         {
             var defPos = p.transform.position;
-            var newPos = newPositions.Any() ? newPositions.Random() : defPos;
+            var newPos = poss.Random();
             p.NetTransform.RpcSnapTo(newPos);
         }
     }
