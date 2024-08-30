@@ -962,7 +962,7 @@ public static class Helpers
         if (Ninja.isInvisble && Ninja.ninja == target) return true;
         if (Jackal.isInvisable && Jackal.jackal == target) return true;
         if (Swooper.isInvisable && Swooper.swooper == target) return true;
-        if (ModOption.hideOutOfSightNametags && InGame && !source.Data.IsDead && isFungle
+        if (ModOption.hideOutOfSightNametags && InGame && !source.Data.IsDead && !isFungle
             && PhysicsHelpers.AnythingBetween(localPlayer.GetTruePosition(), target.GetTruePosition(), Constants.ShadowMask, false)) return true;
         /*
         {
