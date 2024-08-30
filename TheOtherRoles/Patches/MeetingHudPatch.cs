@@ -313,8 +313,6 @@ internal class MeetingHudPatch
                 if (!Eraser.canEraseGuess && CachedPlayer.LocalPlayer != null && CachedPlayer.LocalPlayer.PlayerControl == Eraser.eraser
                     && Eraser.alreadyErased.Contains(playerVoteArea.TargetPlayerId)) continue;
 
-                if (Mayor.mayor != null && Mayor.Revealed && playerVoteArea.TargetPlayerId == Mayor.mayor.PlayerId) continue;
-
                 if (CachedPlayer.LocalPlayer != null && CachedPlayer.LocalPlayer.PlayerControl == Specoality.specoality
                     && Specoality.canNoGuess != null && Specoality.canNoGuess.PlayerId == playerVoteArea.TargetPlayerId) continue;
 
@@ -663,7 +661,7 @@ internal class MeetingHudPatch
 
                     // Mayor vote, redo this iteration to place a second vote
                     if (Mayor.mayor == null || voterState.VoterId != (sbyte)Mayor.mayor.PlayerId
-                        || mayorVotesDisplayed > Mayor.Vote || !Mayor.Revealed)
+                        || mayorVotesDisplayed >= Mayor.Vote - 1 || !Mayor.Revealed)
                     {
                         mayorVotesDisplayed = 0;
                         continue;
