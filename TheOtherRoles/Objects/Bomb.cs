@@ -7,8 +7,8 @@ namespace TheOtherRoles.Objects;
 
 public class Bomb
 {
-    private static ResourceSprite bombSprite = new("Bomb.png", 300f);
-    private static ResourceSprite backgroundSprite = new("BombBackground.png", 110f);
+    private static Sprite bombSprite;
+    private static Sprite backgroundSprite;
     public static ResourceSprite defuseSprite = new("Bomb_Button_Defuse.png");
     public static bool canDefuse;
     public readonly GameObject background;
@@ -27,9 +27,9 @@ public class Bomb
         background.transform.position = position;
 
         var bombRenderer = bomb.AddComponent<SpriteRenderer>();
-        bombRenderer.sprite = bombSprite;
+        bombRenderer.sprite = getBombSprite();
         var backgroundRenderer = background.AddComponent<SpriteRenderer>();
-        backgroundRenderer.sprite = backgroundSprite;
+        backgroundRenderer.sprite = getBackgroundSprite();
 
         bomb.SetActive(false);
         background.SetActive(false);
@@ -59,6 +59,21 @@ public class Bomb
                         if ((int)f == 1) explode(this);
                     })));
             })));
+    }
+
+    public static Sprite getBombSprite()
+    {
+        if (bombSprite) return bombSprite;
+        bombSprite = UnityHelper.loadSpriteFromResources("TheOtherRoles.Resources.Bomb.png", 300f);
+        return bombSprite;
+    }
+
+    public static Sprite getBackgroundSprite()
+    {
+        if (backgroundSprite) return backgroundSprite;
+        backgroundSprite =
+            UnityHelper.loadSpriteFromResources("TheOtherRoles.Resources.BombBackground.png", 110f / Terrorist.hearRange);
+        return backgroundSprite;
     }
 
     public static void explode(Bomb b)

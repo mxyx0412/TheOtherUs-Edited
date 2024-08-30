@@ -41,10 +41,8 @@ public static class CrowdedPlayer
     public static void GameOptionsMenu_Start_Postfix(ref GameOptionsMenu __instance)
     {
         if (!Enable) return;
-        var options = Object.FindObjectsOfType<NumberOption>();
-        var option = options.FirstOrDefault(o => o.Title == StringNames.GameNumImpostors);
-        if (option == null) return;
-        option.ValidRange = new FloatRange(1, MaxImpostor);
+        var options = Object.FindObjectsOfType<NumberOption>().FirstOrDefault(o => o.Title == StringNames.GameNumImpostors);
+        if (options != null) options.ValidRange = new FloatRange(1, MaxImpostor);
     }
 
     [HarmonyPatch(typeof(GameOptionsData), nameof(GameOptionsData.AreInvalid))]

@@ -10,7 +10,7 @@ internal class NinjaTrace
 {
     public static List<NinjaTrace> traces = [];
 
-    private static ResourceSprite TraceSprite = new("NinjaTraceW.png");
+    private static Sprite TraceSprite;
 
     private readonly GameObject trace;
     private float timeRemaining;
@@ -63,6 +63,12 @@ internal class NinjaTrace
 
         trace.SetActive(true);
         traces.Add(this);
+    }
+    public static Sprite getTraceSprite()
+    {
+        if (TraceSprite) return TraceSprite;
+        TraceSprite = UnityHelper.loadSpriteFromResources("TheOtherRoles.Resources.NinjaTraceW.png", 225f);
+        return TraceSprite;
     }
 
     public static void clearTraces()

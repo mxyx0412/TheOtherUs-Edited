@@ -30,30 +30,18 @@ public static class UnityHelper
     {
         try
         {
-            var fileName = Path.GetFileName(path) + $"_{pixelsPerUnit}";
-            if (cache && CacheSprite.Exists(n => n.name == fileName))
-                return CacheSprite.FirstOrDefault(n => n.name == fileName);
-
+            if (cache && CachedSprites.TryGetValue(path + pixelsPerUnit, out var sprite)) return sprite;
             var texture = loadTextureFromResources(path);
-            var sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), pixelsPerUnit);
-            sprite.name = fileName;
-            switch (cache)
-            {
-                case true:
-                    sprite.Dont();
-                    break;
-                case false:
-                    return sprite;
-            }
-
-            CacheSprite.Add(sprite);
-            return sprite;
+            sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f),
+                pixelsPerUnit);
+            if (cache) sprite.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
+            if (!cache) return sprite;
+            return CachedSprites[path + pixelsPerUnit] = sprite;
         }
         catch
         {
-            Error("loading sprite from path: " + path);
+            Error("Error loading sprite from path: " + path);
         }
-
         return null;
     }
 

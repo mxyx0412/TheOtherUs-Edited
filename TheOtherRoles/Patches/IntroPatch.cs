@@ -335,7 +335,7 @@ internal class IntroPatch
                         ? Lovers.lover2
                         : Lovers.lover1;
                     __instance.RoleBlurbText.text +=
-                        cs(Lovers.color, $"\n♥ 你和 {otherLover?.Data?.PlayerName ?? ""} 坠入了爱河♥");
+                        cs(Lovers.color, $"\n♥ 你和 {otherLover?.Data?.PlayerName ?? ""} 坠入了爱河 ♥");
                 }
             }
 
