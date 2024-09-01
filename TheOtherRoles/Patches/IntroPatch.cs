@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Hazel;
 using Il2CppSystem.Collections.Generic;
+using TheOtherRoles.Buttons;
 using TheOtherRoles.CustomGameModes;
 using TheOtherRoles.Objects.Map;
 using TheOtherRoles.Utilities;
@@ -200,6 +201,57 @@ internal class IntroCutsceneOnDestroyPatch
                 CustomOptionHolder.hideNSeekHuntedVision.getFloat();
             GameOptionsManager.Instance.currentNormalGameOptions.KillCooldown =
                 CustomOptionHolder.hideNSeekKillCooldown.getFloat();
+        }
+    }
+
+    public static void Postfix(IntroCutscene __instance)
+    {
+
+        // 显示按键提示
+        Rewired.KeyboardMap keyboardMap = Rewired.ReInput.mapping.GetKeyboardMapInstance(0, 0);
+        Il2CppReferenceArray<Rewired.ActionElementMap> actionArray;
+        Rewired.ActionElementMap actionMap;
+
+        // 地图
+        actionArray = keyboardMap.GetButtonMapsWithAction(4);
+        if (actionArray.Count > 0)
+        {
+            actionMap = actionArray[0];
+            _ = CustomButton.SetKeyGuideOnSmallButton(HudManager.Instance.MapButton.gameObject, actionMap.keyCode);
+            //_ = CustomButton.SetKeyGuide(HudManager.Instance.SabotageButton.gameObject, actionMap.keyCode);
+        }
+
+        // 使用
+        actionArray = keyboardMap.GetButtonMapsWithAction(6);
+        if (actionArray.Count > 0)
+        {
+            actionMap = actionArray[0];
+            _ = CustomButton.SetKeyGuide(HudManager.Instance.UseButton.gameObject, actionMap.keyCode);
+            _ = CustomButton.SetKeyGuide(HudManager.Instance.PetButton.gameObject, actionMap.keyCode);
+        }
+
+        // 报告
+        actionArray = keyboardMap.GetButtonMapsWithAction(7);
+        if (actionArray.Count > 0)
+        {
+            actionMap = actionArray[0];
+            _ = CustomButton.SetKeyGuide(HudManager.Instance.ReportButton.gameObject, actionMap.keyCode);
+        }
+
+        // 击杀
+        actionArray = keyboardMap.GetButtonMapsWithAction(8);
+        if (actionArray.Count > 0)
+        {
+            actionMap = actionArray[0];
+            _ = CustomButton.SetKeyGuide(HudManager.Instance.KillButton.gameObject, actionMap.keyCode);
+        }
+
+        // 管道
+        actionArray = keyboardMap.GetButtonMapsWithAction(50);
+        if (actionArray.Count > 0)
+        {
+            actionMap = actionArray[0];
+            _ = CustomButton.SetKeyGuide(HudManager.Instance.ImpostorVentButton.gameObject, actionMap.keyCode);
         }
     }
 }

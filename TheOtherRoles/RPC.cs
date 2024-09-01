@@ -9,6 +9,7 @@ using Hazel;
 using InnerNet;
 using PowerTools;
 using Reactor.Utilities.Extensions;
+using TheOtherRoles.Buttons;
 using TheOtherRoles.CustomGameModes;
 using TheOtherRoles.Objects;
 using TheOtherRoles.Objects.Map;
@@ -16,8 +17,8 @@ using TheOtherRoles.Patches;
 using TheOtherRoles.Utilities;
 using TMPro;
 using UnityEngine;
+using static TheOtherRoles.Buttons.HudManagerStartPatch;
 using static TheOtherRoles.GameHistory;
-using static TheOtherRoles.HudManagerStartPatch;
 using static TheOtherRoles.Options.ModOption;
 using static TheOtherRoles.Roles.RoleClass;
 using Object = UnityEngine.Object;
@@ -294,6 +295,7 @@ public static class RPCProcedure
 
     public static void resetVariables()
     {
+        reloadPluginOptions();
         Garlic.clearGarlics();
         JackInTheBox.clearJackInTheBoxes();
         NinjaTrace.clearTraces();
@@ -307,7 +309,6 @@ public static class RPCProcedure
         clearAndReloadRoles();
         clearGameHistory();
         setCustomButtonCooldowns();
-        reloadPluginOptions();
         toggleZoom(true);
         GameStartManagerPatch.GameStartManagerUpdatePatch.startingTimer = 0;
         SurveillanceMinigamePatch.nightVisionOverlays = null;

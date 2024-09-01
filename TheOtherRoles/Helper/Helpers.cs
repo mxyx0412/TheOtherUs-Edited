@@ -8,8 +8,8 @@ using AmongUs.GameOptions;
 using Hazel;
 using InnerNet;
 using Reactor.Utilities.Extensions;
+using TheOtherRoles.Buttons;
 using TheOtherRoles.CustomGameModes;
-using TheOtherRoles.Objects;
 using TheOtherRoles.Patches;
 using TheOtherRoles.Utilities;
 using TMPro;
@@ -844,8 +844,7 @@ public static class Helpers
 
     public static bool shouldShowGhostInfo()
     {
-        return (CachedPlayer.LocalPlayer.PlayerControl != null && CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead &&
-                ModOption.ghostsSeeInformation) ||
+        return (CachedPlayer.LocalPlayer.PlayerControl != null && CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead) ||
                AmongUsClient.Instance.GameState == InnerNetClient.GameStates.Ended;
     }
 

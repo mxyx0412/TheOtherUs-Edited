@@ -17,16 +17,12 @@ internal class ModOption
     public static bool blockSkippingInEmergencyMeetings;
     public static bool noVoteIsSelfVote;
     public static bool hidePlayerNames;
-    public static bool ghostsSeeRoles = true;
-    public static bool ghostsSeeModifier = true;
-    public static bool ghostsSeeInformation = true;
-    public static bool ghostsSeeVotes = true;
-    public static bool showRoleSummary = true;
     public static bool allowParallelMedBayScans;
     public static bool showLighterDarker = true;
     public static bool showFPS = true;
     public static bool toggleCursor = true;
     public static bool enableSoundEffects = true;
+    public static bool showKeyReminder;
     public static bool shieldFirstKill;
     public static bool hideVentAnim;
     public static bool impostorSeeRoles;
@@ -120,16 +116,10 @@ internal class ModOption
 
     public static void reloadPluginOptions()
     {
-        ghostsSeeRoles = Main.GhostsSeeRoles.Value;
-        ghostsSeeModifier = Main.GhostsSeeModifier.Value;
-        ghostsSeeInformation = Main.GhostsSeeInformation.Value;
-        ghostsSeeVotes = Main.GhostsSeeVotes.Value;
         showFPS = Main.ShowFPS.Value;
-        showRoleSummary = Main.ShowRoleSummary.Value;
         toggleCursor = Main.ToggleCursor.Value;
         enableSoundEffects = Main.EnableSoundEffects.Value;
-
-        //Patches.ShouldAlwaysHorseAround.isHorseMode = TheOtherRolesPlugin.EnableHorseMode.Value;
+        showKeyReminder = Main.ShowKeyReminder.Value;
     }
 
     public static void resetDeviceTimes()

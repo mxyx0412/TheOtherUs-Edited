@@ -9,6 +9,7 @@ using BepInEx.Unity.IL2CPP;
 using Hazel;
 using Il2CppSystem.Linq;
 using Reactor.Utilities.Extensions;
+using TheOtherRoles.Buttons;
 using TheOtherRoles.Utilities;
 using TMPro;
 using UnityEngine;
@@ -1471,7 +1472,7 @@ public static class GameOptionsNextPagePatch
         if (Input.GetKeyDown(KeyCode.Alpha5) || Input.GetKeyDown(KeyCode.Keypad5)) Main.optionsPage = 4;
         if (Input.GetKeyDown(KeyCode.Alpha6) || Input.GetKeyDown(KeyCode.Keypad6)) Main.optionsPage = 5;
         if (Input.GetKeyDown(KeyCode.Alpha7) || Input.GetKeyDown(KeyCode.Keypad7)) Main.optionsPage = 6;
-        if (Input.GetKeyDown(KeyCode.F1)) HudManagerUpdate.ToggleSettings(HudManager.Instance);
+        if (Input.GetKeyDown(ModInputManager.showOptionPageInput.keyCode)) HudManagerUpdate.ToggleSettings(HudManager.Instance);
         if (Main.optionsPage >= GameOptionsDataPatch.maxPage) Main.optionsPage = 0;
 
         if (page != Main.optionsPage)
@@ -1666,7 +1667,10 @@ public class HudManagerUpdate
             toggleSettingsButton = toggleSettingsButtonObject.GetComponent<PassiveButton>();
             toggleSettingsButton.OnClick.RemoveAllListeners();
             toggleSettingsButton.OnClick.AddListener((Action)(() => ToggleSettings(__instance)));
+            _ = CustomButton.SetKeyGuideOnSmallButton(toggleSettingsButtonObject, ModInputManager.showOptionPageInput.keyCode);
         }
+
+
         toggleSettingsButtonObject.SetActive(__instance.MapButton.gameObject.active && !(MapBehaviour.Instance && MapBehaviour.Instance.IsOpen) && GameOptionsManager.Instance.currentGameOptions.GameMode != GameModes.HideNSeek);
         toggleSettingsButtonObject.transform.localPosition = __instance.MapButton.transform.localPosition + new Vector3(0, -0.66f, -500f);
     }

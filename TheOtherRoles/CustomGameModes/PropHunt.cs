@@ -5,6 +5,7 @@ using AmongUs.Data;
 using AmongUs.GameOptions;
 using Hazel;
 using Reactor.Utilities.Extensions;
+using TheOtherRoles.Buttons;
 using TheOtherRoles.Patches;
 using TheOtherRoles.Utilities;
 using TMPro;

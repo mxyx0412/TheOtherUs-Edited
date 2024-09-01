@@ -8,7 +8,7 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
-namespace TheOtherRoles.Objects;
+namespace TheOtherRoles.Buttons;
 
 public class CustomButton
 {
@@ -71,7 +71,7 @@ public class CustomButton
         button.OnClick.AddListener((UnityAction)onClickEvent);
 
         Timer = ModOption.ButtonCooldown + 8.5f;
-
+        SetHotKeyGuide();
         setActive(false);
     }
 
@@ -197,6 +197,12 @@ public class CustomButton
         }
     }
 
+    public CustomButton SetTimer(float timer)
+    {
+        Timer = timer;
+        return this;
+    }
+
     public void Update()
     {
         var localPlayer = CachedPlayer.LocalPlayer;
@@ -242,7 +248,7 @@ public class CustomButton
             {
                 var aspect = Camera.main.aspect;
                 var safeOrthographicSize = CameraSafeArea.GetSafeOrthographicSize(Camera.main);
-                var xpos = 0.05f - (safeOrthographicSize * aspect * 1.70f);
+                var xpos = 0.05f - safeOrthographicSize * aspect * 1.70f;
                 pos = new Vector3(xpos, pos.y, pos.z);
             }
 
@@ -285,6 +291,79 @@ public class CustomButton
             OnClick = () => { Deputy.setHandcuffedKnows(); };
         else // Reset.
             OnClick = InitialOnClick;
+    }
+
+    public static GameObject SetKeyGuide(GameObject button, KeyCode key, Vector2 pos)
+    {
+        Sprite numSprite = null;
+        if (ModInputManager.allKeyCodes.ContainsKey(key))
+            numSprite = ModInputManager.allKeyCodes[key].GetSprite();
+
+        if (numSprite == null)
+            return null;
+
+        GameObject obj = new()
+        {
+            name = "HotKeyGuide"
+        };
+        obj.transform.SetParent(button.transform);
+        obj.layer = button.layer;
+        var renderer = obj.AddComponent<SpriteRenderer>();
+        renderer.transform.localPosition = (Vector3)pos + new Vector3(0f, 0f, -10f);
+        renderer.sprite = new ResourceSprite("KeyBind.Background.png", 100f);
+
+        GameObject numObj = new()
+        {
+            name = "HotKeyText"
+        };
+        numObj.transform.SetParent(obj.transform);
+        numObj.layer = button.layer;
+        renderer = numObj.AddComponent<SpriteRenderer>();
+        renderer.transform.localPosition = new Vector3(0, 0, -1f);
+        renderer.sprite = numSprite;
+
+        return obj;
+    }
+
+    public static GameObject SetKeyGuide(GameObject button, KeyCode key)
+    {
+        return ModOption.showKeyReminder ? SetKeyGuide(button, key, new Vector2(0.48f, 0.48f)) : null;
+    }
+
+    private void SetHotKeyGuide()
+    {
+        if (!ModOption.showKeyReminder) return;
+        SetKeyGuide(hotkey, new Vector2(0.48f, 0.48f), false);
+    }
+
+    public static GameObject SetKeyGuideOnSmallButton(GameObject button, KeyCode key)
+    {
+        return ModOption.showKeyReminder ? SetKeyGuide(button, key, new Vector2(0.28f, 0.28f)) : null;
+    }
+
+    public void SetKeyGuide(KeyCode? key, Vector2 pos, bool requireChangeOption)
+    {
+        if (!ModOption.showKeyReminder || !key.HasValue) return;
+
+        var guideObj = SetKeyGuide(actionButton.gameObject, key.Value, pos);
+
+        if (guideObj == null)
+            return;
+
+        if (requireChangeOption)
+        {
+            SpriteRenderer renderer;
+
+            GameObject obj = new()
+            {
+                name = "HotKeyOption"
+            };
+            obj.transform.SetParent(guideObj.transform);
+            obj.layer = actionButton.gameObject.layer;
+            renderer = obj.AddComponent<SpriteRenderer>();
+            renderer.transform.localPosition = new Vector3(0.12f, 0.07f, -2f);
+            renderer.sprite = new ResourceSprite("KeyBind.Option.png", 100f);
+        }
     }
 
     public static class ButtonPositions

@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using TheOtherRoles.Utilities;
+using System.Linq;
+using BepInEx.Unity.IL2CPP.Utils.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -9,237 +11,293 @@ using Object = UnityEngine.Object;
 
 namespace TheOtherRoles.Patches;
 
-[HarmonyPatch]
-public static class ClientOptionsPatch
+[HarmonyPatch(typeof(OptionsMenuBehaviour), nameof(OptionsMenuBehaviour.Start))]
+public static class StartOptionMenuPatch
 {
-    private static readonly SelectionBehaviour[] AllOptions =
-    [
-        new SelectionBehaviour("GhostsSeeInformationText",
-            () => ModOption.ghostsSeeInformation = Main.GhostsSeeInformation.Value = !Main.GhostsSeeInformation.Value, Main.GhostsSeeInformation.Value),
-        new SelectionBehaviour("GhostsSeeVotesText",
-            () => ModOption.ghostsSeeVotes = Main.GhostsSeeVotes.Value = !Main.GhostsSeeVotes.Value, Main.GhostsSeeVotes.Value),
-        new SelectionBehaviour("GhostsSeeRolesText",
-            () => ModOption.ghostsSeeRoles = Main.GhostsSeeRoles.Value = !Main.GhostsSeeRoles.Value, Main.GhostsSeeRoles.Value),
-        new SelectionBehaviour("GhostsSeeModifierText",
-            () => ModOption.ghostsSeeModifier = Main.GhostsSeeModifier.Value = !Main.GhostsSeeModifier.Value, Main.GhostsSeeModifier.Value),
-        new SelectionBehaviour("ShowRoleSummaryText",
-            () => ModOption.showRoleSummary = Main.ShowRoleSummary.Value = !Main.ShowRoleSummary.Value, Main.ShowRoleSummary.Value),
-        new SelectionBehaviour("ToggleCursorText",
-            () => ModOption.toggleCursor = Main.ToggleCursor.Value = !Main.ToggleCursor.Value, Main.ToggleCursor.Value),
-        new SelectionBehaviour("EnableSoundEffectsText",
-            () => ModOption.enableSoundEffects = Main.EnableSoundEffects.Value = !Main.EnableSoundEffects.Value, Main.EnableSoundEffects.Value),
-        new SelectionBehaviour("ShowFPS",
-            () => ModOption.showFPS = Main.ShowFPS.Value = !Main.ShowFPS.Value, Main.ShowFPS.Value),
-    ];
-
-    private static GameObject popUp;
-    private static TextMeshPro titleText;
-
-    private static ToggleButtonBehaviour moreOptions;
-    private static TextMeshPro titleTextTitle;
-    private static List<ToggleButtonBehaviour> modButtons = new();
-
-    private static ToggleButtonBehaviour buttonPrefab;
-    private static Vector3? _origin;
-
-    [HarmonyPostfix]
-    [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
-    public static void MainMenuManager_StartPostfix(MainMenuManager __instance)
+    public static void UpdateCustomText(this ToggleButtonBehaviour button, Color color, string text = null)
     {
-        // Prefab for the title
-        var go = new GameObject("TitleTextTOR");
-        var tmp = go.AddComponent<TextMeshPro>();
-        tmp.fontSize = 4;
-        tmp.alignment = TextAlignmentOptions.Center;
-        tmp.transform.localPosition += Vector3.left * 0.2f;
-        titleText = Object.Instantiate(tmp);
-        titleText.gameObject.SetActive(false);
-        Object.DontDestroyOnLoad(titleText);
-    }
-
-    [HarmonyPostfix]
-    [HarmonyPatch(typeof(OptionsMenuBehaviour), nameof(OptionsMenuBehaviour.Start))]
-    public static void OptionsMenuBehaviour_StartPostfix(OptionsMenuBehaviour __instance)
-    {
-        if (!__instance.CensorChatButton) return;
-
-        if (!popUp) CreateCustom(__instance);
-        if (!buttonPrefab)
+        button.onState = false;
+        button.Background.color = color;
+        if (text != null)
         {
-            buttonPrefab = Object.Instantiate(__instance.CensorChatButton);
-            Object.DontDestroyOnLoad(buttonPrefab);
-            buttonPrefab.name = "CensorChatPrefab";
-            buttonPrefab.gameObject.SetActive(false);
+            button.Text.text = text;
         }
 
-        SetUpOptions();
-        InitializeMoreButton(__instance);
-    }
-
-    private static void CreateCustom(OptionsMenuBehaviour prefab)
-    {
-        popUp = Object.Instantiate(prefab.gameObject);
-        Object.DontDestroyOnLoad(popUp);
-        var transform = popUp.transform;
-        var pos = transform.localPosition;
-        pos.z = -810f;
-        transform.localPosition = pos;
-
-        Object.Destroy(popUp.GetComponent<OptionsMenuBehaviour>());
-        foreach (var gObj in popUp.gameObject.GetAllChilds())
-            if (gObj.name != "Background" && gObj.name != "CloseButton")
-                Object.Destroy(gObj);
-
-        popUp.SetActive(false);
-    }
-
-    private static void InitializeMoreButton(OptionsMenuBehaviour __instance)
-    {
-        moreOptions = Object.Instantiate(buttonPrefab, __instance.CensorChatButton.transform.parent);
-        var transform = __instance.CensorChatButton.transform;
-        __instance.CensorChatButton.Text.transform.localScale = new Vector3(1 / 0.66f, 1, 1);
-        _origin ??= transform.localPosition;
-
-        transform.localPosition = _origin.Value + (Vector3.left * 0.45f);
-        transform.localScale = new Vector3(0.66f, 1, 1);
-        __instance.EnableFriendInvitesButton.transform.localScale = new Vector3(0.66f, 1, 1);
-        __instance.EnableFriendInvitesButton.transform.localPosition += Vector3.right * 0.5f;
-        __instance.EnableFriendInvitesButton.Text.transform.localScale = new Vector3(1.2f, 1, 1);
-
-        moreOptions.transform.localPosition = _origin.Value + (Vector3.right * 4f / 3f);
-        moreOptions.transform.localScale = new Vector3(0.66f, 1, 1);
-
-        moreOptions.gameObject.SetActive(true);
-        moreOptions.Text.text = getString("modOptionsText");
-        moreOptions.Text.transform.localScale = new Vector3(1 / 0.66f, 1, 1);
-        var moreOptionsButton = moreOptions.GetComponent<PassiveButton>();
-        moreOptionsButton.OnClick = new ButtonClickedEvent();
-        moreOptionsButton.OnClick.AddListener((Action)(() =>
+        if (button.Rollover)
         {
-            bool closeUnderlying = false;
-            if (!popUp) return;
-
-            if (__instance.transform.parent && __instance.transform.parent == FastDestroyableSingleton<HudManager>.Instance.transform)
-            {
-                popUp.transform.SetParent(FastDestroyableSingleton<HudManager>.Instance.transform);
-                popUp.transform.localPosition = new Vector3(0, 0, -800f);
-                closeUnderlying = true;
-            }
-            else
-            {
-                popUp.transform.SetParent(null);
-                Object.DontDestroyOnLoad(popUp);
-            }
-
-            CheckSetTitle();
-            RefreshOpen();
-            if (closeUnderlying)
-                __instance.Close();
-        }));
-    }
-
-    private static void RefreshOpen()
-    {
-        popUp.gameObject.SetActive(false);
-        popUp.gameObject.SetActive(true);
-        SetUpOptions();
-    }
-
-    private static void CheckSetTitle()
-    {
-        if (!popUp || popUp.GetComponentInChildren<TextMeshPro>() || !titleText) return;
-
-        var title = titleTextTitle = Object.Instantiate(titleText, popUp.transform);
-        title.GetComponent<RectTransform>().localPosition = Vector3.up * 2.3f;
-        title.gameObject.SetActive(true);
-        title.text = getString("modOptionsTitle");
-        title.name = "TitleText";
-    }
-
-    private static void SetUpOptions()
-    {
-        if (popUp.transform.GetComponentInChildren<ToggleButtonBehaviour>()) return;
-
-        foreach (var button in modButtons)
-        {
-            if (button != null) Object.Destroy(button.gameObject);
+            button.Rollover.ChangeOutColor(color);
         }
+    }
 
-        modButtons = new List<ToggleButtonBehaviour>();
-
-        for (var i = 0; i < AllOptions.Length; i++)
+    public static void UpdateToggleText(this ToggleButtonBehaviour button, bool on, string text)
+    {
+        button.onState = on;
+        Color color = on ? new Color(0f, 1f, 0.16470589f, 1f) : Color.white;
+        button.Background.color = color;
+        button.Text.text = text + ": " + DestroyableSingleton<TranslationController>.Instance.GetString(button.onState ? StringNames.SettingsOn : StringNames.SettingsOff, new Il2CppReferenceArray<Il2CppSystem.Object>(0));
+        if (button.Rollover)
         {
-            var info = AllOptions[i];
+            button.Rollover.ChangeOutColor(color);
+        }
+    }
 
-            var button = Object.Instantiate(buttonPrefab, popUp.transform);
-            var pos = new Vector3(i % 2 == 0 ? -1.17f : 1.17f, 1.3f - (i / 2 * 0.8f), -.5f);
+    public static void UpdateButtonText(this ToggleButtonBehaviour button, string text, string state)
+    {
+        button.onState = false;
+        Color color = Color.white;
+        button.Background.color = color;
+        button.Text.text = text + ": " + state;
+        if (button.Rollover)
+        {
+            button.Rollover.ChangeOutColor(color);
+        }
+    }
 
-            var transform = button.transform;
-            transform.localPosition = pos;
+    private static ToggleButtonBehaviour AddButton(Vector2 pos, string name, Action onClicked, GameObject nebulaTab, GameObject toggleButtonTemplate)
+    {
+        GameObject button = Object.Instantiate(toggleButtonTemplate, null);
+        button.transform.SetParent(nebulaTab.transform);
+        button.transform.localScale = new Vector3(1f, 1f, 1f);
+        button.transform.localPosition = new Vector3(1.3f * ((pos.x * 2f) - 1f), 1.6f - (0.5f * pos.y), 0f);
+        button.name = name;
+        ToggleButtonBehaviour result = button.GetComponent<ToggleButtonBehaviour>();
+        PassiveButton passiveButton = button.GetComponent<PassiveButton>();
+        passiveButton.OnClick = new ButtonClickedEvent();
+        passiveButton.OnClick.AddListener((UnityAction)onClicked);
+        return result;
+    }
 
-            button.onState = info.DefaultValue;
-            button.Background.color = button.onState ? Color.green : Palette.ImpostorRed;
+    static ToggleButtonBehaviour toggleCursor;
+    static ToggleButtonBehaviour enableSoundEffects;
+    static ToggleButtonBehaviour showKeyReminder;
+    static ToggleButtonBehaviour showFPS;
 
-            button.Text.text = info.Title.Translate();
-            button.Text.fontSizeMin = button.Text.fontSizeMax = 1.8f;
-            button.Text.font = Object.Instantiate(titleText.font);
-            button.Text.GetComponent<RectTransform>().sizeDelta = new Vector2(2, 2);
+    public static void Postfix(OptionsMenuBehaviour __instance)
+    {
+        List<TabGroup> tabs = new(__instance.Tabs.ToArray());
 
-            button.name = info.Title.Replace(" ", "") + "Toggle";
-            button.gameObject.SetActive(true);
+        PassiveButton passiveButton;
 
-            var passiveButton = button.GetComponent<PassiveButton>();
-            var colliderButton = button.GetComponent<BoxCollider2D>();
+        //設定項目を追加する
 
-            colliderButton.size = new Vector2(2.2f, .7f);
+        GameObject nebulaTab = new("NebulaTab");
+        nebulaTab.transform.SetParent(__instance.transform);
+        nebulaTab.transform.localScale = new Vector3(1f, 1f, 1f);
+        nebulaTab.SetActive(false);
 
+        GameObject keyBindingTab = new("KeyBindingTab");
+        keyBindingTab.transform.SetParent(__instance.transform);
+        keyBindingTab.transform.localScale = new Vector3(1f, 1f, 1f);
+        keyBindingTab.SetActive(false);
+
+        GameObject applyButtonTemplate = tabs[1].Content.transform.GetChild(0).FindChild("ApplyButton").gameObject;
+        GameObject toggleButtonTemplate = tabs[0].Content.transform.FindChild("MiscGroup").FindChild("StreamerModeButton").gameObject;
+
+        //EnableSoundEffects
+        enableSoundEffects = AddButton(new Vector2(0, 0), "EnableSoundEffects", () =>
+        {
+            enableSoundEffects.UpdateToggleText(!enableSoundEffects.onState, getString("EnableSoundEffectsText"));
+            ModOption.enableSoundEffects = Main.EnableSoundEffects.Value = enableSoundEffects.onState;
+        }, nebulaTab, toggleButtonTemplate);
+
+        //ToggleCursor
+        toggleCursor = AddButton(new Vector2(0, 1), "ToggleCursor", () =>
+        {
+            enableCursor(false);
+            toggleCursor.UpdateToggleText(!toggleCursor.onState, getString("ToggleCursorText"));
+            ModOption.toggleCursor = Main.ToggleCursor.Value = toggleCursor.onState;
+            Message($"toggleCursor: {toggleCursor.onState}");
+        }, nebulaTab, toggleButtonTemplate);
+
+        //ShowFPS
+        showKeyReminder = AddButton(new Vector2(1, 0), "ShowFPS", () =>
+        {
+            showKeyReminder.UpdateToggleText(!showKeyReminder.onState, getString("ShowKeyReminder"));
+            ModOption.showKeyReminder = Main.ShowKeyReminder.Value = showKeyReminder.onState;
+        }, nebulaTab, toggleButtonTemplate);
+
+        //ShowFPS
+        showFPS = AddButton(new Vector2(1, 1), "ShowFPS", () =>
+        {
+            showFPS.UpdateToggleText(!showFPS.onState, getString("ShowFPS"));
+            ModOption.showFPS = Main.ShowFPS.Value = showFPS.onState;
+        }, nebulaTab, toggleButtonTemplate);
+
+        //キー割り当てボタン
+        GameObject TextObject;
+
+        List<ToggleButtonBehaviour> allKeyBindingButtons = [];
+        int selectedKeyBinding = -1;
+
+        GameObject defaultButton = Object.Instantiate(applyButtonTemplate, null);
+        defaultButton.transform.SetParent(keyBindingTab.transform);
+        defaultButton.transform.localScale = new Vector3(1f, 1f, 1f);
+        defaultButton.transform.localPosition = new Vector3(0f, -2.5f, 0f);
+        defaultButton.name = "RestoreDefaultsButton";
+        defaultButton.transform.GetChild(0).GetComponent<SpriteRenderer>().size = new Vector2(2.25f, 0.4f);
+        TextObject = defaultButton.transform.FindChild("Text_TMP").gameObject;
+        TextObject.GetComponent<TextMeshPro>().text = getString("keyBinding.restoreDefaults");
+        TextObject.GetComponent<TextMeshPro>().rectTransform.sizeDelta *= 2;
+        TextObject.GetComponent<TextTranslatorTMP>().enabled = false;
+        passiveButton = defaultButton.GetComponent<PassiveButton>();
+        passiveButton.OnClick = new ButtonClickedEvent();
+        passiveButton.OnClick.AddListener((UnityAction)(() =>
+        {
+            selectedKeyBinding = -1;
+            //_ = SoundManager.Instance.PlaySound(Module.MetaScreen.getSelectClip(), false, 0.8f);
+
+            for (int i = 0; i < ModInputManager.allInputs.Count; i++)
+            {
+                ModInputManager.ModInput input = ModInputManager.allInputs[i];
+                input.resetToDefault();
+                allKeyBindingButtons[i].UpdateCustomText(Color.white, getString("keyBinding." + input.identifier) + ": " + ModInputManager.allKeyCodes[input.keyCode].displayKey);
+            }
+        }
+        ));
+
+        foreach (var input in ModInputManager.allInputs)
+        {
+            int index = allKeyBindingButtons.Count;
+
+            GameObject inputButton = Object.Instantiate(toggleButtonTemplate, null);
+            inputButton.transform.SetParent(keyBindingTab.transform);
+            inputButton.transform.localScale = new Vector3(1f, 1f, 1f);
+            inputButton.transform.localPosition = new Vector3(1.3f * ((index % 2 * 2) - 1), 1.5f - (0.5f * (index / 2)), 0f);
+            inputButton.name = input.identifier;
+            ToggleButtonBehaviour inputToggleButton = inputButton.GetComponent<ToggleButtonBehaviour>();
+            inputToggleButton.BaseText = 0;
+            inputToggleButton.Text.text = getString("keyBinding." + input.identifier) + ": " + ModInputManager.allKeyCodes[input.keyCode].displayKey;
+            passiveButton = inputButton.GetComponent<PassiveButton>();
             passiveButton.OnClick = new ButtonClickedEvent();
-            passiveButton.OnMouseOut = new UnityEvent();
-            passiveButton.OnMouseOver = new UnityEvent();
-
-            passiveButton.OnClick.AddListener((Action)(() =>
+            passiveButton.OnClick.AddListener((UnityAction)(() =>
             {
-                if (info.Title == "ToggleCursorText") enableCursor(false);
-                button.onState = info.OnClick();
-                button.Background.color = button.onState ? Color.green : Palette.ImpostorRed;
+                if (selectedKeyBinding == index)
+                {
+                    selectedKeyBinding = -1;
+                    inputToggleButton.UpdateCustomText(Color.white, null);
+                }
+                else
+                {
+                    selectedKeyBinding = index;
+                    allKeyBindingButtons[selectedKeyBinding].UpdateCustomText(Color.yellow,
+                        getString($"{getString($"keyBinding.{input.identifier}")}: {getString("keyBinding.recording")}"));
+                    inputToggleButton.UpdateCustomText(Color.yellow, null);
+                }
             }));
 
-            passiveButton.OnMouseOver.AddListener((Action)(() =>
-                button.Background.color = new Color32(34, 139, 34, byte.MaxValue)));
-            passiveButton.OnMouseOut.AddListener((Action)(() =>
-                button.Background.color = button.onState ? Color.green : Palette.ImpostorRed));
-
-            foreach (var spr in button.gameObject.GetComponentsInChildren<SpriteRenderer>())
-                spr.size = new Vector2(2.2f, .7f);
-
-            modButtons.Add(button);
+            allKeyBindingButtons.Add(inputToggleButton);
         }
-    }
 
-    private static IEnumerable<GameObject> GetAllChilds(this GameObject Go)
-    {
-        for (var i = 0; i < Go.transform.childCount; i++) yield return Go.transform.GetChild(i).gameObject;
-    }
-
-    public static void updateTranslations()
-    {
-        if (titleTextTitle)
-            titleTextTitle.text = getString("moreOptionsText");
-
-        if (moreOptions)
-            moreOptions.Text.text = getString("modOptionsText");
-
-        for (int i = 0; i < AllOptions.Length; i++)
+        GameObject keyBindingButton = Object.Instantiate(applyButtonTemplate, null);
+        keyBindingButton.transform.SetParent(nebulaTab.transform);
+        keyBindingButton.transform.localScale = new Vector3(1f, 1f, 1f);
+        keyBindingButton.transform.localPosition = new Vector3(0f, -1.5f, 0f);
+        keyBindingButton.name = "KeyBindingButton";
+        keyBindingButton.transform.GetChild(0).GetComponent<SpriteRenderer>().size = new Vector2(2.25f, 0.4f);
+        TextObject = keyBindingButton.transform.FindChild("Text_TMP").gameObject;
+        TextObject.GetComponent<TextMeshPro>().text = getString("keyBinding");
+        TextObject.GetComponent<TextMeshPro>().rectTransform.sizeDelta *= 2;
+        TextObject.GetComponent<TextTranslatorTMP>().enabled = false;
+        passiveButton = keyBindingButton.GetComponent<PassiveButton>();
+        passiveButton.OnClick = new ButtonClickedEvent();
+        passiveButton.OnClick.AddListener((UnityAction)(() =>
         {
-            if (i >= modButtons.Count) break;
-            modButtons[i].Text.text = getString(AllOptions[i].Title);
+            //_ = SoundManager.Instance.PlaySound(Module.MetaScreen.getSelectClip(), false, 0.8f);
+            __instance.OpenTabGroup(tabs.Count - 1);
         }
-    }
-    public class SelectionBehaviour(string title, Func<bool> onClick, bool defaultValue)
-    {
-        public bool DefaultValue = defaultValue;
-        public Func<bool> OnClick = onClick;
-        public string Title = title;
-    }
+        ));
 
+        IEnumerator getEnumerator()
+        {
+            while (true)
+            {
+                /*
+                if (HudManager.InstanceExists && !GameStartManager.InstanceExists)
+                {
+                    keyBindingButton.gameObject.SetActive(false);
+                */
+
+                if (keyBindingTab.gameObject.active && Input.anyKeyDown && selectedKeyBinding != -1)
+                {
+                    foreach (KeyValuePair<KeyCode, ModInputManager.KeyCodeData> entry in ModInputManager.allKeyCodes)
+                    {
+                        if (!Input.GetKeyDown(entry.Key))
+                        {
+                            continue;
+                        }
+
+                        ModInputManager.ModInput input = ModInputManager.allInputs[selectedKeyBinding];
+                        input.changeKeyCode(entry.Key);
+                        allKeyBindingButtons[selectedKeyBinding].UpdateCustomText(Color.white, getString("keyBinding." + input.identifier) + ": " + ModInputManager.allKeyCodes[input.keyCode].displayKey);
+                        selectedKeyBinding = -1;
+                        break;
+                    }
+                }
+                else if (!keyBindingTab.gameObject.active && selectedKeyBinding != -1)
+                {
+                    allKeyBindingButtons[selectedKeyBinding].UpdateCustomText(Color.white, null);
+                    selectedKeyBinding = -1;
+                }
+                yield return null;
+            }
+        }
+
+        _ = HudManager.InstanceExists
+            ? HudManager.Instance.StartCoroutine(getEnumerator().WrapToIl2Cpp())
+            : __instance.StartCoroutine(getEnumerator().WrapToIl2Cpp());
+
+
+        //タブを追加する
+
+        tabs[^1] = Object.Instantiate(tabs[1], null);
+        TabGroup nebulaButton = tabs[^1];
+        nebulaButton.gameObject.name = "NebulaButton";
+        nebulaButton.transform.SetParent(tabs[0].transform.parent);
+        nebulaButton.transform.localScale = new Vector3(1f, 1f, 1f);
+        nebulaButton.Content = nebulaTab;
+        GameObject textObj = nebulaButton.transform.FindChild("Text_TMP").gameObject;
+        textObj.GetComponent<TextTranslatorTMP>().enabled = false;
+        textObj.GetComponent<TMP_Text>().text = "TOR";
+
+        tabs.Add(Object.Instantiate(tabs[1], null));
+        TabGroup keyBindingTabButton = tabs[^1];
+        keyBindingTabButton.gameObject.name = "KeyBindingButton";
+        keyBindingTabButton.transform.SetParent(tabs[0].transform.parent);
+        keyBindingTabButton.transform.localScale = new Vector3(1f, 1f, 1f);
+        keyBindingTabButton.Content = keyBindingTab;
+        keyBindingTabButton.gameObject.SetActive(false);
+
+        passiveButton = nebulaButton.gameObject.GetComponent<PassiveButton>();
+        passiveButton.OnClick = new ButtonClickedEvent();
+        passiveButton.OnClick.AddListener((UnityAction)(() =>
+        {
+            __instance.OpenTabGroup(tabs.Count - 2);
+
+            showFPS.UpdateToggleText(Main.ShowFPS.Value, getString("ShowFPS"));
+            enableSoundEffects.UpdateToggleText(Main.EnableSoundEffects.Value, getString("EnableSoundEffectsText"));
+            showKeyReminder.UpdateToggleText(Main.ShowKeyReminder.Value, getString("ShowKeyReminder"));
+            toggleCursor.UpdateToggleText(Main.ToggleCursor.Value, getString("ToggleCursorText"));
+
+            passiveButton.OnMouseOver.Invoke();
+        }
+        ));
+
+        float y = tabs[0].transform.localPosition.y, z = tabs[0].transform.localPosition.z;
+        if (tabs.Count == 4)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                tabs[i].transform.localPosition = new Vector3(1.7f * (i - 1), y, z);
+            }
+        }
+        else if (tabs.Count == 5)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                tabs[i].transform.localPosition = new Vector3(1.62f * (i - 1.5f), y, z);
+            }
+        }
+
+        __instance.Tabs = new Il2CppReferenceArray<TabGroup>(tabs.ToArray());
+    }
 }

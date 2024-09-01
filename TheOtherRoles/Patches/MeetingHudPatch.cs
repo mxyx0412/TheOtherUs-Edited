@@ -4,6 +4,7 @@ using System.Linq;
 using AmongUs.QuickChat;
 using Hazel;
 using Reactor.Utilities;
+using TheOtherRoles.Buttons;
 using TheOtherRoles.Objects;
 using TheOtherRoles.Utilities;
 using TMPro;
@@ -565,11 +566,9 @@ internal class MeetingHudPatch
         public static bool Prefix(MeetingHud __instance, GameData.PlayerInfo voterPlayer, int index, Transform parent)
         {
             var spriteRenderer = Object.Instantiate(__instance.PlayerVotePrefab);
-            var showVoteColors = !GameManager.Instance.LogicOptions.GetAnonymousVotes() ||
-                                 (CachedPlayer.LocalPlayer.Data.IsDead && ghostsSeeVotes) ||
+            var showVoteColors = !GameManager.Instance.LogicOptions.GetAnonymousVotes() || CachedPlayer.LocalPlayer.Data.IsDead ||
                                  (Prosecutor.prosecutor != null && Prosecutor.prosecutor == CachedPlayer.LocalPlayer.PlayerControl &&
-                                  Prosecutor.canSeeVoteColors &&
-                                  TasksHandler.taskInfo(CachedPlayer.LocalPlayer.Data).Item1 >=
+                                  Prosecutor.canSeeVoteColors && TasksHandler.taskInfo(CachedPlayer.LocalPlayer.Data).Item1 >=
                                   Prosecutor.tasksNeededToSeeVoteColors) ||
                                  (Watcher.watcher != null && CachedPlayer.LocalPlayer.PlayerControl == Watcher.watcher);
             if (showVoteColors && !Prosecutor.ProsecuteThisMeeting)

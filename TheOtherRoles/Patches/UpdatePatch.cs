@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using AmongUs.GameOptions;
 using InnerNet;
+using TheOtherRoles.Buttons;
 using TheOtherRoles.CustomGameModes;
-using TheOtherRoles.Objects;
 using TheOtherRoles.Utilities;
 using UnityEngine;
 

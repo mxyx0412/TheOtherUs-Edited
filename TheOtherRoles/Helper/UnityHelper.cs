@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using Reactor.Utilities.Extensions;
 using TheOtherRoles.Utilities;
@@ -41,6 +40,20 @@ public static class UnityHelper
         catch
         {
             Error("Error loading sprite from path: " + path);
+        }
+        return null;
+    }
+
+    public static Sprite loadSpriteFromResources(Texture2D texture, float pixelsPerUnit, Rect textureRect)
+    {
+        return Sprite.Create(texture, textureRect, new Vector2(0.5f, 0.5f), pixelsPerUnit);
+    }
+
+    public static AudioClip FindSound(string sound)
+    {
+        foreach (var audio in Object.FindObjectsOfTypeIncludingAssets(Il2CppType.Of<AudioClip>()))
+        {
+            if (audio.name == sound) return audio.Cast<AudioClip>();
         }
         return null;
     }

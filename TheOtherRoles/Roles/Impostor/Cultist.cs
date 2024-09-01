@@ -23,8 +23,8 @@ public static class Cultist
     public static PlayerControl getCultistPartner(this PlayerControl player)
     {
         if (player == null) return null;
-        if (Cultist.cultist == player) return Follower.follower;
-        if (Follower.follower == player) return Cultist.cultist;
+        if (cultist == player) return Follower.follower;
+        if (Follower.follower == player) return cultist;
         return null;
     }
 

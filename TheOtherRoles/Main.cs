@@ -32,15 +32,11 @@ public class TheOtherRolesPlugin : BasePlugin
     public static IRegionInfo[] defaultRegions;
     public Harmony Harmony { get; } = new(Id);
 
-    public static ConfigEntry<bool> GhostsSeeInformation { get; set; }
-    public static ConfigEntry<bool> GhostsSeeRoles { get; set; }
-    public static ConfigEntry<bool> GhostsSeeModifier { get; set; }
-    public static ConfigEntry<bool> GhostsSeeVotes { get; set; }
-    public static ConfigEntry<bool> ShowRoleSummary { get; set; }
     public static ConfigEntry<bool> EnableSoundEffects { get; set; }
     public static ConfigEntry<bool> ToggleCursor { get; set; }
     public static ConfigEntry<bool> enableDebugLogMode { get; set; }
     public static ConfigEntry<bool> ShowFPS { get; set; }
+    public static ConfigEntry<bool> ShowKeyReminder { get; set; }
     public static ConfigEntry<string> Ip { get; set; }
     public static ConfigEntry<ushort> Port { get; set; }
     public static ConfigEntry<string> ShowPopUpVersion { get; set; }
@@ -83,16 +79,12 @@ public class TheOtherRolesPlugin : BasePlugin
         SetLogSource(Log);
         Instance = this;
 
-        GhostsSeeInformation = Config.Bind("Custom", "Ghosts See Remaining Tasks", true);
-        GhostsSeeRoles = Config.Bind("Custom", "Ghosts See Roles", true);
-        GhostsSeeModifier = Config.Bind("Custom", "Ghosts See Modifier", true);
-        GhostsSeeVotes = Config.Bind("Custom", "Ghosts See Votes", true);
-        ShowRoleSummary = Config.Bind("Custom", "Show Role Summary", true);
         ToggleCursor = Config.Bind("Custom", "Better Cursor", true);
         EnableSoundEffects = Config.Bind("Custom", "Enable Sound Effects", true);
         ShowPopUpVersion = Config.Bind("Custom", "Show PopUp", "0");
         enableDebugLogMode = Config.Bind("Custom", "Debug Log Mode", false);
         ShowFPS = Config.Bind("Custom", "Show FPS", true);
+        ShowKeyReminder = Config.Bind("Custom", "ShowKeyReminder", true);
 
         Ip = Config.Bind("Custom", "Custom Server IP", "127.0.0.1");
         Port = Config.Bind("Custom", "Custom Server Port", (ushort)22023);
@@ -108,11 +100,12 @@ public class TheOtherRolesPlugin : BasePlugin
         AssetLoader.LoadAudioAssets();
         if (ToggleCursor.Value) enableCursor(true);
 
-
         SubmergedCompatibility.Initialize();
         MainMenuPatch.addSceneChangeCallbacks();
         AddToKillDistanceSetting.addKillDistance();
-        Info($"\n Loading TOU completed!\n TheOtherUs-Edited v{VersionString}");
+        ModOption.reloadPluginOptions();
+        ModInputManager.Load();
+        Info($"\n---------------\n Loading TheOtherUs completed!\n TheOtherUs-Edited v{VersionString}\n---------------");
     }
 }
 

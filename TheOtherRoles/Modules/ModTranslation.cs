@@ -3,7 +3,6 @@ using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
-using TheOtherRoles.Patches;
 
 namespace TheOtherRoles.Modules;
 public class ModTranslation
@@ -90,6 +89,6 @@ class SetLanguagePatch
 {
     static void Postfix()
     {
-        ClientOptionsPatch.updateTranslations();
+        //ClientOptionsPatch.updateTranslations();
     }
 }

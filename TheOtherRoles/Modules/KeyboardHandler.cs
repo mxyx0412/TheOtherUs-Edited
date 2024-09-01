@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using TheOtherRoles.Objects;
+using TheOtherRoles.Buttons;
 using TheOtherRoles.Utilities;
 using UnityEngine;
 using Random = System.Random;
@@ -37,13 +37,13 @@ public class CommandHandler
                 GameData.Instance.RpcSetTasks(playerControl.PlayerId, Array.Empty<byte>());
             }
             // 强制开始会议或结束会议
-            if (Input.GetKey(KeyCode.M) && Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Return) && InGame)
+            if (Input.GetKey(ModInputManager.metaControlInput.keyCode) && Input.GetKeyDown(ModInputManager.meetingInput.keyCode) && InGame)
             {
                 if (IsMeeting) MeetingHud.Instance.RpcClose();
                 else CachedPlayer.LocalPlayer.PlayerControl.NoCheckStartMeeting(null, true);
             }
             // 强制结束游戏
-            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.T) && Input.GetKeyDown(KeyCode.Return) && InGame)
+            if (Input.GetKey(ModInputManager.metaControlInput.keyCode) && Input.GetKeyDown(ModInputManager.endGameInput.keyCode) && InGame)
             {
                 ModOption.isCanceled = true;
             }

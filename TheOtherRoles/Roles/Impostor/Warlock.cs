@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TheOtherRoles.Buttons;
+using UnityEngine;
 
 namespace TheOtherRoles.Roles.Impostor;
 

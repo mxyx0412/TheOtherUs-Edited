@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using AmongUs.GameOptions;
 using TheOtherRoles.CustomGameModes;
 using TheOtherRoles.Utilities;
 using TMPro;
@@ -698,7 +699,7 @@ public class EndGameManagerSetUpPatch
             textRenderer.text += $"\n{combinedText}";
         }
 
-        if (ModOption.showRoleSummary || HideNSeek.isHideNSeekGM || PropHunt.isPropHuntGM)
+        if (HideNSeek.isHideNSeekGM || PropHunt.isPropHuntGM || GameOptionsManager.Instance.currentGameOptions.GameMode == GameModes.Normal)
         {
             if (Camera.main != null)
             {

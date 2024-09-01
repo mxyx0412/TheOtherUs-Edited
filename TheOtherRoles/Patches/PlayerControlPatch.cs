@@ -7,6 +7,7 @@ using Assets.CoreScripts;
 using Hazel;
 using InnerNet;
 using Reactor.Utilities.Extensions;
+using TheOtherRoles.Buttons;
 using TheOtherRoles.CustomGameModes;
 using TheOtherRoles.Objects;
 using TheOtherRoles.Utilities;
@@ -815,15 +816,16 @@ public static class PlayerControlFixedUpdatePatch
 
                 var (tasksCompleted, tasksTotal) = TasksHandler.taskInfo(p.Data);
                 var roleNames = RoleInfo.GetRolesString(p, true, false);
-                var roleText = RoleInfo.GetRolesString(p, true, ModOption.ghostsSeeModifier);
+                var roleText = RoleInfo.GetRolesString(p, true, true);
                 var taskInfo = tasksTotal > 0 ? $"<color=#FAD934FF>({tasksCompleted}/{tasksTotal})</color>" : "";
 
                 var playerInfoText = "";
                 var meetingInfoText = "";
-                if (p == local || (ModOption.impostorSeeRoles && Spy.spy == null &&
-                                                                    CachedPlayer.LocalPlayer.Data.Role.IsImpostor &&
-                                                                    !CachedPlayer.LocalPlayer.Data.IsDead &&
-                                                                    p == (p.Data.Role.IsImpostor && !p.Data.IsDead)))
+                if (p == local || (ModOption.impostorSeeRoles
+                    && Spy.spy == null
+                    && CachedPlayer.LocalPlayer.Data.Role.IsImpostor
+                    && !CachedPlayer.LocalPlayer.Data.IsDead
+                    && p == (p.Data.Role.IsImpostor && !p.Data.IsDead)))
                 {
                     if (p.Data.IsDead) roleNames = roleText;
                     playerInfoText = $"{roleNames}";
@@ -838,19 +840,14 @@ public static class PlayerControlFixedUpdatePatch
 
                     meetingInfoText = $"{roleNames} {taskInfo}".Trim();
                 }
-                else if (ModOption.ghostsSeeRoles && ModOption.ghostsSeeInformation)
-                {
-                    playerInfoText = $"{roleText} {taskInfo}".Trim();
-                    meetingInfoText = playerInfoText;
-                }
-                else if (ModOption.ghostsSeeInformation)
-                {
-                    playerInfoText = $"{taskInfo}".Trim();
-                    meetingInfoText = playerInfoText;
-                }
-                else if (ModOption.ghostsSeeRoles || (Lawyer.lawyerKnowsRole && local == Lawyer.lawyer && p == Lawyer.target))
+                else if (Lawyer.lawyerKnowsRole && local == Lawyer.lawyer && p == Lawyer.target)
                 {
                     playerInfoText = $"{roleText}";
+                    meetingInfoText = playerInfoText;
+                }
+                else
+                {
+                    playerInfoText = $"{roleText} {taskInfo}".Trim();
                     meetingInfoText = playerInfoText;
                 }
 

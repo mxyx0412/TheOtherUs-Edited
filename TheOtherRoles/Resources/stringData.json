@@ -12,30 +12,6 @@
         "0": "More Options...",
         "13": "模组选项"
     },
-    "GhostsSeeInformationText": {
-        "0": "Ghosts See Tasks & Other Info",
-        "13": "灵魂可见任务&其他信息"
-    },
-    "GhostsSeeVotesText": {
-        "0": "Ghosts Can See Votes",
-        "13": "灵魂可见投票"
-    },
-    "GhostsSeeRolesText": {
-        "0": "Ghosts Can See Roles",
-        "13": "灵魂可以看到职业"
-    },
-    "GhostsSeeModifierText": {
-        "0": "Ghosts Can Additionally See Modifier",
-        "13": "灵魂可见附加职业"
-    },
-    "ShowRoleSummaryText": {
-        "0": "Show Role Summary",
-        "13": "显示职业总结"
-    },
-    "ShowLighterDarkerText": {
-        "0": "Show Lighter / Darker",
-        "13": "显示颜色深浅"
-    },
     "ToggleCursorText": {
         "0": "Better Cursor",
         "13": "启用模组光标"
@@ -48,9 +24,65 @@
         "0": "Show FPS",
         "13": "在游戏内显示帧率"
     },
+    "ShowKeyReminder": {
+        "0": "Show Key Reminder",
+        "13": "游戏内显示键位提醒"
+    },
     "EnableDebugLogModeText": {
         "0": "Enable Debug Log Mode",
         "13": "收集Debug日志"
+    },
+    "keyBinding": {
+        "0": "Key Bindings",
+        "13": "键位更改"
+    },
+    "keyBinding.restoreDefaults": {
+        "0": "Restore Defaults",
+        "13": "恢复默认"
+    },
+    "keyBinding.recording": {
+        "0": "Recording…",
+        "13": "正在录制…"
+    },
+    "keyBinding.ability": {
+        "0": "Ability",
+        "13": "使用技能"
+    },
+    "keyBinding.secondaryAbility": {
+        "0": "Secondary Ability",
+        "13": "使用第二技能"
+    },
+    "keyBinding.changeAbility": {
+        "0": "Change Ability",
+        "13": "更换技能"
+    },
+    "keyBinding.modifierAbility": {
+        "0": "Modifier Ability",
+        "13": "附加能力技能"
+    },
+    "keyBinding.kill": {
+        "0": "Kill (Additional)",
+        "13": "击杀 (模组)"
+    },
+    "keyBinding.showOptionPage": {
+        "0": "Show Option Page",
+        "13": "显示预设页面"
+    },
+    "keyBinding.help": {
+        "0": "Help",
+        "13": "帮助"
+    },
+    "keyBinding.metaControl": {
+        "0": "Meta Control",
+        "13": "控制键"
+    },
+    "keyBinding.endGame": {
+        "0": "End Game (Meta Control)",
+        "13": "控制键: 快速终止游戏"
+    },
+    "keyBinding.meeting": {
+        "0": "Start/End Meeting (Meta Control)",
+        "13": "控制键: 开始/停止会议"
     },
     "pressTabForMore": {
         "0": "\n Press TAB or Page Number for more... ({0}/{1})",
