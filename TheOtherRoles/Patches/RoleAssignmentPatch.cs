@@ -99,36 +99,30 @@ internal class RoleManagerSelectRolesPatch
         var impostors = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
         impostors.RemoveAll(x => !x.Data.Role.IsImpostor);
 
-        var crewmateMin = CustomOptionHolder.crewmateRolesCountMin.getSelection();
-        var crewmateMax = CustomOptionHolder.crewmateRolesCountMax.getSelection();
         var neutralMin = CustomOptionHolder.neutralRolesCountMin.getSelection();
         var neutralMax = CustomOptionHolder.neutralRolesCountMax.getSelection();
-        var impostorMin = CustomOptionHolder.impostorRolesCountMin.getSelection();
-        var impostorMax = CustomOptionHolder.impostorRolesCountMax.getSelection();
+        var impostorNum = ModOption.NumImpostors;
 
         // Make sure min is less or equal to max
-        if (crewmateMin > crewmateMax) crewmateMin = crewmateMax;
         if (neutralMin > neutralMax) neutralMin = neutralMax;
-        if (impostorMin > impostorMax) impostorMin = impostorMax;
 
         // Automatically force everyone to get a role by setting crew Min / Max according to Neutral Settings
-        if (CustomOptionHolder.crewmateRolesFill.getBool())
+        /*if (CustomOptionHolder.crewmateRolesFill.getBool())
         {
             crewmateMax = crewmates.Count - neutralMin;
             crewmateMin = crewmates.Count - neutralMax;
             crewmateMax += 1;
             crewmateMin += 1;
-        }
+        }*/
 
         // Get the maximum allowed count of each role type based on the minimum and maximum option
-        var crewCountSettings = rnd.Next(crewmateMin, crewmateMax + 1);
         var neutralCountSettings = rnd.Next(neutralMin, neutralMax + 1);
-        var impCountSettings = rnd.Next(impostorMin, impostorMax + 1);
+        var crewCountSettings = PlayerControl.AllPlayerControls.Count - neutralCountSettings - impostorNum;
 
         // Potentially lower the actual maximum to the assignable players
         var maxCrewmateRoles = Mathf.Min(crewmates.Count, crewCountSettings);
         var maxNeutralRoles = Mathf.Min(crewmates.Count, neutralCountSettings);
-        var maxImpostorRoles = Mathf.Min(impostors.Count, impCountSettings);
+        var maxImpostorRoles = Mathf.Min(impostors.Count, impostorNum);
 
         // Fill in the lists with the roles that should be assigned to players. Note that the special roles (like Mafia or Lovers) are NOT included in these lists
         var impSettings = new Dictionary<byte, int>();
@@ -222,14 +216,14 @@ internal class RoleManagerSelectRolesPatch
         if (data.impostors.Count < 2 && data.maxImpostorRoles < 2 &&
             rnd.Next(1, 101) <= CustomOptionHolder.cultistSpawnRate.getSelection() * 10)
         {
-            //       var index = rnd.Next(0, data.impostors.Count);
-            //     PlayerControl playerControl = data.impostors[index];
+            //var index = rnd.Next(0, data.impostors.Count);
+            //PlayerControl playerControl = data.impostors[index];
 
-            //    Helpers.turnToCrewmate(playerControl);
+            //Helpers.turnToCrewmate(playerControl);
 
-            //    data.impostors.RemoveAt(index);
-            //    data.crewmates.Add(playerControl);
-            //      setRoleToRandomPlayer((byte)RoleId.Cultist, data.impostors);
+            //data.impostors.RemoveAt(index);
+            //data.crewmates.Add(playerControl);
+            //setRoleToRandomPlayer((byte)RoleId.Cultist, data.impostors);
             //data.impostors.Count = 1;
             data.impostors.Capacity = 1;
             data.maxImpostorRoles = 1;
@@ -331,12 +325,11 @@ internal class RoleManagerSelectRolesPatch
         var imp = data.impostors.Count < data.maxImpostorRoles
             ? data.impostors.Count
             : data.maxImpostorRoles; // Max number of imp loops
-        var crewSteps = crew / data.crewSettings.Keys.Count(); // Avarage crewvalues deducted after each loop 
-        var impSteps = imp / data.impSettings.Keys.Count(); // Avarage impvalues deducted after each loop
+        var crewSteps = crew / data.crewSettings.Keys.Count; // Avarage crewvalues deducted after each loop 
+        var impSteps = imp / data.impSettings.Keys.Count; // Avarage impvalues deducted after each loop
 
         // set to false if needed, otherwise we can skip the loop
         var isSheriff = !sheriffFlag;
-        //bool isGuesser = !guesserFlag;
 
         // --- Simulate Crew & Imp ticket system ---
         while (crew > 0 && !isSheriff /* || (!isEvilGuesser && !isGuesser)*/)
@@ -347,13 +340,6 @@ internal class RoleManagerSelectRolesPatch
             crew--;
             crewValues -= crewSteps;
         }
-        /*
-        while (imp > 0 && (isEvilGuesser && !isGuesser)) {
-            if (rnd.Next(impValues) < CustomOptionHolder.guesserSpawnRate.getSelection()) isGuesser = true;
-            imp--;
-            impValues -= impSteps;
-        }
-        */
 
         // --- Assign Main Roles if they won the lottery ---
         if (isSheriff && Sheriff.sheriff == null && data.crewmates.Count > 0 && data.maxCrewmateRoles > 0 &&
@@ -364,25 +350,6 @@ internal class RoleManagerSelectRolesPatch
             data.crewmates.ToList().RemoveAll(x => x.PlayerId == sheriff);
             data.maxCrewmateRoles--;
         }
-        /*
-        if (!isGuesserGamemode) 
-        {
-            // Set Nice Guesser cause he won the lottery
-            if (!isEvilGuesser && isGuesser && Guesser.niceGuesser == null && data.crewmates.Count > 0 && data.maxCrewmateRoles > 0 && guesserFlag) 
-            {
-                byte niceGuesser = setRoleToRandomPlayer((byte)RoleId.NiceGuesser, data.crewmates);
-                data.crewmates.ToList().RemoveAll(x => x.PlayerId == niceGuesser);
-                data.maxCrewmateRoles--;
-            }
-            // Set Evil Guesser cause he won the lottery
-            else if (isEvilGuesser && isGuesser && Guesser.evilGuesser == null && data.impostors.Count > 0 && data.maxImpostorRoles > 0 && guesserFlag) 
-            {
-                byte evilGuesser = setRoleToRandomPlayer((byte)RoleId.EvilGuesser, data.impostors);
-                data.impostors.ToList().RemoveAll(x => x.PlayerId == evilGuesser);
-                data.maxImpostorRoles--;
-            }
-        }
-        */
 
         // --- Assign Dependent Roles if main role exists ---
         if (Sheriff.sheriff != null)

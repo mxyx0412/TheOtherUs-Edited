@@ -15,13 +15,8 @@ public class CustomOptionHolder
         ["预设 1", "预设 2", "预设 3", "Skeld预设", "Mira预设", "Polus预设", "Airship预设", "Fungle预设", "Submerged预设"];
 
     public static CustomOption presetSelection;
-    public static CustomOption crewmateRolesCountMin;
-    public static CustomOption crewmateRolesCountMax;
-    public static CustomOption crewmateRolesFill;
     public static CustomOption neutralRolesCountMin;
     public static CustomOption neutralRolesCountMax;
-    public static CustomOption impostorRolesCountMin;
-    public static CustomOption impostorRolesCountMax;
     public static CustomOption modifiersCountMin;
     public static CustomOption modifiersCountMax;
 
@@ -733,20 +728,14 @@ public class CustomOptionHolder
         vanillaSettings = TheOtherRolesPlugin.Instance.Config.Bind("Preset0", "VanillaOptions", "");
 
         // Role Options
-        presetSelection = Create(0, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "presetSelection"), presets, null, true);
+        presetSelection = Create(0, Types.General, cs(new Color32(204, 204, 0, 255), "presetSelection"), presets, null, true);
 
-        anyPlayerCanStopStart = Create(3, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "anyPlayerCanStopStart"), false, null, false);
+        anyPlayerCanStopStart = Create(3, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0), "anyPlayerCanStopStart"), false, null, false);
 
-        // Using new id's for the options to not break compatibilty with older versions
-        crewmateRolesCountMin = Create(5, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "crewmateRolesCountMin"), 15f, 0f, 30f, 1f, null, true);
-        crewmateRolesCountMax = Create(6, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "crewmateRolesCountMax"), 15f, 0f, 30f, 1f);
-        crewmateRolesFill = Create(7, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "crewmateRolesFill"), false);
-        neutralRolesCountMin = Create(8, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "neutralRolesCountMin"), 2f, 0f, 15f, 1f);
-        neutralRolesCountMax = Create(9, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "neutralRolesCountMax"), 2f, 0f, 15f, 1f);
-        impostorRolesCountMin = Create(10, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "impostorRolesCountMin"), 15f, 0f, 15f, 1f);
-        impostorRolesCountMax = Create(11, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "impostorRolesCountMax"), 15f, 0f, 15f, 1f);
-        modifiersCountMin = Create(12, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "modifiersCountMin"), 15f, 0f, 30f, 1f);
-        modifiersCountMax = Create(13, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "modifiersCountMax"), 15f, 0f, 30f, 1f);
+        neutralRolesCountMin = Create(8, Types.General, cs(new Color32(204, 204, 0, 255), "neutralRolesCountMin"), 2f, 0f, 15f, 1f, null, true);
+        neutralRolesCountMax = Create(9, Types.General, cs(new Color32(204, 204, 0, 255), "neutralRolesCountMax"), 2f, 0f, 15f, 1f);
+        modifiersCountMin = Create(12, Types.General, cs(new Color32(204, 204, 0, 255), "modifiersCountMin"), 15f, 0f, 30f, 1f);
+        modifiersCountMax = Create(13, Types.General, cs(new Color32(204, 204, 0, 255), "modifiersCountMax"), 15f, 0f, 30f, 1f);
 
         //-------------------------- Other options 1 - 599 -------------------------- //
 
@@ -759,8 +748,8 @@ public class CustomOptionHolder
         hideOutOfSightNametags = Create(26, Types.General, "hideOutOfSightNametags", true);
         hideVentAnimOnShadows = Create(27, Types.General, "hideVentAnimOnShadows", false);
         showButtonTarget = Create(28, Types.General, "showButtonTarget", true);
-        impostorSeeRoles = Create(30, Types.General, "impostorSeeRoles", false);
-        blockGameEnd = Create(29, Types.General, cs(new Color(200f / 200f, 200f / 200f, 0, 1f), "blockGameEnd"), true);
+        impostorSeeRoles = Create(30, Types.General, cs(Palette.ImpostorRed, "impostorSeeRoles"), false);
+        blockGameEnd = Create(29, Types.General, cs(Color.yellow, "blockGameEnd"), true);
         deadImpsBlockSabotage = Create(32, Types.General, cs(Palette.ImpostorRed, "deadImpsBlockSabotage"), false);
         randomLigherPlayer = Create(34, Types.General, "randomLigherPlayer", true);
         allowModGuess = Create(31, Types.General, "allowModGuess", false);
@@ -792,22 +781,22 @@ public class CustomOptionHolder
         ShowVentsOnMap = Create(211, Types.General, "ShowVentsOnMapText", false, enableMapOptions, true);
         ShowVentsOnMeetingMap = Create(212, Types.General, "ShowVentsOnMeetingMap", true, ShowVentsOnMap);
 
-        enableMiraModify = Create(70, Types.General, cs(new Color(200f / 200f, 200f / 200f, 0, 1f), "Mira"), false, enableMapOptions, true);
+        enableMiraModify = Create(70, Types.General, cs(Color.yellow, "Mira"), false, enableMapOptions, true);
         miraVitals = Create(71, Types.General, "miraVitals", false, enableMiraModify);
 
-        enableBetterPolus = Create(80, Types.General, cs(new Color(200f / 200f, 200f / 200f, 0, 1f), "Polus"), false, enableMapOptions);
+        enableBetterPolus = Create(80, Types.General, cs(Color.yellow, "Polus"), false, enableMapOptions);
         movePolusVents = Create(81, Types.General, "movePolusVents", false, enableBetterPolus);
         addPolusVents = Create(82, Types.General, "addPolusVents", false, enableBetterPolus);
         movePolusVitals = Create(83, Types.General, "movePolusVitals", false, enableBetterPolus);
         swapNavWifi = Create(84, Types.General, "swapNavWifi", false, enableBetterPolus);
         moveColdTemp = Create(85, Types.General, "moveColdTemp", false, enableBetterPolus);
 
-        enableAirShipModify = Create(90, Types.General, cs(new Color(200f / 200f, 200f / 200f, 0, 1f), "AirShip"), false, enableMapOptions);
+        enableAirShipModify = Create(90, Types.General, cs(Color.yellow, "AirShip"), false, enableMapOptions);
         airshipOptimize = Create(91, Types.General, "airshipOptimize", false, enableAirShipModify);
         addAirShipVents = Create(92, Types.General, "addAirShipVents", false, enableAirShipModify);
         airshipLadder = Create(93, Types.General, "airshipLadder", false, enableAirShipModify);
 
-        enableFungleModify = Create(100, Types.General, cs(new Color(200f / 200f, 200f / 200f, 0, 1f), "Fungle"), false, enableMapOptions);
+        enableFungleModify = Create(100, Types.General, cs(Color.yellow, "Fungle"), false, enableMapOptions);
         fungleElectrical = Create(101, Types.General, "fungleElectrical", false, enableFungleModify);
 
         enableCamoComms = Create(120, Types.General, cs(Palette.ImpostorRed, "enableCamoComms"), false, enableMapOptions, true);
@@ -1166,12 +1155,12 @@ public class CustomOptionHolder
 
         timeMasterSpawnRate = Create(30210, Types.Crewmate, cs(TimeMaster.color, "TimeMaster"), rates, null, true);
         timeMasterCooldown = Create(30211, Types.Crewmate, "timeMasterCooldown", 20f, 10f, 60f, 2.5f, timeMasterSpawnRate);
+        timeMasterShieldDuration = Create(30213, Types.Crewmate, "timeMasterShieldDuration", 15f, 2.5f, 20f, 0.5f, timeMasterSpawnRate);
         timeMasterRewindTime = Create(30212, Types.Crewmate, "timeMasterRewindTime", 8f, 1f, 10f, 1f, timeMasterSpawnRate);
-        timeMasterShieldDuration = Create(30213, Types.Crewmate, "timeMasterShieldDuration", 12.5f, 1f, 20f, 2.5f, timeMasterSpawnRate);
 
         veteranSpawnRate = Create(30220, Types.Crewmate, cs(Veteran.color, "Veteran"), rates, null, true);
-        veteranCooldown = Create(30221, Types.Crewmate, "veteranCooldown", 25f, 10f, 120f, 2.5f, veteranSpawnRate);
-        veteranAlertDuration = Create(30222, Types.Crewmate, "veteranAlertDuration", 15f, 1f, 20f, 1f, veteranSpawnRate);
+        veteranCooldown = Create(30221, Types.Crewmate, "veteranCooldown", 25f, 10f, 60f, 2.5f, veteranSpawnRate);
+        veteranAlertDuration = Create(30222, Types.Crewmate, "veteranAlertDuration", 12.5f, 2.5f, 20f, 0.5f, veteranSpawnRate);
 
         swapperSpawnRate = Create(30230, Types.Crewmate, cs(Swapper.color, "Swapper"), rates, null, true);
         swapperCanCallEmergency = Create(30231, Types.Crewmate, "swapperCanCallEmergency", true, swapperSpawnRate);

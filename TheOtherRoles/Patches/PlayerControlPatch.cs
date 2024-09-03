@@ -821,24 +821,25 @@ public static class PlayerControlFixedUpdatePatch
 
                 var playerInfoText = "";
                 var meetingInfoText = "";
-                if (p == local || (ModOption.impostorSeeRoles
-                    && Spy.spy == null
-                    && CachedPlayer.LocalPlayer.Data.Role.IsImpostor
-                    && !CachedPlayer.LocalPlayer.Data.IsDead
-                    && p == (p.Data.Role.IsImpostor && !p.Data.IsDead)))
+                if (p == local)
                 {
                     if (p.Data.IsDead) roleNames = roleText;
                     playerInfoText = $"{roleNames}";
-                    if (p == Swapper.swapper)
-                        playerInfoText = $"{roleNames}" + cs(Swapper.color, $" ({Swapper.charges})");
                     if (HudManager.Instance.TaskPanel != null)
                     {
-                        var tabText = HudManager.Instance.TaskPanel.tab.transform.FindChild("TabText_TMP")
-                            .GetComponent<TextMeshPro>();
-                        tabText.SetText($"Tasks {taskInfo}");
+                        var tabText = HudManager.Instance.TaskPanel.tab.transform.FindChild("TabText_TMP").GetComponent<TextMeshPro>();
+                        tabText.SetText($"任务 {taskInfo}");
                     }
-
                     meetingInfoText = $"{roleNames} {taskInfo}".Trim();
+                }
+                else if (ModOption.impostorSeeRoles
+                    && Spy.spy == null
+                    && CachedPlayer.LocalPlayer.Data.Role.IsImpostor
+                    && !CachedPlayer.LocalPlayer.Data.IsDead
+                    && p.Data.Role.IsImpostor && !p.Data.IsDead)
+                {
+                    playerInfoText = roleNames;
+                    meetingInfoText = playerInfoText;
                 }
                 else if (Lawyer.lawyerKnowsRole && local == Lawyer.lawyer && p == Lawyer.target)
                 {

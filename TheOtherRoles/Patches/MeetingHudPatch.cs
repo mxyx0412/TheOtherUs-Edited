@@ -602,8 +602,7 @@ internal class MeetingHudPatch
                 if (playerVoteArea.TargetPlayerId == Swapper.playerId2) swapped2 = playerVoteArea;
             }
 
-            var doSwap = swapped1 != null && swapped2 != null && Swapper.swapper != null &&
-                         !Swapper.swapper.Data.IsDead;
+            var doSwap = swapped1 != null && swapped2 != null && Swapper.swapper != null && !Swapper.swapper.Data.IsDead;
             if (doSwap)
             {
                 var localPosition = swapped1.transform.localPosition;
@@ -612,7 +611,6 @@ internal class MeetingHudPatch
                 __instance.StartCoroutine(Effects.Slide3D(swapped2.transform, swapped2.transform.localPosition,
                     localPosition, 1.5f));
             }
-
 
             __instance.TitleText.text = FastDestroyableSingleton<TranslationController>.Instance.GetString(StringNames.MeetingVotingResults, new Il2CppReferenceArray<Il2CppSystem.Object>(0));
 
@@ -707,9 +705,7 @@ internal class MeetingHudPatch
                         }
                     }
                 }
-
             }
-
             return false;
         }
     }

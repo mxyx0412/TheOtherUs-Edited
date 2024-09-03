@@ -228,11 +228,20 @@ public class MapData
         return poss;
     }
 
-    public static void RandomSpawnAllPlayers() => RandomSpawnPlayers(CachedPlayer.AllPlayers.Select(n => n.PlayerControl));
+    public static void RandomSpawnAllPlayers()
+    {
+        RandomSpawnPlayers(CachedPlayer.AllPlayers.Where(n => n.PlayerControl.IsAlive()).Select(n => n.PlayerControl));
+    }
 
-    public static void RandomSpawnAllPlayersToVent() => RandomSpawnToVent(CachedPlayer.AllPlayers.Select(n => n.PlayerControl));
+    public static void RandomSpawnAllPlayersToVent()
+    {
+        RandomSpawnToVent(CachedPlayer.AllPlayers.Where(n => n.PlayerControl.IsAlive()).Select(n => n.PlayerControl));
+    }
 
-    public static void RandomSpawnAllPlayersToMap() => RandomSpawnToMap(CachedPlayer.AllPlayers.Select(n => n.PlayerControl));
+    public static void RandomSpawnAllPlayersToMap()
+    {
+        RandomSpawnToMap(CachedPlayer.AllPlayers.Where(n => n.PlayerControl.IsAlive()).Select(n => n.PlayerControl));
+    }
 
     public static void RandomSpawnPlayers(IEnumerable<PlayerControl> players)
     {
@@ -244,12 +253,11 @@ public class MapData
     {
         var players = spawnPlayer.Where(player => !AntiTeleport.antiTeleport.Contains(player));
 
-        var poss = FindVentSpawnPositions();
         foreach (var p in players)
         {
-            var defPos = p.transform.position;
-            var newPos = poss.Random() - (Vector3)p.Collider.offset;
-            p.NetTransform.RpcSnapTo(newPos);
+            var poss = FindVentSpawnPositions().Random() - (Vector3)p.Collider.offset;
+            p.NetTransform.RpcSnapTo(poss);
+            Message($"Spawn PLayer {p.Data.PlayerName} To {poss}");
         }
     }
 
@@ -257,12 +265,11 @@ public class MapData
     {
         var players = spawnPlayer.Where(player => !AntiTeleport.antiTeleport.Contains(player));
 
-        var poss = MapSpawnPosition();
         foreach (var p in players)
         {
-            var defPos = p.transform.position;
-            var newPos = poss.Random();
-            p.NetTransform.RpcSnapTo(newPos);
+            var poss = MapSpawnPosition().Random();
+            p.NetTransform.RpcSnapTo(poss);
+            Message($"Spawn PLayer {p.Data.PlayerName} To {poss}");
         }
     }
 

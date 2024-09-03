@@ -9,7 +9,7 @@ public static class Flash
 
     public static void clearAndReload()
     {
-        flash = new List<PlayerControl>();
+        flash = new();
         speed = CustomOptionHolder.modifierFlashSpeed.getFloat();
     }
 }

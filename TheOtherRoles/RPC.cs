@@ -8,6 +8,7 @@ using Assets.CoreScripts;
 using Hazel;
 using InnerNet;
 using PowerTools;
+using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
 using TheOtherRoles.Buttons;
 using TheOtherRoles.CustomGameModes;
@@ -296,6 +297,8 @@ public static class RPCProcedure
     public static void resetVariables()
     {
         reloadPluginOptions();
+        clearAndReloadMapOptions();
+        clearAndReloadRoles();
         Garlic.clearGarlics();
         JackInTheBox.clearJackInTheBoxes();
         NinjaTrace.clearTraces();
@@ -305,8 +308,6 @@ public static class RPCProcedure
         Trap.clearTraps();
         Silhouette.clearSilhouettes();
         ElectricPatch.Reset();
-        clearAndReloadMapOptions();
-        clearAndReloadRoles();
         clearGameHistory();
         setCustomButtonCooldowns();
         toggleZoom(true);
@@ -2409,22 +2410,18 @@ public static class RPCProcedure
 
     public static void disperse()
     {
-        // AntiTeleport set position
-        //AntiTeleport.setPosition();
+        Coroutines.Start(showFlashCoroutine(Palette.ImpostorRed, 1f, 0.36f));
 
-        showFlash(Palette.ImpostorRed);
-
-        if (AntiTeleport.antiTeleport.Any(x => x == CachedPlayer.LocalPlayer.PlayerControl) || CachedPlayer.LocalPlayer.Data.IsDead) return;
+        //if (CachedPlayer.LocalPlayer.Data.IsDead) return;
 
         MapData.AllPlayerExitVent();
 
-        if (MapBehaviour.Instance)
-            MapBehaviour.Instance.Close();
-        if (Minigame.Instance)
-            Minigame.Instance.ForceClose();
+        if (MapBehaviour.Instance) MapBehaviour.Instance.Close();
+        if (Minigame.Instance) Minigame.Instance.ForceClose();
 
-        if (Disperser.disperser.PlayerId == CachedPlayer.LocalPlayer.PlayerId)
+        if (AmongUsClient.Instance.AmHost)
         {
+            Message("分散");
             if (Disperser.DispersesToVent) MapData.RandomSpawnAllPlayersToVent();
             else MapData.RandomSpawnAllPlayersToMap();
         }
@@ -3551,7 +3548,7 @@ internal class RPCHandlerPatch
         if (!RpcNames!.ContainsKey(packetId))
             return true;
 
-        if (DebugMode && callId != 75) Info($"接收 PlayerControl CustomRpc RpcId{callId} Rpc Name{RpcNames?[(CustomRPC)callId] ?? nameof(packetId)} Message Size {reader.Length}");
+        if (DebugMode && callId != 75) Info($"接收 PlayerControl CustomRpc RpcId{callId} Rpc {RpcNames?[(CustomRPC)callId] ?? nameof(packetId)} Message Size {reader.Length}");
         switch (packetId)
         {
             // Main Controls

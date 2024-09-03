@@ -29,7 +29,7 @@ public static class HauntMenuMinigamePatch
         var roleString = roleInfo.Count > 0 ? roleText.ToString() : "";
         if (__instance.HauntTarget.Data.IsDead)
         {
-            __instance.FilterText.text = roleString + " Ghost";
+            __instance.FilterText.text = roleString + "\nGhost";
             return;
         }
 

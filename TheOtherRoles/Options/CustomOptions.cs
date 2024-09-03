@@ -538,8 +538,7 @@ internal class GameOptionsMenuStartPatch
 
         setOptions(
             new List<GameOptionsMenu> { torMenu, impostorMenu, neutralMenu, crewmateMenu, modifierMenu },
-            new List<List<OptionBehaviour>>
-                { torOptions, impostorOptions, neutralOptions, crewmateOptions, modifierOptions },
+            new List<List<OptionBehaviour>> { torOptions, impostorOptions, neutralOptions, crewmateOptions, modifierOptions },
             new List<GameObject> { torSettings, impostorSettings, neutralSettings, crewmateSettings, modifierSettings }
         );
 
@@ -1162,15 +1161,14 @@ internal class GameOptionsDataPatch
         var options = CustomOption.options.Where(o => o.type == type);
         if (ModOption.gameMode == CustomGamemodes.Guesser)
         {
-            if (type == CustomOptionType.General)
-                options = CustomOption.options.Where(o => o.type == type || o.type == CustomOptionType.Guesser);
+            if (type == CustomOptionType.General) options = CustomOption.options.Where(o => o.type == type || o.type == CustomOptionType.Guesser);
             var remove = new List<int> { 10000, 10001, 10002, 10003, 10004, 10005, 10006, 10007, 10008, 30100, 30101, 30102, 30103, 30104 };
             options = options.Where(x => !remove.Contains(x.id));
         }
         else if (ModOption.gameMode == CustomGamemodes.Classic)
         {
             options = options.Where(x =>
-                !(x.type == CustomOptionType.Guesser || x == CustomOptionHolder.crewmateRolesFill));
+                !(x.type == CustomOptionType.Guesser));
         }
         else if (ModOption.gameMode == CustomGamemodes.HideNSeek)
         {
@@ -1219,46 +1217,11 @@ internal class GameOptionsDataPatch
             }
             else
             {
-                if (option == CustomOptionHolder.crewmateRolesCountMin)
-                {
-                    var optionName = CustomOptionHolder.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "CrewmateRolesText".Translate());
-                    var min = CustomOptionHolder.crewmateRolesCountMin.getSelection();
-                    var max = CustomOptionHolder.crewmateRolesCountMax.getSelection();
-                    var optionValue = "";
-                    if (CustomOptionHolder.crewmateRolesFill.getBool())
-                    {
-                        var crewCount = PlayerControl.AllPlayerControls.Count -
-                                        GameOptionsManager.Instance.currentGameOptions.NumImpostors;
-                        var minNeutral = CustomOptionHolder.neutralRolesCountMin.getSelection();
-                        var maxNeutral = CustomOptionHolder.neutralRolesCountMax.getSelection();
-                        if (minNeutral > maxNeutral) minNeutral = maxNeutral;
-                        min = crewCount - maxNeutral;
-                        max = crewCount - minNeutral;
-                        if (min < 0) min = 0;
-                        if (max < 0) max = 0;
-                        optionValue = "FillCrewmate".Translate();
-                    }
-
-                    if (min > max) min = max;
-                    optionValue += min == max ? $"{max}" : $"{min} - {max}";
-                    sb.AppendLine($"{optionName}: {optionValue}");
-                }
-                else if (option == CustomOptionHolder.neutralRolesCountMin)
+                if (option == CustomOptionHolder.neutralRolesCountMin)
                 {
                     var optionName = CustomOptionHolder.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "NeutralRolesText".Translate());
                     var min = CustomOptionHolder.neutralRolesCountMin.getSelection();
                     var max = CustomOptionHolder.neutralRolesCountMax.getSelection();
-                    if (min > max) min = max;
-                    var optionValue = min == max ? $"{max}" : $"{min} - {max}";
-                    sb.AppendLine($"{optionName}: {optionValue}");
-                }
-                else if (option == CustomOptionHolder.impostorRolesCountMin)
-                {
-                    var optionName = CustomOptionHolder.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "ImpostorRolesText".Translate());
-                    var min = CustomOptionHolder.impostorRolesCountMin.getSelection();
-                    var max = CustomOptionHolder.impostorRolesCountMax.getSelection();
-                    if (max > GameOptionsManager.Instance.currentGameOptions.NumImpostors)
-                        max = GameOptionsManager.Instance.currentGameOptions.NumImpostors;
                     if (min > max) min = max;
                     var optionValue = min == max ? $"{max}" : $"{min} - {max}";
                     sb.AppendLine($"{optionName}: {optionValue}");
@@ -1272,9 +1235,7 @@ internal class GameOptionsDataPatch
                     var optionValue = min == max ? $"{max}" : $"{min} - {max}";
                     sb.AppendLine($"{optionName}: {optionValue}");
                 }
-                else if (option == CustomOptionHolder.crewmateRolesCountMax ||
-                         option == CustomOptionHolder.neutralRolesCountMax ||
-                         option == CustomOptionHolder.impostorRolesCountMax ||
+                else if (option == CustomOptionHolder.neutralRolesCountMax ||
                          option == CustomOptionHolder.modifiersCountMax)
                 {
                 }
