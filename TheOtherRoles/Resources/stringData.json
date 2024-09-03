@@ -2373,6 +2373,9 @@
     "DoomsayerKilledToWin": {
         "13": "还需要猜测 {0} 次胜利"
     },
+    "SwapperCharges": {
+        "13": "换票次数：{0}"
+    },
     "SerialKillerSuicideText": {
         "0": "{0} seconds to suicide",
         "13": "{0}秒后自杀"
@@ -2768,7 +2771,7 @@
     },
     "doomsayerText": {
         "0": "[BLANK]",
-        "13": "揭示"
+        "13": "洞察"
     },
     "hackerVitalText": {
         "0": "[BLANK]",
@@ -2800,7 +2803,7 @@
     },
     "CamButtonText": {
         "0": "[BLANK]",
-        "13": "监控"
+        "13": "查看监控"
     },
     "MayorButtonText": {
         "0": "[BLANK]",
