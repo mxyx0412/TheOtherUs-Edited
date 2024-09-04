@@ -43,7 +43,6 @@ public enum RoleId
     Warlock,
     Trickster,
     BountyHunter,
-    Cultist,
     Cleaner,
     Terrorist,
     Blackmailer,
@@ -52,7 +51,6 @@ public enum RoleId
     Yoyo,
     EvilTrapper,
     Gambler,
-    Follower,
 
     Survivor,
     Amnisiac,
@@ -163,8 +161,6 @@ public enum CustomRPC
     DropBody,
     MedicSetShielded,
     ShowBodyGuardFlash,
-    ShowCultistFlash,
-    ShowFollowerFlash,
     ShieldedMurderAttempt,
     TimeMasterShield,
     TimeMasterRewindTime,
@@ -206,7 +202,6 @@ public enum CustomRPC
     AmnisiacTakeRole,
     MimicMimicRole,
     UsePortal,
-    CultistCreateImposter,
     TurnToCrewmate,
     PlaceJackInTheBox,
     LightsOut,
@@ -475,9 +470,6 @@ public static class RPCProcedure
                     case RoleId.Swooper:
                         Swooper.swooper = player;
                         break;
-                    case RoleId.Follower:
-                        Follower.follower = player;
-                        break;
                     case RoleId.Eraser:
                         Eraser.eraser = player;
                         break;
@@ -543,12 +535,6 @@ public static class RPCProcedure
                         break;
                     case RoleId.Escapist:
                         Escapist.escapist = player;
-                        break;
-                    case RoleId.Cultist:
-                        Cultist.cultist = player;
-                        var impostors = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
-                        impostors.RemoveAll(x => !x.Data.Role.IsImpostor);
-                        Helpers.turnToCrewmate(impostors, player);
                         break;
                     case RoleId.Thief:
                         Thief.thief = player;
@@ -980,13 +966,6 @@ public static class RPCProcedure
                 Amnisiac.clearAndReload();
                 break;
 
-            case RoleId.Cultist:
-                Helpers.turnToImpostor(Amnisiac.amnisiac);
-                if (Amnisiac.resetRole) Cultist.clearAndReload();
-                Cultist.cultist = amnisiac;
-                Amnisiac.clearAndReload();
-                break;
-
             case RoleId.Detective:
                 if (Amnisiac.resetRole) Detective.clearAndReload();
                 Detective.detective = amnisiac;
@@ -1084,13 +1063,6 @@ public static class RPCProcedure
                 Helpers.turnToImpostor(Amnisiac.amnisiac);
                 if (Amnisiac.resetRole) Vampire.clearAndReload();
                 Vampire.vampire = amnisiac;
-                Amnisiac.clearAndReload();
-                break;
-
-            case RoleId.Follower:
-                Helpers.turnToImpostor(Amnisiac.amnisiac);
-                if (Amnisiac.resetRole) Follower.clearAndReload();
-                Follower.follower = amnisiac;
                 Amnisiac.clearAndReload();
                 break;
 
@@ -1535,21 +1507,6 @@ public static class RPCProcedure
                 Mimic.hasMimic = true;
                 break;
         }
-    }
-
-    public static void cultistCreateImposter(byte targetId)
-    {
-        var player = playerById(targetId);
-        if (player == null) return;
-
-        erasePlayerRoles(player.PlayerId);
-
-
-        Helpers.turnToImpostor(player);
-        Follower.follower = player;
-        Cultist.needsFollower = false;
-
-        if (Follower.getsAssassin) Assassin.assassin.Add(player);
     }
 
     public static void turnToImpostor(byte targetId)
@@ -2282,7 +2239,6 @@ public static class RPCProcedure
         if (player == Poucher.poucher && !Poucher.spawnModifier) Poucher.clearAndReload();
         if (player == Vampire.vampire) Vampire.clearAndReload();
         if (player == Eraser.eraser) Eraser.clearAndReload();
-        if (player == Cultist.cultist) Cultist.clearAndReload();
         if (player == Trickster.trickster) Trickster.clearAndReload();
         if (player == Cleaner.cleaner) Cleaner.clearAndReload();
         if (player == Undertaker.undertaker) Undertaker.clearAndReload();
@@ -2295,7 +2251,6 @@ public static class RPCProcedure
         if (player == Yoyo.yoyo) Yoyo.clearAndReload();
         if (player == EvilTrapper.evilTrapper) EvilTrapper.clearAndReload();
         if (player == Blackmailer.blackmailer) Blackmailer.clearAndReload();
-        if (player == Follower.follower) Follower.clearAndReload();
         if (player == Terrorist.terrorist) Terrorist.clearAndReload();
         if (player == Gambler.gambler) Gambler.clearAndReload();
 
@@ -3119,18 +3074,6 @@ public static class RPCProcedure
         if (CustomOptionHolder.bodyGuardFlash.getBool()) showFlash(BodyGuard.color);
     }
 
-    public static void showCultistFlash()
-    {
-        if (Follower.follower == CachedPlayer.LocalPlayer.PlayerControl)
-            showFlash(new Color(32f / 51f, 0.007843138f, 74f / 85f));
-    }
-
-    public static void showFollowerFlash()
-    {
-        if (Cultist.cultist == CachedPlayer.LocalPlayer.PlayerControl)
-            showFlash(new Color(32f / 51f, 0.007843138f, 74f / 85f));
-    }
-
     public static void bodyGuardGuardPlayer(byte targetId)
     {
         var target = playerById(targetId);
@@ -3243,8 +3186,6 @@ public static class RPCProcedure
         if (target == Cleaner.cleaner) Cleaner.cleaner = thief;
         if (target == Warlock.warlock) Warlock.warlock = thief;
         if (target == BountyHunter.bountyHunter) BountyHunter.bountyHunter = thief;
-        if (target == Cultist.cultist) Cultist.cultist = thief;
-        if (target == Follower.follower) Follower.follower = thief;
         if (target == Witch.witch)
         {
             Witch.witch = thief;
@@ -3873,14 +3814,6 @@ internal class RPCHandlerPatch
                 RPCProcedure.showBodyGuardFlash();
                 break;
 
-            case CustomRPC.ShowCultistFlash:
-                RPCProcedure.showCultistFlash();
-                break;
-
-            case CustomRPC.ShowFollowerFlash:
-                RPCProcedure.showFollowerFlash();
-                break;
-
             case CustomRPC.SetInvisible:
                 var invisiblePlayer = reader.ReadByte();
                 var invisibleFlag = reader.ReadByte();
@@ -3911,10 +3844,6 @@ internal class RPCHandlerPatch
                 var pos = reader.ReadBytesAndSize();
                 var zAxis = reader.ReadSingle();
                 RPCProcedure.Mine(newVentId, role, pos, zAxis);
-                break;
-
-            case CustomRPC.CultistCreateImposter:
-                RPCProcedure.cultistCreateImposter(reader.ReadByte());
                 break;
 
             case CustomRPC.TurnToImpostor:

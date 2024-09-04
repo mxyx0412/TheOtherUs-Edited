@@ -390,17 +390,6 @@ public static class PlayerControlFixedUpdatePatch
         Swooper.currentTarget = setTarget(untargetablePlayers: untargetablePlayers);
         setPlayerOutline(Swooper.currentTarget, Palette.ImpostorRed);
     }
-    private static void cultistSetFollower()
-    {
-        if (Cultist.cultist == null || Cultist.cultist != CachedPlayer.LocalPlayer.PlayerControl) return;
-        var untargetablePlayers = new List<PlayerControl>();
-        if (Swooper.swooper != null && Swooper.isInvisable) untargetablePlayers.Add(Swooper.swooper);
-        if (Mini.mini != null && !Mini.isGrownUp())
-            untargetablePlayers.Add(Mini.mini); // Exclude Jackal from targeting the Mini unless it has grown up
-        Cultist.currentTarget = setTarget(untargetablePlayers: untargetablePlayers);
-        //        Cultist.currentFollower = setTarget(untargetablePlayers: untargetablePlayers);
-        //        setPlayerOutline(Cultist.currentTarget, Palette.ImpostorRed);
-    }
 
     private static void eraserSetTarget()
     {
@@ -1721,68 +1710,6 @@ public static class PlayerControlFixedUpdatePatch
         }
     }
 
-    private static void cultistUpdate()
-    {
-        if (Cultist.localArrows == null) return;
-
-        foreach (var arrow in Cultist.localArrows) arrow.arrow.SetActive(false);
-
-        if (Cultist.cultist == null || Cultist.cultist.Data.IsDead) return;
-
-
-        if (CachedPlayer.LocalPlayer.PlayerControl == Cultist.cultist)
-        {
-            var arrowIndex = 0;
-            foreach (PlayerControl p in CachedPlayer.AllPlayers)
-            {
-                var arrowForImp = p == Follower.follower;
-                if (!p.Data.IsDead && arrowForImp)
-                {
-                    if (arrowIndex >= Cultist.localArrows.Count)
-                        Cultist.localArrows.Add(new Arrow(Palette.ImpostorRed));
-                    if (arrowIndex < Cultist.localArrows.Count && Cultist.localArrows[arrowIndex] != null)
-                    {
-                        Cultist.localArrows[arrowIndex].arrow.SetActive(true);
-                        Cultist.localArrows[arrowIndex].Update(p.transform.position, Palette.ImpostorRed);
-                    }
-
-                    arrowIndex++;
-                }
-            }
-        }
-    }
-
-    private static void followerUpdate()
-    {
-        if (Follower.localArrows == null) return;
-
-        foreach (var arrow in Follower.localArrows) arrow.arrow.SetActive(false);
-
-        if (Follower.follower == null || Follower.follower.Data.IsDead) return;
-
-
-        if (CachedPlayer.LocalPlayer.PlayerControl == Follower.follower)
-        {
-            var arrowIndex = 0;
-            foreach (PlayerControl p in CachedPlayer.AllPlayers)
-            {
-                var arrowForImp = p == Cultist.cultist;
-                if (!p.Data.IsDead && arrowForImp)
-                {
-                    if (arrowIndex >= Follower.localArrows.Count)
-                        Follower.localArrows.Add(new Arrow(Palette.ImpostorRed));
-                    if (arrowIndex < Follower.localArrows.Count && Follower.localArrows[arrowIndex] != null)
-                    {
-                        Follower.localArrows[arrowIndex].arrow.SetActive(true);
-                        Follower.localArrows[arrowIndex].Update(p.transform.position, Palette.ImpostorRed);
-                    }
-
-                    arrowIndex++;
-                }
-            }
-        }
-    }
-
     public static void akujoUpdate()
     {
         if (Akujo.akujo == null || Akujo.akujo.Data.IsDead || CachedPlayer.LocalPlayer.PlayerControl != Akujo.akujo) return;
@@ -2001,11 +1928,6 @@ public static class PlayerControlFixedUpdatePatch
             blackMailerSetTarget();
             // Witch
             witchSetTarget();
-            // Cultist
-            cultistUpdate();
-            followerUpdate();
-            //Cultist
-            cultistSetFollower();
             // Ninja
             ninjaSetTarget();
             NinjaTrace.UpdateAll();

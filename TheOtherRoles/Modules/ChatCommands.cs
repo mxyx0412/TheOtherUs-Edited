@@ -15,12 +15,6 @@ public static class ChatCommands
         return player != null && (player == Lovers.lover1 || player == Lovers.lover2);
     }
 
-    public static bool isTeamCultist(this PlayerControl player)
-    {
-        return player != null && (player == Cultist.cultist || player == Follower.follower) &&
-               Cultist.cultist != null && Follower.follower != null;
-    }
-
     [HarmonyPatch(typeof(ChatController), nameof(ChatController.SendChat))]
     private static class SendChatPatch
     {
@@ -187,15 +181,6 @@ public static class ChatCommands
                 }
             }
 
-            if (chat.StartsWith("/team") && CachedPlayer.LocalPlayer.PlayerControl.isLover() && CachedPlayer.LocalPlayer.PlayerControl.isTeamCultist())
-            {
-                if (Cultist.cultist == CachedPlayer.LocalPlayer.PlayerControl)
-                    Cultist.chatTarget = !Cultist.chatTarget;
-                if (Follower.follower == CachedPlayer.LocalPlayer.PlayerControl)
-                    Follower.chatTarget = !Follower.chatTarget;
-                handled = true;
-            }
-
             if (handled)
             {
                 __instance.freeChatField.Clear();
@@ -211,9 +196,9 @@ public static class ChatCommands
     {
         public static void Postfix(HudManager __instance)
         {
-            if (!__instance.Chat.isActiveAndEnabled && (AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay || ModOption.DebugMode ||
-                                                        (CachedPlayer.LocalPlayer.PlayerControl.isLover() && Lovers.enableChat) ||
-                                                        CachedPlayer.LocalPlayer.PlayerControl.isTeamCultist()))
+            if (!__instance.Chat.isActiveAndEnabled && (AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay
+                                                        || ModOption.DebugMode
+                                                        || (CachedPlayer.LocalPlayer.PlayerControl.isLover() && Lovers.enableChat)))
                 __instance.Chat.SetVisible(true);
 
             if (Multitasker.multitasker.FindAll(x => x.PlayerId == CachedPlayer.LocalPlayer.PlayerId).Count > 0 || ModOption.transparentTasks)
@@ -239,7 +224,7 @@ public static class ChatCommands
     {
         public static void Postfix(ChatBubble __instance, [HarmonyArgument(0)] string playerName)
         {
-            var sourcePlayer = PlayerControl.AllPlayerControls.ToArray().ToList()
+            var sourcePlayer = PlayerControl.AllPlayerControls.ToList()
                 .FirstOrDefault(x => x.Data != null && x.Data.PlayerName.Equals(playerName, StringComparison.Ordinal));
 
             if (CachedPlayer.LocalPlayer != null && CachedPlayer.LocalPlayer.Data.Role.IsImpostor && __instance != null
@@ -265,10 +250,8 @@ public static class ChatCommands
             if (__instance != FastDestroyableSingleton<HudManager>.Instance.Chat) return true;
             if (playerControl == null) return true;
             if (ModOption.DebugMode) return flag;
-            if (!playerControl.isTeamCultist() && !playerControl.isLover()) return flag;
-            if ((playerControl.isTeamCultist() && Follower.chatTarget) ||
-                (playerControl.isLover() && Lovers.enableChat) ||
-                (playerControl.isTeamCultist() && playerControl.isLover() && !Follower.chatTarget))
+            if (!playerControl.isLover()) return flag;
+            if ((playerControl.isLover() && Lovers.enableChat))
                 return sourcePlayer.getChatPartner() == playerControl || playerControl.getChatPartner() == playerControl == (bool)sourcePlayer || flag;
             return flag;
         }

@@ -79,7 +79,6 @@ internal class RoleManagerSelectRolesPatch
     private static void assignRoles()
     {
         var data = getRoleAssignmentData();
-        assignSpecialRoles(data); // Assign special roles like mafia and lovers first as they assign a role to multiple players and the chances are independent of the ticket system
         selectFactionForFactionIndependentRoles(data);
         assignEnsuredRoles(data); // Assign roles that should always be in the game next
         assignDependentRoles(data); // Assign roles that may have a dependent role
@@ -207,27 +206,6 @@ internal class RoleManagerSelectRolesPatch
             maxNeutralRoles = maxNeutralRoles,
             maxImpostorRoles = maxImpostorRoles
         };
-    }
-
-    private static void assignSpecialRoles(RoleAssignmentData data)
-    {
-        // //Assign Cultist
-        if (Cultist.isCultistGame) setRoleToRandomPlayer((byte)RoleId.Cultist, data.impostors);
-        if (data.impostors.Count < 2 && data.maxImpostorRoles < 2 &&
-            rnd.Next(1, 101) <= CustomOptionHolder.cultistSpawnRate.getSelection() * 10)
-        {
-            //var index = rnd.Next(0, data.impostors.Count);
-            //PlayerControl playerControl = data.impostors[index];
-
-            //Helpers.turnToCrewmate(playerControl);
-
-            //data.impostors.RemoveAt(index);
-            //data.crewmates.Add(playerControl);
-            //setRoleToRandomPlayer((byte)RoleId.Cultist, data.impostors);
-            //data.impostors.Count = 1;
-            data.impostors.Capacity = 1;
-            data.maxImpostorRoles = 1;
-        }
     }
 
     private static void selectFactionForFactionIndependentRoles(RoleAssignmentData data)
@@ -566,25 +544,12 @@ internal class RoleManagerSelectRolesPatch
             var isEvilLover = rnd.Next(1, 101) <= CustomOptionHolder.modifierLoverImpLoverRate.getSelection() * 10;
             byte firstLoverId;
 
-            if (!Cultist.isCultistGame)
-            {
-                if (isEvilLover) firstLoverId = setModifierToRandomPlayer((byte)RoleId.Lover, impPlayerL);
-                else firstLoverId = setModifierToRandomPlayer((byte)RoleId.Lover, crewPlayer);
-                var secondLoverId = setModifierToRandomPlayer((byte)RoleId.Lover, crewPlayer, 1);
+            if (isEvilLover) firstLoverId = setModifierToRandomPlayer((byte)RoleId.Lover, impPlayerL);
+            else firstLoverId = setModifierToRandomPlayer((byte)RoleId.Lover, crewPlayer);
+            var secondLoverId = setModifierToRandomPlayer((byte)RoleId.Lover, crewPlayer, 1);
 
-                players.RemoveAll(x => x.PlayerId == firstLoverId || x.PlayerId == secondLoverId);
-                modifierCount--;
-            }
-
-            if (Cultist.isCultistGame)
-            {
-                firstLoverId = setModifierToRandomPlayer((byte)RoleId.Lover, crewPlayer);
-                var secondLoverId = setModifierToRandomPlayer((byte)RoleId.Lover, crewPlayer, 1);
-
-
-                players.RemoveAll(x => x.PlayerId == firstLoverId || x.PlayerId == secondLoverId);
-                modifierCount--;
-            }
+            players.RemoveAll(x => x.PlayerId == firstLoverId || x.PlayerId == secondLoverId);
+            modifierCount--;
         }
 
         foreach (var m in allModifiers)
@@ -1052,9 +1017,8 @@ internal class RoleManagerSelectRolesPatch
                 if (!isGuesserGamemode)
                 {
                     selection = CustomOptionHolder.modifierAssassin.getSelection();
-                    if (!Cultist.isCultistGame)
-                        if (multiplyQuantity)
-                            selection *= CustomOptionHolder.modifierAssassinQuantity.getQuantity();
+                    if (multiplyQuantity)
+                        selection *= CustomOptionHolder.modifierAssassinQuantity.getQuantity();
                 }
                 break;
         }

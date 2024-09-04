@@ -377,8 +377,6 @@ internal class HudManagerUpdatePatch
         var enabled = true;
         if (Vampire.vampire != null && Vampire.vampire == CachedPlayer.LocalPlayer.PlayerControl)
             enabled = false;
-        else if (Cultist.cultist != null && Cultist.cultist == CachedPlayer.LocalPlayer.PlayerControl &&
-                 Cultist.needsFollower) enabled = false;
 
         if (enabled) __instance.KillButton.Show();
         else __instance.KillButton.Hide();

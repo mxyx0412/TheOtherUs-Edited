@@ -38,7 +38,6 @@ public static class RoleClass
         Seer.clearAndReload();
         Morphling.clearAndReload();
         Camouflager.clearAndReload();
-        Cultist.clearAndReload();
         Hacker.clearAndReload();
         Tracker.clearAndReload();
         Vampire.clearAndReload();
@@ -46,7 +45,6 @@ public static class RoleClass
         Jackal.clearAndReload();
         Sidekick.clearAndReload();
         Pavlovsdogs.clearAndReload();
-        Follower.clearAndReload();
         Eraser.clearAndReload();
         Spy.clearAndReload();
         Trickster.clearAndReload();

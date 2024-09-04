@@ -45,8 +45,6 @@ public class RoleInfo
     public static RoleInfo warlock = new("Warlock", Warlock.color, RoleId.Warlock, RoleTeam.Impostor);
     public static RoleInfo trickster = new("Trickster", Trickster.color, RoleId.Trickster, RoleTeam.Impostor);
     public static RoleInfo bountyHunter = new("BountyHunter", BountyHunter.color, RoleId.BountyHunter, RoleTeam.Impostor);
-    public static RoleInfo cultist = new("Cultist", Cultist.color, RoleId.Cultist, RoleTeam.Impostor);
-    public static RoleInfo follower = new("Follower", Follower.color, RoleId.Follower, RoleTeam.Impostor);
     public static RoleInfo terrorist = new("Terrorist", Terrorist.color, RoleId.Terrorist, RoleTeam.Impostor);
     public static RoleInfo blackmailer = new("Blackmailer", Blackmailer.color, RoleId.Blackmailer, RoleTeam.Impostor);
     public static RoleInfo witch = new("Witch", Witch.color, RoleId.Witch, RoleTeam.Impostor);
@@ -153,7 +151,6 @@ public class RoleInfo
         warlock,
         trickster,
         bountyHunter,
-        cultist,
         cleaner,
         terrorist,
         blackmailer,
@@ -313,7 +310,6 @@ public class RoleInfo
         if (p == Terrorist.terrorist) infos.Add(terrorist);
         if (p == Detective.detective) infos.Add(detective);
         if (p == TimeMaster.timeMaster) infos.Add(timeMaster);
-        if (p == Cultist.cultist) infos.Add(cultist);
         if (p == Amnisiac.amnisiac) infos.Add(amnisiac);
         if (p == Veteran.veteran) infos.Add(veteran);
         if (p == Medic.medic) infos.Add(medic);
@@ -323,10 +319,8 @@ public class RoleInfo
         if (p == Hacker.hacker) infos.Add(hacker);
         if (p == Tracker.tracker) infos.Add(tracker);
         if (p == Snitch.snitch) infos.Add(snitch);
-        if (p == Jackal.jackal || (Jackal.formerJackals != null
-            && Jackal.formerJackals.Any(x => x.PlayerId == p.PlayerId))) infos.Add(jackal);
+        if (p == Jackal.jackal || (Jackal.formerJackals != null && Jackal.formerJackals.Any(x => x.PlayerId == p.PlayerId))) infos.Add(jackal);
         if (p == Sidekick.sidekick) infos.Add(sidekick);
-        if (p == Follower.follower) infos.Add(follower);
         if (p == Spy.spy) infos.Add(spy);
         if (p == SecurityGuard.securityGuard) infos.Add(securityGuard);
         if (p == Arsonist.arsonist) infos.Add(arsonist);

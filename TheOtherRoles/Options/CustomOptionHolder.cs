@@ -25,8 +25,6 @@ public class CustomOptionHolder
     public static CustomOption deadImpsBlockSabotage;
     public static CustomOption randomLigherPlayer;
 
-    public static CustomOption cultistSpawnRate;
-
     public static CustomOption minerSpawnRate;
     public static CustomOption minerCooldown;
 
@@ -452,7 +450,6 @@ public class CustomOptionHolder
     public static CustomOption modifierAssassinNumberOfShots;
     public static CustomOption modifierAssassinMultipleShotsPerMeeting;
     public static CustomOption modifierAssassinKillsThroughShield;
-    public static CustomOption modifierAssassinCultist;
 
     public static CustomOption modifierBait;
     public static CustomOption modifierBaitReportDelayMin;
@@ -829,7 +826,6 @@ public class CustomOptionHolder
         guesserEvilCanKillCrewmate = Create(10005, Types.Impostor, "guesserEvilCanKillCrewmate", true, modifierAssassin);
         guesserCantGuessSnitchIfTaksDone = Create(10006, Types.Impostor, "guesserCantGuessSnitchIfTaksDone", true, modifierAssassin);
         modifierAssassinKillsThroughShield = Create(10007, Types.Impostor, "modifierAssassinKillsThroughShield", false, modifierAssassin);
-        modifierAssassinCultist = Create(10008, Types.Impostor, "modifierAssassinCultist", false, modifierAssassin);
 
         morphlingSpawnRate = Create(10110, Types.Impostor, cs(Morphling.color, "Morphling"), rates, null, true);
         morphlingCooldown = Create(10111, Types.Impostor, "morphlingCooldown", 15f, 10f, 60f, 2.5f, morphlingSpawnRate);
@@ -875,8 +871,6 @@ public class CustomOptionHolder
         escapistEscapeTime = Create(10181, Types.Impostor, "escapistEscapeTime", 15f, 0f, 60f, 2.5f, escapistSpawnRate);
         escapistMaxCharges = Create(10185, Types.Impostor, "escapistMaxCharges", 3, 1, 10, 1, escapistSpawnRate);
         escapistResetPlaceAfterMeeting = Create(10183, Types.Impostor, "escapistResetPlaceAfterMeeting", false, escapistSpawnRate);
-
-        cultistSpawnRate = Create(10190, Types.Impostor, cs(Cultist.color, "Cultist"), rates, null, true);
 
         tricksterSpawnRate = Create(10200, Types.Impostor, cs(Trickster.color, "Trickster"), rates, null, true);
         tricksterPlaceBoxCooldown = Create(10201, Types.Impostor, "tricksterPlaceBoxCooldown", 20f, 2.5f, 30f, 2.5f, tricksterSpawnRate);

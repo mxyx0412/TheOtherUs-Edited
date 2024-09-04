@@ -143,35 +143,35 @@ Even more roles are coming soon.
 
 ## Roles
 
-|    Impostor    |    Neutral     |      Crewmate       |   Modifier    |
-| :------------: | :------------: | :-----------------: | :-----------: |
-|   Morphling    |    Survivor    |      Vigilante      |     Lover     |
-|     Bomber     |    Amnisiac    |        Mayor        |   Assassin    |
-|    Poucher     |     Jester     |     Prosecutor      |   Disperser   |
-|     Mimic      |    Vulture     |     Portalmaker     |  Specoality   |
-|  Camouflager   |     Lawyer     |      Engineer       | Last Impostor |
-|     Miner      |  Executioner   | PrivateInvestigator |     Torch     |
-|     Eraser     |    Pursuer     |       Sheriff       |  Sunglasses   |
-|    Vampire     |     Jackal     |       Deputy        |     Bait      |
-|    Cleaner     |    Sidekick    |      BodyGuard      |   Aftermath   |
-|   Undertaker   | Pavlov's owner |       Lighter       |    Bloody     |
-|    Escapist    | Pavlov's dogs  |       Jumper        | AntiTeleport  |
-|    Warlock     |    Swooper     |      Detective      |  Tiebreaker   |
-|   Trickster    |    Arsonist    |     Time Master     |     Flash     |
-| Bounty Hunter  |    Werewolf    |       Veteran       |  Multitasker  |
-|    Cultist     |     Thief      |        Medic        |     Giant     |
-|   Terrorist    |   Juggernaut   |       Swapper       |     Mini      |
-|  Blackmailer   |   Doomsayer    |        Seer         |      Vip      |
-|     Witch      |     Akujo      |       Hacker        |  Indomitable  |
-|     Ninja      |                |       Tracker       |    Slueth     |
-|     Yo-Yo      |                |       Snitch        |    Cursed     |
-|  Evil Trapper  |                |       Prophet       |    Invert     |
-| Butcher [Beta] |                |     Info Sleuth     |     Blind     |
-|    Gambler     |                |         Spy         |    Watcher    |
-|                |                |    SecurityGuard    |     Radar     |
-|                |                |       Medium        | Button Barry  |
-|                |                |       Trapper       |   Chameleon   |
-|                |                |                     |    Shifter    |
+|    Impostor    |    Neutral     |   Crewmate    |   Modifier    |
+| :------------: | :------------: | :-----------: | :-----------: |
+|   Morphling    |    Survivor    |   Vigilante   |     Lover     |
+|     Bomber     |    Amnisiac    |     Mayor     |   Assassin    |
+|    Poucher     |     Jester     |  Prosecutor   |   Disperser   |
+|     Mimic      |    Vulture     |    Sheriff    |  Specoality   |
+|  Camouflager   |     Lawyer     |    Deputy     | Last Impostor |
+|     Miner      |  Executioner   |   Engineer    |     Torch     |
+|     Eraser     |    Pursuer     |  Portalmaker  |  Sunglasses   |
+|    Vampire     |     Jackal     |   BodyGuard   |     Bait      |
+|    Cleaner     |    Sidekick    |     Medic     |   Aftermath   |
+|   Undertaker   | Pavlov's owner |   Detective   |    Bloody     |
+|    Escapist    | Pavlov's dogs  |    Veteran    | AntiTeleport  |
+|    Warlock     |    Swooper     |  Time Master  |  Tiebreaker   |
+|   Trickster    |    Arsonist    |    Swapper    |     Flash     |
+| Bounty Hunter  |    Werewolf    |    Hacker     |  Multitasker  |
+|   Terrorist    |     Thief      |     Seer      |     Giant     |
+|  Blackmailer   |   Juggernaut   |    Jumper     |     Mini      |
+|     Witch      |   Doomsayer    |    Tracker    |      Vip      |
+|     Ninja      |     Akujo      |    Snitch     |  Indomitable  |
+|     Yo-Yo      |                |      Spy      |    Slueth     |
+|  Evil Trapper  |                | SecurityGuard |    Cursed     |
+| Butcher [Beta] |                |    Medium     |    Invert     |
+|    Gambler     |                |    Trapper    |     Blind     |
+|                |                |    Prophet    |    Watcher    |
+|                |                |  Info Sleuth  |     Radar     |
+|                |                |               | Button Barry  |
+|                |                |               |   Chameleon   |
+|                |                |               |    Shifter    |
 
 ## Credits & Resources
 <p align="center">

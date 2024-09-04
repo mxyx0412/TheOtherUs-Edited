@@ -307,26 +307,7 @@ public class GameStartManagerPatch
                     RPCProcedure.dynamicMapOption(mapId);
                 }
 
-                if (Cultist.isCultistGame)
-                {
-                    GameOptionsManager.Instance.currentNormalGameOptions.NumImpostors = 2;
-                    Cultist.isCultistGame = false;
-                }
-
-                bool cultistCheck = CustomOptionHolder.cultistSpawnRate.getSelection() != 0
-                                    && (rnd.Next(1, 101) <= CustomOptionHolder.cultistSpawnRate.getSelection() * 10);
-                if (cultistCheck)
-                {
-                    // We should have Custist (Cultist is only supported on 2 Impostors)
-                    Cultist.isCultistGame = true;
-                    GameOptionsManager.Instance.currentNormalGameOptions.NumImpostors = 1;
-                }
-                else if (cultistCheck)
-                {
-                    Cultist.isCultistGame = false;
-                }
-
-                else if (CustomOptionHolder.dynamicMap.getBool() && continueStart)
+                if (CustomOptionHolder.dynamicMap.getBool() && continueStart)
                 {
                     // 0 = Skeld
                     // 1 = Mira HQ

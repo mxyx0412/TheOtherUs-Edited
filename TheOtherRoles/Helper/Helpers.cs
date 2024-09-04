@@ -1254,22 +1254,6 @@ public static class Helpers
             return MurderAttemptResult.BlankKill;
         }
 
-        if (Cultist.cultist != null && !target.Data.Role.IsImpostor && killer == Cultist.cultist)
-        {
-            var writer3 = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
-                (byte)CustomRPC.ShowCultistFlash, SendOption.Reliable);
-            AmongUsClient.Instance.FinishRpcImmediately(writer3);
-            RPCProcedure.showCultistFlash();
-        }
-
-        else if (Follower.follower != null && !target.Data.Role.IsImpostor && killer == Follower.follower)
-        {
-            var writer3 = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
-                (byte)CustomRPC.ShowFollowerFlash, SendOption.Reliable);
-            AmongUsClient.Instance.FinishRpcImmediately(writer3);
-            RPCProcedure.showFollowerFlash();
-        }
-
         // Thief if hit crew only kill if setting says so, but also kill the thief.
         else if (Thief.thief != null && killer == Thief.thief && !Thief.tiefCanKill(target, killer))
         {
@@ -1400,28 +1384,9 @@ public static class Helpers
         return !(player == null) && (player == Lovers.lover1 || player == Lovers.lover2);
     }
 
-    public static bool isTeamCultist(PlayerControl player)
-    {
-        return !(player == null) && (player == Cultist.cultist || player == Follower.follower);
-    }
-
     public static PlayerControl getChatPartner(this PlayerControl player)
     {
-        if (!player.isLover()) return player.getCultistPartner();
-        if (!player.isTeamCultist()) return player.getPartner();
-        if (player == Cultist.cultist)
-        {
-            if (Cultist.chatTarget) return Follower.follower;
-            if (!Cultist.chatTarget) return player.getPartner();
-        }
-
-        if (player == Follower.follower)
-        {
-            if (Follower.chatTarget2) return Cultist.cultist;
-            if (!Follower.chatTarget2) return player.getPartner();
-        }
-
-        return null;
+        return player.isLover() ? player.getPartner() : null;
     }
 
     public static void toggleZoom(bool reset = false)

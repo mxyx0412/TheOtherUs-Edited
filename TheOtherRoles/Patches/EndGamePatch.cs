@@ -127,8 +127,6 @@ public class OnGameEndPatch
                 Kills = killCount,
                 IsAlive = !playerControl.Data.IsDead
             });
-
-            if (Cultist.isCultistGame) GameOptionsManager.Instance.currentNormalGameOptions.NumImpostors = 2;
         }
 
         // Remove Jester, Arsonist, Vulture, Jackal, former Jackals and Sidekick from winners (if they win, they'll be readded)

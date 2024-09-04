@@ -28,7 +28,6 @@ internal static class HudManagerStartPatch
     private static CustomButton amnisiacRememberButton;
     public static CustomButton veteranAlertButton;
     public static CustomButton medicShieldButton;
-    private static CustomButton cultistTurnButton;
     private static CustomButton shifterShiftButton;
     public static CustomButton bomberBombButton;
     public static CustomButton bomberGiveButton;
@@ -3677,38 +3676,6 @@ internal static class HudManagerStartPatch
             () => { },
             false,
             "Blackmail"
-        );
-
-        // Jackal Sidekick Button
-        cultistTurnButton = new CustomButton(
-            () =>
-            {
-                if (checkAndDoVetKill(Cultist.currentTarget)) return;
-                var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
-                    (byte)CustomRPC.CultistCreateImposter, SendOption.Reliable);
-                writer.Write(Cultist.currentTarget.PlayerId);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCProcedure.cultistCreateImposter(Cultist.currentTarget.PlayerId);
-                SoundEffectsManager.play("jackalSidekick");
-            },
-            () =>
-            {
-                return Cultist.needsFollower && Cultist.cultist != null &&
-                       Cultist.cultist == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
-            },
-            () =>
-            {
-                showTargetNameOnButton(Cultist.currentTarget, cultistTurnButton,
-                    getString("ConvertText")); // Show now text since the button already says sidekick
-                return Cultist.needsFollower && Cultist.currentTarget != null &&
-                       CachedPlayer.LocalPlayer.PlayerControl.CanMove;
-            },
-            () => { jackalSidekickButton.Timer = jackalSidekickButton.MaxTimer; },
-            Cultist.buttonSprite,
-            ButtonPositions.upperRowLeft, //brb
-            __instance,
-            abilityInput.keyCode
         );
 
         // Trapper button

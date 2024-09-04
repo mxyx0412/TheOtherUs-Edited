@@ -172,8 +172,7 @@ internal class ExileControllerBeginPatch
 
         ModOption.ventsToSeal = new List<Vent>();
         // 1 = reset per turn
-        if (ModOption.restrictDevices == 1)
-            ModOption.resetDeviceTimes();
+        if (ModOption.restrictDevices == 1) ModOption.resetDeviceTimes();
     }
 }
 
