@@ -336,7 +336,6 @@ internal class RoleManagerSelectRolesPatch
         {
             if (!isSheriff && rnd.Next(crewValues) < CustomOptionHolder.sheriffSpawnRate.getSelection())
                 isSheriff = true;
-            //if (!isEvilGuesser && !isGuesser && rnd.Next(crewValues) < CustomOptionHolder.guesserSpawnRate.getSelection()) isGuesser = true;
             crew--;
             crewValues -= crewSteps;
         }
@@ -371,38 +370,6 @@ internal class RoleManagerSelectRolesPatch
         }
 
         if (!data.crewSettings.ContainsKey((byte)RoleId.Sheriff)) data.crewSettings.Add((byte)RoleId.Sheriff, 0);
-        /*
-        if (!isGuesserGamemode)
-        {
-            // Other Guesser (evil)
-            if (!isEvilGuesser && Guesser.niceGuesser != null)
-            {
-                // Forceother guesser (evil)
-                if (CustomOptionHolder.guesserSpawnBothRate.getSelection() == 10 && data.impostors.Count > 0 && data.maxImpostorRoles > 0)
-                {
-                    byte bothGuesser = setRoleToRandomPlayer((byte)RoleId.EvilGuesser, data.impostors);
-                    data.impostors.ToList().RemoveAll(x => x.PlayerId == bothGuesser);
-                    data.maxImpostorRoles--;
-                }
-                // Dont force, add Guesser (evil) to the ticket system
-                else if (CustomOptionHolder.guesserSpawnBothRate.getSelection() < 10)
-                    data.impSettings.Add((byte)RoleId.EvilGuesser, CustomOptionHolder.guesserSpawnBothRate.getSelection());
-            }
-            // ELSE other Guesser (nice)
-            else if (isEvilGuesser && Guesser.evilGuesser != null) {
-                // Forceother guesser (nice)
-                if (CustomOptionHolder.guesserSpawnBothRate.getSelection() == 10 && data.crewmates.Count > 0 && data.maxCrewmateRoles > 0)
-                {
-                    byte bothGuesser = setRoleToRandomPlayer((byte)RoleId.NiceGuesser, data.crewmates);
-                    data.crewmates.ToList().RemoveAll(x => x.PlayerId == bothGuesser);
-                    data.maxCrewmateRoles--;
-                }
-                // Dont force, add Guesser (nice) to the ticket system
-                else if (CustomOptionHolder.guesserSpawnBothRate.getSelection() < 10)
-                    data.crewSettings.Add((byte)RoleId.NiceGuesser, CustomOptionHolder.guesserSpawnBothRate.getSelection());
-            }
-        }
-        */
     }
 
     private static void assignChanceRoles(RoleAssignmentData data)

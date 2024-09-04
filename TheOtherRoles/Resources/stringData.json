@@ -357,7 +357,7 @@
     },
     "impostorSeeRoles": {
         "0": "Impostors Can See The Roles Of Their Team",
-        "13": "内鬼可见队友职业"
+        "13": "伪装者可见队友职业"
     },
     "blockGameEnd": {
         "0": "Block Game End If Power Crew Is Alive",

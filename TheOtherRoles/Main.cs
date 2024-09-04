@@ -34,7 +34,6 @@ public class TheOtherRolesPlugin : BasePlugin
 
     public static ConfigEntry<bool> EnableSoundEffects { get; set; }
     public static ConfigEntry<bool> ToggleCursor { get; set; }
-    public static ConfigEntry<bool> enableDebugLogMode { get; set; }
     public static ConfigEntry<bool> ShowFPS { get; set; }
     public static ConfigEntry<bool> ShowKeyReminder { get; set; }
     public static ConfigEntry<string> Ip { get; set; }
@@ -82,7 +81,6 @@ public class TheOtherRolesPlugin : BasePlugin
         ToggleCursor = Config.Bind("Custom", "Better Cursor", true);
         EnableSoundEffects = Config.Bind("Custom", "Enable Sound Effects", true);
         ShowPopUpVersion = Config.Bind("Custom", "Show PopUp", "0");
-        enableDebugLogMode = Config.Bind("Custom", "Debug Log Mode", false);
         ShowFPS = Config.Bind("Custom", "Show FPS", true);
         ShowKeyReminder = Config.Bind("Custom", "ShowKeyReminder", true);
 

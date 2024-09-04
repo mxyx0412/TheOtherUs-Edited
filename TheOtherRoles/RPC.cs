@@ -157,7 +157,6 @@ public enum CustomRPC
     EngineerUsedRepair,
     CleanBody,
     DissectionBody,
-    RandomBody,
     Mine,
     ShowIndomitableFlash,
     DragBody,
@@ -829,11 +828,6 @@ public static class RPCProcedure
             var randomPosition = MapData.MapSpawnPosition().Random();
             array[i].transform.position = randomPosition;
         }
-    }
-
-    public static void randomBody(byte playerId)
-    {
-
     }
 
     public static void dragBody(byte playerId)
@@ -3657,10 +3651,6 @@ internal class RPCHandlerPatch
 
             case CustomRPC.DissectionBody:
                 RPCProcedure.dissectionBody(reader.ReadByte(), reader.ReadByte());
-                break;
-
-            case CustomRPC.RandomBody:
-                RPCProcedure.randomBody(reader.ReadByte());
                 break;
 
             case CustomRPC.BlackmailPlayer:
