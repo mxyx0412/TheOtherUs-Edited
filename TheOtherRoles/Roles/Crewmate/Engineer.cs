@@ -16,25 +16,20 @@ public class Engineer
     public static bool highlightForImpostors = true;
     public static bool highlightForTeamJackal = true;
 
-    public static bool usedFix;
-
     public static void resetFixes()
     {
         remainingFixes = Mathf.RoundToInt(CustomOptionHolder.engineerNumberOfFixes.getFloat());
-        usedFix = false;
     }
 
     public static void clearAndReload()
     {
         engineer = null;
-        resetFixes();
         remoteFix = CustomOptionHolder.engineerRemoteFix.getBool();
         //expertRepairs = CustomOptionHolder.engineerExpertRepairs.getBool();
         resetFixAfterMeeting = CustomOptionHolder.engineerResetFixAfterMeeting.getBool();
         remainingFixes = Mathf.RoundToInt(CustomOptionHolder.engineerNumberOfFixes.getFloat());
         highlightForImpostors = CustomOptionHolder.engineerHighlightForImpostors.getBool();
         highlightForTeamJackal = CustomOptionHolder.engineerHighlightForTeamJackal.getBool();
-        usedFix = false;
     }
 }
 

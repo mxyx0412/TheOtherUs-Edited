@@ -772,7 +772,6 @@ public static class RPCProcedure
 
     public static void engineerUsedRepair()
     {
-        Engineer.usedFix = true;
         Engineer.remainingFixes--;
         /*
         if (Helpers.shouldShowGhostInfo())

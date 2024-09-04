@@ -476,9 +476,8 @@ internal static class HudManagerStartPatch
                 foreach (var task in CachedPlayer.LocalPlayer.PlayerControl.myTasks.GetFastEnumerator())
                     if (task.TaskType == TaskTypes.FixLights)
                     {
-                        var writer = AmongUsClient.Instance.StartRpcImmediately(
-                            CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.EngineerFixLights,
-                            SendOption.Reliable);
+                        var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
+                            (byte)CustomRPC.EngineerFixLights, SendOption.Reliable);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         RPCProcedure.engineerFixLights();
                     }
@@ -527,11 +526,9 @@ internal static class HudManagerStartPatch
                     if (task.TaskType == TaskTypes.FixLights || task.TaskType == TaskTypes.RestoreOxy ||
                         task.TaskType == TaskTypes.ResetReactor || task.TaskType == TaskTypes.ResetSeismic ||
                         task.TaskType == TaskTypes.FixComms || task.TaskType == TaskTypes.StopCharles
-                        || SubmergedCompatibility.IsSubmerged &&
-                            task.TaskType == SubmergedCompatibility.RetrieveOxygenMask)
+                        || SubmergedCompatibility.IsSubmerged && task.TaskType == SubmergedCompatibility.RetrieveOxygenMask)
                         sabotageActive = true;
-                return sabotageActive && Engineer.remainingFixes > 0 &&
-                       CachedPlayer.LocalPlayer.PlayerControl.CanMove && !Engineer.usedFix;
+                return sabotageActive && Engineer.remainingFixes > 0 && CachedPlayer.LocalPlayer.PlayerControl.CanMove;
             },
             () =>
             {
