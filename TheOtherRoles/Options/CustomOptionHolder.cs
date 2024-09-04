@@ -374,7 +374,6 @@ public class CustomOptionHolder
     public static CustomOption escapistSpawnRate;
     public static CustomOption escapistEscapeTime;
     public static CustomOption escapistResetPlaceAfterMeeting;
-    public static CustomOption escapistChargesGainOnMeeting;
     public static CustomOption escapistMaxCharges;
 
     public static CustomOption werewolfSpawnRate;
@@ -876,7 +875,6 @@ public class CustomOptionHolder
         escapistEscapeTime = Create(10181, Types.Impostor, "escapistEscapeTime", 15f, 0f, 60f, 2.5f, escapistSpawnRate);
         escapistMaxCharges = Create(10185, Types.Impostor, "escapistMaxCharges", 3, 1, 10, 1, escapistSpawnRate);
         escapistResetPlaceAfterMeeting = Create(10183, Types.Impostor, "escapistResetPlaceAfterMeeting", false, escapistSpawnRate);
-        escapistChargesGainOnMeeting = Create(10184, Types.Impostor, "escapistChargesGainOnMeeting", 2, 0, 10, 1, escapistSpawnRate);
 
         cultistSpawnRate = Create(10190, Types.Impostor, cs(Cultist.color, "Cultist"), rates, null, true);
 

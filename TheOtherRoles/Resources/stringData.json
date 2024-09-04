@@ -973,16 +973,9 @@
         "0": "Mark and Escape Cooldown",
         "13": "标记/逃逸冷却"
     },
-    "escapistChargesOnPlace": {
-        "0": "Charges On Place"
-    },
     "escapistResetPlaceAfterMeeting": {
         "0": "Reset Places After Meeting",
         "13": "会议后重置目标地点"
-    },
-    "escapistChargesGainOnMeeting": {
-        "0": "Charges Gained After Meeting",
-        "13": "会议后增加次数"
     },
     "tricksterPlaceBoxCooldown": {
         "0": "Trickster Box Cooldown",

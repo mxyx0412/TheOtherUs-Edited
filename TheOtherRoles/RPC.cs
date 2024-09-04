@@ -226,8 +226,6 @@ public enum CustomRPC
     Bloody,
     SetFirstKill,
     SetMeetingChatOverlay,
-    SetPosition,
-    SetPositionESC,
     SetTiebreak,
     SetInvisibleGen,
     SetSwoop,
@@ -1450,7 +1448,8 @@ public static class RPCProcedure
             case RoleId.Jumper:
                 if (Amnisiac.resetRole) Jumper.clearAndReload();
                 Jumper.jumper = Mimic.mimic;
-                jumperButton.PositionOffset = CustomButton.ButtonPositions.upperRowLeft;
+                jumperMarkButton.PositionOffset = CustomButton.ButtonPositions.lowerRowCenter;
+                jumperJumpButton.PositionOffset = CustomButton.ButtonPositions.upperRowLeft;
                 Mimic.hasMimic = true;
                 break;
 
@@ -1755,19 +1754,14 @@ public static class RPCProcedure
         {
             if (Escapist.escapeLocation != Vector3.zero)
             {
-                var writer = AmongUsClient.Instance.StartRpcImmediately(killer.NetId,
-                    (byte)CustomRPC.SetPositionESC, SendOption.Reliable);
-                writer.Write(killer.PlayerId);
-                writer.Write(Escapist.escapeLocation.x);
-                writer.Write(Escapist.escapeLocation.y);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
                 killer.NetTransform.RpcSnapTo(Escapist.escapeLocation);
             }
             else
             {
                 Escapist.escapeLocation = PlayerControl.LocalPlayer.transform.localPosition;
             }
-            escapistButton.Timer = escapistButton.MaxTimer;
+            escapistMarkButton.Timer = escapistMarkButton.MaxTimer;
+            escapistEscapeButton.Timer = escapistEscapeButton.MaxTimer;
         }
         else if (Yoyo.yoyo == killer)
         {
@@ -3166,20 +3160,6 @@ public static class RPCProcedure
         Bloody.bloodyKillerMap.Add(killerPlayerId, bloodyPlayerId);
     }
 
-    public static void setPosition(byte playerId, float x, float y)
-    {
-        var target = playerById(playerId);
-        target.transform.localPosition = new Vector3(x, y, 0);
-        target.transform.position = new Vector3(x, y, 0);
-    }
-
-    public static void setPositionESC(byte playerId, float x, float y)
-    {
-        var target = playerById(playerId);
-        target.transform.localPosition = new Vector3(x, y, 0);
-        target.transform.position = new Vector3(x, y, 0);
-    }
-
     public static void setFirstKill(byte playerId)
     {
         var target = playerById(playerId);
@@ -4067,10 +4047,6 @@ internal class RPCHandlerPatch
                 RPCProcedure.yoyoBlink(reader.ReadByte() == byte.MaxValue, reader.ReadBytesAndSize());
                 break;
             case CustomRPC.SetFutureReveal:
-                break;
-            case CustomRPC.SetPosition:
-                break;
-            case CustomRPC.SetPositionESC:
                 break;
             case CustomRPC.TrapperKill:
                 RPCProcedure.trapperKill(reader.ReadByte(), reader.ReadByte(), reader.ReadByte());

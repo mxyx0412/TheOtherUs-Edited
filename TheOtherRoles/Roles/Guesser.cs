@@ -324,10 +324,11 @@ public static class Guesser
                 }
                 else
                 {
+                    var dyingTarget = CachedPlayer.LocalPlayer.PlayerControl;
                     var focusedTarget = playerById(__instance.playerStates[buttonTarget].TargetPlayerId);
-                    if
-                    (
-                        __instance.state is not (MeetingHud.VoteStates.Voted or MeetingHud.VoteStates.NotVoted)
+                    var mainRoleInfo = RoleInfo.getRoleInfoForPlayer(focusedTarget, true);
+
+                    if (__instance.state is not (MeetingHud.VoteStates.Voted or MeetingHud.VoteStates.NotVoted)
                         || focusedTarget == null
                         || (HandleGuesser.remainingShots(CachedPlayer.LocalPlayer.PlayerId) <= 0
                             && HandleGuesser.isGuesser(CachedPlayer.LocalPlayer.PlayerId))
@@ -360,9 +361,6 @@ public static class Guesser
                         SoundEffectsManager.play("fail");
                         return;
                     }
-                    var dyingTarget = CachedPlayer.LocalPlayer.PlayerControl;
-
-                    var mainRoleInfo = RoleInfo.getRoleInfoForPlayer(focusedTarget, true);
 
                     if (mainRoleInfo == null) return;
 

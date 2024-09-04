@@ -536,6 +536,7 @@ public static class Helpers
         var indexData = UnityEngine.Random.Range(0, list.Count);
         return indexData;
     }
+
     public static void ForEach<T>(this Il2CppArrayBase<T> list, Action<T> func)
     {
         foreach (T obj in list) func(obj);
@@ -639,8 +640,7 @@ public static class Helpers
     public static PlayerControl GetHostPlayer()
     {
         var host = GameData.Instance.GetHost();
-        if (host != null) return playerById(host.PlayerId);
-        return null;
+        return host != null ? playerById(host.PlayerId) : null;
     }
 
     public static PlayerControl playerById(byte id)

@@ -68,8 +68,10 @@ internal static class HudManagerStartPatch
     public static CustomButton mediumButton;
     public static CustomButton pursuerButton;
     public static CustomButton witchSpellButton;
-    public static CustomButton jumperButton;
-    public static CustomButton escapistButton;
+    public static CustomButton jumperMarkButton;
+    public static CustomButton jumperJumpButton;
+    public static CustomButton escapistMarkButton;
+    public static CustomButton escapistEscapeButton;
     public static CustomButton ninjaButton;
     public static CustomButton werewolfRampageButton;
     public static CustomButton werewolfKillButton;
@@ -166,8 +168,10 @@ internal static class HudManagerStartPatch
         hackerAdminTableButton.MaxTimer = Hacker.cooldown;
         vampireKillButton.MaxTimer = Vampire.cooldown;
         trackerTrackPlayerButton.MaxTimer = defaultMaxTimer;
-        jumperButton.MaxTimer = Jumper.JumpTime;
-        escapistButton.MaxTimer = Escapist.EscapeTime;
+        jumperMarkButton.MaxTimer = Jumper.JumpTime;
+        jumperJumpButton.MaxTimer = Jumper.JumpTime;
+        escapistMarkButton.MaxTimer = Escapist.EscapeTime;
+        escapistEscapeButton.MaxTimer = Escapist.EscapeTime;
         bodyGuardGuardButton.MaxTimer = defaultMaxTimer;
         garlicButton.MaxTimer = defaultMaxTimer;
         jackalKillButton.MaxTimer = Jackal.cooldown;
@@ -3394,131 +3398,122 @@ internal static class HudManagerStartPatch
             }
         );
 
-        // Jumper Jump
-        jumperButton = new CustomButton(
+        // Jumper Mark
+        jumperMarkButton = new CustomButton(
             () =>
             {
-                if (Jumper.jumpLocation == Vector3.zero)
-                {
-                    //set location
-                    Jumper.jumpLocation = PlayerControl.LocalPlayer.transform.localPosition;
-                    jumperButton.Sprite = Jumper.jumpButtonSprite;
-                    Jumper.Charges = Jumper.ChargesOnPlace;
-                    jumperButton.buttonText = "jumperJumpText".Translate();
-                }
-                else if (Jumper.Charges >= 1f)
-                {
-                    //teleport to location if you have one
-                    var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                        (byte)CustomRPC.SetPosition, SendOption.Reliable);
-                    writer.Write(PlayerControl.LocalPlayer.PlayerId);
-                    writer.Write(Jumper.jumpLocation.x);
-                    writer.Write(Jumper.jumpLocation.y);
-                    AmongUsClient.Instance.FinishRpcImmediately(writer);
-
-                    PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(Jumper.jumpLocation);
-
-
-                    Jumper.Charges -= 1f;
-                }
-
-                if (Jumper.Charges > 0) jumperButton.Timer = jumperButton.MaxTimer;
+                //set location
+                Jumper.jumpLocation = PlayerControl.LocalPlayer.transform.localPosition;
+                jumperMarkButton.Timer = jumperMarkButton.MaxTimer;
             },
             () =>
             {
-                return Jumper.jumper != null && Jumper.jumper == PlayerControl.LocalPlayer &&
-                       !PlayerControl.LocalPlayer.Data.IsDead;
+                return Jumper.jumper != null && Jumper.jumper == PlayerControl.LocalPlayer
+                && !PlayerControl.LocalPlayer.Data.IsDead && Jumper.Charges > 0;
             },
             () =>
             {
-                //if (jumperChargesText != null) jumperChargesText.text = $"{Jumper.jumperCharges}";
                 Jumper.usedPlace = true;
-                return (Jumper.jumpLocation == Vector3.zero || Jumper.Charges >= 1f) &&
-                       PlayerControl.LocalPlayer.CanMove;
+                return Jumper.Charges > 0f && PlayerControl.LocalPlayer.CanMove;
 
             },
             () =>
             {
-                if (Jumper.resetPlaceAfterMeeting)
-                {
-                    Jumper.resetPlaces();
-                    jumperButton.Sprite = Jumper.jumpMarkButtonSprite;
-                    jumperButton.buttonText = "jumperMarkText".Translate();
-                }
-                if (Jumper.jumpLocation == Vector3.zero) jumperButton.buttonText = "jumperJumpText".Translate();
-                Jumper.Charges += Jumper.ChargesGainOnMeeting;
-                if (Jumper.Charges > Jumper.MaxCharges) Jumper.Charges = Jumper.MaxCharges;
-
-                if (Jumper.Charges > 0) jumperButton.Timer = jumperButton.MaxTimer;
+                if (Jumper.resetPlaceAfterMeeting) Jumper.jumpLocation = Vector3.zero;
+                jumperMarkButton.Timer = jumperMarkButton.MaxTimer;
             },
             Jumper.jumpMarkButtonSprite,
-            ButtonPositions.lowerRowRight, //brb
+            ButtonPositions.upperRowCenter,
+            __instance,
+            secondaryAbilityInput.keyCode,
+            buttonText: "jumperMarkText".Translate()
+        );
+
+        // Jumper Jump
+        jumperJumpButton = new CustomButton(
+            () =>
+            {
+                //teleport to location if you have one
+                PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(Jumper.jumpLocation);
+                Jumper.Charges--;
+                if (Jumper.Charges > 0) jumperJumpButton.Timer = jumperJumpButton.MaxTimer;
+            },
+            () =>
+            {
+                return Jumper.jumper != null && Jumper.jumper == PlayerControl.LocalPlayer && PlayerControl.LocalPlayer.IsAlive() && Jumper.Charges > 0;
+            },
+            () =>
+            {
+                Jumper.usedPlace = true;
+                return Jumper.Charges >= 1f && Jumper.jumpLocation != Vector3.zero && PlayerControl.LocalPlayer.CanMove;
+            },
+            () =>
+            {
+                Jumper.Charges += Jumper.ChargesGainOnMeeting;
+                if (Jumper.Charges > 0) jumperJumpButton.Timer = jumperJumpButton.MaxTimer;
+            },
+            Jumper.jumpJumpButtonSprite,
+            ButtonPositions.upperRowRight,
             __instance,
             abilityInput.keyCode,
+            buttonText: "jumperJumpText".Translate()
+        );
+
+        // Escapist Escape
+        escapistMarkButton = new CustomButton(
+            () =>
+            {
+                //set location
+                Escapist.escapeLocation = PlayerControl.LocalPlayer.transform.localPosition;
+                escapistMarkButton.Timer = escapistMarkButton.MaxTimer;
+            },
+            () =>
+            {
+                return Escapist.escapist != null && Escapist.escapist == PlayerControl.LocalPlayer && PlayerControl.LocalPlayer.IsAlive();
+            },
+            () =>
+            {
+                Escapist.usedPlace = true;
+                return PlayerControl.LocalPlayer.CanMove;
+            },
+            () =>
+            {
+                if (Escapist.resetPlaceAfterMeeting) Escapist.escapeLocation = Vector3.zero;
+                escapistMarkButton.Timer = escapistMarkButton.MaxTimer;
+            },
+            Escapist.escapeEscapeButtonSprite,
+            ButtonPositions.lowerRowCenter, //brb
+            __instance,
+            secondaryAbilityInput.keyCode,
             buttonText: "jumperMarkText".Translate()
         );
 
         // Escapist Escape
-        escapistButton = new CustomButton(
+        escapistEscapeButton = new CustomButton(
             () =>
             {
-                if (Escapist.escapeLocation == Vector3.zero)
-                {
-                    //set location
-                    Escapist.escapeLocation = PlayerControl.LocalPlayer.transform.localPosition;
-                    escapistButton.Sprite = Escapist.escapeMarkButtonSprite;
-                    Escapist.Charges = Escapist.ChargesOnPlace;
-                    escapistButton.buttonText = "jumperJumpText".Translate();
-                }
-                else if (Escapist.Charges >= 1f)
-                {
-                    //teleport to location if you have one
-                    var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                        (byte)CustomRPC.SetPositionESC, SendOption.Reliable);
-                    writer.Write(PlayerControl.LocalPlayer.PlayerId);
-                    writer.Write(Escapist.escapeLocation.x);
-                    writer.Write(Escapist.escapeLocation.y);
-                    AmongUsClient.Instance.FinishRpcImmediately(writer);
-
-                    PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(Escapist.escapeLocation);
-
-
-                    Escapist.Charges -= 1f;
-                }
-
-                if (Escapist.Charges > 0) escapistButton.Timer = escapistButton.MaxTimer;
+                //set location
+                PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(Escapist.escapeLocation);
+                escapistEscapeButton.Timer = escapistEscapeButton.MaxTimer;
             },
             () =>
             {
-                return Escapist.escapist != null && Escapist.escapist == PlayerControl.LocalPlayer &&
-                       !PlayerControl.LocalPlayer.Data.IsDead;
+                return Escapist.escapist != null && Escapist.escapist == PlayerControl.LocalPlayer && PlayerControl.LocalPlayer.IsAlive();
             },
             () =>
             {
-                //if (jumperChargesText != null) jumperChargesText.text = $"{Jumper.jumperCharges}";
                 Escapist.usedPlace = true;
-                return (Escapist.escapeLocation == Vector3.zero || Escapist.Charges >= 1f) &&
-                       PlayerControl.LocalPlayer.CanMove;
+                return Escapist.escapeLocation != Vector3.zero && PlayerControl.LocalPlayer.CanMove;
             },
             () =>
             {
-                if (Escapist.resetPlaceAfterMeeting)
-                {
-                    Escapist.resetPlaces();
-                    escapistButton.Sprite = Escapist.escapeButtonSprite;
-                    escapistButton.buttonText = "jumperMarkText".Translate();
-                }
-                if (Escapist.escapeLocation == Vector3.zero) escapistButton.buttonText = "jumperJumpText".Translate();
-                Escapist.Charges += Escapist.ChargesGainOnMeeting;
-                if (Escapist.Charges > Escapist.MaxCharges) Escapist.Charges = Escapist.MaxCharges;
-
-                if (Escapist.Charges > 0) escapistButton.Timer = escapistButton.MaxTimer;
+                escapistEscapeButton.Timer = escapistEscapeButton.MaxTimer;
             },
-            Escapist.escapeButtonSprite,
+            Escapist.escapeEscapeButtonSprite,
             ButtonPositions.upperRowLeft, //brb
             __instance,
             abilityInput.keyCode,
-            buttonText: "jumperMarkText".Translate()
+            buttonText: "jumperJumpText".Translate()
         );
 
         // Ninja mark and assassinate button 
