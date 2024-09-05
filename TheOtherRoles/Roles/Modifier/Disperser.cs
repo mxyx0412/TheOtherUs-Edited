@@ -13,7 +13,7 @@ public static class Disperser
     public static void clearAndReload()
     {
         disperser = null;
-        remainingDisperses = 100;
+        remainingDisperses = 1;
         //remainingDisperses = CustomOptionHolder.modifierDisperserRemainingDisperses.GetInt();
         DispersesToVent = CustomOptionHolder.modifierDisperserDispersesToVent.getBool();
     }
