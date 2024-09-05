@@ -105,6 +105,9 @@ internal class IntroCutsceneOnDestroyPatch
         // Force Reload of SoundEffectHolder
         SoundEffectsManager.Load();
 
+        // AntiTeleport set position
+        AntiTeleport.setPosition();
+
         if (AmongUsClient.Instance.AmHost)
         {
             LastImpostor.promoteToLastImpostor();

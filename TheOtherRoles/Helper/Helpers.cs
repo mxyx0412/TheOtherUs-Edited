@@ -603,6 +603,11 @@ public static class Helpers
         return false;
     }
 
+    public static bool Contains<T, TKey>(this IEnumerable<T> list, T item, Func<T, TKey> keySelector)
+    {
+        return list.Any(x => keySelector(x).Equals(keySelector(item)));
+    }
+
     public static string readTextFromResources(string path)
     {
         var assembly = Assembly.GetExecutingAssembly();

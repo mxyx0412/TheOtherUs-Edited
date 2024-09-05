@@ -339,7 +339,7 @@ internal class ExileControllerWrapUpPatch
         }
 
         // AntiTeleport set position
-        //AntiTeleport.setPosition();
+        AntiTeleport.setPosition();
 
         if (AmongUsClient.Instance.AmHost)
         {

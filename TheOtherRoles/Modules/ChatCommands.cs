@@ -196,12 +196,13 @@ public static class ChatCommands
     {
         public static void Postfix(HudManager __instance)
         {
-            if (!__instance.Chat.isActiveAndEnabled && (AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay
-                                                        || ModOption.DebugMode
+            if (!__instance.Chat.isActiveAndEnabled && (ModOption.DebugMode
+                                                        || AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay
                                                         || (CachedPlayer.LocalPlayer.PlayerControl.isLover() && Lovers.enableChat)))
                 __instance.Chat.SetVisible(true);
 
-            if (Multitasker.multitasker.FindAll(x => x.PlayerId == CachedPlayer.LocalPlayer.PlayerId).Count > 0 || ModOption.transparentTasks)
+            if (ModOption.transparentTasks || (Multitasker.multitasker != null
+                && Multitasker.multitasker.FindAll(x => x.PlayerId == CachedPlayer.LocalPlayer.PlayerId).Count > 0))
             {
                 if (PlayerControl.LocalPlayer.Data.IsDead || PlayerControl.LocalPlayer.Data.Disconnected) return;
                 if (!Minigame.Instance) return;

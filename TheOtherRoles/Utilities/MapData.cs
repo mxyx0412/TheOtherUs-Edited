@@ -228,20 +228,11 @@ public class MapData
         return poss;
     }
 
-    public static void RandomSpawnAllPlayers()
-    {
-        RandomSpawnPlayers(CachedPlayer.AllPlayers.Where(n => n.PlayerControl.IsAlive()).Select(n => n.PlayerControl));
-    }
+    public static void RandomSpawnAllPlayers() => RandomSpawnPlayers(PlayerControl.AllPlayerControls.ToArray());
 
-    public static void RandomSpawnAllPlayersToVent()
-    {
-        RandomSpawnToVent(CachedPlayer.AllPlayers.Where(n => n.PlayerControl.IsAlive()).Select(n => n.PlayerControl));
-    }
+    public static void RandomSpawnAllPlayersToVent() => RandomSpawnToVent(PlayerControl.AllPlayerControls.ToArray().Where(n => n.IsAlive()));
 
-    public static void RandomSpawnAllPlayersToMap()
-    {
-        RandomSpawnToMap(CachedPlayer.AllPlayers.Where(n => n.PlayerControl.IsAlive()).Select(n => n.PlayerControl));
-    }
+    public static void RandomSpawnAllPlayersToMap() => RandomSpawnToMap(PlayerControl.AllPlayerControls.ToArray().Where(n => n.IsAlive()));
 
     public static void RandomSpawnPlayers(IEnumerable<PlayerControl> players)
     {
@@ -251,7 +242,7 @@ public class MapData
 
     public static void RandomSpawnToVent(IEnumerable<PlayerControl> spawnPlayer)
     {
-        var players = spawnPlayer.Where(player => !AntiTeleport.antiTeleport.Contains(player));
+        var players = spawnPlayer.Where(p => !AntiTeleport.antiTeleport.Contains(p, player => player.PlayerId));
 
         foreach (var p in players)
         {
@@ -263,7 +254,7 @@ public class MapData
 
     public static void RandomSpawnToMap(IEnumerable<PlayerControl> spawnPlayer)
     {
-        var players = spawnPlayer.Where(player => !AntiTeleport.antiTeleport.Contains(player));
+        var players = spawnPlayer.Where(p => !AntiTeleport.antiTeleport.Contains(p, player => player.PlayerId));
 
         foreach (var p in players)
         {
