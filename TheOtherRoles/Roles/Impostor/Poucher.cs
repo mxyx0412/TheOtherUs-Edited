@@ -11,10 +11,10 @@ public static class Poucher
     public static List<PlayerControl> killed = new();
 
 
-    public static void clearAndReload(bool clearList = true)
+    public static void clearAndReload()
     {
         poucher = null;
+        killed = new();
         spawnModifier = CustomOptionHolder.poucherSpawnModifier.getBool();
-        if (clearList) killed = new List<PlayerControl>();
     }
 }

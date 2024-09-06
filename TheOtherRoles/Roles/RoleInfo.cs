@@ -258,6 +258,7 @@ public class RoleInfo
             }
 
             if (p == Lovers.lover1 || p == Lovers.lover2) infos.Add(lover);
+            if (Assassin.assassin.Any(x => x.PlayerId == p.PlayerId) && p != Specoality.specoality) infos.Add(assassin);
             if (AntiTeleport.antiTeleport.Any(x => x.PlayerId == p.PlayerId)) infos.Add(antiTeleport);
             if (Sunglasses.sunglasses.Any(x => x.PlayerId == p.PlayerId)) infos.Add(sunglasses);
             if (Torch.torch.Any(x => x.PlayerId == p.PlayerId)) infos.Add(torch);
@@ -277,7 +278,6 @@ public class RoleInfo
             if (Invert.invert.Any(x => x.PlayerId == p.PlayerId)) infos.Add(invert);
             if (Chameleon.chameleon.Any(x => x.PlayerId == p.PlayerId)) infos.Add(chameleon);
             if (p == Shifter.shifter) infos.Add(shifter);
-            if (Assassin.assassin.Any(x => x.PlayerId == p.PlayerId)) infos.Add(assassin);
             if (p == LastImpostor.lastImpostor) infos.Add(lastImpostor);
         }
 
