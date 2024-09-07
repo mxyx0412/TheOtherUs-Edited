@@ -1116,8 +1116,7 @@ internal static class HudManagerStartPatch
             },
             () =>
             {
-                if (Morphling.sampledTarget == null)
-                    showTargetNameOnButton(Morphling.currentTarget, morphlingButton, getString("SampleText"));
+                if (Morphling.sampledTarget == null) showTargetNameOnButton(Morphling.currentTarget, morphlingButton, getString("SampleText"));
                 return (Morphling.currentTarget || Morphling.sampledTarget) && !isActiveCamoComms() &&
                        CachedPlayer.LocalPlayer.PlayerControl.CanMove && !MushroomSabotageActive();
             },

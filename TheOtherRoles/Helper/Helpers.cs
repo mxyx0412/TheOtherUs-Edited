@@ -247,16 +247,17 @@ public static class Helpers
 
     public static bool isShiftNeutral(PlayerControl player)
     {
-        if (CustomOptionHolder.modifierShiftALLNeutral.getBool())
+        if (Shifter.shiftNeutral && Shifter.shiftALLNeutra)
         {
             return player != null && (
                        player == Jackal.jackal ||
                        player == Sidekick.sidekick ||
                        player == Pavlovsdogs.pavlovsowner ||
-                       Pavlovsdogs.pavlovsdogs.Contains(player) ||
+                       Pavlovsdogs.pavlovsdogs.Any(x => x == player) ||
+                       player == Akujo.akujo ||
                        player == Lawyer.lawyer);
         }
-        else if (CustomOptionHolder.modifierShiftNeutral.getBool())
+        else if (Shifter.shiftNeutral)
         {
             return player != null && (
                        player == Jackal.jackal ||
@@ -271,7 +272,7 @@ public static class Helpers
         }
         else
         {
-            return isNeutral(player);
+            return player != null && isNeutral(player);
         }
     }
 
@@ -291,8 +292,7 @@ public static class Helpers
                 player == Jackal.jackal ||
                 player == Sidekick.sidekick ||
                 player == Pavlovsdogs.pavlovsowner ||
-                Pavlovsdogs.pavlovsdogs.Contains(player)
-                );
+                Pavlovsdogs.pavlovsdogs.Contains(player));
     }
 
     public static bool isEvil(PlayerControl player)

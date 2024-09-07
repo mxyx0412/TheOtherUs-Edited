@@ -196,7 +196,8 @@ public class OnGameEndPatch
         }
         else
         {
-            akujoWin = Akujo.akujo != null && gameOverReason == (GameOverReason)CustomGameOverReason.AkujoWin && Akujo.honmei != null && !Akujo.honmei.Data.IsDead && !Akujo.akujo.Data.IsDead;
+            akujoWin = Akujo.akujo != null && gameOverReason == (GameOverReason)CustomGameOverReason.AkujoWin
+                && Akujo.honmei != null && !Akujo.honmei.Data.IsDead && !Akujo.akujo.Data.IsDead;
         }
 
         bool isPursurerLose = jesterWin || arsonistWin || miniLose || isCanceled;
@@ -397,10 +398,22 @@ public class OnGameEndPatch
                             TempData.winners.Add(new WinningPlayerData(p.Data));
                         else if (Survivor.survivor.Contains(p) && !p.Data.IsDead)
                             TempData.winners.Add(new WinningPlayerData(p.Data));
-                        else if (p != Jester.jester && p != Jackal.jackal && p != Werewolf.werewolf &&
-                            p != Juggernaut.juggernaut && p != Doomsayer.doomsayer && p != Lawyer.lawyer && !Pursuer.pursuer.Contains(p) &&
-                            p != Sidekick.sidekick && p != Arsonist.arsonist && p != Vulture.vulture && p != Amnisiac.amnisiac && p != Thief.thief &&
-                            p != Pavlovsdogs.pavlovsowner && !Pavlovsdogs.pavlovsdogs.Contains(p) && !Jackal.formerJackals.Contains(p) && !p.Data.Role.IsImpostor)
+                        else if (p != Jester.jester
+                                 && p != Jackal.jackal
+                                 && p != Werewolf.werewolf
+                                 && p != Juggernaut.juggernaut
+                                 && p != Doomsayer.doomsayer
+                                 && p != Lawyer.lawyer
+                                 && !Pursuer.pursuer.Contains(p)
+                                 && p != Sidekick.sidekick
+                                 && p != Arsonist.arsonist
+                                 && p != Vulture.vulture
+                                 && p != Amnisiac.amnisiac
+                                 && p != Thief.thief
+                                 && p != Pavlovsdogs.pavlovsowner
+                                 && !Pavlovsdogs.pavlovsdogs.Contains(p)
+                                 && !Jackal.formerJackals.Contains(p)
+                                 && !p.Data.Role.IsImpostor)
                             TempData.winners.Add(new WinningPlayerData(p.Data));
 
                     }

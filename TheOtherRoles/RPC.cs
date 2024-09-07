@@ -2589,8 +2589,8 @@ public static class RPCProcedure
         if (SubmergedCompatibility.IsSubmerged)
         {
             vent.gameObject.layer = 12;
-            vent.gameObject.AddSubmergedComponent(SubmergedCompatibility.Classes
-                .ElevatorMover); // just in case elevator vent is not blocked
+            // just in case elevator vent is not blocked
+            vent.gameObject.AddSubmergedComponent(SubmergedCompatibility.Classes.ElevatorMover);
             if (vent.gameObject.transform.position.y > -7)
             {
                 vent.gameObject.transform.position = new Vector3(vent.gameObject.transform.position.x,

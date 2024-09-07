@@ -149,7 +149,7 @@ internal class MeetingHudPatch
             (byte)CustomRPC.MayorRevealed, SendOption.Reliable);
         writer.Write(Mayor.Revealed);
         AmongUsClient.Instance.FinishRpcImmediately(writer);
-        meetingExtraButtonLabel.text = cs(Mayor.color, "揭示");
+        //meetingExtraButtonLabel.text = cs(Mayor.color, "揭示"); 
         Object.Destroy(MeetingExtraButton);
 
     }
@@ -226,7 +226,7 @@ internal class MeetingHudPatch
                 localScale.x * 1.7f,
                 localScale.x * 1.7f);
             meetingExtraButtonLabel.transform.localScale = localScale;
-            meetingExtraButtonLabel.text = cs(Mayor.color, "");
+            meetingExtraButtonLabel.text = cs(Mayor.color, "揭示");
 
             var passiveButton = meetingExtraButton.GetComponent<PassiveButton>();
             passiveButton.OnClick.RemoveAllListeners();
