@@ -1607,6 +1607,7 @@ public static class RPCProcedure
             var bombWriter = AmongUsClient.Instance.StartRpcImmediately(killer.NetId,
                 (byte)CustomRPC.GiveBomb, SendOption.Reliable);
             bombWriter.Write(target.PlayerId);
+            bombWriter.Write(false);
             AmongUsClient.Instance.FinishRpcImmediately(bombWriter);
             giveBomb(target.PlayerId);
             bomberBombButton.Timer = bomberBombButton.MaxTimer;
@@ -2396,18 +2397,24 @@ public static class RPCProcedure
         Medic.usedShield = true;
     }
 
-    public static void giveBomb(byte playerId)
+    public static void giveBomb(byte playerId, bool bomb = false)
     {
         if (playerId == byte.MaxValue)
         {
-            Bomber.hasBomb = null;
+            Bomber.hasBombPlayer = null;
             Bomber.bombActive = false;
             Bomber.hasAlerted = false;
             Bomber.timeLeft = 0;
             return;
         }
 
-        Bomber.hasBomb = playerById(playerId);
+        if (bomb)
+        {
+            Bomber.hasBombPlayer = playerById(playerId);
+            return;
+        }
+
+        Bomber.hasBombPlayer = playerById(playerId);
         FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(Bomber.bombDelay,
             new Action<float>(p =>
             {
@@ -2417,18 +2424,18 @@ public static class RPCProcedure
             new Action<float>(p =>
             {
                 // Delayed action
-                if (!Bomber.hasBomb.IsAlive()) return;
+                if (Bomber.hasBombPlayer.IsDead()) return;
                 if (p == 1f && Bomber.bombActive)
                 {
                     // Perform kill if possible and reset bitten (regardless whether the kill was successful or not)
-                    checkMurderAttemptAndKill(Bomber.bomber, Bomber.hasBomb, false, false, true, true);
-                    Bomber.hasBomb = null;
+                    checkMurderAttemptAndKill(Bomber.bomber, Bomber.hasBombPlayer, false, false, true, true);
+                    Bomber.hasBombPlayer = null;
                     Bomber.bombActive = false;
                     Bomber.hasAlerted = false;
                     Bomber.timeLeft = 0;
                 }
 
-                if (CachedPlayer.LocalPlayer.PlayerControl == Bomber.hasBomb)
+                if (CachedPlayer.LocalPlayer.PlayerControl == Bomber.hasBombPlayer)
                 {
                     var totalTime = (int)(Bomber.bombDelay + Bomber.bombTimer);
                     var timeLeft = (int)(totalTime - (totalTime * p));
@@ -2444,7 +2451,7 @@ public static class RPCProcedure
                         {
                             if (!Bomber.hasAlerted)
                             {
-                                showFlash(Bomber.alertColor);
+                                Coroutines.Start(showFlashCoroutine(Palette.ImpostorRed, 0.75f));
                                 Bomber.hasAlerted = true;
                             }
                         }
@@ -3805,7 +3812,7 @@ internal class RPCHandlerPatch
                 break;
 
             case CustomRPC.GiveBomb:
-                RPCProcedure.giveBomb(reader.ReadByte());
+                RPCProcedure.giveBomb(reader.ReadByte(), reader.ReadBoolean());
                 break;
 
             case CustomRPC.SetFutureSpelled:

@@ -21,6 +21,8 @@ internal static class HudManagerStartPatch
     private static bool initialized;
 
     private static readonly float defaultMaxTimer = 0.5f;
+    private static readonly float multiplier = Mini.mini != null && CachedPlayer.LocalPlayer.PlayerControl == Mini.mini 
+        ? Mini.isGrownUp() ? 0.66f : 2f : 1f;
     public static CustomButton engineerRepairButton;
     public static CustomButton sheriffKillButton;
     private static CustomButton deputyHandcuffButton;
@@ -2155,9 +2157,13 @@ internal static class HudManagerStartPatch
                 var bombWriter = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
                     (byte)CustomRPC.GiveBomb, SendOption.Reliable);
                 bombWriter.Write(Bomber.currentTarget.PlayerId);
+                bombWriter.Write(false);
                 AmongUsClient.Instance.FinishRpcImmediately(bombWriter);
                 RPCProcedure.giveBomb(Bomber.currentTarget.PlayerId);
-                Bomber.bomber.killTimer = Bomber.bombTimer + Bomber.bombDelay;
+                if (Bomber.triggerBothCooldowns)
+                {
+                    Bomber.bomber.killTimer = bomberBombButton.MaxTimer * multiplier;
+                }
                 bomberBombButton.Timer = bomberBombButton.MaxTimer;
             },
             () =>
@@ -2177,7 +2183,7 @@ internal static class HudManagerStartPatch
                 bomberBombButton.Timer = bomberBombButton.MaxTimer;
                 bomberBombButton.isEffectActive = false;
                 bomberBombButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
-                Bomber.hasBomb = null;
+                Bomber.hasBombPlayer = null;
             },
             Bomber.buttonSprite,
             ButtonPositions.upperRowLeft, //brb
@@ -2189,38 +2195,50 @@ internal static class HudManagerStartPatch
             () =>
             {
                 /* On Use */
-                if (Bomber.currentBombTarget == Bomber.bomber)
+                if (!Bomber.canGiveToBomber && Bomber.currentBombTarget == Bomber.bomber)
                 {
-                    var killWriter = AmongUsClient.Instance.StartRpcImmediately(
-                        CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.UncheckedMurderPlayer,
-                        SendOption.Reliable);
+                    var killWriter = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
+                        (byte)CustomRPC.UncheckedMurderPlayer, SendOption.Reliable);
                     killWriter.Write(Bomber.bomber.Data.PlayerId);
-                    killWriter.Write(Bomber.hasBomb.Data.PlayerId);
+                    killWriter.Write(Bomber.hasBombPlayer.Data.PlayerId);
                     killWriter.Write(0);
                     AmongUsClient.Instance.FinishRpcImmediately(killWriter);
-                    RPCProcedure.uncheckedMurderPlayer(Bomber.bomber.Data.PlayerId, Bomber.hasBomb.Data.PlayerId, 0);
+                    RPCProcedure.uncheckedMurderPlayer(Bomber.bomber.Data.PlayerId, Bomber.hasBombPlayer.Data.PlayerId, 0);
 
-                    var bombWriter1 = AmongUsClient.Instance.StartRpcImmediately(
-                        CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.GiveBomb, SendOption.Reliable);
-                    bombWriter1.Write(byte.MaxValue);
-                    AmongUsClient.Instance.FinishRpcImmediately(bombWriter1);
+                    var clearWriter = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
+                        (byte)CustomRPC.GiveBomb, SendOption.Reliable);
+                    clearWriter.Write(byte.MaxValue);
+                    clearWriter.Write(false);
+                    AmongUsClient.Instance.FinishRpcImmediately(clearWriter);
                     RPCProcedure.giveBomb(byte.MaxValue);
                     return;
                 }
 
                 if (checkAndDoVetKill(Bomber.currentBombTarget)) return;
-                if (checkMurderAttemptAndKill(Bomber.hasBomb, Bomber.currentBombTarget) ==
-                    MurderAttemptResult.SuppressKill) return;
-                var bombWriter = AmongUsClient.Instance.StartRpcImmediately(
-                    CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.GiveBomb, SendOption.Reliable);
-                bombWriter.Write(byte.MaxValue);
-                AmongUsClient.Instance.FinishRpcImmediately(bombWriter);
-                RPCProcedure.giveBomb(byte.MaxValue);
+                if (Bomber.hotPotatoMode)
+                {
+                    var bombWriter = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
+                        (byte)CustomRPC.GiveBomb, SendOption.Reliable);
+                    bombWriter.Write(Bomber.currentBombTarget.PlayerId);
+                    bombWriter.Write(true);
+                    AmongUsClient.Instance.FinishRpcImmediately(bombWriter);
+                    RPCProcedure.giveBomb(Bomber.currentBombTarget.PlayerId, true);
+                }
+                else
+                {
+                    if (checkMurderAttemptAndKill(Bomber.hasBombPlayer, Bomber.currentBombTarget) == MurderAttemptResult.SuppressKill) return;
+                    var bombWriter = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
+                        (byte)CustomRPC.GiveBomb, SendOption.Reliable);
+                    bombWriter.Write(byte.MaxValue);
+                    bombWriter.Write(false);
+                    AmongUsClient.Instance.FinishRpcImmediately(bombWriter);
+                    RPCProcedure.giveBomb(byte.MaxValue);
+                }
             },
             () =>
             {
                 /* Can See */
-                return Bomber.bomber != null && Bomber.hasBomb == CachedPlayer.LocalPlayer.PlayerControl &&
+                return Bomber.bomber != null && Bomber.hasBombPlayer == CachedPlayer.LocalPlayer.PlayerControl &&
                        Bomber.bombActive && !CachedPlayer.LocalPlayer.Data.IsDead;
             },
             () =>
@@ -3405,7 +3423,7 @@ internal static class HudManagerStartPatch
                     RPCProcedure.setFutureSpelled(Witch.currentTarget.PlayerId);
                 }
 
-                if (attempt == MurderAttemptResult.BlankKill || attempt == MurderAttemptResult.PerformKill)
+                if (attempt is MurderAttemptResult.BlankKill or MurderAttemptResult.PerformKill)
                 {
                     Witch.currentCooldownAddition += Witch.cooldownAddition;
                     witchSpellButton.MaxTimer = Witch.cooldown + Witch.currentCooldownAddition;
@@ -3413,11 +3431,7 @@ internal static class HudManagerStartPatch
                     witchSpellButton.Timer = witchSpellButton.MaxTimer;
                     if (Witch.triggerBothCooldowns)
                     {
-                        var multiplier = Mini.mini != null && CachedPlayer.LocalPlayer.PlayerControl == Mini.mini
-                            ? Mini.isGrownUp() ? 0.66f : 2f
-                            : 1f;
-                        Witch.witch.killTimer = GameOptionsManager.Instance.currentNormalGameOptions.KillCooldown *
-                                                multiplier;
+                        Witch.witch.killTimer = ModOption.KillCooddown * multiplier;
                     }
                 }
                 else
@@ -3614,8 +3628,7 @@ internal static class HudManagerStartPatch
 
                     if (attempt is MurderAttemptResult.BlankKill or MurderAttemptResult.PerformKill)
                     {
-                        ninjaButton.Timer = ninjaButton.MaxTimer;
-                        Ninja.ninja.killTimer = GameOptionsManager.Instance.currentNormalGameOptions.KillCooldown;
+                        Ninja.ninja.killTimer = ninjaButton.Timer = ninjaButton.MaxTimer;
                     }
                     else if (attempt == MurderAttemptResult.SuppressKill)
                     {

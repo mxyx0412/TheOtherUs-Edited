@@ -210,12 +210,12 @@ public static class PlayerControlFixedUpdatePatch
         setBomberBombTarget();
         if (Bomber.bomber == null || Bomber.bomber != CachedPlayer.LocalPlayer.PlayerControl) return;
         Bomber.currentTarget = setTarget();
-        if (Bomber.hasBomb == null) setPlayerOutline(Bomber.currentTarget, Bomber.color);
+        if (Bomber.hasBombPlayer == null) setPlayerOutline(Bomber.currentTarget, Bomber.color);
     }
 
     private static void setBomberBombTarget()
     {
-        if (Bomber.bomber == null || Bomber.hasBomb != CachedPlayer.LocalPlayer.PlayerControl) return;
+        if (Bomber.bomber == null || Bomber.hasBombPlayer != CachedPlayer.LocalPlayer.PlayerControl) return;
         Bomber.currentBombTarget = setTarget();
         //if (Bomber.hasBomb != null) setPlayerOutline(Bomber.currentBombTarget, Bomber.color);
     }
@@ -2251,6 +2251,12 @@ public static class MurderPlayerPatch
             CachedPlayer.LocalPlayer.PlayerControl == Witch.witch && __instance == Witch.witch &&
             HudManagerStartPatch.witchSpellButton != null)
             HudManagerStartPatch.witchSpellButton.Timer = HudManagerStartPatch.witchSpellButton.MaxTimer;
+
+        // Bomber Button Sync
+        if (Bomber.triggerBothCooldowns && Bomber.bomber != null &&
+            CachedPlayer.LocalPlayer.PlayerControl == Bomber.bomber && __instance == Bomber.bomber &&
+            HudManagerStartPatch.bomberBombButton != null)
+            HudManagerStartPatch.bomberBombButton.Timer = HudManagerStartPatch.bomberBombButton.MaxTimer;
 
         // Warlock Button Sync
         if (Warlock.warlock != null && CachedPlayer.LocalPlayer.PlayerControl == Warlock.warlock &&

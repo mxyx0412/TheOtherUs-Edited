@@ -897,6 +897,12 @@
         "0": "Bomb Timer",
         "13": "炸弹爆炸时间"
     },
+    "bomberTriggerBothCooldowns": {
+        "13": "炸弹与击杀共享冷却"
+    },
+    "bomberCanGiveToBomber": {
+        "13": "炸弹可以传回炸弹狂"
+    },
     "bomberHotPotatoMode": {
         "0": "Hot Potato Mode",
         "13": "烫手山芋模式"
@@ -1039,7 +1045,7 @@
     },
     "witchTriggerBothCooldowns": {
         "0": "Trigger Both Cooldowns",
-        "13": "诅咒与击杀冷却共用"
+        "13": "诅咒与击杀共享冷却"
     },
     "witchVoteSavesTargets": {
         "0": "Voting The Witch Saves All The Targets",

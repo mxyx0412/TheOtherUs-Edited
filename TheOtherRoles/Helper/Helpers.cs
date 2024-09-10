@@ -681,10 +681,11 @@ public static class Helpers
     public static void handleBomberExplodeOnBodyReport()
     {
         // Murder the bitten player and reset bitten (regardless whether the kill was successful or not)
-        checkMurderAttemptAndKill(Bomber.bomber, Bomber.hasBomb, true, false);
+        checkMurderAttemptAndKill(Bomber.bomber, Bomber.hasBombPlayer, true, false);
         var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
             (byte)CustomRPC.GiveBomb, SendOption.Reliable);
         writer.Write(byte.MaxValue);
+        writer.Write(false);
         AmongUsClient.Instance.FinishRpcImmediately(writer);
         RPCProcedure.giveBomb(byte.MaxValue);
     }

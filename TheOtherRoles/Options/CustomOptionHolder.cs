@@ -44,7 +44,9 @@ public class CustomOptionHolder
     public static CustomOption bomberBombCooldown;
     public static CustomOption bomberDelay;
     public static CustomOption bomberTimer;
-    //public static CustomOption bomberHotPotatoMode;
+    public static CustomOption bomberTriggerBothCooldowns;
+    public static CustomOption bomberCanGiveToBomber;
+    public static CustomOption bomberHotPotatoMode;
 
     public static CustomOption undertakerSpawnRate;
     public static CustomOption undertakerDragingDelaiAfterKill;
@@ -841,7 +843,9 @@ public class CustomOptionHolder
         bomberBombCooldown = Create(10121, Types.Impostor, "bomberBombCooldown", 25f, 10f, 60f, 2.5f, bomberSpawnRate);
         bomberDelay = Create(10122, Types.Impostor, "bomberDelay", 5f, 0f, 20f, 0.5f, bomberSpawnRate);
         bomberTimer = Create(10123, Types.Impostor, "bomberTimer", 10f, 5f, 30f, 0.5f, bomberSpawnRate);
-        //bomberHotPotatoMode = Create(10124, Types.Impostor, "bomberHotPotatoMode", true, bomberSpawnRate);
+        bomberTriggerBothCooldowns = Create(10125, Types.Impostor, "bomberTriggerBothCooldowns", false, bomberSpawnRate);
+        bomberCanGiveToBomber = Create(10126, Types.Impostor, "bomberCanGiveToBomber", false, bomberSpawnRate);
+        bomberHotPotatoMode = Create(10124, Types.Impostor, "bomberHotPotatoMode", true, bomberSpawnRate);
 
         undertakerSpawnRate = Create(10130, Types.Impostor, cs(Undertaker.color, "Undertaker"), rates, null, true);
         undertakerDragingDelaiAfterKill = Create(10131, Types.Impostor, "undertakerDragingDelaiAfterKill", 0f, 0f, 15, 0.5f, undertakerSpawnRate);
