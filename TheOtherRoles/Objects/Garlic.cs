@@ -7,12 +7,9 @@ namespace TheOtherRoles.Objects;
 internal class Garlic
 {
     public static List<Garlic> garlics = [];
-
-    private static ResourceSprite garlicSprite = new("Garlic.png", 300);
-
-    private static ResourceSprite backgroundSprite = new("GarlicBackground.png", 60);
+    private static Sprite garlicSprite = new ResourceSprite("Garlic.png", 300);
+    private static Sprite backgroundSprite = new ResourceSprite("GarlicBackground.png", 60);
     private readonly GameObject background;
-
     public readonly GameObject garlic;
 
     public Garlic(Vector2 p)

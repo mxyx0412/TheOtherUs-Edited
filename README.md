@@ -1,6 +1,6 @@
 <p align="center"> <a href="README_EN.md"> English </a> </p>
 
-![mod banner](./Images/TOU_Logo.png)
+![mod banner](./Images/TOU_Banner.png)
 
 <p align="center">
 <a href="https://github.com/mxyx-club/TheOtherUs-Edited/releases/"><img src="https://badgen.net/github/release/mxyx-club/TheOtherUs-Edited"></a>    
@@ -41,7 +41,7 @@
     - 传送师 & 逃逸者：将标记与传送分离为两个按钮，即现在可以自由标点与传送。
 
  - #### Bug修复：
- 
+
     - 修复选项 “隐藏受阻碍的玩家名称” 无效的问题
     - 工程师：修复选项 “远程修理可用次数” 无效的问题
     - 清理者：小孩清理者时，清理技能的cd不会双倍了

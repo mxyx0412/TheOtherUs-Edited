@@ -275,9 +275,9 @@ public class OnGameEndPatch
                     if (p == null) continue;
                     if (p == Lovers.lover1 || p == Lovers.lover2)
                         TempData.winners.Add(new WinningPlayerData(p.Data));
-                    else if (Pursuer.pursuer.Any(pc => pc == p) && !Pursuer.pursuer.Any(pc => pc.Data.IsDead))
+                    else if (Pursuer.pursuer.Any(pc => pc == p) && Pursuer.pursuer.Any(pc => pc.IsAlive()))
                         TempData.winners.Add(new WinningPlayerData(p.Data));
-                    else if (Survivor.survivor.Any(pc => pc == p) && !Survivor.survivor.Any(pc => pc.Data.IsDead))
+                    else if (Survivor.survivor.Any(pc => pc == p) && Survivor.survivor.Any(pc => pc.IsAlive()))
                         TempData.winners.Add(new WinningPlayerData(p.Data));
                     else if (!notWinners.Contains(p) && !p.Data.Role.IsImpostor)
                         TempData.winners.Add(new WinningPlayerData(p.Data));

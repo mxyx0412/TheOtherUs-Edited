@@ -71,8 +71,8 @@ public static class CredentialsPatch
             torLogo.transform.localPosition = new Vector3(-0.4f, 1f, 5f);
 
             renderer = torLogo.AddComponent<SpriteRenderer>();
-            renderer.sprite = UnityHelper.loadSpriteFromResources("TheOtherRoles.Resources.Banner.png", 300f);
-
+            if (IsCN()) renderer.sprite = new ResourceSprite("TheOtherRoles.Resources.Banner2.png", 270f);
+            else renderer.sprite = new ResourceSprite("TheOtherRoles.Resources.Banner.png", 300f);
             instance = __instance;
             var credentialObject = new GameObject("credentialsTOR");
             var credentials = credentialObject.AddComponent<TextMeshPro>();

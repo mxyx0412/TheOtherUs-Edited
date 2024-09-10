@@ -11,10 +11,10 @@ namespace TheOtherRoles.Patches;
 
 public class GameStartManagerPatch
 {
-    public static Dictionary<int, PlayerVersion> playerVersions = new Dictionary<int, PlayerVersion>();
+    public static Dictionary<int, PlayerVersion> playerVersions = new();
     public static float timer = 600f;
-    private static float kickingTimer = 0f;
-    private static bool versionSent = false;
+    private static float kickingTimer;
+    private static bool versionSent;
     private static string lobbyCodeText = "";
 
     [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnPlayerJoined))]
@@ -105,7 +105,7 @@ public class GameStartManagerPatch
                     else if (!PV.GuidMatches())
                     {
                         // version presumably matches, check if Guid matches
-                        message += $"<color=#FF0000FF>{client.Character.Data.PlayerName} {"modifiedTouVersion".Translate()} v{playerVersions[client.Id].version.ToString()} <size=30%>({PV.guid})</size>\n</color>";
+                        message += $"<color=#FF0000FF>{client.Character.Data.PlayerName} {"modifiedTouVersion".Translate()} v{playerVersions[client.Id].version} <size=30%>({PV.guid})</size>\n</color>";
                         versionMismatch = true;
                     }
                 }

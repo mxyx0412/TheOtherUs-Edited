@@ -840,17 +840,27 @@ internal static class HudManagerStartPatch
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.akujoSetHonmei(CachedPlayer.LocalPlayer.PlayerControl.PlayerId, Akujo.currentTarget.PlayerId);
             },
-            () => { return CachedPlayer.LocalPlayer.PlayerControl == Akujo.akujo && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead && Akujo.honmei == null && Akujo.timeLeft > 0; },
             () =>
             {
-                return CachedPlayer.LocalPlayer.PlayerControl == Akujo.akujo && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead && Akujo.currentTarget != null && Akujo.honmei == null && Akujo.timeLeft > 0;
+                return CachedPlayer.LocalPlayer.PlayerControl == Akujo.akujo
+                       && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead
+                       && Akujo.honmei == null
+                       && Akujo.timeLeft > 0;
+            },
+            () =>
+            {
+                return CachedPlayer.LocalPlayer.PlayerControl == Akujo.akujo
+                       && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead
+                       && Akujo.currentTarget != null
+                       && Akujo.honmei == null
+                       && Akujo.timeLeft > 0;
             },
             () => { akujoHonmeiButton.Timer = akujoHonmeiButton.MaxTimer; },
             Akujo.honmeiSprite,
             ButtonPositions.upperRowRight,
             __instance,
             abilityInput.keyCode,
-            buttonText: "(F)" + getString("AkujoHonmeiText")
+            buttonText: getString("AkujoHonmeiText")
         );
         akujoTimeRemainingText = Object.Instantiate(akujoHonmeiButton.actionButton.cooldownTimerText, __instance.transform);
         akujoTimeRemainingText.text = "";
