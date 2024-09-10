@@ -320,7 +320,7 @@ internal class MeetingHudPatch
         {
             meetingInfoText = string.Format(getString("DoomsayerKilledToWin"), Doomsayer.killToWin - Doomsayer.killedToWin);
         }
-        
+
         if (CachedPlayer.LocalPlayer.PlayerControl == Swapper.swapper)
         {
             meetingInfoText = string.Format(getString("SwapperCharges"), Swapper.charges);

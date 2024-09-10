@@ -77,6 +77,7 @@ public static class RoleClass
         Yoyo.clearAndReload();
         EvilTrapper.clearAndReload();
         Survivor.clearAndReload();
+        PartTimer.clearAndReload();
 
         // Modifier
         Assassin.clearAndReload();

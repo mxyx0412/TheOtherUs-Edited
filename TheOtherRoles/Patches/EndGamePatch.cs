@@ -48,6 +48,7 @@ internal enum WinCondition
     AdditionalLawyerStolenWin,
     AdditionalAlivePursuerWin,
     AdditionalAliveSurvivorWin,
+    AdditionalPartTimerWin,
     ExecutionerWin,
     WerewolfWin,
     JuggernautWin,
@@ -144,6 +145,7 @@ public class OnGameEndPatch
         if (Thief.thief != null) notWinners.Add(Thief.thief);
         if (Juggernaut.juggernaut != null) notWinners.Add(Juggernaut.juggernaut);
         if (Doomsayer.doomsayer != null) notWinners.Add(Doomsayer.doomsayer);
+        if (PartTimer.partTimer != null) notWinners.Add(PartTimer.partTimer);
         if (Akujo.akujo != null) notWinners.Add(Akujo.akujo);
         if (Pavlovsdogs.pavlovsowner != null) notWinners.Add(Pavlovsdogs.pavlovsowner);
         if (Pavlovsdogs.pavlovsdogs != null) notWinners.AddRange(Pavlovsdogs.pavlovsdogs);
@@ -190,7 +192,7 @@ public class OnGameEndPatch
         {
             akujoWin = (Akujo.akujo != null
                 && gameOverReason == (GameOverReason)CustomGameOverReason.AkujoWin
-                    && Akujo.honmei != null && !Akujo.honmei.Data.IsDead && !Akujo.akujo.Data.IsDead)
+                && Akujo.honmei != null && !Akujo.honmei.Data.IsDead && !Akujo.akujo.Data.IsDead)
                 || (GameManager.Instance.DidHumansWin(gameOverReason)
                 && !Akujo.existingWithKiller() && Akujo.honmei != null && !Akujo.honmei.Data.IsDead && !Akujo.akujo.Data.IsDead);
         }
@@ -278,14 +280,7 @@ public class OnGameEndPatch
                         TempData.winners.Add(new WinningPlayerData(p.Data));
                     else if (Survivor.survivor.Any(pc => pc == p) && !Survivor.survivor.Any(pc => pc.Data.IsDead))
                         TempData.winners.Add(new WinningPlayerData(p.Data));
-                    else if (p != Jester.jester && p != Jackal.jackal && p != Werewolf.werewolf &&
-                             p != Juggernaut.juggernaut && p != Doomsayer.doomsayer &&
-                             p != Sidekick.sidekick && p != Arsonist.arsonist && p != Vulture.vulture &&
-                             p != Swooper.swooper &&
-                             p != Pavlovsdogs.pavlovsowner &&
-                             !Pavlovsdogs.pavlovsdogs.Contains(p) &&
-                             p != Akujo.akujo &&
-                             !Jackal.formerJackals.Contains(p) && !p.Data.Role.IsImpostor)
+                    else if (!notWinners.Contains(p) && !p.Data.Role.IsImpostor)
                         TempData.winners.Add(new WinningPlayerData(p.Data));
                 }
             }
@@ -398,22 +393,7 @@ public class OnGameEndPatch
                             TempData.winners.Add(new WinningPlayerData(p.Data));
                         else if (Survivor.survivor.Contains(p) && !p.Data.IsDead)
                             TempData.winners.Add(new WinningPlayerData(p.Data));
-                        else if (p != Jester.jester
-                                 && p != Jackal.jackal
-                                 && p != Werewolf.werewolf
-                                 && p != Juggernaut.juggernaut
-                                 && p != Doomsayer.doomsayer
-                                 && p != Lawyer.lawyer
-                                 && !Pursuer.pursuer.Contains(p)
-                                 && p != Sidekick.sidekick
-                                 && p != Arsonist.arsonist
-                                 && p != Vulture.vulture
-                                 && p != Amnisiac.amnisiac
-                                 && p != Thief.thief
-                                 && p != Pavlovsdogs.pavlovsowner
-                                 && !Pavlovsdogs.pavlovsdogs.Contains(p)
-                                 && !Jackal.formerJackals.Contains(p)
-                                 && !p.Data.Role.IsImpostor)
+                        else if (!notWinners.Contains(p) && !p.Data.Role.IsImpostor)
                             TempData.winners.Add(new WinningPlayerData(p.Data));
 
                     }
@@ -494,9 +474,12 @@ public class OnGameEndPatch
                     TempData.winners.Add(new WinningPlayerData(player.Data));
             }
             AdditionalTempData.additionalWinConditions.Add(WinCondition.AdditionalAliveSurvivorWin);
-            /*
-            if (!TempData.winners.ToArray().Any(x => x.PlayerName == Survivor.survivor.Data.PlayerName))
-                TempData.winners.Add(new WinningPlayerData(Survivor.survivor.Data));*/
+        }
+
+        if (PartTimer.partTimer != null && TempData.winners.ToList().Any(x => x.PlayerName == PartTimer.target.Data.PlayerName))
+        {
+            TempData.winners.Add(new WinningPlayerData(PartTimer.partTimer.Data));
+            AdditionalTempData.additionalWinConditions.Add(WinCondition.AdditionalPartTimerWin);
         }
 
         AdditionalTempData.timer = (float)(DateTime.UtcNow -
@@ -680,6 +663,9 @@ public class EndGameManagerSetUpPatch
                     break;
                 case WinCondition.AdditionalLawyerBonusWin:
                     winConditionsTexts.Add(cs(Lawyer.color, "律师和客户胜利"));
+                    break;
+                case WinCondition.AdditionalPartTimerWin:
+                    winConditionsTexts.Add(cs(PartTimer.color, "打工仔跟随胜利"));
                     break;
                 case WinCondition.AdditionalAlivePursuerWin:
                     pursuerAlive = true;

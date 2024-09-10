@@ -95,6 +95,7 @@ public static class Helpers
                player == Jackal.jackal ||
                player == Sidekick.sidekick ||
                player == Pavlovsdogs.pavlovsowner ||
+               player == PartTimer.partTimer ||
                player == Akujo.akujo ||
                player == Swooper.swooper ||
                player == Lawyer.lawyer ||
@@ -299,6 +300,7 @@ public static class Helpers
     {
         return isNeutral(player) &&
                 player != Amnisiac.amnisiac &&
+                player != PartTimer.partTimer &&
                 !Pursuer.pursuer.Contains(player) &&
                 !Survivor.survivor.Contains(player);
     }

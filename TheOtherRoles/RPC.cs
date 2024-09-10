@@ -59,6 +59,7 @@ public enum RoleId
     Lawyer,
     Executioner,
     Pursuer,
+    PartTimer,
     Doomsayer,
     Arsonist,
     Jackal,
@@ -70,7 +71,6 @@ public enum RoleId
     Juggernaut,
     Akujo,
     Thief,
-
 
     Crew,
     Crewmate,
@@ -207,6 +207,7 @@ public enum CustomRPC
     LightsOut,
     PlaceCamera,
     SealVent,
+    PartTimerSet,
     ArsonistWin,
     GuesserShoot,
     LawyerSetTarget,
@@ -415,6 +416,9 @@ public static class RPCProcedure
                         break;
                     case RoleId.Amnisiac:
                         Amnisiac.amnisiac = player;
+                        break;
+                    case RoleId.PartTimer:
+                        PartTimer.partTimer = player;
                         break;
                     case RoleId.Veteran:
                         Veteran.veteran = player;
@@ -1004,6 +1008,12 @@ public static class RPCProcedure
             case RoleId.Swapper:
                 if (Amnisiac.resetRole) Swapper.clearAndReload();
                 Swapper.swapper = amnisiac;
+                Amnisiac.clearAndReload();
+                break;
+                
+            case RoleId.PartTimer:
+                if (Amnisiac.resetRole) PartTimer.clearAndReload();
+                PartTimer.partTimer = amnisiac;
                 Amnisiac.clearAndReload();
                 break;
 
@@ -2031,6 +2041,14 @@ public static class RPCProcedure
                 Vampire.bitten = player;
     }
 
+    public static void partTimerSet(byte targetId)
+    {
+        PlayerControl target = playerById(targetId);
+        if (target == null) return;
+        PartTimer.target = target;
+        PartTimer.canSetTarget = false;
+    }
+
     public static void prophetExamine(byte targetId)
     {
         var target = playerById(targetId);
@@ -2277,6 +2295,7 @@ public static class RPCProcedure
         if (player == Juggernaut.juggernaut) Juggernaut.clearAndReload();
         if (player == Doomsayer.doomsayer) Doomsayer.clearAndReload();
         if (player == Akujo.akujo) Akujo.clearAndReload();
+        if (player == PartTimer.partTimer) PartTimer.clearAndReload();
 
         if (Pavlovsdogs.pavlovsdogs.Any(x => x.PlayerId == player.PlayerId))
             Pavlovsdogs.pavlovsdogs.RemoveAll(x => x.PlayerId == player.PlayerId);
@@ -3705,6 +3724,10 @@ internal class RPCHandlerPatch
 
             case CustomRPC.SetFutureErased:
                 RPCProcedure.setFutureErased(reader.ReadByte());
+                break;
+
+            case CustomRPC.PartTimerSet:
+                RPCProcedure.partTimerSet(reader.ReadByte());
                 break;
 
             case CustomRPC.SetFutureShifted:

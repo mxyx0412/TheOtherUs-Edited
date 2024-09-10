@@ -60,6 +60,7 @@ public class RoleInfo
     public static RoleInfo lawyer = new("Lawyer", Lawyer.color, RoleId.Lawyer, RoleTeam.Neutral);
     public static RoleInfo executioner = new("Executioner", Executioner.color, RoleId.Executioner, RoleTeam.Neutral);
     public static RoleInfo pursuer = new("Pursuer", Pursuer.color, RoleId.Pursuer, RoleTeam.Neutral);
+    public static RoleInfo partTimer = new("PartTimer", PartTimer.color, RoleId.PartTimer, RoleTeam.Neutral);
     public static RoleInfo jackal = new("Jackal", Jackal.color, RoleId.Jackal, RoleTeam.Neutral);
     public static RoleInfo sidekick = new("Sidekick", Sidekick.color, RoleId.Sidekick, RoleTeam.Neutral);
     public static RoleInfo pavlovsowner = new("Pavlovsowner", Pavlovsdogs.color, RoleId.Pavlovsowner, RoleTeam.Neutral);
@@ -167,6 +168,7 @@ public class RoleInfo
         lawyer,
         executioner,
         pursuer,
+        partTimer,
         doomsayer,
         arsonist,
         jackal,
@@ -334,6 +336,7 @@ public class RoleInfo
         if (p == Vulture.vulture) infos.Add(vulture);
         if (p == Medium.medium) infos.Add(medium);
         if (p == Lawyer.lawyer) infos.Add(lawyer);
+        if (p == PartTimer.partTimer) infos.Add(partTimer);
         if (p == Prosecutor.prosecutor) infos.Add(prosecutor);
         if (p == Executioner.executioner) infos.Add(executioner);
         if (p == Trapper.trapper) infos.Add(trapper);

@@ -1417,7 +1417,7 @@
     },
     "pursuerBlanksCooldown": {
         "0": "Blank Cooldown",
-        "13": "空包弹冷却"
+        "13": "空包弹冷却时间"
     },
     "pursuerBlanksNumber": {
         "0": "Number Of Blanks",
@@ -1428,7 +1428,7 @@
     },
     "pursuerVestCooldown": {
         "0": "Vest Cooldown",
-        "13": "防弹衣冷却"
+        "13": "防弹衣冷却时间"
     },
     "pursuerVestDuration": {
         "0": "Vest Duration",
@@ -1441,6 +1441,15 @@
     "pursuerVestNumber": {
         "0": "Number Of Vest",
         "13": "防弹衣可用次数"
+    },
+    "partTimerCooldown": {
+        "13": "打工冷却时间"
+    },
+    "partTimerDeathTurn": {
+        "13": "无业状态下打工仔穷死经过的回合数"
+    },
+    "partTimerIsCheckTargetRole": {
+        "13": "打工仔可以确认打工对象的职业"
     },
     "doomsayerCooldown": {
         "0": "Reveal Cooldown",
@@ -2871,6 +2880,10 @@
         "0": "Rampage",
         "13": "狂暴"
     },
+    "partTimerButton": {
+        "0": "PartTimer",
+        "13": "打工"
+    },
     "GuessserGMInfo": {
         "0": " (Guesser)",
         "13": " (赌怪)"
@@ -3208,6 +3221,16 @@
     },
     "PursuerShortDesc": {
         "13": "活下去！"
+    },
+    "PartTimer": {
+        "0": "PartTimer",
+        "13": "打工仔"
+    },
+    "PartTimerIntroDesc": {
+        "13": "打工人，打工魂，打工都是人上人！"
+    },
+    "PartTimerShortDesc": {
+        "13": "向老板提交简历以跟随对方获胜"
     },
     "Jackal": {
         "0": "Jackal",

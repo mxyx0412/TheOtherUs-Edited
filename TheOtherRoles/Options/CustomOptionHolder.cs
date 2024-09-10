@@ -226,6 +226,7 @@ public class CustomOptionHolder
     public static CustomOption sheriffCanKillThief;
     public static CustomOption sheriffCanKillAmnesiac;
     public static CustomOption sheriffCanKillPursuer;
+    public static CustomOption sheriffCanKillPartTimer;
     public static CustomOption sheriffCanKillDoomsayer;
     public static CustomOption deputySpawnRate;
 
@@ -357,6 +358,11 @@ public class CustomOptionHolder
     //public static CustomOption pursuerSpawnRate;
     public static CustomOption pursuerBlanksCooldown;
     public static CustomOption pursuerBlanksNumber;
+
+    public static CustomOption partTimerSpawnRate;
+    public static CustomOption partTimerCooldown;
+    public static CustomOption partTimerDeathTurn;
+    public static CustomOption partTimerIsCheckTargetRole;
 
     public static CustomOption executionerSpawnRate;
     public static CustomOption executionerCanCallEmergency;
@@ -1041,6 +1047,11 @@ public class CustomOptionHolder
         executionerPromotesToLawyer = Create(20192, Types.Neutral, "executionerPromotesToLawyer", true, executionerSpawnRate);
         //executionerOnTargetDead = Create(20193, Types.Neutral, "目标死亡后变为", [cs(Pursuer.color, "Pursuer"), cs(Jester.color, "Jester"), cs(Amnisiac.color, "Amnisiac"), "Crewmate"], executionerSpawnRate);
 
+        partTimerSpawnRate = Create(20290, Types.Neutral, cs(PartTimer.color, "PartTimer"), rates, null, true);
+        partTimerCooldown = Create(20291, Types.Neutral, "partTimerCooldown", 20f, 2.5f, 60f, 2.5f, partTimerSpawnRate);
+        partTimerDeathTurn = Create(20292, Types.Neutral, "partTimerDeathTurn", 2, 1, 5, 1, partTimerSpawnRate);
+        partTimerIsCheckTargetRole = Create(20293, Types.Neutral, "partTimerIsCheckTargetRole", true, partTimerSpawnRate);
+
         doomsayerSpawnRate = Create(20221, Types.Neutral, cs(Doomsayer.color, "Doomsayer"), rates, null, true);
         doomsayerCooldown = Create(20222, Types.Neutral, "doomsayerCooldown", 20f, 2.5f, 60f, 2.5f, doomsayerSpawnRate);
         doomsayerHasMultipleShotsPerMeeting = Create(20223, Types.Neutral, "doomsayerHasMultipleShotsPerMeeting", true, doomsayerSpawnRate);
@@ -1083,12 +1094,13 @@ public class CustomOptionHolder
         sheriffCanKillSurvivor = Create(30160, Types.Crewmate, $"{"sheriffCanKill".Translate()}{cs(Survivor.color, "Survivor".Translate())}", false, sheriffCanKillNeutrals);
         sheriffCanKillAmnesiac = Create(30153, Types.Crewmate, $"{"sheriffCanKill".Translate()}{cs(Amnisiac.color, "Amnisiac".Translate())}", false, sheriffCanKillNeutrals);
         sheriffCanKillPursuer = Create(30158, Types.Crewmate, $"{"sheriffCanKill".Translate()}{cs(Pursuer.color, "Pursuer".Translate())}", true, sheriffCanKillNeutrals);
+        sheriffCanKillPartTimer = Create(30161, Types.Crewmate, $"{"sheriffCanKill".Translate()}{cs(PartTimer.color, "PartTimer".Translate())}", true, sheriffCanKillNeutrals);
         sheriffCanKillJester = Create(30151, Types.Crewmate, $"{"sheriffCanKill".Translate()}{cs(Jester.color, "Jester".Translate())}", true, sheriffCanKillNeutrals);
         sheriffCanKillLawyer = Create(30156, Types.Crewmate, $"{"sheriffCanKill".Translate()}{cs(Lawyer.color, "Lawyer".Translate())}", true, sheriffCanKillNeutrals);
         sheriffCanKillExecutioner = Create(30152, Types.Crewmate, $"{"sheriffCanKill".Translate()}{cs(Executioner.color, "Executioner".Translate())}", true, sheriffCanKillNeutrals);
         sheriffCanKillVulture = Create(30155, Types.Crewmate, $"{"sheriffCanKill".Translate()}{cs(Vulture.color, "Vulture".Translate())}", true, sheriffCanKillNeutrals);
-        sheriffCanKillThief = Create(30157, Types.Crewmate, $"{"sheriffCanKill".Translate()}{cs(Thief.color, "Thief".Translate())}", true, sheriffCanKillNeutrals);
         sheriffCanKillDoomsayer = Create(30159, Types.Crewmate, $"{"sheriffCanKill".Translate()}{cs(Doomsayer.color, "Doomsayer".Translate())}", true, sheriffCanKillNeutrals);
+        sheriffCanKillThief = Create(30157, Types.Crewmate, $"{"sheriffCanKill".Translate()}{cs(Thief.color, "Thief".Translate())}", true, sheriffCanKillNeutrals);
 
         deputySpawnRate = Create(30170, Types.Crewmate, cs(Deputy.color, "deputySpawnRate"), rates, sheriffSpawnRate);
         deputyNumberOfHandcuffs = Create(30171, Types.Crewmate, "deputyNumberOfHandcuffs", 5f, 1f, 10f, 1f, deputySpawnRate);

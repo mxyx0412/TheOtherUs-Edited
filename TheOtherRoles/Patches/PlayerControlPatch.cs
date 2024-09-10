@@ -198,6 +198,13 @@ public static class PlayerControlFixedUpdatePatch
         if (!Medic.usedShield) setPlayerOutline(Medic.currentTarget, Medic.shieldedColor);
     }
 
+    private static void partTimerSetTarget()
+    {
+        if (PartTimer.partTimer == null || PartTimer.partTimer != CachedPlayer.LocalPlayer.PlayerControl) return;
+        PartTimer.currentTarget = setTarget();
+        if (PartTimer.canSetTarget) setPlayerOutline(PartTimer.currentTarget, PartTimer.color);
+    }
+
     private static void bomberSetTarget()
     {
         setBomberBombTarget();
@@ -1936,6 +1943,8 @@ public static class PlayerControlFixedUpdatePatch
             thiefSetTarget();
             // yoyo
             Silhouette.UpdateAll();
+            // PartTimer
+            partTimerSetTarget();
 
             hackerUpdate();
             swapperUpdate();

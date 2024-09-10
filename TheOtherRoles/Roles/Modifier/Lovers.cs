@@ -39,6 +39,7 @@ public static class Lovers
         return existing() && (lover1 == Jackal.jackal || lover2 == Jackal.jackal
                            || lover1 == Sidekick.sidekick || lover2 == Sidekick.sidekick
                            || lover1 == Werewolf.werewolf || lover2 == Werewolf.werewolf
+                           || lover1 == Swooper.swooper || lover2 == Swooper.swooper
                            || lover1 == Pavlovsdogs.pavlovsowner || lover2 == Pavlovsdogs.pavlovsowner
                            || Pavlovsdogs.pavlovsdogs.Contains(lover1) || Pavlovsdogs.pavlovsdogs.Contains(lover2)
                            || lover1 == Juggernaut.juggernaut || lover2 == Juggernaut.juggernaut

@@ -55,6 +55,7 @@ internal static class HudManagerStartPatch
     public static CustomButton swooperKillButton;
     private static CustomButton jackalSidekickButton;
     public static CustomButton eraserButton;
+    public static CustomButton partTimerButton;
     public static CustomButton placeJackInTheBoxButton;
     public static CustomButton lightsOutButton;
     public static CustomButton cleanerCleanButton;
@@ -190,6 +191,7 @@ internal static class HudManagerStartPatch
         amnisiacRememberButton.MaxTimer = defaultMaxTimer;
         bomberGiveButton.MaxTimer = 0f;
         bomberGiveButton.Timer = 0f;
+        partTimerButton.MaxTimer = PartTimer.cooldown;
         mediumButton.MaxTimer = Medium.cooldown;
         pursuerButton.MaxTimer = Pursuer.cooldown;
         trackerTrackCorpsesButton.MaxTimer = Tracker.corpsesTrackingCooldown;
@@ -1028,7 +1030,7 @@ internal static class HudManagerStartPatch
             0f,
             () => { },
             false,
-            "Meeting"
+            buttonText: getString("MayorButtonText")
         );
 
         // ButtonBarry Meetings
@@ -2371,6 +2373,40 @@ internal static class HudManagerStartPatch
             __instance,
             abilityInput.keyCode
         );
+
+        partTimerButton = new CustomButton(
+            () =>
+            {
+                if (PartTimer.currentTarget == null) return;
+                if (checkAndDoVetKill(PartTimer.currentTarget)) return;
+
+                var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
+                    (byte)CustomRPC.PartTimerSet, SendOption.Reliable);
+                writer.Write(PartTimer.currentTarget);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.partTimerSet(PartTimer.currentTarget.PlayerId);
+                SoundEffectsManager.play("jackalSidekick");
+
+                partTimerButton.Timer = partTimerButton.MaxTimer;
+            },
+            () =>
+            {
+                return PartTimer.partTimer != null && PartTimer.partTimer == CachedPlayer.LocalPlayer.PlayerControl &&
+                       !CachedPlayer.LocalPlayer.Data.IsDead && PartTimer.canSetTarget;
+            },
+            () =>
+            {
+                showTargetNameOnButton(PartTimer.currentTarget, partTimerButton, getString("partTimerButton"));
+                return CachedPlayer.LocalPlayer.PlayerControl.CanMove && PartTimer.currentTarget != null; ;
+            },
+            () => { partTimerButton.Timer = partTimerButton.MaxTimer; },
+            PartTimer.buttonSprite,
+            ButtonPositions.upperRowCenter,
+            __instance,
+            abilityInput.keyCode,
+            buttonText: getString("partTimerButton")
+        );
+
 
         placeJackInTheBoxButton = new CustomButton(
             () =>

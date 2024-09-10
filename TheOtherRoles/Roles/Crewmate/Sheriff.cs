@@ -14,6 +14,7 @@ public static class Sheriff
     public static bool canKillSurvivor;
     public static bool canKillJester;
     public static bool canKillPursuer;
+    public static bool canKillPartTimer;
     public static bool canKillVulture;
     public static bool canKillThief;
     public static bool canKillAmnesiac;
@@ -48,17 +49,17 @@ public static class Sheriff
                 Pavlovsdogs.pavlovsdogs.Any(p => p == target) ||
                 (spyCanDieToSheriff && Spy.spy == target) ||
                 (canKillNeutrals &&
-                    (Akujo.akujo == target ||
-                     isKiller(target) ||
-                     (Survivor.survivor.Contains(target) && canKillSurvivor) ||
-                     (Jester.jester == target && canKillJester) ||
-                     (Vulture.vulture == target && canKillVulture) ||
-                     (Thief.thief == target && canKillThief) ||
-                     (Amnisiac.amnisiac == target && canKillAmnesiac) ||
-                     (Lawyer.lawyer == target && canKillLawyer) ||
-                     (Executioner.executioner == target && canKillExecutioner) ||
-                     (Pursuer.pursuer.Contains(target) && canKillPursuer) ||
-                     (Doomsayer.doomsayer == target && canKillDoomsayer))));
+                    (Akujo.akujo == target || isKiller(target) ||
+                        (Survivor.survivor.Contains(target) && canKillSurvivor) ||
+                        (Jester.jester == target && canKillJester) ||
+                        (Vulture.vulture == target && canKillVulture) ||
+                        (Thief.thief == target && canKillThief) ||
+                        (Amnisiac.amnisiac == target && canKillAmnesiac) ||
+                        (PartTimer.partTimer == target && canKillPartTimer) ||
+                        (Lawyer.lawyer == target && canKillLawyer) ||
+                        (Executioner.executioner == target && canKillExecutioner) ||
+                        (Pursuer.pursuer.Contains(target) && canKillPursuer) ||
+                        (Doomsayer.doomsayer == target && canKillDoomsayer))));
     }
 
     public static void clearAndReload()
@@ -74,6 +75,7 @@ public static class Sheriff
         canKillLawyer = CustomOptionHolder.sheriffCanKillLawyer.getBool();
         canKillJester = CustomOptionHolder.sheriffCanKillJester.getBool();
         canKillPursuer = CustomOptionHolder.sheriffCanKillPursuer.getBool();
+        canKillPartTimer = CustomOptionHolder.sheriffCanKillPartTimer.getBool();
         canKillVulture = CustomOptionHolder.sheriffCanKillVulture.getBool();
         canKillThief = CustomOptionHolder.sheriffCanKillThief.getBool();
         canKillAmnesiac = CustomOptionHolder.sheriffCanKillAmnesiac.getBool();
