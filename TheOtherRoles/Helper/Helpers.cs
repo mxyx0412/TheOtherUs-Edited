@@ -646,8 +646,7 @@ public static class Helpers
 
     public static PlayerControl GetHostPlayer()
     {
-        var host = GameData.Instance.GetHost();
-        return host != null ? playerById(host.PlayerId) : null;
+        return playerById(GameData.Instance.GetHost().PlayerId);
     }
 
     public static PlayerControl playerById(byte id)

@@ -15,6 +15,11 @@ public static class Lovers
     // Lovers save if next to be exiled is a lover, because RPC of ending game comes before RPC of exiled
     public static bool notAckedExiledIsLover;
 
+    public static bool isLover(this PlayerControl player)
+    {
+        return player != null && (player == lover1 || player == lover2);
+    }
+
     public static bool existing()
     {
         return lover1 != null && lover2 != null && !lover1.Data.Disconnected && !lover2.Data.Disconnected;

@@ -132,27 +132,26 @@ public class OnGameEndPatch
 
         // Remove Jester, Arsonist, Vulture, Jackal, former Jackals and Sidekick from winners (if they win, they'll be readded)
         var notWinners = new List<PlayerControl>();
-        if (Jester.jester != null) notWinners.Add(Jester.jester);
-        if (Sidekick.sidekick != null) notWinners.Add(Sidekick.sidekick);
-        if (Amnisiac.amnisiac != null) notWinners.Add(Amnisiac.amnisiac);
-        if (Jackal.jackal != null) notWinners.Add(Jackal.jackal);
-        if (Arsonist.arsonist != null) notWinners.Add(Arsonist.arsonist);
-        if (Swooper.swooper != null) notWinners.Add(Swooper.swooper);
-        if (Vulture.vulture != null) notWinners.Add(Vulture.vulture);
-        if (Werewolf.werewolf != null) notWinners.Add(Werewolf.werewolf);
-        if (Lawyer.lawyer != null) notWinners.Add(Lawyer.lawyer);
-        if (Executioner.executioner != null) notWinners.Add(Executioner.executioner);
-        if (Thief.thief != null) notWinners.Add(Thief.thief);
-        if (Juggernaut.juggernaut != null) notWinners.Add(Juggernaut.juggernaut);
-        if (Doomsayer.doomsayer != null) notWinners.Add(Doomsayer.doomsayer);
-        if (PartTimer.partTimer != null) notWinners.Add(PartTimer.partTimer);
-        if (Akujo.akujo != null) notWinners.Add(Akujo.akujo);
-        if (Pavlovsdogs.pavlovsowner != null) notWinners.Add(Pavlovsdogs.pavlovsowner);
-        if (Pavlovsdogs.pavlovsdogs != null) notWinners.AddRange(Pavlovsdogs.pavlovsdogs);
-        if (Akujo.honmei != null && Akujo.honmeiCannotFollowWin) notWinners.Add(Akujo.honmei);
-        if (Pursuer.pursuer != null) notWinners.AddRange(Pursuer.pursuer);
-        if (Survivor.survivor != null) notWinners.AddRange(Survivor.survivor);
-        notWinners.AddRange(Jackal.formerJackals);
+
+        notWinners.AddRange(new[]
+        {
+            Jester.jester,
+            Sidekick.sidekick,
+            Amnisiac.amnisiac,
+            Jackal.jackal,
+            Arsonist.arsonist,
+            Swooper.swooper,
+            Vulture.vulture,
+            Werewolf.werewolf,
+            Lawyer.lawyer,
+            Executioner.executioner,
+            Thief.thief,
+            Juggernaut.juggernaut,
+            Doomsayer.doomsayer,
+            PartTimer.partTimer,
+            Akujo.akujo,
+            Pavlovsdogs.pavlovsowner
+        }.Where(p => p != null));
 
         var winnersToRemove = new List<WinningPlayerData>();
         foreach (var winner in TempData.winners.GetFastEnumerator())

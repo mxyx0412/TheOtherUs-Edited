@@ -128,8 +128,7 @@ internal class ExileControllerBeginPatch
                     writer3.Write(Witch.witch.PlayerId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer3);
 
-                    GameHistory.overrideDeathReasonAndKiller(target, DeadPlayer.CustomDeathReason.WitchExile,
-                        Witch.witch);
+                    GameHistory.overrideDeathReasonAndKiller(target, DeadPlayer.CustomDeathReason.WitchExile, Witch.witch);
                 }
             }
         }

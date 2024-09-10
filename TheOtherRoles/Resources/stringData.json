@@ -898,9 +898,11 @@
         "13": "炸弹爆炸时间"
     },
     "bomberTriggerBothCooldowns": {
+        "0": "Trigger Both Cooldowns",
         "13": "炸弹与击杀共享冷却"
     },
     "bomberCanGiveToBomber": {
+        "0": "Can Bomb Give To Bomber",
         "13": "炸弹可以传回炸弹狂"
     },
     "bomberHotPotatoMode": {
@@ -2270,7 +2272,16 @@
     },
     "creditsString1": {
         "0": "<align=\"center\"><b>TheOtherUs-Edited Team:</b>\nmxyx    Huier-Huang    haoren\nImp2    FangKuaiYa\n\nThanks to The Other Roles, The Other Roles CE, The Other Roles GM IA, Town of Us, Stellar Roles, SuperNewRoles!\n\nThanks to miniduikboot & GD for hosting modded servers (and so much more)\n\n",
-        "13": "<align=\"center\"><b>TheOtherUs-Edited 开发者:</b>\n沫夏悠轩    天寸梦初    善良的好人    Imp11\n\n<b>美工:</b>\n方块    黎木\n\n<b>翻译:</b>\nEN：九头蛇\nCN：沫夏悠轩\n\n<b>GitHub贡献者:</b>\n沫夏悠轩    天寸梦初    Imp11\n\n本模组使用了部分[https://github.com/dabao40/TheOtherRolesGMIA]TheOtherRolesGMIA]的代码，感谢Imp11的支持！\n\nThanks to The Other Roles, The Other Roles CE, The Other Roles GM IA, Town of Us, Stellar Roles , SuperNewRoles!\n\nThanks to miniduikboot & GD for hosting modded servers (and so much more)\n"
+        "13": "<align=\"center\"><b>TheOtherUs-Edited 开发者:</b>\n沫夏悠轩    天寸梦初    善良的好人    Imp11\n\n<b>美工:</b>\n方块    Det黎木\n\n<b>翻译:</b>\nEN：九头蛇\nCN：沫夏悠轩\n\n<b>GitHub贡献者:</b>\n沫夏悠轩    天寸梦初    Imp11\n\n本模组使用了部分[https://github.com/dabao40/TheOtherRolesGMIA]TheOtherRolesGMIA]的代码，感谢Imp11的支持！\n\nThanks to The Other Roles, The Other Roles CE, The Other Roles GM IA, Town of Us, Stellar Roles , SuperNewRoles!\n\nThanks to miniduikboot & GD for hosting modded servers (and so much more)\n"
+    },
+    "WelcomeText": {
+        "13": "欢迎游玩<color=#ff351f><size=120%>我们的超多职业</size></color> ！\n\n游戏指令：\n/r [职业名称] ：获取该职业的介绍\n/m ：游戏内使用，获取自己已有职业的介绍\n\n如需查看其它指令请输入：/cmd"
+    },
+    "CommandsInHost": {
+        "13": "大厅指令：\n/gm [模式代码] ：切换游戏模式\n模式代码：gm(赌怪模式)、hn(猎杀模式)、ph(道具躲猫猫)\n\n/kick [玩家名称] ：踢出玩家\n/ban [玩家名称] 封禁玩家\n\n游戏中指令：\n/end ：强制游戏结束\n/meeting (mt) 召集/结束会议\n/kill [玩家名称] ：强制击杀玩家\n/revive [玩家名称] ： 强制复活玩家"
+    },
+    "CommandsInPlayer": {
+        "13": "全局指令：\n/r [职业名称] ：获得该职业的职业介绍\n\n游戏中指令：\n/m  ： 获得当前玩家所有职业的职业介绍\n\n死亡玩家或游戏大厅指令：\n/tp [玩家名称] ：将自己传送到该玩家的位置。"
     },
     "Host": {
         "0": "Host",
@@ -2290,17 +2301,14 @@
     },
     "swapperMeetingButton": {
         "0": "The Swapper can't start an emergency meeting",
-        "11": "スワッパーはミーティングを招集できない",
         "13": "换票师不可以发起紧急会议"
     },
     "jesterMeetingButton": {
         "0": "The Jester can't start an emergency meeting",
-        "11": "ジェスターはミーティングを招集できない",
         "13": "小丑不可以发起紧急会议"
     },
     "lawyerMeetingButton": {
         "0": "The Lawyer can't start an emergency meeting",
-        "11": "弁護士はミーティングを招集できない",
         "13": "律师不可以发起紧急会议"
     },
     "fortuneTellerMeetingButton": {
@@ -2365,17 +2373,14 @@
     },
     "trapperGotTrapText": {
         "0": "{0} got caught in the trap",
-        "11": "{0}が罠にかかった",
         "13": "{0} 掉进了陷阱里！"
     },
     "guesserGuessesLeft": {
         "0": "Guesses Left: {0}",
-        "11": "残り推測可能回数:{0}",
         "13": "剩余猜测次数：{0}"
     },
     "akujoTimeRemaining": {
         "0": "Time Remaining: {0}",
-        "11": "残り時間:{0}",
         "13": "招募剩余时间：{0}"
     },
     "DoomsayerKilledToWin": {

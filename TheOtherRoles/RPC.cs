@@ -261,6 +261,7 @@ public enum CustomRPC
     PropHuntSetInvis,
     PropHuntSetSpeedboost,
     HostEndGame,
+    HostKill,
     HostRevive,
 
     // Other functionality
@@ -1927,6 +1928,21 @@ public static class RPCProcedure
             AmongUsClient.Instance.FinishRpcImmediately(invisibleWriter);
             setJackalSwoop(Jackal.jackal.PlayerId, byte.MinValue);
             jackalSwoopButton.Timer = jackalSwoopButton.MaxTimer + Jackal.duration;
+        }
+    }
+
+    public static void hostKill(byte targetId)
+    {
+        var target = playerById(targetId);
+        target.Exiled();
+        overrideDeathReasonAndKiller(target, DeadPlayer.CustomDeathReason.HostCmdKill, GetHostPlayer());
+
+        DeadBody[] array = Object.FindObjectsOfType<DeadBody>();
+        foreach (var body in array)
+        {
+            if (body.ParentId != targetId) continue;
+            Object.Destroy(body.gameObject);
+            break;
         }
     }
 
@@ -4054,6 +4070,9 @@ internal class RPCHandlerPatch
 
             case CustomRPC.HostRevive:
                 RPCProcedure.hostRevive(reader.ReadByte());
+                break;
+            case CustomRPC.HostKill:
+                RPCProcedure.hostKill(reader.ReadByte());
                 break;
         }
 

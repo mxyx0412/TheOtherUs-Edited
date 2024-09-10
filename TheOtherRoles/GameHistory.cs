@@ -9,6 +9,7 @@ public class DeadPlayer
 {
     public enum CustomDeathReason
     {
+        HostCmdKill,
         Exile,
         Kill,
         Disconnect,

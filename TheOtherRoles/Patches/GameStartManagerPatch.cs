@@ -105,7 +105,7 @@ public class GameStartManagerPatch
                     else if (!PV.GuidMatches())
                     {
                         // version presumably matches, check if Guid matches
-                        message += $"<color=#FF0000FF>{client.Character.Data.PlayerName} {"modifiedTouVersion".Translate()} v{playerVersions[client.Id].version.ToString()} <size=30%>({PV.guid.ToString()})</size>\n</color>";
+                        message += $"<color=#FF0000FF>{client.Character.Data.PlayerName} {"modifiedTouVersion".Translate()} v{playerVersions[client.Id].version.ToString()} <size=30%>({PV.guid})</size>\n</color>";
                         versionMismatch = true;
                     }
                 }

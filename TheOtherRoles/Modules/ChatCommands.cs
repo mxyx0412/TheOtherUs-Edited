@@ -1,20 +1,17 @@
 using System;
+using System.Collections;
 using System.Linq;
 using Hazel;
 using InnerNet;
 using TheOtherRoles.Utilities;
 using UnityEngine;
+using static TheOtherRoles.DeadPlayer;
 
 namespace TheOtherRoles.Modules;
 
 [HarmonyPatch]
 public static class ChatCommands
 {
-    public static bool isLover(this PlayerControl player)
-    {
-        return player != null && (player == Lovers.lover1 || player == Lovers.lover2);
-    }
-
     [HarmonyPatch(typeof(ChatController), nameof(ChatController.SendChat))]
     private static class SendChatPatch
     {
@@ -104,8 +101,11 @@ public static class ChatCommands
                         : (PlayerControl)CachedPlayer.AllPlayers.FirstOrDefault(x => x.Data.PlayerName.Equals(playerName));
                     if (target != null)
                     {
-                        target.Exiled();
-                        target.RpcMurderPlayer(target, true);
+                        var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
+                            (byte)CustomRPC.HostKill, SendOption.Reliable);
+                        writer.Write(target.PlayerId);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        RPCProcedure.hostKill(target.PlayerId);
                     }
                     handled = true;
                 }
@@ -169,16 +169,25 @@ public static class ChatCommands
             }
 
             // 死亡玩家指令
-            if (chat.StartsWith("/tp ") && CachedPlayer.LocalPlayer.Data.IsDead)
+            if (chat.StartsWith("/tp ") && (CachedPlayer.LocalPlayer.IsDead || AmongUsClient.Instance.GameState != InnerNetClient.GameStates.Started))
             {
                 var playerName = text[4..].ToLower();
-                PlayerControl target =
-                    CachedPlayer.AllPlayers.FirstOrDefault(x => x.Data.PlayerName.ToLower().Equals(playerName));
+                PlayerControl target = CachedPlayer.AllPlayers.FirstOrDefault(x => x.Data.PlayerName.ToLower().Equals(playerName));
                 if (target != null)
                 {
                     CachedPlayer.LocalPlayer.transform.position = target.transform.position;
                     handled = true;
                 }
+            }
+
+            if (chat.StartsWith("/cmd"))
+            {
+                if (AmongUsClient.Instance.AmHost)
+                {
+                    __instance.AddChat(CachedPlayer.LocalPlayer.PlayerControl, "CommandsInHost".Translate());
+                }
+                __instance.AddChat(CachedPlayer.LocalPlayer.PlayerControl, "CommandsInPlayer".Translate());
+                handled = true;
             }
 
             if (handled)
@@ -191,6 +200,31 @@ public static class ChatCommands
         }
     }
 
+
+    [HarmonyPatch(typeof(PlayerPhysics), nameof(PlayerPhysics.CoSpawnPlayer))]
+    public class AmongUsClientOnPlayerJoinedPatch
+    {
+        public static void Postfix(PlayerPhysics __instance)
+        {
+            if (PlayerControl.LocalPlayer == __instance.myPlayer && AmongUsClient.Instance.NetworkMode != NetworkModes.FreePlay)
+            {
+                _ = new LateTask(() =>
+                {
+                    if (__instance.myPlayer.IsAlive())
+                    {
+                        FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(__instance.myPlayer, GetWelcomeMessage());
+                    }
+                }, 1f, "Welcome Message");
+            }
+        }
+
+        static string GetWelcomeMessage()
+        {
+            return "WelcomeText".Translate();
+        }
+    }
+
+
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
     public static class EnableChat
     {
@@ -201,8 +235,8 @@ public static class ChatCommands
                                                         || (CachedPlayer.LocalPlayer.PlayerControl.isLover() && Lovers.enableChat)))
                 __instance.Chat.SetVisible(true);
 
-            if (ModOption.transparentTasks || (Multitasker.multitasker != null
-                && Multitasker.multitasker.FindAll(x => x.PlayerId == CachedPlayer.LocalPlayer.PlayerId).Count > 0))
+            if (ModOption.transparentTasks
+                || (Multitasker.multitasker != null && Multitasker.multitasker.Any(x => x.PlayerId == PlayerControl.LocalPlayer.PlayerId)))
             {
                 if (PlayerControl.LocalPlayer.Data.IsDead || PlayerControl.LocalPlayer.Data.Disconnected) return;
                 if (!Minigame.Instance) return;

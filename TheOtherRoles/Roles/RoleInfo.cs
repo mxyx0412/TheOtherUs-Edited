@@ -436,6 +436,9 @@ public class RoleInfo
                             case DeadPlayer.CustomDeathReason.Disconnect:
                                 deathReasonString = " - 断开连接";
                                 break;
+                            case DeadPlayer.CustomDeathReason.HostCmdKill:
+                                deathReasonString = $" - 被 {deadPlayer.killerIfExisting.Data.PlayerName} 制裁";
+                                break;
                             case DeadPlayer.CustomDeathReason.SheriffKill:
                                 deathReasonString = $" - 出警 {cs(killerColor, deadPlayer.killerIfExisting.Data.PlayerName)}";
                                 break;
