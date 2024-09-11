@@ -20,13 +20,17 @@ internal class LateTask
         }
         return false;
     }
+
     public LateTask(Action action, float time, string name = "No Name Task")
     {
         this.action = action;
-        this.timer = time;
+        timer = time;
         this.name = name;
         Tasks.Add(this);
+
+        Info("New LateTask \"" + name + "\" is created");
     }
+
     public static void Update(float deltaTime)
     {
         var TasksToRemove = new List<LateTask>();

@@ -2427,6 +2427,7 @@ public static class RPCProcedure
         if (bomb)
         {
             Bomber.hasBombPlayer = playerById(playerId);
+            Bomber.timeLeft += (int)0.5;
             return;
         }
 

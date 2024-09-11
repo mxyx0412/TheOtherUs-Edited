@@ -95,17 +95,16 @@ public class Trap
         Trapper.playersOnMap.Add(player);
         if (localIsTrapper) t.arrow.arrow.SetActive(true);
 
-        FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(Trapper.trapDuration,
-            new Action<float>(p =>
+        FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(Trapper.trapDuration, new Action<float>(p =>
+        {
+            if (p == 1f)
             {
-                if (p == 1f)
-                {
-                    player.moveable = true;
-                    Trapper.playersOnMap.RemoveAll(x => x == player);
-                    if (trapPlayerIdMap.ContainsKey(playerId)) trapPlayerIdMap.Remove(playerId);
-                    t.arrow.arrow.SetActive(false);
-                }
-            })));
+                player.moveable = true;
+                Trapper.playersOnMap.RemoveAll(x => x == player);
+                if (trapPlayerIdMap.ContainsKey(playerId)) trapPlayerIdMap.Remove(playerId);
+                t.arrow.arrow.SetActive(false);
+            }
+        })));
 
         if (t.usedCount == t.neededCount) t.revealed = true;
 

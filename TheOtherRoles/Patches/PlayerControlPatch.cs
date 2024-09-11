@@ -591,7 +591,9 @@ public static class PlayerControlFixedUpdatePatch
 
         if (Prophet.prophet == null || Prophet.prophet.Data.IsDead) return;
 
-        if (Prophet.isRevealed && isKiller(CachedPlayer.LocalPlayer.PlayerControl))
+        var local = CachedPlayer.LocalPlayer.PlayerControl;
+
+        if (Prophet.isRevealed && (local.Data.Role.IsImpostor || isKiller(local)))
         {
             if (Prophet.arrows.Count == 0) Prophet.arrows.Add(new Arrow(Prophet.color));
             if (Prophet.arrows.Count != 0 && Prophet.arrows[0] != null)
@@ -637,7 +639,7 @@ public static class PlayerControlFixedUpdatePatch
                     if (Tracker.trackingMode is 1 or 2) Arrow.UpdateProximity(position);
                     if (Tracker.trackingMode is 0 or 2)
                     {
-                        Tracker.arrow.Update(position);
+                        Tracker.arrow.Update(position, Tracker.tracked.Data.Color);
                         Tracker.arrow.arrow.SetActive(trackedOnMap);
                     }
                     Tracker.timeUntilUpdate = Tracker.updateIntervall;
@@ -727,7 +729,7 @@ public static class PlayerControlFixedUpdatePatch
             collider.radius *= 0.85f;
         }
     }
-
+#nullable enable
     public static void updatePlayerInfo()
     {
 
@@ -824,7 +826,7 @@ public static class PlayerControlFixedUpdatePatch
                     if (HudManager.Instance.TaskPanel != null)
                     {
                         var tabText = HudManager.Instance.TaskPanel.tab.transform.FindChild("TabText_TMP").GetComponent<TextMeshPro>();
-                        tabText.SetText($"任务 {taskInfo}");
+                        tabText.SetText(string.Format("tasksNum".Translate(), taskInfo));
                     }
                     meetingInfoText = $"{roleNames} {taskInfo}".Trim();
                 }
@@ -850,14 +852,14 @@ public static class PlayerControlFixedUpdatePatch
 
                 playerInfo.text = playerInfoText;
                 playerInfo.gameObject.SetActive(p.Visible);
-                if (meetingInfo != null)
-                    meetingInfo.text = MeetingHud.Instance.state == MeetingHud.VoteStates.Results
-                        ? ""
-                        : meetingInfoText;
+                if (meetingInfo != null && MeetingHud.Instance != null && MeetingHud.Instance.state == MeetingHud.VoteStates.Results)
+                {
+                    meetingInfo.text = meetingInfoText;
+                }
             }
         }
     }
-
+#nullable disable
     public static void securityGuardSetTarget()
     {
         if (SecurityGuard.securityGuard == null ||

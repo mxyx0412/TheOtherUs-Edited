@@ -2198,7 +2198,8 @@ internal static class HudManagerStartPatch
             Bomber.buttonSprite,
             ButtonPositions.upperRowLeft, //brb
             __instance,
-            abilityInput.keyCode
+            abilityInput.keyCode,
+            buttonText: "giveBombText".Translate()
         );
 
         bomberGiveButton = new CustomButton(
@@ -2264,7 +2265,8 @@ internal static class HudManagerStartPatch
             //          0, -0.06f, 0
             new Vector3(-4.5f, 1.5f, 0),
             __instance,
-            hotkey: null
+            hotkey: null,
+            buttonText: "giveBombText".Translate()
         );
 
         // Werewolf Kill
@@ -3450,7 +3452,8 @@ internal static class HudManagerStartPatch
                 }
 
                 Witch.spellCastingTarget = null;
-            }
+            },
+            buttonText: "WitchText".Translate()
         );
 
         // Jumper Mark

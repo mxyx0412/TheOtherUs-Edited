@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Linq;
+using AmongUs.Data;
 using Hazel;
 using InnerNet;
 using TheOtherRoles.Utilities;
@@ -214,7 +215,7 @@ public static class ChatCommands
                     {
                         FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(__instance.myPlayer, GetWelcomeMessage());
                     }
-                }, 1f, "Welcome Message");
+                }, 1f);
             }
         }
 
@@ -289,6 +290,29 @@ public static class ChatCommands
             if ((playerControl.isLover() && Lovers.enableChat))
                 return sourcePlayer.getChatPartner() == playerControl || playerControl.getChatPartner() == playerControl == (bool)sourcePlayer || flag;
             return flag;
+        }
+    }
+
+    [HarmonyPatch(typeof(ChatController), nameof(ChatController.Update))]
+    public static class ChatControllerAwakePatch
+    {
+        public static void Prefix()
+        {
+            DataManager.Settings.Multiplayer.ChatMode = QuickChatModes.FreeChatOrQuickChat;
+        }
+        public static void Postfix(ChatController __instance)
+        {
+            DataManager.Settings.Multiplayer.ChatMode = QuickChatModes.FreeChatOrQuickChat;
+
+            if (Input.GetKeyDown(ModInputManager.toggleChat.keyCode))
+            {
+                if (!__instance.isActiveAndEnabled) return;
+                __instance.Toggle();
+            }
+            if (__instance.IsOpenOrOpening)
+            {
+                __instance.banButton.MenuButton.enabled = !__instance.IsAnimating;
+            }
         }
     }
 }
