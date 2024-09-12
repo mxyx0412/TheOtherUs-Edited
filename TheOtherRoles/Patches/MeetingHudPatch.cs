@@ -315,19 +315,20 @@ internal class MeetingHudPatch
         {
             meetingInfoText = string.Format(getString("akujoTimeRemaining"), $"{TimeSpan.FromSeconds(Akujo.timeLeft):mm\\:ss}");
         }
-
-        if (CachedPlayer.LocalPlayer.PlayerControl == Doomsayer.doomsayer)
+        else if (CachedPlayer.LocalPlayer.PlayerControl == Doomsayer.doomsayer)
         {
             meetingInfoText = string.Format(getString("DoomsayerKilledToWin"), Doomsayer.killToWin - Doomsayer.killedToWin);
         }
-
-        if (CachedPlayer.LocalPlayer.PlayerControl == Swapper.swapper)
+        else if (CachedPlayer.LocalPlayer.PlayerControl == Swapper.swapper)
         {
             meetingInfoText = string.Format(getString("SwapperCharges"), Swapper.charges);
         }
+        else if (CachedPlayer.LocalPlayer.PlayerControl == PartTimer.partTimer && PartTimer.target == null)
+        {
+            meetingInfoText = string.Format(getString("PartTimerMeetingInfo"), Swapper.charges);
+        }
 
         if (meetingInfoText == "") return;
-
         __instance.TimerText.text = $"{meetingInfoText}\n" + __instance.TimerText.text;
     }
 
@@ -815,7 +816,7 @@ internal class MeetingHudPatch
                     message = trap.trappedPlayer.Aggregate(message, (current, p) => current + Trapper.infoType switch
                     {
                         0 => RoleInfo.GetRolesString(p, false, false, true) + "\n",
-                        1 when isEvil(p) || p.Data.Role.IsImpostor => "邪恶职业 \n",
+                        1 when isEvilNeutral(p) || p.Data.Role.IsImpostor => "邪恶职业 \n",
                         1 => "善良职业 \n",
                         _ => p.Data.PlayerName + "\n"
                     });
@@ -921,14 +922,12 @@ internal class MeetingHudPatch
         {
             Message("会议开始");
             shookAlready = false;
-            if (Blackmailer.blackmailed != null
-                && Blackmailer.blackmailed.Data.PlayerId == CachedPlayer.LocalPlayer.PlayerId
-                && !Blackmailer.blackmailed.Data.IsDead)
-            {
-                //Nothing here for now. What to do when local player who is blackmailed starts meeting
-                //Coroutines.Start(BlackmailShhh());
+            //Nothing here for now. What to do when local player who is blackmailed starts meeting
+            if (Blackmailer.blackmailed != null && Blackmailer.blackmailed.Data.PlayerId == CachedPlayer.LocalPlayer.PlayerId
+                && Blackmailer.blackmailed.IsAlive() && Blackmailer.blackmailer.IsAlive())
                 Coroutines.Start(BlackmailShhh());
-            }
+
+            if (PartTimer.partTimer != null && PartTimer.partTimer.IsAlive() && PartTimer.target == null) PartTimer.deathTurn--;
 
             if (InfoSleuth.infoSleuth != null && InfoSleuth.target != null && InfoSleuth.infoSleuth == CachedPlayer.LocalPlayer.PlayerControl)
             {

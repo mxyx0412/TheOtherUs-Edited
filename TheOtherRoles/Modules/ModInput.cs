@@ -60,7 +60,7 @@ public class ModInputManager
     public class KeyInputTexture
     {
         private readonly string address;
-        private Texture2D? texture = null;
+        private Texture2D? texture;
         public Texture2D GetTexture()
         {
             if (texture == null || !texture)
@@ -83,7 +83,7 @@ public class ModInputManager
         public KeyInputTexture texture { get; private set; }
         public int textureNum { get; private set; }
         public string displayKey { get; private set; }
-        private Sprite? sprite = null;
+        private Sprite? sprite;
         public KeyCodeData(KeyCode keyCode, string displayKey, KeyInputTexture texture, int num)
         {
             this.keyCode = keyCode;

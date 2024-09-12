@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 
 namespace TheOtherRoles.Objects;
-
+#nullable enable
 internal class Garlic
 {
     public static List<Garlic> garlics = [];
@@ -34,7 +34,7 @@ internal class Garlic
 
     public static void clearGarlics()
     {
-        garlics = [];
+        garlics.Clear();
     }
 
     public static void UpdateAll()
@@ -45,6 +45,6 @@ internal class Garlic
 
     public void Update()
     {
-        background?.transform.Rotate(Vector3.forward * 6 * Time.fixedDeltaTime);
+        if (background != null) background.transform.Rotate(Vector3.forward * 6 * Time.fixedDeltaTime);
     }
 }

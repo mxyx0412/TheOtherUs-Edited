@@ -21,7 +21,7 @@ internal static class HudManagerStartPatch
     private static bool initialized;
 
     private static readonly float defaultMaxTimer = 0.5f;
-    private static readonly float multiplier = Mini.mini != null && CachedPlayer.LocalPlayer.PlayerControl == Mini.mini 
+    private static readonly float multiplier = Mini.mini != null && CachedPlayer.LocalPlayer.PlayerControl == Mini.mini
         ? Mini.isGrownUp() ? 0.66f : 2f : 1f;
     public static CustomButton engineerRepairButton;
     public static CustomButton sheriffKillButton;
@@ -1968,7 +1968,6 @@ internal static class HudManagerStartPatch
             modKillInput.keyCode
         );
 
-
         // Swooper Kill
         swooperKillButton = new CustomButton(
             () =>
@@ -2025,7 +2024,7 @@ internal static class HudManagerStartPatch
                 if (Pavlovsdogs.enableRampage)
                 {
                     Pavlovsdogs.deathTime = Pavlovsdogs.rampageDeathTime;
-                    pavlovsdogsKillButton.MaxTimer = Pavlovsdogs.ownerIsDead ? Pavlovsdogs.rampageKillCooldown : Pavlovsdogs.cooldown;
+                    pavlovsdogsKillButton.MaxTimer = Pavlovsdogs.pavlovsowner.IsDead() ? Pavlovsdogs.rampageKillCooldown : Pavlovsdogs.cooldown;
                 }
                 pavlovsdogsKillButton.Timer = pavlovsdogsKillButton.MaxTimer;
                 Pavlovsdogs.killTarget = null;
@@ -2038,7 +2037,7 @@ internal static class HudManagerStartPatch
             },
             () =>
             {
-                if (Pavlovsdogs.enableRampage && Pavlovsdogs.ownerIsDead && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead)
+                if (Pavlovsdogs.enableRampage && Pavlovsdogs.pavlovsowner.IsDead() && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead)
                 {
                     Pavlovsdogs.deathTime -= Time.deltaTime;
                     if (PavlovsdogKillSelfText != null)
@@ -2051,10 +2050,10 @@ internal static class HudManagerStartPatch
             },
             () =>
             {
-                if (Pavlovsdogs.enableRampage && Pavlovsdogs.rampageDeathTimeIsMeetingReset)
+                if (Pavlovsdogs.enableRampage)
                 {
                     Pavlovsdogs.deathTime = Pavlovsdogs.rampageDeathTime;
-                    pavlovsdogsKillButton.MaxTimer = Pavlovsdogs.ownerIsDead ? Pavlovsdogs.rampageKillCooldown : Pavlovsdogs.cooldown;
+                    pavlovsdogsKillButton.MaxTimer = Pavlovsdogs.pavlovsowner.IsDead() ? Pavlovsdogs.rampageKillCooldown : Pavlovsdogs.cooldown;
                 }
                 pavlovsdogsKillButton.Timer = pavlovsdogsKillButton.MaxTimer;
             },
@@ -2101,7 +2100,7 @@ internal static class HudManagerStartPatch
             },
             () => { pavlovsownerCreateDogButton.Timer = pavlovsownerCreateDogButton.MaxTimer; },
             Pavlovsdogs.CreateDogButton,
-            ButtonPositions.lowerRowCenter,
+            ButtonPositions.upperRowCenter,
             __instance,
             abilityInput.keyCode
         );
@@ -2412,7 +2411,7 @@ internal static class HudManagerStartPatch
 
                 var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
                     (byte)CustomRPC.PartTimerSet, SendOption.Reliable);
-                writer.Write(PartTimer.currentTarget);
+                writer.Write(PartTimer.currentTarget.PlayerId);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.partTimerSet(PartTimer.currentTarget.PlayerId);
                 SoundEffectsManager.play("jackalSidekick");
@@ -2422,7 +2421,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return PartTimer.partTimer != null && PartTimer.partTimer == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead && PartTimer.canSetTarget;
+                       !CachedPlayer.LocalPlayer.Data.IsDead && PartTimer.target == null;
             },
             () =>
             {
@@ -3724,7 +3723,7 @@ internal static class HudManagerStartPatch
                 var text = getString("BlackmailerText");
                 if (Blackmailer.blackmailed != null) text = Blackmailer.blackmailed.Data.PlayerName;
                 //Show target name under button if setting is true
-                showTargetNameOnButtonExplicit(Blackmailer.currentTarget, blackmailerButton, text);
+                showTargetNameOnButtonExplicit(Blackmailer.currentTarget, blackmailerButton, getString("BlackmailerText"));
                 return Blackmailer.currentTarget != null && CachedPlayer.LocalPlayer.PlayerControl.CanMove;
             },
             () => { blackmailerButton.Timer = blackmailerButton.MaxTimer; },
@@ -3735,8 +3734,7 @@ internal static class HudManagerStartPatch
             true,
             1f,
             () => { },
-            false,
-            "Blackmail"
+            false
         );
 
         // Trapper button

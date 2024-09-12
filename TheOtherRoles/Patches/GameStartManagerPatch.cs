@@ -51,8 +51,8 @@ public class GameStartManagerPatch
     [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.Update))]
     public class GameStartManagerUpdatePatch
     {
-        public static float startingTimer = 0;
-        private static bool update = false;
+        public static float startingTimer;
+        private static bool update;
         private static string currentText = "";
         private static GameObject copiedStartButton;
 
@@ -86,7 +86,7 @@ public class GameStartManagerPatch
                 else if (!playerVersions.ContainsKey(client.Id))
                 {
                     versionMismatch = true;
-                    message += $"<color=#FF0000FF>{client.Character.Data.PlayerName} {"differentVersionTou".Translate()}\n</color>";
+                    message += $"<color=#FF0000FF>{client?.Character?.Data.PlayerName} {"differentVersionTou".Translate()}\n</color>";
                 }
                 else
                 {
@@ -110,7 +110,6 @@ public class GameStartManagerPatch
                     }
                 }
             }
-
             // Display message to the host
             if (AmongUsClient.Instance.AmHost)
             {
@@ -190,7 +189,7 @@ public class GameStartManagerPatch
                     __instance.GameStartText.transform.localPosition = __instance.StartButton.transform.localPosition;
                     if (!__instance.GameStartText.text.StartsWith(FastDestroyableSingleton<TranslationController>.Instance.GetString(StringNames.GameStarting).Replace("{0}", "")))
                     {
-                        __instance.GameStartText.text = String.Empty;
+                        __instance.GameStartText.text = string.Empty;
                     }
                 }
 
@@ -213,7 +212,8 @@ public class GameStartManagerPatch
 
                     void StopStartFunc()
                     {
-                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.StopStart, SendOption.Reliable, AmongUsClient.Instance.HostId);
+                        var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
+                            (byte)CustomRPC.StopStart, SendOption.Reliable, AmongUsClient.Instance.HostId);
                         writer.Write(PlayerControl.LocalPlayer.PlayerId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         copiedStartButton.Destroy();
@@ -377,7 +377,7 @@ public class GameStartManagerPatch
 
         public bool GuidMatches()
         {
-            return Assembly.GetExecutingAssembly().ManifestModule.ModuleVersionId.Equals(this.guid);
+            return Assembly.GetExecutingAssembly().ManifestModule.ModuleVersionId.Equals(guid);
         }
     }
 }

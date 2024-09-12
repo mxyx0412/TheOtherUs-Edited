@@ -49,7 +49,7 @@ public static class Sheriff
                 Pavlovsdogs.pavlovsdogs.Any(p => p == target) ||
                 (spyCanDieToSheriff && Spy.spy == target) ||
                 (canKillNeutrals &&
-                    (Akujo.akujo == target || isKiller(target) ||
+                    (Akujo.akujo == target || isKillerNeutral(target) ||
                         (Survivor.survivor.Contains(target) && canKillSurvivor) ||
                         (Jester.jester == target && canKillJester) ||
                         (Vulture.vulture == target && canKillVulture) ||

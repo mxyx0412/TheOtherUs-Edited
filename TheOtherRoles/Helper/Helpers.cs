@@ -283,7 +283,7 @@ public static class Helpers
         return roleInfo != null && roleInfo.roleTeam == RoleTeam.Neutral;
     }
 
-    public static bool isKiller(PlayerControl player)
+    public static bool isKillerNeutral(PlayerControl player)
     {
         return isNeutral(player) && (
                 player == Juggernaut.juggernaut ||
@@ -296,13 +296,28 @@ public static class Helpers
                 Pavlovsdogs.pavlovsdogs.Contains(player));
     }
 
-    public static bool isEvil(PlayerControl player)
+    public static bool isKiller(this PlayerControl player)
+    {
+        return player != null && (player.Data.Role.IsImpostor || isKillerNeutral(player));
+    }
+
+    public static bool isEvilNeutral(PlayerControl player)
     {
         return isNeutral(player) &&
                 player != Amnisiac.amnisiac &&
                 player != PartTimer.partTimer &&
                 !Pursuer.pursuer.Contains(player) &&
                 !Survivor.survivor.Contains(player);
+    }
+
+    public static bool isCrew(this PlayerControl player)
+    {
+        return player != null && !player.Data.Role.IsImpostor && !isNeutral(player);
+    }
+
+    public static bool isImpostor(this PlayerControl player)
+    {
+        return player != null && player.Data.Role.IsImpostor;
     }
 
     public static string teamString(PlayerControl player)
@@ -872,7 +887,8 @@ public static class Helpers
 
     public static void shareGameVersion()
     {
-        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.VersionHandshake, SendOption.Reliable, -1);
+        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
+            (byte)CustomRPC.VersionHandshake, SendOption.Reliable, -1);
         writer.Write((byte)Main.Version.Major);
         writer.Write((byte)Main.Version.Minor);
         writer.Write((byte)Main.Version.Build);
@@ -1428,8 +1444,7 @@ public static class Helpers
         var field = builtin.GetField("CompileTime");
         if (field == null) return 0;
         var value = field.GetValue(null);
-        if (value == null) return 0;
-        return (long)value;
+        return value == null ? 0 : (long)value;
     }
 
     public static object TryCast(this Il2CppObjectBase self, Type type)

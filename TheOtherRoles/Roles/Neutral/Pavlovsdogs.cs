@@ -21,7 +21,6 @@ public class Pavlovsdogs
     public static bool enableRampage;
     public static float rampageKillCooldown;
     public static int rampageDeathTime;
-    public static bool rampageDeathTimeIsMeetingReset;
 
     public static float canUseVents;
     public static bool canSabotage;
@@ -32,7 +31,6 @@ public class Pavlovsdogs
 
     public static bool asWell => CustomOptionHolder.pavlovsownerAndJackalAsWell.getBool();
     public static bool canCreateDog => (pavlovsdogs == null || pavlovsdogs.All(p => p.Data.IsDead || p.Data.Disconnected)) && createDogNum > 0;
-    public static bool ownerIsDead => pavlovsowner == null || pavlovsowner.Data.Disconnected || pavlovsowner.Data.IsDead;
     public static bool loser => pavlovsdogs.All(p => p.Data.IsDead || p.Data.Disconnected) && createDogNum == 0;
 
     public static void clearAndReload()
@@ -59,6 +57,5 @@ public class Pavlovsdogs
         enableRampage = CustomOptionHolder.pavlovsownerRampage.getBool();
         rampageKillCooldown = CustomOptionHolder.pavlovsownerRampageKillCooldown.getFloat();
         rampageDeathTime = CustomOptionHolder.pavlovsownerRampageDeathTime.GetInt();
-        rampageDeathTimeIsMeetingReset = CustomOptionHolder.pavlovsownerRampageDeathTimeIsMeetingReset.getBool();
     }
 }

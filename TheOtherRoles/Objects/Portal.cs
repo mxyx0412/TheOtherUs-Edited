@@ -51,8 +51,8 @@ public class Portal
 
         if (firstPortal == null) firstPortal = this;
         else if (secondPortal == null) secondPortal = this;
-        var lastRoom = FastDestroyableSingleton<HudManager>.Instance.roomTracker.LastRoom.RoomId;
-        room = DestroyableSingleton<TranslationController>.Instance.GetString(lastRoom);
+        var lastRoom = FastDestroyableSingleton<HudManager>.Instance?.roomTracker?.LastRoom.RoomId;
+        room = lastRoom != null ? DestroyableSingleton<TranslationController>.Instance.GetString((SystemTypes)lastRoom) : "Open Field";
     }
 
     public static Sprite getFgAnimationSprite(int index)

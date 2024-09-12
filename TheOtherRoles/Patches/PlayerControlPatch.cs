@@ -202,7 +202,7 @@ public static class PlayerControlFixedUpdatePatch
     {
         if (PartTimer.partTimer == null || PartTimer.partTimer != CachedPlayer.LocalPlayer.PlayerControl) return;
         PartTimer.currentTarget = setTarget();
-        if (PartTimer.canSetTarget) setPlayerOutline(PartTimer.currentTarget, PartTimer.color);
+        if (PartTimer.target != null) setPlayerOutline(PartTimer.currentTarget, PartTimer.color);
     }
 
     private static void bomberSetTarget()
@@ -593,7 +593,7 @@ public static class PlayerControlFixedUpdatePatch
 
         var local = CachedPlayer.LocalPlayer.PlayerControl;
 
-        if (Prophet.isRevealed && (local.Data.Role.IsImpostor || isKiller(local)))
+        if (Prophet.isRevealed && (local.Data.Role.IsImpostor || isKillerNeutral(local)))
         {
             if (Prophet.arrows.Count == 0) Prophet.arrows.Add(new Arrow(Prophet.color));
             if (Prophet.arrows.Count != 0 && Prophet.arrows[0] != null)
@@ -627,7 +627,8 @@ public static class PlayerControlFixedUpdatePatch
                     bool trackedOnMap = !Tracker.tracked.Data.IsDead;
                     Vector3 position = Tracker.tracked.transform.position;
                     if (!trackedOnMap)
-                    { // Check for dead body
+                    {
+                        // Check for dead body
                         DeadBody body = Object.FindObjectsOfType<DeadBody>().FirstOrDefault(b => b.ParentId == Tracker.tracked.PlayerId);
                         if (body != null)
                         {
@@ -639,7 +640,7 @@ public static class PlayerControlFixedUpdatePatch
                     if (Tracker.trackingMode is 1 or 2) Arrow.UpdateProximity(position);
                     if (Tracker.trackingMode is 0 or 2)
                     {
-                        Tracker.arrow.Update(position, Tracker.tracked.Data.Color);
+                        Tracker.arrow.Update(position, Tracker.tracked?.Data.Color);
                         Tracker.arrow.arrow.SetActive(trackedOnMap);
                     }
                     Tracker.timeUntilUpdate = Tracker.updateIntervall;
@@ -659,13 +660,13 @@ public static class PlayerControlFixedUpdatePatch
         // Handle corpses tracking
         if (Tracker.tracker != null && Tracker.tracker == CachedPlayer.LocalPlayer.PlayerControl && Tracker.corpsesTrackingTimer >= 0f && !Tracker.tracker.Data.IsDead)
         {
-            bool arrowsCountChanged = Tracker.localArrows.Count != Tracker.deadBodyPositions.Count;
+            bool arrowsCountChanged = Tracker.localArrows.Count != Tracker.deadBodyPositions.Count();
             int index = 0;
 
             if (arrowsCountChanged)
             {
                 foreach (Arrow arrow in Tracker.localArrows) Object.Destroy(arrow.arrow);
-                Tracker.localArrows = [];
+                Tracker.localArrows = new();
             }
             foreach (Vector3 position in Tracker.deadBodyPositions)
             {
@@ -674,16 +675,17 @@ public static class PlayerControlFixedUpdatePatch
                     Tracker.localArrows.Add(new Arrow(Tracker.color));
                     Tracker.localArrows[index].arrow.SetActive(true);
                 }
-                Tracker.localArrows[index]?.Update(position);
+                if (Tracker.localArrows[index] != null) Tracker.localArrows[index].Update(position);
                 index++;
             }
         }
         else if (Tracker.localArrows.Count > 0)
         {
             foreach (Arrow arrow in Tracker.localArrows) Object.Destroy(arrow.arrow);
-            Tracker.localArrows = [];
+            Tracker.localArrows = new();
         }
     }
+
     public static void MiniSizeUpdate(PlayerControl p)
     {
         // Set default player size
@@ -729,7 +731,7 @@ public static class PlayerControlFixedUpdatePatch
             collider.radius *= 0.85f;
         }
     }
-#nullable enable
+
     public static void updatePlayerInfo()
     {
 
@@ -755,28 +757,14 @@ public static class PlayerControlFixedUpdatePatch
             // This moves both the name AND the colorblindtext behind objects (if the player is behind the object), like the rock on polus
             p.cosmetics.nameText.transform.parent.SetLocalZ(-0.0001f);
 
-            //Snitch See Roles
-            /*
-            bool snitchFlag = false;
-            if (Snitch.snitch != null && Snitch.seeInMeeting && Snitch.canSeeRoles && !Snitch.snitch.Data.IsDead)
-            {
-                var (playerCompleted, playerTotal) = TasksHandler.taskInfo(Snitch.snitch.Data);
-                var numberOfTasks = playerTotal - playerCompleted;
-                var completedSnitch = local == Snitch.snitch && numberOfTasks == 0;
-                var forImpTeam = p.Data.Role.IsImpostor;
-                var forKillerTeam = Snitch.Team == Snitch.includeNeutralTeam.KillNeutral && isKiller(p);
-                var forEvilTeam = Snitch.Team == Snitch.includeNeutralTeam.EvilNeutral && isEvil(p);
-                var forNeutraTeam = Snitch.Team == Snitch.includeNeutralTeam.AllNeutral && isNeutral(p);
-                snitchFlag = completedSnitch && (forImpTeam || forKillerTeam || forEvilTeam || forNeutraTeam);
-            }
-            */
-
             if ((Lawyer.lawyerKnowsRole && local == Lawyer.lawyer && p == Lawyer.target) ||
-                   (Akujo.knowsRoles && local == Akujo.akujo && (p == Akujo.honmei || Akujo.keeps.Any(x => x.PlayerId == p.PlayerId))) ||
-                   p == local || CachedPlayer.LocalPlayer.Data.IsDead ||
+                (PartTimer.knowsRole && local == PartTimer.partTimer && p == PartTimer.target) ||
+                (local == PartTimer.target && p == PartTimer.partTimer) ||
+                (Akujo.knowsRoles && local == Akujo.akujo &&
+                    (p == Akujo.honmei || Akujo.keeps.Any(x => x.PlayerId == p.PlayerId))) || p == local || local.Data.IsDead ||
                 (local == Slueth.slueth && Slueth.reported.Any(x => x.PlayerId == p.PlayerId)) ||
                 (ModOption.impostorSeeRoles && Spy.spy == null && CachedPlayer.LocalPlayer.Data.Role.IsImpostor &&
-                 !CachedPlayer.LocalPlayer.Data.IsDead && p == (p.Data.Role.IsImpostor && !p.Data.IsDead)) ||
+                 !CachedPlayer.LocalPlayer.IsDead && p == (p.Data.Role.IsImpostor && !p.Data.IsDead)) ||
                 (local == Poucher.poucher && Poucher.killed.Any(x => x.PlayerId == p.PlayerId)))
             {
                 var playerInfoTransform = p.cosmetics.nameText.transform.parent.FindChild("Info");
@@ -790,12 +778,8 @@ public static class PlayerControlFixedUpdatePatch
                     playerInfo.color = playerInfo.color.SetAlpha(1f);
                 }
 
-                var meetingInfoTransform = playerVoteArea != null
-                    ? playerVoteArea.NameText.transform.parent.FindChild("Info")
-                    : null;
-                var meetingInfo = meetingInfoTransform != null
-                    ? meetingInfoTransform.GetComponent<TextMeshPro>()
-                    : null;
+                var meetingInfoTransform = playerVoteArea != null ? playerVoteArea.NameText.transform.parent.FindChild("Info") : null;
+                var meetingInfo = meetingInfoTransform != null ? meetingInfoTransform.GetComponent<TextMeshPro>() : null;
 
                 if (meetingInfo == null && playerVoteArea != null)
                 {
@@ -844,6 +828,16 @@ public static class PlayerControlFixedUpdatePatch
                     playerInfoText = $"{roleText}";
                     meetingInfoText = playerInfoText;
                 }
+                else if (PartTimer.partTimer == local && PartTimer.target != null && p == PartTimer.target && local.IsAlive())
+                {
+                    playerInfoText = $"{roleText}";
+                    meetingInfoText = playerInfoText;
+                }
+                else if (local == PartTimer.target && p == PartTimer.partTimer)
+                {
+                    playerInfoText = $"{roleNames}";
+                    meetingInfoText = playerInfoText;
+                }
                 else
                 {
                     playerInfoText = $"{roleText} {taskInfo}".Trim();
@@ -852,14 +846,14 @@ public static class PlayerControlFixedUpdatePatch
 
                 playerInfo.text = playerInfoText;
                 playerInfo.gameObject.SetActive(p.Visible);
-                if (meetingInfo != null && MeetingHud.Instance != null && MeetingHud.Instance.state == MeetingHud.VoteStates.Results)
-                {
-                    meetingInfo.text = meetingInfoText;
-                }
+                if (meetingInfo != null)
+                    meetingInfo.text = MeetingHud.Instance.state == MeetingHud.VoteStates.Results
+                        ? ""
+                        : meetingInfoText;
             }
         }
     }
-#nullable disable
+
     public static void securityGuardSetTarget()
     {
         if (SecurityGuard.securityGuard == null ||
@@ -935,8 +929,8 @@ public static class PlayerControlFixedUpdatePatch
         var local = CachedPlayer.LocalPlayer.PlayerControl;
 
         var forImpTeam = local.Data.Role.IsImpostor;
-        var forKillerTeam = Snitch.Team == Snitch.includeNeutralTeam.KillNeutral && isKiller(local);
-        var forEvilTeam = Snitch.Team == Snitch.includeNeutralTeam.EvilNeutral && isEvil(local);
+        var forKillerTeam = Snitch.Team == Snitch.includeNeutralTeam.KillNeutral && isKillerNeutral(local);
+        var forEvilTeam = Snitch.Team == Snitch.includeNeutralTeam.EvilNeutral && isEvilNeutral(local);
         var forNeutraTeam = Snitch.Team == Snitch.includeNeutralTeam.AllNeutral && isNeutral(local);
 
         if (numberOfTasks <= Snitch.taskCountForReveal && (forImpTeam || forKillerTeam || forEvilTeam || forNeutraTeam))
@@ -955,8 +949,8 @@ public static class PlayerControlFixedUpdatePatch
             {
                 var arrowForImp = p.Data.Role.IsImpostor;
                 if (Mimic.mimic == p) arrowForImp = true;
-                var arrowForKillerTeam = Snitch.Team == Snitch.includeNeutralTeam.KillNeutral && isKiller(p);
-                var arrowForEvilTeam = Snitch.Team == Snitch.includeNeutralTeam.EvilNeutral && isEvil(p);
+                var arrowForKillerTeam = Snitch.Team == Snitch.includeNeutralTeam.KillNeutral && isKillerNeutral(p);
+                var arrowForEvilTeam = Snitch.Team == Snitch.includeNeutralTeam.EvilNeutral && isEvilNeutral(p);
                 var arrowForNeutraTeam = Snitch.Team == Snitch.includeNeutralTeam.AllNeutral && isNeutral(p);
                 var targetsRole = RoleInfo.getRoleInfoForPlayer(p, false).FirstOrDefault();
 
@@ -996,8 +990,8 @@ public static class PlayerControlFixedUpdatePatch
 
         var isDead = local == Snitch.snitch || local.Data.IsDead;
         var forImpTeam = local.Data.Role.IsImpostor;
-        var forKillerTeam = Snitch.Team == Snitch.includeNeutralTeam.KillNeutral && isKiller(local);
-        var forEvilTeam = Snitch.Team == Snitch.includeNeutralTeam.EvilNeutral && isEvil(local);
+        var forKillerTeam = Snitch.Team == Snitch.includeNeutralTeam.KillNeutral && isKillerNeutral(local);
+        var forEvilTeam = Snitch.Team == Snitch.includeNeutralTeam.EvilNeutral && isEvilNeutral(local);
         var forNeutraTeam = Snitch.Team == Snitch.includeNeutralTeam.AllNeutral && isNeutral(local);
 
         if (numberOfTasks <= Snitch.taskCountForReveal && (forImpTeam || forKillerTeam || forEvilTeam || forNeutraTeam || isDead))
@@ -1022,6 +1016,29 @@ public static class PlayerControlFixedUpdatePatch
         }
         else if (Snitch.text != null) Snitch.text.Destroy();
     }
+
+    private static void partTimerUpdate()
+    {
+        if (PartTimer.partTimer == null
+            || CachedPlayer.LocalPlayer.PlayerControl != PartTimer.partTimer
+            || PartTimer.partTimer.IsDead()) return;
+
+        if (PartTimer.target != null && PartTimer.target.IsDead())
+        {
+            var playerInfoTransform = PartTimer.target?.cosmetics.nameText.transform.parent.FindChild("Info");
+            var playerInfo = playerInfoTransform?.GetComponent<TextMeshPro>();
+            if (playerInfo != null) playerInfo.text = "";
+
+            var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
+                    (byte)CustomRPC.PartTimerSet, SendOption.Reliable);
+            writer.Write(byte.MaxValue);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            RPCProcedure.partTimerSet(byte.MaxValue);
+
+            PartTimer.deathTurn = PartTimer.DeathDefaultTurn;
+        }
+    }
+
 
     private static void undertakerDragBodyUpdate()
     {
@@ -1606,7 +1623,7 @@ public static class PlayerControlFixedUpdatePatch
                 continue; // Skip the creation of the next blood drop, if the killer is dead or the time is up
             }
 
-            new Bloodytrail(player, bloodyPlayer);
+            _ = new Bloodytrail(player, bloodyPlayer);
         }
     }
 
@@ -1947,6 +1964,7 @@ public static class PlayerControlFixedUpdatePatch
             Silhouette.UpdateAll();
             // PartTimer
             partTimerSetTarget();
+            partTimerUpdate();
 
             hackerUpdate();
             swapperUpdate();

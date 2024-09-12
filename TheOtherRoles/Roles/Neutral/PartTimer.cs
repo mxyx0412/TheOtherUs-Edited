@@ -9,11 +9,10 @@ public class PartTimer
     public static PlayerControl currentTarget;
     public static PlayerControl target;
 
-    public static bool canSetTarget = true;
-
     public static float cooldown;
+    public static int DeathDefaultTurn;
     public static int deathTurn;
-    public static bool checkTargetRole;
+    public static bool knowsRole;
 
     public static ResourceSprite buttonSprite = new("PartTimerButton.png");
 
@@ -22,9 +21,8 @@ public class PartTimer
         partTimer = null;
         currentTarget = null;
         target = null;
-        canSetTarget = true;
         cooldown = CustomOptionHolder.partTimerCooldown.getFloat();
-        deathTurn = CustomOptionHolder.partTimerDeathTurn.GetInt();
-        checkTargetRole = CustomOptionHolder.partTimerIsCheckTargetRole.getBool();
+        deathTurn = DeathDefaultTurn = CustomOptionHolder.partTimerDeathTurn.GetInt();
+        knowsRole = CustomOptionHolder.partTimerKnowsRole.getBool();
     }
 }

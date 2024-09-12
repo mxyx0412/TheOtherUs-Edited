@@ -156,8 +156,8 @@ internal class HudManagerUpdatePatch
             var snitchIsDead = Snitch.snitch.Data.IsDead;
 
             bool forImp = localPlayer.Data.Role.IsImpostor;
-            bool forKillerTeam = Snitch.Team == Snitch.includeNeutralTeam.KillNeutral && isKiller(localPlayer);
-            bool forEvilTeam = Snitch.Team == Snitch.includeNeutralTeam.EvilNeutral && isEvil(localPlayer);
+            bool forKillerTeam = Snitch.Team == Snitch.includeNeutralTeam.KillNeutral && isKillerNeutral(localPlayer);
+            bool forEvilTeam = Snitch.Team == Snitch.includeNeutralTeam.EvilNeutral && isEvilNeutral(localPlayer);
             bool forNeutraTeam = Snitch.Team == Snitch.includeNeutralTeam.AllNeutral && isNeutral(localPlayer);
             if (numberOfTasks <= Snitch.taskCountForReveal)
             {
@@ -174,8 +174,8 @@ internal class HudManagerUpdatePatch
                 foreach (PlayerControl p in CachedPlayer.AllPlayers)
                 {
                     bool TargetsImp = p.Data.Role.IsImpostor;
-                    bool TargetsKillerTeam = Snitch.Team == Snitch.includeNeutralTeam.KillNeutral && isKiller(p);
-                    bool TargetsEvilTeam = Snitch.Team == Snitch.includeNeutralTeam.EvilNeutral && isEvil(p);
+                    bool TargetsKillerTeam = Snitch.Team == Snitch.includeNeutralTeam.KillNeutral && isKillerNeutral(p);
+                    bool TargetsEvilTeam = Snitch.Team == Snitch.includeNeutralTeam.EvilNeutral && isEvilNeutral(p);
                     bool TargetsNeutraTeam = Snitch.Team == Snitch.includeNeutralTeam.AllNeutral && isNeutral(p);
                     var targetsRole = RoleInfo.getRoleInfoForPlayer(p, false).FirstOrDefault();
                     if (localPlayer == Snitch.snitch && (TargetsImp || TargetsKillerTeam || TargetsEvilTeam || TargetsNeutraTeam))
@@ -206,10 +206,10 @@ internal class HudManagerUpdatePatch
 
     private static void setNameTags()
     {
+        var local = CachedPlayer.LocalPlayer.PlayerControl;
         // Lovers
         if (Lovers.lover1 != null && Lovers.lover2 != null &&
-            (Lovers.lover1 == CachedPlayer.LocalPlayer.PlayerControl ||
-             Lovers.lover2 == CachedPlayer.LocalPlayer.PlayerControl))
+            (Lovers.lover1 == local || Lovers.lover2 == local))
         {
             var suffix = cs(Lovers.color, " ♥");
             Lovers.lover1.cosmetics.nameText.text += suffix;
@@ -227,8 +227,8 @@ internal class HudManagerUpdatePatch
             {
                 foreach (PlayerControl p in Akujo.keeps)
                 {
-                    if (CachedPlayer.LocalPlayer.PlayerControl == Akujo.akujo) p.cosmetics.nameText.text += cs(Color.gray, " ♥");
-                    if (CachedPlayer.LocalPlayer.PlayerControl == p)
+                    if (local == Akujo.akujo) p.cosmetics.nameText.text += cs(Color.gray, " ♥");
+                    if (local == p)
                     {
                         Akujo.akujo.cosmetics.nameText.text += cs(Akujo.color, " ♥");
                         p.cosmetics.nameText.text += cs(Akujo.color, " ♥");
@@ -237,8 +237,8 @@ internal class HudManagerUpdatePatch
             }
             if (Akujo.honmei != null)
             {
-                if (CachedPlayer.LocalPlayer.PlayerControl == Akujo.akujo) Akujo.honmei.cosmetics.nameText.text += cs(Akujo.color, " ♥");
-                if (CachedPlayer.LocalPlayer.PlayerControl == Akujo.honmei)
+                if (local == Akujo.akujo) Akujo.honmei.cosmetics.nameText.text += cs(Akujo.color, " ♥");
+                if (local == Akujo.honmei)
                 {
                     Akujo.akujo.cosmetics.nameText.text += cs(Akujo.color, " ♥");
                     Akujo.honmei.cosmetics.nameText.text += cs(Akujo.color, " ♥");
@@ -249,9 +249,9 @@ internal class HudManagerUpdatePatch
             {
                 foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates)
                 {
-                    if (player.TargetPlayerId == Akujo.akujo.PlayerId && ((Akujo.honmei != null && Akujo.honmei == CachedPlayer.LocalPlayer.PlayerControl) || (Akujo.keeps != null && Akujo.keeps.Any(x => x.PlayerId == CachedPlayer.LocalPlayer.PlayerControl.PlayerId))))
+                    if (player.TargetPlayerId == Akujo.akujo.PlayerId && ((Akujo.honmei != null && Akujo.honmei == local) || (Akujo.keeps != null && Akujo.keeps.Any(x => x.PlayerId == local.PlayerId))))
                         player.NameText.text += cs(Akujo.color, " ♥");
-                    if (CachedPlayer.LocalPlayer.PlayerControl == Akujo.akujo)
+                    if (local == Akujo.akujo)
                     {
                         if (player.TargetPlayerId == Akujo.honmei?.PlayerId) player.NameText.text += cs(Akujo.color, " ♥");
                         if (Akujo.keeps != null && Akujo.keeps.Any(x => x.PlayerId == player.TargetPlayerId)) player.NameText.text += cs(Color.gray, " ♥");
@@ -259,9 +259,23 @@ internal class HudManagerUpdatePatch
                 }
             }
         }
+
+        // Parttimer
+        if (PartTimer.partTimer != null && PartTimer.target != null && (local == PartTimer.partTimer || local == PartTimer.target || local.IsDead()))
+        {
+            var suffix = cs(PartTimer.color, " ★");
+            PartTimer.partTimer.cosmetics.nameText.text += suffix;
+            PartTimer.target.cosmetics.nameText.text += suffix;
+
+            if (MeetingHud.Instance != null)
+                foreach (var player in MeetingHud.Instance.playerStates)
+                    if (PartTimer.partTimer.PlayerId == player.TargetPlayerId || PartTimer.target.PlayerId == player.TargetPlayerId)
+                        player.NameText.text += suffix;
+        }
+
         // Lawyer or Prosecutor
-        var localIsLawyer = Lawyer.lawyer != null && Lawyer.target != null && Lawyer.lawyer == PlayerControl.LocalPlayer;
-        var localIsKnowingTarget = Lawyer.lawyer != null && Lawyer.target != null && Lawyer.targetKnows && Lawyer.target == PlayerControl.LocalPlayer;
+        var localIsLawyer = Lawyer.lawyer != null && Lawyer.target != null && Lawyer.lawyer == local;
+        var localIsKnowingTarget = Lawyer.lawyer != null && Lawyer.target != null && Lawyer.targetKnows && Lawyer.target == local;
         if (localIsLawyer || (localIsKnowingTarget && !Lawyer.lawyer.Data.IsDead))
         {
             var suffix = cs(Lawyer.color, " §");
@@ -273,7 +287,7 @@ internal class HudManagerUpdatePatch
                         player.NameText.text += suffix;
         }
 
-        var localIsExecutioner = Executioner.executioner != null && Executioner.target != null && Executioner.executioner == PlayerControl.LocalPlayer;
+        var localIsExecutioner = Executioner.executioner != null && Executioner.target != null && Executioner.executioner == local;
         if (localIsExecutioner && !Executioner.executioner.Data.IsDead)
         {
             var suffix = cs(Executioner.color, " §");
@@ -286,8 +300,7 @@ internal class HudManagerUpdatePatch
         }
 
         // Former Thief
-        if (Thief.formerThief != null && (Thief.formerThief == CachedPlayer.LocalPlayer.PlayerControl ||
-                                          CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead))
+        if (Thief.formerThief != null && (Thief.formerThief == local || local.Data.IsDead))
         {
             var suffix = cs(Thief.color, " $");
             Thief.formerThief.cosmetics.nameText.text += suffix;

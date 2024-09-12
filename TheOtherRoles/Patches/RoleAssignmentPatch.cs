@@ -808,10 +808,10 @@ internal class RoleManagerSelectRolesPatch
             if (Shifter.shiftALLNeutra)
             {
                 shifterCrewPlayer.RemoveAll(x => x.Data.Role.IsImpostor
-                                        || x == Jackal.jackal
-                                        || x == Sidekick.sidekick
-                                        || x == Lawyer.lawyer
-                                        || x == Pavlovsdogs.pavlovsowner);
+                    || x == Jackal.jackal
+                    || x == Sidekick.sidekick
+                    || x == Lawyer.lawyer
+                    || x == Pavlovsdogs.pavlovsowner);
             }
             else
             {
@@ -953,8 +953,7 @@ internal class RoleManagerSelectRolesPatch
                 selection = CustomOptionHolder.modifierSpecoality.getSelection();
                 break;
             case RoleId.PoucherModifier:
-                if (Poucher.spawnModifier)
-                    selection = CustomOptionHolder.poucherSpawnRate.getSelection();
+                if (Poucher.spawnModifier) selection = CustomOptionHolder.poucherSpawnRate.getSelection();
                 break;
             case RoleId.Mini:
                 selection = CustomOptionHolder.modifierMini.getSelection();
@@ -973,6 +972,7 @@ internal class RoleManagerSelectRolesPatch
                 if (multiplyQuantity) selection *= CustomOptionHolder.modifierBloodyQuantity.getQuantity();
                 break;
             case RoleId.AntiTeleport:
+                if (isFungle) break;
                 selection = CustomOptionHolder.modifierAntiTeleport.getSelection();
                 if (multiplyQuantity) selection *= CustomOptionHolder.modifierAntiTeleportQuantity.getQuantity();
                 break;

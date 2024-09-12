@@ -49,6 +49,11 @@ internal class ExileControllerBeginPatch
 
         Shifter.futureShift = null;
 
+        if (PartTimer.partTimer != null && PartTimer.partTimer.IsAlive())
+        {
+            if (PartTimer.deathTurn <= 0 && PartTimer.target == null) PartTimer.partTimer.Exiled();
+        }
+
         if (Doomsayer.doomsayer != null && AmongUsClient.Instance.AmHost && !Doomsayer.canGuess) Doomsayer.canGuess = true;
 
         if (Specoality.specoality != null && Specoality.canNoGuess != null) Specoality.canNoGuess = null;

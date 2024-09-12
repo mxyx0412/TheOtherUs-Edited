@@ -25,14 +25,9 @@ public static class Akujo
     public static ResourceSprite honmeiSprite = new("AkujoHonmeiButton.png");
     public static ResourceSprite keepSprite = new("AkujoKeepButton.png");
 
-    public static bool existing()
-    {
-        return honmei != null && !honmei.Data.Disconnected;
-    }
-
     public static bool existingWithKiller()
     {
-        return existing() && isKiller(honmei);
+        return honmei != null && !honmei.Data.Disconnected && honmei.isKiller();
     }
 
     public static void breakLovers(PlayerControl lover)

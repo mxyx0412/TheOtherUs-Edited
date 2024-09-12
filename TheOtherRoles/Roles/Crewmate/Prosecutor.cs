@@ -205,7 +205,7 @@ public class ExilePros
             if (Prosecutor.ProsecuteThisMeeting)
             {
                 var exiled = __instance.exiled?.Object;
-                if (exiled != null && exiled != (exiled.Data.Role.IsImpostor || isKiller(exiled) || isEvil(exiled)) && Prosecutor.diesOnIncorrectPros)
+                if (exiled != null && exiled != (exiled.Data.Role.IsImpostor || isKillerNeutral(exiled) || isEvilNeutral(exiled)) && Prosecutor.diesOnIncorrectPros)
                     Prosecutor.prosecutor.Exiled();
                 if (exiled == null)
                     Prosecutor.Prosecuted = false;

@@ -12,7 +12,7 @@ public static class Blackmailer
     public static PlayerControl blackmailed;
     public static PlayerControl currentTarget;
     public static float cooldown = 30f;
-    public static ResourceSprite blackmailButtonSprite = new("BlackmailerOverlay.png");
+    public static ResourceSprite blackmailButtonSprite = new("BlackmailerBlackmailButton.png");
     public static ResourceSprite overlaySprite = new("BlackmailerOverlay.png", 100);
 
     public static void clearAndReload()

@@ -1011,7 +1011,7 @@ public static class RPCProcedure
                 Swapper.swapper = amnisiac;
                 Amnisiac.clearAndReload();
                 break;
-                
+
             case RoleId.PartTimer:
                 if (Amnisiac.resetRole) PartTimer.clearAndReload();
                 PartTimer.partTimer = amnisiac;
@@ -2060,10 +2060,10 @@ public static class RPCProcedure
 
     public static void partTimerSet(byte targetId)
     {
+        if (targetId == byte.MaxValue) PartTimer.target = null;
         PlayerControl target = playerById(targetId);
         if (target == null) return;
         PartTimer.target = target;
-        PartTimer.canSetTarget = false;
     }
 
     public static void prophetExamine(byte targetId)
@@ -2390,21 +2390,28 @@ public static class RPCProcedure
     {
         Coroutines.Start(showFlashCoroutine(Palette.ImpostorRed, 1f, 0.36f));
 
-        //if (CachedPlayer.LocalPlayer.Data.IsDead) return;
-
-        MapData.AllPlayerExitVent();
-
-        if (MapBehaviour.Instance) MapBehaviour.Instance.Close();
-        if (Minigame.Instance) Minigame.Instance.ForceClose();
-
-        if (AmongUsClient.Instance.AmHost)
+        if (!AntiTeleport.antiTeleport.Any(x => x.PlayerId == CachedPlayer.LocalPlayer.PlayerId) && CachedPlayer.LocalPlayer.IsAlive)
         {
-            Message("分散");
-            if (Disperser.DispersesToVent) MapData.RandomSpawnAllPlayersToVent();
-            else MapData.RandomSpawnAllPlayersToMap();
-        }
+            foreach (var player in CachedPlayer.AllPlayers)
+            {
+                if (MapBehaviour.Instance) MapBehaviour.Instance.Close();
+                if (Minigame.Instance) Minigame.Instance.ForceClose();
 
-        Disperser.remainingDisperses--;
+                MapData.AllPlayerExitVent();
+
+                if (Disperser.DispersesToVent)
+                {
+                    CachedPlayer.LocalPlayer.PlayerControl.NetTransform.RpcSnapTo
+                    (MapData.FindVentSpawnPositions()[rnd.Next(MapData.FindVentSpawnPositions().Count)]);
+                }
+                else
+                {
+                    CachedPlayer.LocalPlayer.PlayerControl.NetTransform.RpcSnapTo
+                    (MapData.MapSpawnPosition()[rnd.Next(MapData.MapSpawnPosition().Count)]);
+                }
+            }
+            Disperser.remainingDisperses--;
+        }
     }
 
     public static void setFutureShielded(byte playerId)
@@ -2767,7 +2774,7 @@ public static class RPCProcedure
         Vector3 position = Vector2.zero;
         position.x = BitConverter.ToSingle(buff, 0 * sizeof(float));
         position.y = BitConverter.ToSingle(buff, 1 * sizeof(float));
-        new Portal(position);
+        _ = new Portal(position);
     }
 
     public static void usePortal(byte playerId, byte exit)

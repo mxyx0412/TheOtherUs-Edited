@@ -1438,10 +1438,8 @@ public static class GameOptionsNextPagePatch
 
         if (page != Main.optionsPage)
         {
-            var position =
-                (Vector3)FastDestroyableSingleton<HudManager>.Instance?.GameSettings?.transform.localPosition;
-            FastDestroyableSingleton<HudManager>.Instance.GameSettings.transform.localPosition =
-                new Vector3(position.x, 2.9f, position.z);
+            var position = (Vector3)FastDestroyableSingleton<HudManager>.Instance?.GameSettings?.transform.localPosition;
+            FastDestroyableSingleton<HudManager>.Instance.GameSettings.transform.localPosition = new Vector3(position.x, 2.9f, position.z);
         }
     }
 }

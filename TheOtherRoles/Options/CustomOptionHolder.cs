@@ -138,7 +138,6 @@ public class CustomOptionHolder
     public static CustomOption pavlovsownerRampage;
     public static CustomOption pavlovsownerRampageKillCooldown;
     public static CustomOption pavlovsownerRampageDeathTime;
-    public static CustomOption pavlovsownerRampageDeathTimeIsMeetingReset;
 
     public static CustomOption evilTrapperSpawnRate;
     public static CustomOption evilTrapperNumTrap;
@@ -364,7 +363,7 @@ public class CustomOptionHolder
     public static CustomOption partTimerSpawnRate;
     public static CustomOption partTimerCooldown;
     public static CustomOption partTimerDeathTurn;
-    public static CustomOption partTimerIsCheckTargetRole;
+    public static CustomOption partTimerKnowsRole;
 
     public static CustomOption executionerSpawnRate;
     public static CustomOption executionerCanCallEmergency;
@@ -1007,7 +1006,6 @@ public class CustomOptionHolder
         pavlovsownerRampage = Create(20260, Types.Neutral, "pavlovsownerRampage", true, pavlovsownerSpawnRate);
         pavlovsownerRampageKillCooldown = Create(20261, Types.Neutral, "pavlovsownerRampageKillCooldown", 15f, 5f, 60f, 2.5f, pavlovsownerRampage);
         pavlovsownerRampageDeathTime = Create(20262, Types.Neutral, "pavlovsownerRampageDeathTime", 60f, 30f, 180f, 2.5f, pavlovsownerRampageKillCooldown);
-        pavlovsownerRampageDeathTimeIsMeetingReset = Create(20263, Types.Neutral, "pavlovsownerRampageDeathTimeIsMeetingReset", true, pavlovsownerRampageKillCooldown);
 
         swooperSpawnRate = Create(20150, Types.Neutral, cs(Swooper.color, "Swooper"), rates, null, true);
         swooperKillCooldown = Create(20151, Types.Neutral, "swooperKillCooldown", 25f, 10f, 60f, 2.5f, swooperSpawnRate);
@@ -1054,7 +1052,7 @@ public class CustomOptionHolder
         partTimerSpawnRate = Create(20290, Types.Neutral, cs(PartTimer.color, "PartTimer"), rates, null, true);
         partTimerCooldown = Create(20291, Types.Neutral, "partTimerCooldown", 20f, 2.5f, 60f, 2.5f, partTimerSpawnRate);
         partTimerDeathTurn = Create(20292, Types.Neutral, "partTimerDeathTurn", 2, 1, 5, 1, partTimerSpawnRate);
-        partTimerIsCheckTargetRole = Create(20293, Types.Neutral, "partTimerIsCheckTargetRole", true, partTimerSpawnRate);
+        partTimerKnowsRole = Create(20293, Types.Neutral, "partTimerIsCheckTargetRole", true, partTimerSpawnRate);
 
         doomsayerSpawnRate = Create(20221, Types.Neutral, cs(Doomsayer.color, "Doomsayer"), rates, null, true);
         doomsayerCooldown = Create(20222, Types.Neutral, "doomsayerCooldown", 20f, 2.5f, 60f, 2.5f, doomsayerSpawnRate);

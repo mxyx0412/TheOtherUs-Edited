@@ -52,10 +52,6 @@
         "0": "Secondary Ability",
         "13": "使用第二技能"
     },
-    "keyBinding.changeAbility": {
-        "0": "Change Ability",
-        "13": "更换技能"
-    },
     "keyBinding.modifierAbility": {
         "0": "Modifier Ability",
         "13": "附加能力技能"
@@ -64,13 +60,13 @@
         "0": "Kill (Additional)",
         "13": "击杀 (模组)"
     },
+    "keyBinding.toggleChat": {
+        "0": "Toggle Chat",
+        "13": "打开聊天栏"
+    },
     "keyBinding.showOptionPage": {
         "0": "Show Option Page",
         "13": "显示预设页面"
-    },
-    "keyBinding.help": {
-        "0": "Help",
-        "13": "帮助"
     },
     "keyBinding.metaControl": {
         "0": "Meta Control",
@@ -1495,7 +1491,7 @@
         "13": "魅魔是否知道目标职业"
     },
     "akujoHonmeiCannotFollowWin": {
-        "13": "真爱无法跟随阵营获胜"
+        "13": "真爱无法跟随原阵营获胜"
     },
     "akujoHonmeiOptimizeWin": {
         "13": "真爱为船员时允许跟随胜利"
@@ -2388,10 +2384,16 @@
         "13": "招募剩余时间：{0}"
     },
     "DoomsayerKilledToWin": {
+        "0": "Can Killed To Win: {0}",
         "13": "还需要猜测 {0} 次胜利"
     },
     "SwapperCharges": {
+        "0": "Swaps: {0}",
         "13": "换票次数：{0}"
+    },
+    "PartTimerMeetingInfo": {
+        "0": "{0}",
+        "13": "距离穷死还有 {0} 次会议"
     },
     "SerialKillerSuicideText": {
         "0": "{0} seconds to suicide",
@@ -2681,10 +2683,6 @@
     "WitchText": {
         "0": "SPELL",
         "13": "诅咒"
-    },
-    "WarlockText": {
-        "0": "[BLANK]",
-        "13": "下咒"
     },
     "NinjaText": {
         "0": "[BLANK]",

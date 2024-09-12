@@ -1,12 +1,10 @@
 using System;
-using System.Collections;
 using System.Linq;
 using AmongUs.Data;
 using Hazel;
 using InnerNet;
 using TheOtherRoles.Utilities;
 using UnityEngine;
-using static TheOtherRoles.DeadPlayer;
 
 namespace TheOtherRoles.Modules;
 
@@ -215,7 +213,7 @@ public static class ChatCommands
                     {
                         FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(__instance.myPlayer, GetWelcomeMessage());
                     }
-                }, 1f);
+                }, 1f, "Welcome Chat");
             }
         }
 
@@ -237,7 +235,8 @@ public static class ChatCommands
                 __instance.Chat.SetVisible(true);
 
             if (ModOption.transparentTasks
-                || (Multitasker.multitasker != null && Multitasker.multitasker.Any(x => x.PlayerId == PlayerControl.LocalPlayer.PlayerId)))
+                || (Multitasker.multitasker != null
+                && Multitasker.multitasker.Any(x => x.PlayerId == PlayerControl.LocalPlayer.PlayerId)))
             {
                 if (PlayerControl.LocalPlayer.Data.IsDead || PlayerControl.LocalPlayer.Data.Disconnected) return;
                 if (!Minigame.Instance) return;

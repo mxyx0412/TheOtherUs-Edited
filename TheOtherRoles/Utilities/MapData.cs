@@ -222,7 +222,7 @@ public class MapData
         {
             var Transform = vent.transform;
             var position = Transform.position;
-            poss.Add(new Vector3(position.x, position.y, position.z = 0.0f));
+            poss.Add(new Vector3(position.x, position.y + 0.3f, position.z = 0.0f));
         }
 
         return poss;
@@ -246,7 +246,7 @@ public class MapData
 
         foreach (var p in players)
         {
-            var poss = FindVentSpawnPositions().Random() - (Vector3)p.Collider.offset;
+            var poss = FindVentSpawnPositions().Random();
             p.NetTransform.RpcSnapTo(poss);
             Message($"Spawn PLayer {p.Data.PlayerName} To {poss}");
         }

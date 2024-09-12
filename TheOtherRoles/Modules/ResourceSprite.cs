@@ -66,7 +66,7 @@ public class ResourceSprite(string pathName = "", float pixel = 115f, bool cache
 public class ResourceSpriteArray((string, float)[] sprites, bool cache = true, Action<ResourceSpriteArray>? onGet = null) : List<ResourceSprite>
 {
     public (string, float)[] Sprites = sprites;
-    public int Current = 0;
+    public int Current;
     private Action<ResourceSpriteArray>? OnGet = onGet;
 
     public ResourceSprite GetSprite(int value = -1)

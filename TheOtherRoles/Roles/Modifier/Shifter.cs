@@ -7,7 +7,6 @@ public static class Shifter
 
     public static PlayerControl futureShift;
     public static PlayerControl currentTarget;
-    public static PlayerControl InvertDuration;
 
     public static bool shiftNeutral;
     public static bool shiftALLNeutra;
@@ -217,13 +216,18 @@ public static class Shifter
             if (repeat) shiftRole(player2, player1, false);
             Akujo.akujo = player1;
         }
+        else if (PartTimer.partTimer != null && PartTimer.partTimer == player2)
+        {
+            if (repeat) shiftRole(player2, player1, false);
+            PartTimer.partTimer = player1;
+        }
     }
 
     public static void clearAndReload()
     {
         shifter = null;
-        currentTarget = null;
         futureShift = null;
+        currentTarget = null;
         shiftNeutral = CustomOptionHolder.modifierShiftNeutral.getBool();
         shiftALLNeutra = CustomOptionHolder.modifierShiftALLNeutral.getBool();
     }

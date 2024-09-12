@@ -156,7 +156,7 @@ public class CustomButton
         if (p.Data.Role.IsImpostor && p != Vampire.vampire)
         {
             if (time == 0f) time = ModOption.KillCooddown;
-            p.SetKillTimer(time);
+            p.killTimer = time;
             return;
         }
 

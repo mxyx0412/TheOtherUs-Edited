@@ -22,7 +22,6 @@ public static class CustomHatManager
             return $"https://raw.githubusercontent.com/{owner}/{repository}/{branch}".GithubUrl();
         }
     }
-
     internal static readonly string ManifestFileName = "CustomHats.json";
 
     internal static string CustomSkinsDirectory => Path.Combine(Path.GetDirectoryName(Application.dataPath)!, ResourcesDirectory);
