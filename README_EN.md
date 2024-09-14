@@ -163,7 +163,7 @@ Even more roles are coming soon.
 |  Blackmailer   |   Juggernaut   |    Jumper     |     Mini      |
 |     Witch      |   Doomsayer    |    Tracker    |      Vip      |
 |     Ninja      |     Akujo      |    Snitch     |  Indomitable  |
-|     Yo-Yo      |                |      Spy      |    Slueth     |
+|     Yo-Yo      |   PartTimer    |      Spy      |    Slueth     |
 |  Evil Trapper  |                | SecurityGuard |    Cursed     |
 | Butcher [Beta] |                |    Medium     |    Invert     |
 |    Gambler     |                |    Trapper    |     Blind     |

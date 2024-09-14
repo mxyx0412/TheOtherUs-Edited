@@ -923,11 +923,12 @@ internal class MeetingHudPatch
             Message("会议开始");
             shookAlready = false;
             //Nothing here for now. What to do when local player who is blackmailed starts meeting
-            if (Blackmailer.blackmailed != null && Blackmailer.blackmailed.Data.PlayerId == CachedPlayer.LocalPlayer.PlayerId
-                && Blackmailer.blackmailed.IsAlive() && Blackmailer.blackmailer.IsAlive())
+            if (Blackmailer.blackmailed != null
+                && Blackmailer.blackmailed.Data.PlayerId == CachedPlayer.LocalPlayer.PlayerId
+                && Blackmailer.blackmailed.IsAlive())
                 Coroutines.Start(BlackmailShhh());
 
-            if (PartTimer.partTimer != null && PartTimer.partTimer.IsAlive() && PartTimer.target == null) PartTimer.deathTurn--;
+            if (PartTimer.partTimer.IsAlive() && PartTimer.target == null) PartTimer.deathTurn--;
 
             if (InfoSleuth.infoSleuth != null && InfoSleuth.target != null && InfoSleuth.infoSleuth == CachedPlayer.LocalPlayer.PlayerControl)
             {

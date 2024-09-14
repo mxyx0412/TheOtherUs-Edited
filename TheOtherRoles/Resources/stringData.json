@@ -1325,9 +1325,6 @@
     "pavlovsownerRampageDeathTime": {
         "13": "狂化后自杀时限"
     },
-    "pavlovsownerRampageDeathTimeIsMeetingReset": {
-        "13": "会议后重置自杀时限"
-    },
     "swooperKillCooldown": {
         "0": "Kill Cooldown",
         "13": "击杀冷却"

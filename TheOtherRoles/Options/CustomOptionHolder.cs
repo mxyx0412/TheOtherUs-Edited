@@ -895,7 +895,7 @@ public class CustomOptionHolder
 
         bountyHunterSpawnRate = Create(10230, Types.Impostor, cs(BountyHunter.color, "BountyHunter"), rates, null, true);
         bountyHunterBountyDuration = Create(10231, Types.Impostor, "bountyHunterBountyDuration", 60f, 10f, 180f, 5f, bountyHunterSpawnRate);
-        bountyHunterReducedCooldown = Create(10232, Types.Impostor, "bountyHunterReducedCooldown", 2.5f, 0f, 30f, 2.5f, bountyHunterSpawnRate);
+        bountyHunterReducedCooldown = Create(10232, Types.Impostor, "bountyHunterReducedCooldown", 2.5f, 0f, 30f, 0.5f, bountyHunterSpawnRate);
         bountyHunterPunishmentTime = Create(10233, Types.Impostor, "bountyHunterPunishmentTime", 10f, 0f, 60f, 2.5f, bountyHunterSpawnRate);
         bountyHunterShowArrow = Create(10234, Types.Impostor, "bountyHunterShowArrow", true, bountyHunterSpawnRate);
         bountyHunterArrowUpdateIntervall = Create(10235, Types.Impostor, "bountyHunterArrowUpdateIntervall", 0.5f, 0f, 15f, 0.5f, bountyHunterShowArrow);
