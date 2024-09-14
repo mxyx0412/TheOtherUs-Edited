@@ -164,15 +164,18 @@ public class OnGameEndPatch
             Doomsayer.doomsayer,
             PartTimer.partTimer,
             Akujo.akujo,
-            Pavlovsdogs.pavlovsowner
+            Pavlovsdogs.pavlovsowner,
         }.Where(p => p != null));
 
-        if (Akujo.honmeiCannotFollowWin) notWinners.Add(Akujo.honmei);
+        notWinners.AddRange(Pavlovsdogs.pavlovsdogs.Where(p => p != null));
+        notWinners.AddRange(Jackal.formerJackals.Where(p => p != null));
+        if (Akujo.honmeiCannotFollowWin && Akujo.honmei != null) notWinners.Add(Akujo.honmei);
 
         var winnersToRemove = new List<WinningPlayerData>();
         foreach (var winner in TempData.winners.GetFastEnumerator())
             if (notWinners.Any(x => x != null && x.Data.PlayerName == winner.PlayerName))
                 winnersToRemove.Add(winner);
+
         foreach (var winner in winnersToRemove) TempData.winners.Remove(winner);
         var isCanceled = gameOverReason == (GameOverReason)CustomGameOverReason.Canceled;
         var everyoneDead = AdditionalTempData.playerRoles.All(x => !x.IsAlive);
