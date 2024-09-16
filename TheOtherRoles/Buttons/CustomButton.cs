@@ -152,7 +152,7 @@ public class CustomButton
     /// </summary>
     public static void resetKillButton(PlayerControl p, float time = 0f)
     {
-        if (p == null) return;
+        if (p.IsDead()) return;
         if (p.Data.Role.IsImpostor && p != Vampire.vampire)
         {
             if (time == 0f) time = ModOption.KillCooddown;

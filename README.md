@@ -17,6 +17,7 @@
 
 | 游戏版本            | 模组版本 | 发布日期  | 链接                                                         |
 | ------------------- | -------- | --------- | ------------------------------------------------------------ |
+| 2024.3.5 ~ 2024.6.4 | v1.0.7.7 | 2024.9.16  | [下载](https://github.com/mxyx-club/TheOtherUs-Edited/releases/download/v1.0.7.7/TheOtherUs.zip) |
 | 2024.3.5 ~ 2024.6.4 | v1.0.7.6 | 2024.9.14  | [下载](https://github.com/mxyx-club/TheOtherUs-Edited/releases/download/v1.0.7.6/TheOtherUs.zip) |
 | 2024.3.5 ~ 2024.6.4 | v1.0.7.2 | 2024.9.6  | [下载](https://github.com/mxyx-club/TheOtherUs-Edited/releases/download/v1.0.7.2/TheOtherUs.zip) |
 | 2024.3.5 ~ 2024.6.4 | v1.0.6.6 | 2024.8.14 | [下载](https://github.com/mxyx-club/TheOtherUs-Edited/releases/download/v1.0.6.6/TheOtherUs.zip) |
@@ -32,6 +33,15 @@
 <p align="center">注：本模组只发布经过测试后的文件，其余仅为内测版本。</p>
 
 ## 更新日志
+
+
+###  v1.0.7.7:
+
+ - #### Bug修复与其它优化：
+
+    - 修复部分中立职业会跟随好人获胜
+    - 炸弹狂：限制击杀RPC发送者，避免被炸弹炸死时会击多次
+    - 设陷师：修复陷阱报错问题，修复陷阱激活前没有透明效果
 
 ###  v1.0.7.6:
 
@@ -430,11 +440,11 @@
 
 ### 主要开发者：
 
-[沫夏悠轩](https://github.com/mxyx0412)、善良的好人、[天寸梦初](https://github.com/TianMengLucky)
+[沫夏悠轩](https://github.com/mxyx0412)、善良的好人
 
 ### Github贡献者：
 
-[Imp11](https://github.com/dabao40)、[方块](https://github.com/FangkuaiYa)
+[天寸梦初](https://github.com/TianMengLucky)、[Imp11](https://github.com/dabao40)、[方块](https://github.com/FangkuaiYa)
 
 ### 美工：
 
@@ -469,7 +479,7 @@
 [Goose-Goose-Duck](https://store.steampowered.com/app/1568590/Goose_Goose_Duck) - Idea for the Vulture role came from **Slushiegoose**\
 [TheEpicRoles](https://github.com/LaicosVK/TheEpicRoles) - Idea for the first kill shield (partly) and the tabbed option menu (fully + some code), by **LaicosVK** **DasMonschta** **Nova**\
 [Ninja](#ninja), [Thief](#thief), [Lawyer](#lawyer) / [Pursuer](#pursuer), [Deputy](#deputy), [Portalmaker](#portalmaker), [Guesser Modifier](#guesser-modifier) - Idea: [K3ndo](https://github.com/K3ndoo) ; Developed by [Gendelo](https://github.com/gendelo3) & [Mallöris](https://github.com/Mallaris) \
-[ugackMiner53](https://github.com/ugackMiner53/PropHunt) - Idea and core code for the Prop Hunt game mode
+[PropHunt](https://github.com/ugackMiner53/PropHunt) - Idea and core code for the Prop Hunt game mode by **ugackMiner53**\
 
 ## 许可
 

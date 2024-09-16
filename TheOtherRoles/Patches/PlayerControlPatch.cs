@@ -660,7 +660,7 @@ public static class PlayerControlFixedUpdatePatch
         // Handle corpses tracking
         if (Tracker.tracker != null && Tracker.tracker == CachedPlayer.LocalPlayer.PlayerControl && Tracker.corpsesTrackingTimer >= 0f && !Tracker.tracker.Data.IsDead)
         {
-            bool arrowsCountChanged = Tracker.localArrows.Count != Tracker.deadBodyPositions.Count();
+            bool arrowsCountChanged = Tracker.localArrows.Count != Tracker.deadBodyPositions.Count;
             int index = 0;
 
             if (arrowsCountChanged)
@@ -761,7 +761,8 @@ public static class PlayerControlFixedUpdatePatch
                 (PartTimer.knowsRole && local == PartTimer.partTimer && p == PartTimer.target) ||
                 (local == PartTimer.target && p == PartTimer.partTimer) ||
                 (Akujo.knowsRoles && local == Akujo.akujo &&
-                    (p == Akujo.honmei || Akujo.keeps.Any(x => x.PlayerId == p.PlayerId))) || p == local || local.Data.IsDead ||
+                    (p == Akujo.honmei || Akujo.keeps.Any(x => x.PlayerId == p.PlayerId))) ||
+                p == local || local.Data.IsDead || (Mayor.mayor != null && p == Mayor.mayor && Mayor.Revealed) ||
                 (local == Slueth.slueth && Slueth.reported.Any(x => x.PlayerId == p.PlayerId)) ||
                 (ModOption.impostorSeeRoles && Spy.spy == null && CachedPlayer.LocalPlayer.Data.Role.IsImpostor &&
                  !CachedPlayer.LocalPlayer.IsDead && p == (p.Data.Role.IsImpostor && !p.Data.IsDead)) ||
@@ -812,7 +813,7 @@ public static class PlayerControlFixedUpdatePatch
                         var tabText = HudManager.Instance.TaskPanel.tab.transform.FindChild("TabText_TMP").GetComponent<TextMeshPro>();
                         tabText.SetText(string.Format("tasksNum".Translate(), taskInfo));
                     }
-                    meetingInfoText = $"{roleNames} {taskInfo}".Trim();
+                    meetingInfoText = $"{roleText} {taskInfo}".Trim();
                 }
                 else if (ModOption.impostorSeeRoles
                     && Spy.spy == null
@@ -831,6 +832,11 @@ public static class PlayerControlFixedUpdatePatch
                 else if (PartTimer.partTimer == local && PartTimer.target != null && p == PartTimer.target && local.IsAlive())
                 {
                     playerInfoText = $"{roleText}";
+                    meetingInfoText = playerInfoText;
+                }
+                else if (local.IsAlive() && Mayor.mayor != null && Mayor.mayor == p && Mayor.Revealed)
+                {
+                    //playerInfoText = $"{roleNames}";
                     meetingInfoText = playerInfoText;
                 }
                 else if (local == PartTimer.target && p == PartTimer.partTimer)
@@ -1145,7 +1151,7 @@ public static class PlayerControlFixedUpdatePatch
         }
 
         DeadBody[] deadBodies = Object.FindObjectsOfType<DeadBody>();
-        var arrowUpdate = Vulture.localArrows.Count != deadBodies.Count();
+        var arrowUpdate = Vulture.localArrows.Count != deadBodies.Length;
         var index = 0;
 
         if (arrowUpdate)
@@ -1179,7 +1185,7 @@ public static class PlayerControlFixedUpdatePatch
         }
 
         DeadBody[] deadBodies = Object.FindObjectsOfType<DeadBody>();
-        var arrowUpdate = Amnisiac.localArrows.Count != deadBodies.Count();
+        var arrowUpdate = Amnisiac.localArrows.Count != deadBodies.Length;
         var index = 0;
 
         if (arrowUpdate)
@@ -2070,7 +2076,7 @@ internal class BodyReportPatch
                 {
                     if (timeSinceDeath < Detective.reportNameDuration * 1000)
                     {
-                        msg = $"尸检报告: 凶手的职业似乎是 {RoleInfo.getRoleInfoForPlayer(killer).First(x => !x.isModifier).Name} !\n尸体在 {Math.Round(timeSinceDeath / 1000)} 秒前死亡";
+                        msg = $"尸检报告: 凶手的职业似乎是 {RoleInfo.getRoleInfoForPlayer(killer, false).First().Name} !\n尸体在 {Math.Round(timeSinceDeath / 1000)} 秒前死亡";
                     }
                     else if (timeSinceDeath < Detective.reportColorDuration * 1000)
                     {

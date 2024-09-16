@@ -8,7 +8,7 @@ public class CustomOptionHolder
 {
     public static string[] rates = ["0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"];
 
-    public static string[] ratesModifier =
+    public static string[] ratesCount =
         ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"];
 
     public static string[] presets =
@@ -575,7 +575,7 @@ public class CustomOptionHolder
     public static CustomOption camsNightVision;
     public static CustomOption camsNoNightVisionIfImpVision;
 
-    public static CustomOption preventTaskEnd;
+    public static CustomOption disableTaskGameEnd;
     public static CustomOption dynamicMap;
     public static CustomOption dynamicMapEnableSkeld;
     public static CustomOption dynamicMapEnableMira;
@@ -586,6 +586,7 @@ public class CustomOptionHolder
     public static CustomOption dynamicMapSeparateSettings;
 
     public static CustomOption debugMode;
+    public static CustomOption disableGameEnd;
 
     public static CustomOption enableBetterPolus;
 
@@ -764,19 +765,19 @@ public class CustomOptionHolder
         disableMedbayWalk = Create(41, Types.General, "disableMedbayWalk", false);
         allowParallelMedBayScans = Create(44, Types.General, "allowParallelMedBayScans", false);
         finishTasksBeforeHauntingOrZoomingOut = Create(42, Types.General, "finishTasksBeforeHauntingOrZoomingOut", false);
-        preventTaskEnd = Create(43, Types.General, "preventTaskEnd", false);
+        disableTaskGameEnd = Create(43, Types.General, "disableTaskGameEnd", false);
 
         //Map options
         enableMapOptions = Create(200, Types.General, "enableMapOptions", false, null, true);
 
         IsReactorDurationSetting = Create(201, Types.General, "IsReactorDurationSetting", false, null, true);
-        SkeldReactorTimeLimit = Create(202, Types.General, "SkeldReactorTimeLimit", 30f, 15f, 60f, 2.5f, IsReactorDurationSetting);
-        SkeldLifeSuppTimeLimit = Create(203, Types.General, "SkeldLifeSuppTimeLimit", 30f, 15f, 60f, 2.5f, IsReactorDurationSetting);
-        MiraLifeSuppTimeLimit = Create(204, Types.General, "MiraLifeSuppTimeLimit", 30f, 15f, 60f, 2.5f, IsReactorDurationSetting);
-        MiraReactorTimeLimit = Create(205, Types.General, "MiraReactorTimeLimit", 30f, 15f, 60f, 2.5f, IsReactorDurationSetting);
-        PolusReactorTimeLimit = Create(206, Types.General, "PolusReactorTimeLimit", 60f, 15f, 90f, 2.5f, IsReactorDurationSetting);
-        AirshipReactorTimeLimit = Create(207, Types.General, "AirshipReactorTimeLimit", 75f, 15f, 120f, 2.5f, IsReactorDurationSetting);
-        FungleReactorTimeLimit = Create(208, Types.General, "FungleReactorTimeLimit", 45f, 15f, 60f, 2.5f, IsReactorDurationSetting);
+        SkeldReactorTimeLimit = Create(202, Types.General, "SkeldReactorTimeLimit", 30f, 0f, 30f, 2.5f, IsReactorDurationSetting);
+        SkeldLifeSuppTimeLimit = Create(203, Types.General, "SkeldLifeSuppTimeLimit", 30f, 0f, 30f, 2.5f, IsReactorDurationSetting);
+        MiraLifeSuppTimeLimit = Create(204, Types.General, "MiraLifeSuppTimeLimit", 30f, 0f, 45f, 2.5f, IsReactorDurationSetting);
+        MiraReactorTimeLimit = Create(205, Types.General, "MiraReactorTimeLimit", 30f, 0f, 45f, 2.5f, IsReactorDurationSetting);
+        PolusReactorTimeLimit = Create(206, Types.General, "PolusReactorTimeLimit", 60f, 0f, 60f, 2.5f, IsReactorDurationSetting);
+        AirshipReactorTimeLimit = Create(207, Types.General, "AirshipReactorTimeLimit", 75f, 0f, 90f, 2.5f, IsReactorDurationSetting);
+        FungleReactorTimeLimit = Create(208, Types.General, "FungleReactorTimeLimit", 45f, 0f, 60f, 2.5f, IsReactorDurationSetting);
 
         randomGameStartPosition = Create(50, Types.General, "randomGameStartPosition", false, enableMapOptions, true);
         randomGameStartToVents = Create(51, Types.General, "randomGameStartToVents", true, randomGameStartPosition);
@@ -821,12 +822,13 @@ public class CustomOptionHolder
         dynamicMapEnableSubmerged = Create(136, Types.General, "Submerged", rates, dynamicMap);
         dynamicMapSeparateSettings = Create(137, Types.General, "dynamicMapSeparateSettings", false, dynamicMap);
 
-        debugMode = Create(999, Types.General, "debugMode", false, null, true);
+        debugMode = Create(900, Types.General, "debugMode", false, null, true);
+        disableGameEnd = Create(901, Types.General, "DisableGameEnd", false, debugMode);
 
         //-------------------------- Impostor Options 10000-19999 -------------------------- //
 
         modifierAssassin = Create(10000, Types.Impostor, cs(Assassin.color, "modifierAssassin"), rates, null, true);
-        modifierAssassinQuantity = Create(10001, Types.Impostor, "modifierAssassinQuantity", ratesModifier, modifierAssassin);
+        modifierAssassinQuantity = Create(10001, Types.Impostor, "modifierAssassinQuantity", ratesCount, modifierAssassin);
         modifierAssassinNumberOfShots = Create(10002, Types.Impostor, "modifierAssassinNumberOfShots", 3f, 1f, 15f, 1f, modifierAssassin);
         modifierAssassinMultipleShotsPerMeeting = Create(10003, Types.Impostor, "modifierAssassinMultipleShotsPerMeeting", true, modifierAssassin);
         guesserEvilCanKillSpy = Create(10004, Types.Impostor, "guesserEvilCanKillSpy", true, modifierAssassin);
@@ -1284,11 +1286,11 @@ public class CustomOptionHolder
         modifierSpecoality = Create(40350, Types.Modifier, cs(Palette.ImpostorRed, "Specoality"), rates, null, true);
 
         modifierBloody = Create(40120, Types.Modifier, cs(Color.yellow, "Bloody"), rates, null, true);
-        modifierBloodyQuantity = Create(40121, Types.Modifier, cs(Color.yellow, "modifierBloodyQuantity"), ratesModifier, modifierBloody);
+        modifierBloodyQuantity = Create(40121, Types.Modifier, cs(Color.yellow, "modifierBloodyQuantity"), ratesCount, modifierBloody);
         modifierBloodyDuration = Create(40122, Types.Modifier, "modifierBloodyDuration", 10f, 3f, 60f, 0.5f, modifierBloody);
 
         modifierAntiTeleport = Create(40130, Types.Modifier, cs(Color.yellow, "AntiTeleport"), rates, null, true);
-        modifierAntiTeleportQuantity = Create(40131, Types.Modifier, cs(Color.yellow, "modifierAntiTeleportQuantity"), ratesModifier, modifierAntiTeleport);
+        modifierAntiTeleportQuantity = Create(40131, Types.Modifier, cs(Color.yellow, "modifierAntiTeleportQuantity"), ratesCount, modifierAntiTeleport);
 
         modifierTieBreaker = Create(40140, Types.Modifier, cs(Color.yellow, "TieBreaker"), rates, null, true);
 
@@ -1301,19 +1303,19 @@ public class CustomOptionHolder
         modifierAftermath = Create(40360, Types.Modifier, cs(Color.yellow, "Aftermath"), rates, null, true);
 
         modifierSunglasses = Create(40170, Types.Modifier, cs(Color.yellow, "Sunglasses"), rates, null, true);
-        modifierSunglassesQuantity = Create(40171, Types.Modifier, cs(Color.yellow, "modifierSunglassesQuantity"), ratesModifier, modifierSunglasses);
+        modifierSunglassesQuantity = Create(40171, Types.Modifier, cs(Color.yellow, "modifierSunglassesQuantity"), ratesCount, modifierSunglasses);
         modifierSunglassesVision = Create(40172, Types.Modifier, "modifierSunglassesVision", ["-10%", "-20%", "-30%", "-40%", "-50%"], modifierSunglasses);
 
         modifierTorch = Create(40180, Types.Modifier, cs(Color.yellow, "Torch"), rates, null, true);
-        modifierTorchQuantity = Create(40181, Types.Modifier, cs(Color.yellow, "modifierTorchQuantity"), ratesModifier, modifierTorch);
+        modifierTorchQuantity = Create(40181, Types.Modifier, cs(Color.yellow, "modifierTorchQuantity"), ratesCount, modifierTorch);
         modifierTorchVision = Create(40182, Types.Modifier, "modifierTorchVision", 1.5f, 1f, 3f, 0.125f, modifierTorch);
 
         modifierFlash = Create(40190, Types.Modifier, cs(Color.yellow, "Flash"), rates, null, true);
-        modifierFlashQuantity = Create(40191, Types.Modifier, cs(Color.yellow, "modifierFlashQuantity"), ratesModifier, modifierFlash);
+        modifierFlashQuantity = Create(40191, Types.Modifier, cs(Color.yellow, "modifierFlashQuantity"), ratesCount, modifierFlash);
         modifierFlashSpeed = Create(40192, Types.Modifier, "modifierFlashSpeed", 1.25f, 1f, 3f, 0.125f, modifierFlash);
 
         modifierMultitasker = Create(40200, Types.Modifier, cs(Color.yellow, "Multitasker"), rates, null, true);
-        modifierMultitaskerQuantity = Create(40201, Types.Modifier, cs(Color.yellow, "modifierMultitaskerQuantity"), ratesModifier, modifierMultitasker);
+        modifierMultitaskerQuantity = Create(40201, Types.Modifier, cs(Color.yellow, "modifierMultitaskerQuantity"), ratesCount, modifierMultitasker);
 
         modifierMini = Create(40210, Types.Modifier, cs(Color.yellow, "Mini"), rates, null, true);
         modifierMiniGrowingUpDuration = Create(40211, Types.Modifier, "modifierMiniGrowingUpDuration", 400f, 100f, 1500f, 25f, modifierMini);
@@ -1341,15 +1343,15 @@ public class CustomOptionHolder
         modifierShowCursed = Create(40301, Types.Modifier, "modifierShowCursed", false, modifierCursed);
 
         modifierVip = Create(40310, Types.Modifier, cs(Color.yellow, "Vip"), rates, null, true);
-        modifierVipQuantity = Create(40311, Types.Modifier, cs(Color.yellow, "modifierVipQuantity"), ratesModifier, modifierVip);
+        modifierVipQuantity = Create(40311, Types.Modifier, cs(Color.yellow, "modifierVipQuantity"), ratesCount, modifierVip);
         modifierVipShowColor = Create(40312, Types.Modifier, "modifierVipShowColor", true, modifierVip);
 
         modifierInvert = Create(40320, Types.Modifier, cs(Color.yellow, "Invert"), rates, null, true);
-        modifierInvertQuantity = Create(40321, Types.Modifier, cs(Color.yellow, "modifierInvertQuantity"), ratesModifier, modifierInvert);
+        modifierInvertQuantity = Create(40321, Types.Modifier, cs(Color.yellow, "modifierInvertQuantity"), ratesCount, modifierInvert);
         modifierInvertDuration = Create(40322, Types.Modifier, "modifierInvertDuration", 2f, 1f, 15f, 1f, modifierInvert);
 
         modifierChameleon = Create(40330, Types.Modifier, cs(Color.yellow, "Chameleon"), rates, null, true);
-        modifierChameleonQuantity = Create(40331, Types.Modifier, cs(Color.yellow, "modifierChameleonQuantity"), ratesModifier, modifierChameleon);
+        modifierChameleonQuantity = Create(40331, Types.Modifier, cs(Color.yellow, "modifierChameleonQuantity"), ratesCount, modifierChameleon);
         modifierChameleonHoldDuration = Create(40332, Types.Modifier, "modifierChameleonHoldDuration", 3f, 1f, 10f, 0.5f, modifierChameleon);
         modifierChameleonFadeDuration = Create(40333, Types.Modifier, "modifierChameleonFadeDuration", 1f, 0.25f, 10f, 0.25f, modifierChameleon);
         modifierChameleonMinVisibility = Create(40334, Types.Modifier, "modifierChameleonMinVisibility", ["0%", "10%", "20%", "30%", "40%", "50%"], modifierChameleon);

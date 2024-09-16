@@ -177,9 +177,9 @@ public class AllowExtraVotes
 }
 
 [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.StartMeeting))]
-class StartMeetingPatch
+public class StartMeetingPatch
 {
-    public static void Prefix(PlayerControl __instance, [HarmonyArgument(0)] GameData.PlayerInfo meetingTarget)
+    private static void Prefix(PlayerControl __instance, [HarmonyArgument(0)] GameData.PlayerInfo meetingTarget)
     {
         if (__instance == null) return;
         if (Prosecutor.prosecutor != null) Prosecutor.StartProsecute = false;

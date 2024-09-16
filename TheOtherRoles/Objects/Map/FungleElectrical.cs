@@ -9,7 +9,7 @@ public static class FungleAdditionalElectrical
 {
     public static void CreateElectrical()
     {
-        if (!isFungle || !CustomOptionHolder.fungleElectrical.getBool())
+        if (!isFungle || !CustomOptionHolder.fungleElectrical.getBool() || !CustomOptionHolder.enableFungleModify.getBool())
             return;
 
         FungleShipStatus fungleShipStatus = ShipStatus.Instance.CastFast<FungleShipStatus>();

@@ -7,8 +7,6 @@ public static class Mayor
     public static PlayerControl mayor;
     public static Color color = new Color32(32, 77, 66, byte.MaxValue);
     public static ResourceSprite emergencySprite = new("EmergencyButton.png", 550f);
-    public static PlayerVoteArea Reveal;
-    public static bool StartReveal;
     public static bool Revealed;
     public static int Vote;
 
@@ -20,7 +18,6 @@ public static class Mayor
     public static void clearAndReload()
     {
         mayor = null;
-        StartReveal = false;
         Revealed = false;
         Vote = CustomOptionHolder.mayorVote.GetInt();
         meetingButton = CustomOptionHolder.mayorMeetingButton.getBool();

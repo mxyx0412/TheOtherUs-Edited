@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TheOtherRoles.Buttons;
+using TheOtherRoles.Patches;
 using TheOtherRoles.Utilities;
 using UnityEngine;
 using Random = System.Random;
@@ -45,9 +46,9 @@ public class CommandHandler
             // 强制结束游戏
             if (Input.GetKey(ModInputManager.metaControlInput.keyCode) && Input.GetKeyDown(ModInputManager.endGameInput.keyCode) && InGame)
             {
-                ModOption.isCanceled = true;
+                GameManager.Instance.RpcEndGame((GameOverReason)CustomGameOverReason.Canceled, false);
             }
-            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.V) && Input.GetKeyDown(KeyCode.Return) && InGame)
+            if (Input.GetKey(ModInputManager.metaControlInput.keyCode) && Input.GetKey(KeyCode.C) && Input.GetKeyDown(KeyCode.Return) && InGame)
             {
                 CustomButton.resetKillButton(CachedPlayer.LocalPlayer.PlayerControl, 0.5f);
             }

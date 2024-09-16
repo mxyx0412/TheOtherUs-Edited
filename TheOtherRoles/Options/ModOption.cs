@@ -7,7 +7,7 @@ namespace TheOtherRoles.Options;
 internal class ModOption
 {
     public static float ButtonCooldown => CustomOptionHolder.resteButtonCooldown.getFloat();
-    public static bool PreventTaskEnd => CustomOptionHolder.preventTaskEnd.getBool();
+    public static bool PreventTaskEnd => CustomOptionHolder.disableTaskGameEnd.getBool();
     public static float KillCooddown => GameOptionsManager.Instance.currentNormalGameOptions.KillCooldown;
     public static int NumImpostors => GameOptionsManager.Instance.currentNormalGameOptions.NumImpostors;
     public static bool DebugMode => CustomOptionHolder.debugMode.getBool();

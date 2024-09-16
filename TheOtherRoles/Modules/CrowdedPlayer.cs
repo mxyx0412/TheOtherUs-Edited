@@ -19,14 +19,12 @@ public static class CrowdedPlayer
 
     public static bool Enable = true;
 
-
     public static void Start()
     {
         if (!Enable) return;
         NormalGameOptionsV07.RecommendedImpostors = NormalGameOptionsV07.MaxImpostors = Enumerable.Repeat(MaxPlayer, MaxPlayer).ToArray();
         NormalGameOptionsV07.MinPlayers = Enumerable.Repeat(4, MaxPlayer).ToArray();
     }
-
 
     [HarmonyPatch(typeof(SecurityLogger), nameof(SecurityLogger.Awake))]
     [HarmonyPostfix]
@@ -42,7 +40,7 @@ public static class CrowdedPlayer
     {
         if (!Enable) return;
         var options = Object.FindObjectsOfType<NumberOption>().FirstOrDefault(o => o.Title == StringNames.GameNumImpostors);
-        if (options != null) options.ValidRange = new FloatRange(1, MaxImpostor);
+        if (options != null) options.ValidRange = new FloatRange(0, MaxImpostor);
     }
 
     [HarmonyPatch(typeof(GameOptionsData), nameof(GameOptionsData.AreInvalid))]
@@ -175,7 +173,6 @@ public static class CrowdedPlayer
         }));
         Start();
     }
-
 
     [HarmonyPatch(typeof(CreateOptionsPicker), nameof(CreateOptionsPicker.UpdateMaxPlayersButtons))]
     [HarmonyPrefix]

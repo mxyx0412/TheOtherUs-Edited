@@ -296,11 +296,6 @@ public static class Helpers
                 Pavlovsdogs.pavlovsdogs.Contains(player));
     }
 
-    public static bool isKiller(this PlayerControl player)
-    {
-        return player != null && (player.Data.Role.IsImpostor || isKillerNeutral(player));
-    }
-
     public static bool isEvilNeutral(PlayerControl player)
     {
         return isNeutral(player) &&
@@ -308,6 +303,11 @@ public static class Helpers
                 player != PartTimer.partTimer &&
                 !Pursuer.pursuer.Contains(player) &&
                 !Survivor.survivor.Contains(player);
+    }
+
+    public static bool isKiller(this PlayerControl player)
+    {
+        return player != null && (player.Data.Role.IsImpostor || isKillerNeutral(player));
     }
 
     public static bool isCrew(this PlayerControl player)
@@ -324,8 +324,8 @@ public static class Helpers
     {
         var killerTeam = "";
         if (isNeutral(player)) killerTeam = "NeutralRolesText".Translate();
-        else if (player.Data.Role.IsImpostor) killerTeam = "ImpostorRolesText".Translate();
-        else if (!player.Data.Role.IsImpostor && !isNeutral(player)) killerTeam = "CrewmateRolesText".Translate();
+        else if (player.isImpostor()) killerTeam = "ImpostorRolesText".Translate();
+        else if (player.isCrew()) killerTeam = "CrewmateRolesText".Translate();
         return killerTeam;
     }
 
@@ -645,7 +645,7 @@ public static class Helpers
         var allRoleInfo = new List<RoleInfo>();
         foreach (var role in RoleInfo.allRoleInfos)
         {
-            if (role.isModifier) continue;
+            if (role.roleTeam == RoleTeam.Modifier) continue;
             allRoleInfo.Add(role);
         }
         return allRoleInfo;
@@ -720,8 +720,7 @@ public static class Helpers
             var currentText = textTask.Text;
 
             if (taskTexts.Contains(currentText))
-                taskTexts.Remove(
-                    currentText); // TextTask for this RoleInfo does not have to be added, as it already exists
+                taskTexts.Remove(currentText); // TextTask for this RoleInfo does not have to be added, as it already exists
             else toRemove.Add(t); // TextTask does not have a corresponding RoleInfo and will hence be deleted
         }
 
@@ -744,14 +743,8 @@ public static class Helpers
 
     internal static string getRoleString(RoleInfo roleInfo)
     {
-        if (roleInfo.Name == "Jackal")
-        {
-            var getSidekickText = Jackal.canCreateSidekick ? " and recruit a Sidekick" : "";
-            return cs(roleInfo.color, $"{roleInfo.Name}: Kill everyone{getSidekickText}");
-        }
-
-        if (roleInfo.Name == "Invert")
-            return cs(roleInfo.color, $"{roleInfo.Name}: {roleInfo.ShortDescription} ({Invert.meetings})");
+        if (roleInfo.roleId == RoleId.Invert)
+            return cs(roleInfo.color, $"{roleInfo.Name}: {roleInfo.ShortDescription} \n(还有 {Invert.meetings} 次会议醒酒)");
 
         return cs(roleInfo.color, $"{roleInfo.Name}: {roleInfo.ShortDescription}");
     }

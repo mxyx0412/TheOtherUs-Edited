@@ -71,13 +71,12 @@ public static class ShipStatusPatch2
         {
             if (CustomOptionHolder.movePolusVitals.getBool()) MoveVitals();
             if (CustomOptionHolder.swapNavWifi.getBool()) SwitchNavWifi();
-            if (CustomOptionHolder.movePolusVitals.getBool() && !CustomOptionHolder.moveColdTemp.getBool())
-                MoveTempCold();
+            if (CustomOptionHolder.movePolusVitals.getBool() && !CustomOptionHolder.moveColdTemp.getBool()) MoveTempCold();
             if (CustomOptionHolder.moveColdTemp.getBool()) MoveTempColdDV();
         }
         else
         {
-            Warn("Couldn't move elements as not all of them have been fetched.");
+            Warn("[BetterPolus] Couldn't move elements as not all of them have been fetched.");
         }
 
         if (CustomOptionHolder.movePolusVents.getBool()) AdjustVents(); // Programed
@@ -167,7 +166,7 @@ public static class ShipStatusPatch2
         }
         else
         {
-            Warn("Couldn't adjust Vents as not all objects have been fetched.");
+            Warn("[BetterPolus] Couldn't adjust Vents as not all objects have been fetched.");
         }
     }
 

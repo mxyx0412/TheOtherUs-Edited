@@ -78,27 +78,47 @@ public static class MeltdownBooster
     {
         if (ElectricPatch.IsReactorDurationSetting)
         {
-            if (!__instance.IsActive)
-                return;
-            switch (GameOptionsManager.Instance.currentNormalGameOptions.MapId)
+            if (!__instance.IsActive) return;
+            switch (MapUtilities.CachedShipStatus.Type)
             {
-                case 0 when __instance.Countdown >= CustomOptionHolder.SkeldReactorTimeLimit.getFloat():
+                case ShipStatus.MapType.Ship when __instance.Countdown >= CustomOptionHolder.SkeldReactorTimeLimit.getFloat():
                     __instance.Countdown = CustomOptionHolder.SkeldReactorTimeLimit.getFloat();
                     return;
-                case 1 | 4 when __instance.Countdown >= CustomOptionHolder.MiraReactorTimeLimit.getFloat():
+                case ShipStatus.MapType.Hq when __instance.Countdown >= CustomOptionHolder.MiraReactorTimeLimit.getFloat():
                     __instance.Countdown = CustomOptionHolder.MiraReactorTimeLimit.getFloat();
                     return;
-                case 2 when __instance.Countdown >= CustomOptionHolder.PolusReactorTimeLimit.getFloat():
+                case ShipStatus.MapType.Pb when __instance.Countdown >= CustomOptionHolder.PolusReactorTimeLimit.getFloat():
                     __instance.Countdown = CustomOptionHolder.PolusReactorTimeLimit.getFloat();
                     return;
-                case 3 when __instance.Countdown >= CustomOptionHolder.AirshipReactorTimeLimit.getFloat():
-                    __instance.Countdown = CustomOptionHolder.AirshipReactorTimeLimit.getFloat();
-                    return;
-                case 5 when __instance.Countdown >= CustomOptionHolder.FungleReactorTimeLimit.getFloat():
+                case ShipStatus.MapType.Fungle when __instance.Countdown >= CustomOptionHolder.FungleReactorTimeLimit.getFloat():
                     __instance.Countdown = CustomOptionHolder.FungleReactorTimeLimit.getFloat();
                     return;
                 default:
                     return;
+            }
+        }
+    }
+}
+
+
+[HarmonyPatch(typeof(HeliSabotageSystem), nameof(HeliSabotageSystem.Deteriorate))]
+public static class HeliMeltdownBooster
+{
+    public static void Prefix(HeliSabotageSystem __instance)
+    {
+        if (CustomOptionHolder.IsReactorDurationSetting.getBool())
+        {
+            if (!__instance.IsActive)
+            {
+                return;
+            }
+
+            if (MapUtilities.CachedShipStatus != null)
+            {
+                if (__instance.Countdown >= CustomOptionHolder.AirshipReactorTimeLimit.getFloat())
+                {
+                    __instance.Countdown = CustomOptionHolder.AirshipReactorTimeLimit.getFloat();
+                }
             }
         }
     }

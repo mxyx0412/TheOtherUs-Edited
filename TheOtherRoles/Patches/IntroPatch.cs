@@ -346,7 +346,7 @@ internal class IntroPatch
             // Don't override the intro of the vanilla roles
             var infos = RoleInfo.getRoleInfoForPlayer(CachedPlayer.LocalPlayer.PlayerControl);
             var roleInfo = infos.FirstOrDefault(info => info.roleTeam != RoleTeam.Modifier);
-            var modifierInfo = infos.FirstOrDefault(info => info.isModifier);
+            var modifierInfo = infos.FirstOrDefault(info => info.roleTeam == RoleTeam.Modifier);
 
             __instance.RoleBlurbText.text = "";
             if (roleInfo != null)

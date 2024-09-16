@@ -8,6 +8,7 @@ using Assets.CoreScripts;
 using Hazel;
 using InnerNet;
 using PowerTools;
+using Reactor.Networking.Extensions;
 using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
 using TheOtherRoles.Buttons;
@@ -98,6 +99,7 @@ public enum RoleId
     SecurityGuard,
     Medium,
     Trapper,
+    Balancer,
 
     // Modifier ---
     Lover,
@@ -155,6 +157,7 @@ public enum CustomRPC
     EngineerUsedRepair,
     CleanBody,
     DissectionBody,
+    RandomDeadBodyPosition,
     Mine,
     ShowIndomitableFlash,
     DragBody,
@@ -250,6 +253,7 @@ public enum CustomRPC
     //ShareRoom,
     YoyoMarkLocation,
     YoyoBlink,
+    BalancerBalance,
 
     // Gamemode
     SetGuesserGm,
@@ -538,6 +542,9 @@ public static class RPCProcedure
                     case RoleId.Jumper:
                         Jumper.jumper = player;
                         break;
+                    case RoleId.Balancer:
+                        Balancer.balancer = player;
+                        break;
                     case RoleId.Escapist:
                         Escapist.escapist = player;
                         break;
@@ -811,11 +818,16 @@ public static class RPCProcedure
         Butcher.dissected = player;
 
         DeadBody[] array = Object.FindObjectsOfType<DeadBody>();
-        for (var i = 1; i < array.Length && GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId == playerId; i++)
+
+        for (var i = 1; i < array.Length && array[i].ParentId == playerId; i++)
         {
             var randomPosition = MapData.MapSpawnPosition().Random();
             array[i].transform.position = randomPosition;
         }
+    }
+
+    public static void RandomDeadBodyPosition(byte parentId, Vector2 position)
+    {
     }
 
     public static void dragBody(byte playerId)
@@ -885,7 +897,7 @@ public static class RPCProcedure
         var amnisiac = Amnisiac.amnisiac;
         if (target == null || amnisiac == null) return;
         var targetInfo = RoleInfo.getRoleInfoForPlayer(target);
-        var roleInfo = targetInfo.FirstOrDefault(info => !info.isModifier);
+        var roleInfo = targetInfo.FirstOrDefault(info => info.roleTeam != RoleTeam.Modifier);
         switch (roleInfo!.roleId)
         {
             case RoleId.Crewmate:
@@ -974,6 +986,12 @@ public static class RPCProcedure
             case RoleId.Detective:
                 if (Amnisiac.resetRole) Detective.clearAndReload();
                 Detective.detective = amnisiac;
+                Amnisiac.clearAndReload();
+                break;
+
+            case RoleId.Balancer:
+                if (Amnisiac.resetRole) Balancer.clearAndReload();
+                Balancer.balancer = amnisiac;
                 Amnisiac.clearAndReload();
                 break;
 
@@ -1376,7 +1394,7 @@ public static class RPCProcedure
         var target = playerById(targetId);
         if (target == null || Mimic.mimic == null) return;
         var targetInfo = RoleInfo.getRoleInfoForPlayer(target);
-        var roleInfo = targetInfo.FirstOrDefault(info => !info.isModifier);
+        var roleInfo = targetInfo.FirstOrDefault(info => info.roleTeam != RoleTeam.Modifier);
         switch (roleInfo!.roleId)
         {
             case RoleId.BodyGuard:
@@ -2255,6 +2273,7 @@ public static class RPCProcedure
         if (player == Seer.seer) Seer.clearAndReload();
         if (player == Hacker.hacker) Hacker.clearAndReload();
         if (player == BodyGuard.bodyguard) BodyGuard.clearAndReload();
+        if (player == Balancer.balancer) Balancer.clearAndReload();
         if (player == Tracker.tracker) Tracker.clearAndReload();
         if (player == Snitch.snitch) Snitch.clearAndReload();
         if (player == Swapper.swapper) Swapper.clearAndReload();
@@ -2374,6 +2393,16 @@ public static class RPCProcedure
         InfoSleuth.target = null;
     }
 
+
+    public static void balancerBalance(byte sourceId, byte player1Id, byte player2Id)
+    {
+        PlayerControl source = playerById(sourceId);
+        PlayerControl player1 = playerById(player1Id);
+        PlayerControl player2 = playerById(player2Id);
+        if (source is null || player1 is null || player2 is null) return;
+        Balancer.StartAbility(source, player1, player2);
+    }
+
     public static void setFutureErased(byte playerId)
     {
         var player = playerById(playerId);
@@ -2452,7 +2481,8 @@ public static class RPCProcedure
                 if (p == 1f && Bomber.bombActive)
                 {
                     // Perform kill if possible and reset bitten (regardless whether the kill was successful or not)
-                    checkMurderAttemptAndKill(Bomber.bomber, Bomber.hasBombPlayer, false, false, true, true);
+                    if (Bomber.bomber.IsAlive() && CachedPlayer.LocalPlayer.PlayerControl == Bomber.bomber)
+                        checkMurderAttemptAndKill(Bomber.bomber, Bomber.hasBombPlayer, false, false, true, true);
                     Bomber.hasBombPlayer = null;
                     Bomber.bombActive = false;
                     Bomber.hasAlerted = false;
@@ -3623,6 +3653,10 @@ internal class RPCHandlerPatch
                 RPCProcedure.dissectionBody(reader.ReadByte(), reader.ReadByte());
                 break;
 
+            case CustomRPC.RandomDeadBodyPosition:
+                RPCProcedure.RandomDeadBodyPosition(reader.ReadByte(), reader.ReadVector2());
+                break;
+
             case CustomRPC.BlackmailPlayer:
                 RPCProcedure.blackmailPlayer(reader.ReadByte());
                 break;
@@ -4070,6 +4104,10 @@ internal class RPCHandlerPatch
 
             case CustomRPC.InfoSleuthNoTarget:
                 RPCProcedure.infoSleuthNoTarget();
+                break;
+
+            case CustomRPC.BalancerBalance:
+                RPCProcedure.balancerBalance(reader.ReadByte(), reader.ReadByte(), reader.ReadByte());
                 break;
 
             case CustomRPC.HostEndGame:

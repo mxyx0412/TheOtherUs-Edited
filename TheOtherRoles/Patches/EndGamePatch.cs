@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Xml.Schema;
 using AmongUs.GameOptions;
 using TheOtherRoles.CustomGameModes;
 using TheOtherRoles.Utilities;
@@ -169,6 +168,8 @@ public class OnGameEndPatch
 
         notWinners.AddRange(Pavlovsdogs.pavlovsdogs.Where(p => p != null));
         notWinners.AddRange(Jackal.formerJackals.Where(p => p != null));
+        notWinners.AddRange(Pursuer.pursuer.Where(p => p != null));
+        notWinners.AddRange(Survivor.survivor.Where(p => p != null));
         if (Akujo.honmeiCannotFollowWin && Akujo.honmei != null) notWinners.Add(Akujo.honmei);
 
         var winnersToRemove = new List<WinningPlayerData>();
@@ -368,7 +369,6 @@ public class OnGameEndPatch
                 var wpd = new WinningPlayerData(player) { IsImpostor = true };
                 if (player.Role.IsImpostor)
                 {
-                    Message("伪装者获胜");
                     TempData.winners.Add(wpd);
                 }
             }
@@ -761,7 +761,6 @@ internal class CheckEndCriteriaPatch
     {
         if (!GameData.Instance) return false;
         var statistics = new PlayerStatistics(__instance);
-        if (CheckAndEndGameForHost(__instance)) return false;
         if (ModOption.DebugMode) return false;
         // InstanceExists | Don't check Custom Criteria when in Tutorial
         if (DestroyableSingleton<TutorialManager>.InstanceExists) return true;
@@ -782,16 +781,6 @@ internal class CheckEndCriteriaPatch
         if (CheckAndEndGameForJuggernautWin(__instance, statistics)) return false;
         if (CheckAndEndGameForImpostorWin(__instance, statistics)) return false;
         if (CheckAndEndGameForCrewmateWin(__instance, statistics)) return false;
-        return false;
-    }
-
-    private static bool CheckAndEndGameForHost(ShipStatus __instance)
-    {
-        if (ModOption.isCanceled)
-        {
-            GameManager.Instance.RpcEndGame((GameOverReason)CustomGameOverReason.Canceled, false);
-            return true;
-        }
         return false;
     }
 

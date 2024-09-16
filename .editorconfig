@@ -2,6 +2,7 @@
 dotnet_diagnostic.IDE1006.severity = silent
 dotnet_diagnostic.IDE0007.severity = silent
 dotnet_diagnostic.IDE0031.severity = silent
+dotnet_diagnostic.IDE0061.severity = silent
 dotnet_diagnostic.CA1720.severity = none
 
 # Default severity for all analyzer diagnostics
