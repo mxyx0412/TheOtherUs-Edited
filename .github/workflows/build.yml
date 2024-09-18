@@ -85,6 +85,9 @@ jobs:
       - name: Compress subdirectories
         run: |
           ls -R
+          mv ./BepInEx/plugins/TheOtherUs.dll ./
+          zip -q -r TheOtherUs.zip *
+          mv ./TheOtherUs.zip ./
         
       # 提取版本号
       - name: Extract version from tag
