@@ -97,7 +97,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}  # 使用 GitHub 密钥
           name: "TheOtherUs v${{ env.VERSION }}"  # 发布名称
-          body_path: "NO CHANGELOG"  # 使用 CHANGELOG 作为发布描述
+          body_path: CHANGELOG.md  # 使用 CHANGELOG 作为发布描述
           files: ./Release/BepInEx/plugins/TheOtherUs.dll  # 发布的文件
           draft: false  # 直接发布（非草稿）
           prerelease: false  # 不是预发布版本
