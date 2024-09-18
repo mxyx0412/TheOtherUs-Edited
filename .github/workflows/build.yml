@@ -82,7 +82,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: TheOtherUs
-
+      - name: Compress subdirectories
+        run: |
+          ls -R
+        
       # 提取版本号
       - name: Extract version from tag
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
@@ -100,8 +103,7 @@ jobs:
           name: "TheOtherUs v${{ env.VERSION }}"  # 发布名称
           body_path: CHANGELOG.md  # 使用 CHANGELOG 作为发布描述
           files: |
-            ls -R
+            TheOtherUs.dll
             TheOtherUs.zip
-            TheOtherUs.dll.zip
           draft: true  # 直接发布（非草稿）
           prerelease: false  # 不是预发布版本
