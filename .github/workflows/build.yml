@@ -85,9 +85,8 @@ jobs:
       - name: Compress subdirectories
         run: |
           ls -R
-          mv ./BepInEx/plugins/TheOtherUs.dll ./
           zip -q -r TheOtherUs.zip *
-          mv ./TheOtherUs.zip ./
+          mv ./BepInEx/plugins/TheOtherUs.dll ./
         
       # 提取版本号
       - name: Extract version from tag
@@ -107,6 +106,6 @@ jobs:
           body_path: CHANGELOG.md  # 使用 CHANGELOG 作为发布描述
           files: |
             TheOtherUs.dll
-            TheOtherUs.zip
+            ./TheOtherUs.zip
           draft: true  # 直接发布（非草稿）
           prerelease: false  # 不是预发布版本
