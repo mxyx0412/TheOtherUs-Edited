@@ -87,9 +87,9 @@ jobs:
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
 
       # 克隆 CHANGELOG 文件（如果有的话）
-      #- name: Clone Changes Log
-      #  run: |
-      #    wget https://raw.githubusercontent.com/your_repo/main/CHANGELOG.md -O CHANGELOG.md
+      - name: Clone Changes Log
+        run: |
+          wget https://raw.githubusercontent.com/mxyx0412/TheOtherUs-Edited/CHANGELOG.md -O CHANGELOG.md
 
       # 创建并发布 Release
       - name: Create GitHub Release
