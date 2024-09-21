@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AmongUs.GameOptions;
 using Hazel;
+using MonoMod.Utils;
 using Reactor.Utilities.Extensions;
 using TheOtherRoles.CustomGameModes;
 using TheOtherRoles.Utilities;
@@ -36,7 +37,7 @@ internal class GameOptionsDataGetAdjustedNumImpostorsPatch
         else if (GameOptionsManager.Instance.CurrentGameOptions.GameMode == GameModes.Normal)
         {
             // Ignore Vanilla impostor limits in TOR Games.
-            __result = Mathf.Clamp(GameOptionsManager.Instance.CurrentGameOptions.NumImpostors, 1, 15);
+            __result = Mathf.Clamp(GameOptionsManager.Instance.CurrentGameOptions.NumImpostors, 0, 15);
         }
     }
 }
@@ -101,10 +102,14 @@ internal class RoleManagerSelectRolesPatch
 
         var neutralMin = CustomOptionHolder.neutralRolesCountMin.getSelection();
         var neutralMax = CustomOptionHolder.neutralRolesCountMax.getSelection();
+        var killerNeutralMin = CustomOptionHolder.killerNeutralRolesCountMin.getSelection();
+        var killerNeutralMax = CustomOptionHolder.killerNeutralRolesCountMax.getSelection();
         var impostorNum = ModOption.NumImpostors;
 
         // Make sure min is less or equal to max
-        if (neutralMin > neutralMax) neutralMin = neutralMax;
+        neutralMin = Math.Min(neutralMin, neutralMax);
+        killerNeutralMin = Math.Min(killerNeutralMin, killerNeutralMax);
+
 
         // Automatically force everyone to get a role by setting crew Min / Max according to Neutral Settings
         /*if (CustomOptionHolder.crewmateRolesFill.getBool())
@@ -117,16 +122,21 @@ internal class RoleManagerSelectRolesPatch
 
         // Get the maximum allowed count of each role type based on the minimum and maximum option
         var neutralCountSettings = rnd.Next(neutralMin, neutralMax + 1);
+        var killerNeutralCount = rnd.Next(killerNeutralMin, killerNeutralMax + 1);
         var crewCountSettings = PlayerControl.AllPlayerControls.Count - neutralCountSettings - impostorNum;
+
+        killerNeutralCount = Math.Min(killerNeutralCount, neutralCountSettings);
 
         // Potentially lower the actual maximum to the assignable players
         var maxCrewmateRoles = Mathf.Min(crewmates.Count, crewCountSettings);
         var maxNeutralRoles = Mathf.Min(crewmates.Count, neutralCountSettings);
+        var maxKillerNeutralRoles = Mathf.Min(crewmates.Count, killerNeutralCount);
         var maxImpostorRoles = Mathf.Min(impostors.Count, impostorNum);
 
         // Fill in the lists with the roles that should be assigned to players. Note that the special roles (like Mafia or Lovers) are NOT included in these lists
         var impSettings = new Dictionary<byte, int>();
         var neutralSettings = new Dictionary<byte, int>();
+        var killerNeutralSettings = new Dictionary<byte, int>();
         var crewSettings = new Dictionary<byte, int>();
 
         impSettings.Add((byte)RoleId.Morphling, CustomOptionHolder.morphlingSpawnRate.getSelection());
@@ -152,23 +162,36 @@ internal class RoleManagerSelectRolesPatch
         impSettings.Add((byte)RoleId.EvilTrapper, CustomOptionHolder.evilTrapperSpawnRate.getSelection());
         impSettings.Add((byte)RoleId.Gambler, CustomOptionHolder.gamblerSpawnRate.getSelection());
 
-        neutralSettings.Add((byte)RoleId.Jester, CustomOptionHolder.jesterSpawnRate.getSelection());
+        neutralSettings.Add((byte)RoleId.Survivor, CustomOptionHolder.survivorSpawnRate.getSelection());
+        //neutralSettings.Add((byte)RoleId.Pursuer, CustomOptionHolder.pursuerSpawnRate.getSelection());
         neutralSettings.Add((byte)RoleId.Amnisiac, CustomOptionHolder.amnisiacSpawnRate.getSelection());
+        neutralSettings.Add((byte)RoleId.PartTimer, CustomOptionHolder.partTimerSpawnRate.getSelection());
+        neutralSettings.Add((byte)RoleId.Jester, CustomOptionHolder.jesterSpawnRate.getSelection());
+        neutralSettings.Add((byte)RoleId.Lawyer, CustomOptionHolder.lawyerSpawnRate.getSelection());
+        neutralSettings.Add((byte)RoleId.Executioner, CustomOptionHolder.executionerSpawnRate.getSelection());
         neutralSettings.Add((byte)RoleId.Arsonist, CustomOptionHolder.arsonistSpawnRate.getSelection());
-        neutralSettings.Add((byte)RoleId.Jackal, CustomOptionHolder.jackalSpawnRate.getSelection());
-        neutralSettings.Add((byte)RoleId.Pavlovsowner, CustomOptionHolder.pavlovsownerSpawnRate.getSelection());
-        neutralSettings.Add((byte)RoleId.Swooper, CustomOptionHolder.swooperSpawnRate.getSelection());
-        neutralSettings.Add((byte)RoleId.Werewolf, CustomOptionHolder.werewolfSpawnRate.getSelection());
-        neutralSettings.Add((byte)RoleId.Juggernaut, CustomOptionHolder.juggernautSpawnRate.getSelection());
+        neutralSettings.Add((byte)RoleId.Vulture, CustomOptionHolder.vultureSpawnRate.getSelection());
         neutralSettings.Add((byte)RoleId.Doomsayer, CustomOptionHolder.doomsayerSpawnRate.getSelection());
         neutralSettings.Add((byte)RoleId.Akujo, CustomOptionHolder.akujoSpawnRate.getSelection());
-        neutralSettings.Add((byte)RoleId.Vulture, CustomOptionHolder.vultureSpawnRate.getSelection());
         neutralSettings.Add((byte)RoleId.Thief, CustomOptionHolder.thiefSpawnRate.getSelection());
-        neutralSettings.Add((byte)RoleId.Executioner, CustomOptionHolder.executionerSpawnRate.getSelection());
-        neutralSettings.Add((byte)RoleId.Lawyer, CustomOptionHolder.lawyerSpawnRate.getSelection());
-        neutralSettings.Add((byte)RoleId.Survivor, CustomOptionHolder.survivorSpawnRate.getSelection());
-        neutralSettings.Add((byte)RoleId.PartTimer, CustomOptionHolder.partTimerSpawnRate.getSelection());
-        //neutralSettings.Add((byte)RoleId.Pursuer, CustomOptionHolder.pursuerSpawnRate.getSelection());
+        killerNeutralSettings.Add((byte)RoleId.Jackal, CustomOptionHolder.jackalSpawnRate.getSelection());
+        killerNeutralSettings.Add((byte)RoleId.Pavlovsowner, CustomOptionHolder.pavlovsownerSpawnRate.getSelection());
+        killerNeutralSettings.Add((byte)RoleId.Werewolf, CustomOptionHolder.werewolfSpawnRate.getSelection());
+        killerNeutralSettings.Add((byte)RoleId.Juggernaut, CustomOptionHolder.juggernautSpawnRate.getSelection());
+        killerNeutralSettings.Add((byte)RoleId.Swooper, CustomOptionHolder.swooperSpawnRate.getSelection());
+
+        // Check if killerNeutralMin and killerNeutralMax are 0
+        if (killerNeutralMin + killerNeutralMax == 0)
+        {
+            // If both are 0, treat all killer neutrals as regular neutrals
+            neutralSettings.AddRange(killerNeutralSettings);
+            killerNeutralCount = 0;
+        }
+        else
+        {
+            // Adjust maxNeutralRoles by allocating killerNeutral roles
+            maxNeutralRoles = Math.Min(maxNeutralRoles - killerNeutralCount, neutralMax);
+        }
 
         crewSettings.Add((byte)RoleId.Mayor, CustomOptionHolder.mayorSpawnRate.getSelection());
         crewSettings.Add((byte)RoleId.Prosecutor, CustomOptionHolder.prosecutorSpawnRate.getSelection());
@@ -202,9 +225,11 @@ internal class RoleManagerSelectRolesPatch
             impostors = impostors,
             crewSettings = crewSettings,
             neutralSettings = neutralSettings,
+            killerNeutralSettings = killerNeutralSettings,
             impSettings = impSettings,
             maxCrewmateRoles = maxCrewmateRoles,
             maxNeutralRoles = maxNeutralRoles,
+            maxKillerNeutralRoles = maxKillerNeutralRoles,
             maxImpostorRoles = maxImpostorRoles
         };
     }
@@ -217,7 +242,6 @@ internal class RoleManagerSelectRolesPatch
             CustomOptionHolder.deputySpawnRate.getSelection() == 0)
             data.crewSettings.Add((byte)RoleId.Sheriff, CustomOptionHolder.sheriffSpawnRate.getSelection());
 
-
         crewValues = data.crewSettings.Values.ToList().Sum();
         impValues = data.impSettings.Values.ToList().Sum();
     }
@@ -227,14 +251,15 @@ internal class RoleManagerSelectRolesPatch
         // Get all roles where the chance to occur is set to 100%
         var ensuredCrewmateRoles = data.crewSettings.Where(x => x.Value == 10).Select(x => x.Key).ToList();
         var ensuredNeutralRoles = data.neutralSettings.Where(x => x.Value == 10).Select(x => x.Key).ToList();
+        var ensuredKillerNeutralRoles = data.killerNeutralSettings.Where(x => x.Value == 10).Select(x => x.Key).ToList();
         var ensuredImpostorRoles = data.impSettings.Where(x => x.Value == 10).Select(x => x.Key).ToList();
 
         // Assign roles until we run out of either players we can assign roles to or run out of roles we can assign to players
-        while (
-            (data.impostors.Count > 0 && data.maxImpostorRoles > 0 && ensuredImpostorRoles.Count > 0) ||
+        while ((data.impostors.Count > 0 && data.maxImpostorRoles > 0 && ensuredImpostorRoles.Count > 0) ||
             (data.crewmates.Count > 0 && (
-                (data.maxCrewmateRoles > 0 && ensuredCrewmateRoles.Count > 0) ||
-                (data.maxNeutralRoles > 0 && ensuredNeutralRoles.Count > 0)
+                (data.maxCrewmateRoles > 0 && ensuredCrewmateRoles.Count > 0)
+                || (data.maxNeutralRoles > 0 && ensuredNeutralRoles.Count > 0)
+                || (data.maxKillerNeutralRoles > 0 && ensuredKillerNeutralRoles.Count > 0)
             )))
         {
             var rolesToAssign = new Dictionary<RoleType, List<byte>>();
@@ -242,32 +267,36 @@ internal class RoleManagerSelectRolesPatch
                 rolesToAssign.Add(RoleType.Crewmate, ensuredCrewmateRoles);
             if (data.crewmates.Count > 0 && data.maxNeutralRoles > 0 && ensuredNeutralRoles.Count > 0)
                 rolesToAssign.Add(RoleType.Neutral, ensuredNeutralRoles);
+            if (data.crewmates.Count > 0 && data.maxKillerNeutralRoles > 0 && ensuredKillerNeutralRoles.Count > 0)
+                rolesToAssign.Add(RoleType.KillerNeutral, ensuredKillerNeutralRoles);
             if (data.impostors.Count > 0 && data.maxImpostorRoles > 0 && ensuredImpostorRoles.Count > 0)
                 rolesToAssign.Add(RoleType.Impostor, ensuredImpostorRoles);
 
             // Randomly select a pool of roles to assign a role from next (Crewmate role, Neutral role or Impostor role) 
             // then select one of the roles from the selected pool to a player 
             // and remove the role (and any potentially blocked role pairings) from the pool(s)
-            var roleType = rolesToAssign.Keys.ElementAt(rnd.Next(0, rolesToAssign.Keys.Count()));
-            var players = roleType == RoleType.Crewmate || roleType == RoleType.Neutral
-                ? data.crewmates
-                : data.impostors;
+            var roleType = rolesToAssign.Keys.ElementAt(rnd.Next(0, rolesToAssign.Keys.Count));
+            var players = roleType is RoleType.Crewmate or RoleType.Neutral or RoleType.KillerNeutral ? data.crewmates : data.impostors;
+
             var index = rnd.Next(0, rolesToAssign[roleType].Count);
             var roleId = rolesToAssign[roleType][index];
-            setRoleToRandomPlayer(rolesToAssign[roleType][index], players);
+            setRoleToRandomPlayer(roleId, players);
             rolesToAssign[roleType].RemoveAt(index);
 
             if (RoleClass.blockedRolePairings.ContainsKey(roleId))
+            {
                 foreach (var blockedRoleId in RoleClass.blockedRolePairings[roleId])
                 {
                     // Set chance for the blocked roles to 0 for chances less than 100%
                     if (data.impSettings.ContainsKey(blockedRoleId)) data.impSettings[blockedRoleId] = 0;
                     if (data.neutralSettings.ContainsKey(blockedRoleId)) data.neutralSettings[blockedRoleId] = 0;
+                    if (data.killerNeutralSettings.ContainsKey(blockedRoleId)) data.killerNeutralSettings[blockedRoleId] = 0;
                     if (data.crewSettings.ContainsKey(blockedRoleId)) data.crewSettings[blockedRoleId] = 0;
                     // Remove blocked roles even if the chance was 100%
                     foreach (var ensuredRolesList in rolesToAssign.Values)
                         ensuredRolesList.RemoveAll(x => x == blockedRoleId);
                 }
+            }
 
             // Adjust the role limit
             switch (roleType)
@@ -278,6 +307,9 @@ internal class RoleManagerSelectRolesPatch
                     break;
                 case RoleType.Neutral:
                     data.maxNeutralRoles--;
+                    break;
+                case RoleType.KillerNeutral:
+                    data.maxKillerNeutralRoles--;
                     break;
                 case RoleType.Impostor:
                     data.maxImpostorRoles--;
@@ -353,20 +385,20 @@ internal class RoleManagerSelectRolesPatch
 
     private static void assignChanceRoles(RoleAssignmentData data)
     {
+        static List<byte> GetEnsuredRoles(Dictionary<byte, int> settings) => settings.Where(x => x.Value > 0).Select(x => x.Key).ToList();
+
         // Get all roles where the chance to occur is set grater than 0% but not 100% and build a ticket pool based on their weight
-        var crewmateTickets = data.crewSettings.Where(x => x.Value > 0 && x.Value < 10)
-            .Select(x => Enumerable.Repeat(x.Key, x.Value)).SelectMany(x => x).ToList();
-        var neutralTickets = data.neutralSettings.Where(x => x.Value > 0 && x.Value < 10)
-            .Select(x => Enumerable.Repeat(x.Key, x.Value)).SelectMany(x => x).ToList();
-        var impostorTickets = data.impSettings.Where(x => x.Value > 0 && x.Value < 10)
-            .Select(x => Enumerable.Repeat(x.Key, x.Value)).SelectMany(x => x).ToList();
+        var crewmateTickets = GetEnsuredRoles(data.crewSettings);
+        var neutralTickets = GetEnsuredRoles(data.neutralSettings);
+        var killerNeutralTickets = GetEnsuredRoles(data.killerNeutralSettings);
+        var impostorTickets = GetEnsuredRoles(data.impSettings);
 
         // Assign roles until we run out of either players we can assign roles to or run out of roles we can assign to players
-        while (
-            (data.impostors.Count > 0 && data.maxImpostorRoles > 0 && impostorTickets.Count > 0) ||
+        while ((data.impostors.Count > 0 && data.maxImpostorRoles > 0 && impostorTickets.Count > 0) ||
             (data.crewmates.Count > 0 && (
-                (data.maxCrewmateRoles > 0 && crewmateTickets.Count > 0) ||
-                (data.maxNeutralRoles > 0 && neutralTickets.Count > 0)
+                (data.maxCrewmateRoles > 0 && crewmateTickets.Count > 0)
+                || (data.maxNeutralRoles > 0 && neutralTickets.Count > 0)
+                || (data.maxKillerNeutralRoles > 0 && killerNeutralTickets.Count > 0)
             )))
         {
             var rolesToAssign = new Dictionary<RoleType, List<byte>>();
@@ -374,6 +406,8 @@ internal class RoleManagerSelectRolesPatch
                 rolesToAssign.Add(RoleType.Crewmate, crewmateTickets);
             if (data.crewmates.Count > 0 && data.maxNeutralRoles > 0 && neutralTickets.Count > 0)
                 rolesToAssign.Add(RoleType.Neutral, neutralTickets);
+            if (data.crewmates.Count > 0 && data.maxKillerNeutralRoles > 0 && killerNeutralTickets.Count > 0)
+                rolesToAssign.Add(RoleType.KillerNeutral, killerNeutralTickets);
             if (data.impostors.Count > 0 && data.maxImpostorRoles > 0 && impostorTickets.Count > 0)
                 rolesToAssign.Add(RoleType.Impostor, impostorTickets);
 
@@ -381,9 +415,7 @@ internal class RoleManagerSelectRolesPatch
             // then select one of the roles from the selected pool to a player 
             // and remove all tickets of this role (and any potentially blocked role pairings) from the pool(s)
             var roleType = rolesToAssign.Keys.ElementAt(rnd.Next(0, rolesToAssign.Keys.Count));
-            var players = roleType == RoleType.Crewmate || roleType == RoleType.Neutral
-                ? data.crewmates
-                : data.impostors;
+            var players = roleType is RoleType.Crewmate or RoleType.Neutral or RoleType.KillerNeutral ? data.crewmates : data.impostors;
             var index = rnd.Next(0, rolesToAssign[roleType].Count);
             var roleId = rolesToAssign[roleType][index];
             setRoleToRandomPlayer(roleId, players);
@@ -395,6 +427,7 @@ internal class RoleManagerSelectRolesPatch
                     // Remove tickets of blocked roles from all pools
                     crewmateTickets.RemoveAll(x => x == blockedRoleId);
                     neutralTickets.RemoveAll(x => x == blockedRoleId);
+                    killerNeutralTickets.RemoveAll(x => x == blockedRoleId);
                     impostorTickets.RemoveAll(x => x == blockedRoleId);
                 }
 
@@ -406,6 +439,9 @@ internal class RoleManagerSelectRolesPatch
                     break;
                 case RoleType.Neutral:
                     data.maxNeutralRoles--;
+                    break;
+                case RoleType.KillerNeutral:
+                    data.maxKillerNeutralRoles--;
                     break;
                 case RoleType.Impostor:
                     data.maxImpostorRoles--;
@@ -667,6 +703,7 @@ internal class RoleManagerSelectRolesPatch
 
     private static byte setRoleToRandomPlayer(byte roleId, List<PlayerControl> playerList, bool removePlayer = true)
     {
+        Message("setRoleToRandomPlayer");
         var index = rnd.Next(0, playerList.Count);
         var playerId = playerList[index].PlayerId;
         if (removePlayer) playerList.RemoveAt(index);
@@ -1052,10 +1089,12 @@ internal class RoleManagerSelectRolesPatch
         public Dictionary<byte, int> crewSettings = new();
         public Dictionary<byte, int> impSettings = new();
         public Dictionary<byte, int> neutralSettings = new();
+        public Dictionary<byte, int> killerNeutralSettings = new();
         public List<PlayerControl> crewmates { get; set; }
         public List<PlayerControl> impostors { get; set; }
         public int maxCrewmateRoles { get; set; }
         public int maxNeutralRoles { get; set; }
+        public int maxKillerNeutralRoles { get; set; }
         public int maxImpostorRoles { get; set; }
     }
 
@@ -1063,6 +1102,7 @@ internal class RoleManagerSelectRolesPatch
     {
         Crewmate = 0,
         Neutral = 1,
-        Impostor = 2
+        KillerNeutral = 2,
+        Impostor = 3
     }
 }

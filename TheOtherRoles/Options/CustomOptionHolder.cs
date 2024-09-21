@@ -10,6 +10,8 @@ public class CustomOptionHolder
 
     public static string[] ratesCount =
         ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"];
+    public static string[] ratesRandom =
+        ["Random", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"];
 
     public static string[] presets =
         ["预设 1", "预设 2", "预设 3", "Skeld预设", "Mira预设", "Polus预设", "Airship预设", "Fungle预设", "Submerged预设"];
@@ -17,6 +19,8 @@ public class CustomOptionHolder
     public static CustomOption presetSelection;
     public static CustomOption neutralRolesCountMin;
     public static CustomOption neutralRolesCountMax;
+    public static CustomOption killerNeutralRolesCountMin;
+    public static CustomOption killerNeutralRolesCountMax;
     public static CustomOption modifiersCountMin;
     public static CustomOption modifiersCountMax;
 
@@ -738,6 +742,8 @@ public class CustomOptionHolder
 
         neutralRolesCountMin = Create(8, Types.General, cs(new Color32(204, 204, 0, 255), "neutralRolesCountMin"), 2f, 0f, 15f, 1f, null, true);
         neutralRolesCountMax = Create(9, Types.General, cs(new Color32(204, 204, 0, 255), "neutralRolesCountMax"), 2f, 0f, 15f, 1f);
+        killerNeutralRolesCountMin = Create(10, Types.General, cs(new Color32(204, 204, 0, 255), "killerNeutralRolesCountMin"), ratesRandom);
+        killerNeutralRolesCountMax = Create(11, Types.General, cs(new Color32(204, 204, 0, 255), "killerNeutralRolesCountMax"), ratesRandom);
         modifiersCountMin = Create(12, Types.General, cs(new Color32(204, 204, 0, 255), "modifiersCountMin"), 15f, 0f, 30f, 1f);
         modifiersCountMax = Create(13, Types.General, cs(new Color32(204, 204, 0, 255), "modifiersCountMax"), 15f, 0f, 30f, 1f);
 
