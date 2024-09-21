@@ -374,6 +374,10 @@ public class CustomOptionHolder
     public static CustomOption executionerPromotesToLawyer;
     public static CustomOption executionerOnTargetDead;
 
+    public static CustomOption balancerSpawnRate;
+    public static CustomOption balancerCount;
+    public static CustomOption balancerVoteTime;
+
     public static CustomOption jumperSpawnRate;
     public static CustomOption jumperJumpTime;
     public static CustomOption jumperResetPlaceAfterMeeting;
@@ -1261,9 +1265,11 @@ public class CustomOptionHolder
         jumperMaxCharges = Create(30325, Types.Crewmate, "jumperMaxCharges", 3, 0, 10, 1, jumperSpawnRate);
         jumperResetPlaceAfterMeeting = Create(30323, Types.Crewmate, "jumperResetPlaceAfterMeeting", false, jumperSpawnRate);
         jumperChargesGainOnMeeting = Create(30324, Types.Crewmate, "jumperChargesGainOnMeeting", 2, 0, 10, 1, jumperSpawnRate);
-        /*
-         * 30330
-        */
+
+        balancerSpawnRate = Create(30330, Types.Crewmate, cs(Balancer.color, "Balancer"), rates, null, true);
+        balancerCount = Create(30331, Types.Crewmate, "balancerCount", 1, 1, 3, 1, balancerSpawnRate);
+        balancerVoteTime = Create(30332, Types.Crewmate, "balancerVoteTime", 40, 15, 90, 5, balancerSpawnRate);
+
         trapperSpawnRate = Create(30350, Types.Crewmate, cs(Trapper.color, "Trapper"), rates, null, true);
         trapperCooldown = Create(30351, Types.Crewmate, "trapperCooldown", 20f, 5f, 120f, 2.5f, trapperSpawnRate);
         trapperMaxCharges = Create(30352, Types.Crewmate, "trapperMaxCharges", 4f, 1f, 15f, 1f, trapperSpawnRate);

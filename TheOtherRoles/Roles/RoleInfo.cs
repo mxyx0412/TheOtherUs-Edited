@@ -96,6 +96,7 @@ public class RoleInfo
     public static RoleInfo securityGuard = new("SecurityGuard", SecurityGuard.color, RoleId.SecurityGuard, RoleTeam.Crewmate);
     public static RoleInfo medium = new("Medium", Medium.color, RoleId.Medium, RoleTeam.Crewmate);
     public static RoleInfo trapper = new("Trapper", Trapper.color, RoleId.Trapper, RoleTeam.Crewmate);
+    public static RoleInfo balancer = new("Balancer", Balancer.color, RoleId.Balancer, RoleTeam.Crewmate);
 
     // Modifier
     public static RoleInfo assassin = new("Assassin", Assassin.color, RoleId.Assassin, RoleTeam.Modifier);
@@ -204,6 +205,7 @@ public class RoleInfo
         securityGuard,
         medium,
         trapper,
+        balancer,
 
         lover,
         assassin,
@@ -336,6 +338,7 @@ public class RoleInfo
         if (p == Lawyer.lawyer) infos.Add(lawyer);
         if (p == PartTimer.partTimer) infos.Add(partTimer);
         if (p == Prosecutor.prosecutor) infos.Add(prosecutor);
+        if (p == Balancer.balancer) infos.Add(balancer);
         if (p == Executioner.executioner) infos.Add(executioner);
         if (p == Trapper.trapper) infos.Add(trapper);
         if (p == Prophet.prophet) infos.Add(prophet);

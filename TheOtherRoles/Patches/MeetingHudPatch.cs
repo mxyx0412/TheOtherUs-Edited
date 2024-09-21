@@ -9,6 +9,7 @@ using TheOtherRoles.Objects;
 using TheOtherRoles.Utilities;
 using TMPro;
 using UnityEngine;
+using static MeetingHud;
 using static TheOtherRoles.Options.ModOption;
 using Object = UnityEngine.Object;
 
@@ -475,15 +476,18 @@ internal class MeetingHudPatch
                 }
             }
 
-            var array = new MeetingHud.VoterState[__instance.playerStates.Length];
+            VoterState[] states;
+            GameData.PlayerInfo exiledPlayer = CachedPlayer.LocalPlayer.Data;
+            List<VoterState> statesList = new();
+
             for (var i = 0; i < __instance.playerStates.Length; i++)
             {
                 var playerVoteArea = __instance.playerStates[i];
-                array[i] = new MeetingHud.VoterState
+                statesList.Add(new VoterState()
                 {
                     VoterId = playerVoteArea.TargetPlayerId,
                     VotedForId = playerVoteArea.VotedFor
-                };
+                });
 
                 if (Tiebreaker.tiebreaker == null ||
                     playerVoteArea.TargetPlayerId != Tiebreaker.tiebreaker.PlayerId) continue;
@@ -495,36 +499,36 @@ internal class MeetingHudPatch
                     else if (tiebreakerVote == swapped2.TargetPlayerId) tiebreakerVote = swapped1.TargetPlayerId;
                 }
 
+                //バランサー処理
+                if (Balancer.currentAbilityUser != null)
+                {
+                    if (playerVoteArea.VotedFor != Balancer.targetplayerright.PlayerId &&
+                        playerVoteArea.VotedFor != Balancer.targetplayerleft.PlayerId)
+                    {
+                        playerVoteArea.VotedFor = Helpers.GetRandom([Balancer.targetplayerright.PlayerId, Balancer.targetplayerleft.PlayerId]);
+                    }
+                }
+
+                if (tie && Balancer.currentAbilityUser != null)
+                {
+                    exiledPlayer = Balancer.targetplayerleft.Data;
+                }
+
                 if (potentialExiled.FindAll(x => x != null && x.PlayerId == tiebreakerVote).Count <= 0 ||
                     (potentialExiled.Count <= 1 && !skipIsTie)) continue;
                 exiled = potentialExiled.ToArray().FirstOrDefault(v => v.PlayerId == tiebreakerVote);
                 tie = false;
 
-                var writer = AmongUsClient.Instance.StartRpcImmediately(
-                    CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SetTiebreak,
-                    SendOption.Reliable);
+                var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
+                    (byte)CustomRPC.SetTiebreak, SendOption.Reliable);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.setTiebreak();
             }
 
+            states = statesList.ToArray();
             // RPCVotingComplete
-            __instance.RpcVotingComplete(array, exiled, tie);
+            __instance.RpcVotingComplete(states, exiled, tie);
             return false;
-        }
-    }
-
-    [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.VotingComplete))]
-    public static class VotingComplete
-    {
-        public static void Postfix(MeetingHud __instance,
-            [HarmonyArgument(0)] Il2CppStructArray<MeetingHud.VoterState> states,
-            [HarmonyArgument(1)] GameData.PlayerInfo exiled,
-            [HarmonyArgument(2)] bool tie)
-        {
-            __instance.exiledPlayer = __instance.wasTie ? null : __instance.exiledPlayer;
-            var exiledString = exiled == null ? "null" : exiled.PlayerName;
-            Message($"被驱逐玩家: {exiledString}");
-            Message($"是否平票: {tie}");
         }
     }
 
@@ -707,6 +711,21 @@ internal class MeetingHudPatch
             // Snitch
             if (Snitch.snitch != null && !Snitch.needsUpdate && Snitch.snitch.Data.IsDead && Snitch.text != null) Object.Destroy(Snitch.text);
 
+            __instance.exiledPlayer = __instance.wasTie ? null : __instance.exiledPlayer;
+            var exiledString = exiled == null ? "null" : exiled.PlayerName;
+            Message($"被驱逐玩家: {exiledString}");
+            Message($"是否平票: {tie}");
+        }
+
+        private static void Prefix(MeetingHud __instance,
+            [HarmonyArgument(0)] Il2CppStructArray<MeetingHud.VoterState> states,
+            [HarmonyArgument(1)] GameData.PlayerInfo exiled,
+            [HarmonyArgument(2)] bool tie)
+        {
+            if (tie && Balancer.currentAbilityUser != null)
+            {
+                Balancer.IsDoubleExile = true;
+            }
         }
     }
 
@@ -913,6 +932,17 @@ internal class MeetingHudPatch
         }
     }
 
+
+    [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.UpdateButtons))]
+    private class MeetingHudUpdateButtonsPatch
+    {
+        private static void Postfix(MeetingHud __instance)
+        {
+            if (Balancer.balancer != null && CachedPlayer.LocalPlayer.PlayerControl == Balancer.balancer)
+                Balancer.Balancer_updatepatch.UpdateButtonsPostfix(__instance);
+        }
+    }
+
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Start))]
     public class MeetingHudStart
     {
@@ -960,6 +990,10 @@ internal class MeetingHudPatch
                 RPCProcedure.infoSleuthNoTarget();
             }
 
+            if (Balancer.balancer.IsAlive() && PlayerControl.LocalPlayer == Balancer.balancer)
+            {
+                Balancer.Balancer_Patch.MeetingHudStartPostfix(__instance);
+            }
         }
     }
 }

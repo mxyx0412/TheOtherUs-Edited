@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using AmongUs.GameOptions;
 using Hazel;
 using PowerTools;
 using TheOtherRoles.Buttons;
 using TheOtherRoles.Objects;
 using TheOtherRoles.Utilities;
+using TMPro;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -16,15 +19,56 @@ namespace TheOtherRoles.Patches;
 internal class ExileControllerBeginPatch
 {
     public static GameData.PlayerInfo lastExiled;
-
-    public static void Prefix(ExileController __instance, [HarmonyArgument(0)] ref GameData.PlayerInfo exiled,
-        [HarmonyArgument(1)] bool tie)
+    public static TextMeshPro confirmImpostorSecondText;
+    static bool IsSec;
+    public static bool Prefix(ExileController __instance, [HarmonyArgument(0)] ref GameData.PlayerInfo exiled, [HarmonyArgument(1)] bool tie)
     {
         lastExiled = exiled;
 
+        if (Balancer.currentAbilityUser != null && Balancer.IsDoubleExile && !IsSec)
+        {
+            IsSec = true;
+            __instance.exiled = null;
+            ExileController controller = Object.Instantiate(__instance, __instance.transform.parent);
+            controller.exiled = Balancer.targetplayerright.Data;
+            controller.Begin(controller.exiled, false);
+            IsSec = false;
+            controller.completeString = string.Empty;
+
+            controller.Text.gameObject.SetActive(false);
+            controller.Player.UpdateFromEitherPlayerDataOrCache(controller.exiled, PlayerOutfitType.Default, PlayerMaterial.MaskType.Exile, includePet: false);
+            controller.Player.ToggleName(active: false);
+            SkinViewData skin = ShipStatus.Instance.CosmeticsCache.GetSkin(controller.exiled.Outfits[PlayerOutfitType.Default].SkinId);
+            controller.Player.FixSkinSprite(skin.EjectFrame);
+            AudioClip sound = null;
+            if (controller.EjectSound != null)
+            {
+                sound = new(controller.EjectSound.Pointer);
+            }
+            controller.EjectSound = null;
+            void createlate(int index)
+            {
+                new LateTask(() => { controller.StopAllCoroutines(); controller.StartCoroutine(controller.Animate()); }, 0.025f + index * 0.025f);
+            }
+            new LateTask(() => controller.StartCoroutine(controller.Animate()), 0f);
+            for (int i = 0; i < 23; i++)
+            {
+                createlate(i);
+            }
+            new LateTask(() => { controller.StopAllCoroutines(); controller.EjectSound = sound; controller.StartCoroutine(controller.Animate()); }, 0.6f);
+            ExileController.Instance = __instance;
+            __instance.exiled = Balancer.targetplayerleft.Data;
+            exiled = __instance.exiled;
+            if (isFungle)
+            {
+                Helpers.SetActiveAllObject(controller.gameObject.GetChildren(), "RaftAnimation", false);
+                controller.transform.localPosition = new(-3.75f, -0.2f, -60f);
+            }
+            if (!IsSec) return true;
+        }
+
         // Medic shield
-        if (Medic.medic != null && AmongUsClient.Instance.AmHost && Medic.futureShielded != null &&
-            !Medic.medic.Data.IsDead)
+        if (Medic.medic != null && AmongUsClient.Instance.AmHost && Medic.futureShielded != null && !Medic.medic.Data.IsDead)
         {
             // We need to send the RPC from the host here, to make sure that the order of shifting and setting the shield is correct(for that reason the futureShifted and futureShielded are being synced)
             var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
@@ -63,6 +107,7 @@ internal class ExileControllerBeginPatch
             Butcher.dissected = null;
             Butcher.canDissection = true;
         }
+
         // Eraser erase
         if (Eraser.eraser != null && AmongUsClient.Instance.AmHost && Eraser.futureErased != null)
         {
@@ -173,10 +218,38 @@ internal class ExileControllerBeginPatch
             rend.color = Color.white;
             vent.name = "SealedVent_" + vent.name;
         }
-
         ModOption.ventsToSeal = new List<Vent>();
         // 1 = reset per turn
         if (ModOption.restrictDevices == 1) ModOption.resetDeviceTimes();
+
+        return true;
+    }
+
+    public static void Postfix(ExileController __instance)
+    {
+        confirmImpostorSecondText = Object.Instantiate(__instance.ImpostorText, __instance.Text.transform);
+        StringBuilder changeStringBuilder = new();
+
+        if (GameManager.Instance.LogicOptions.currentGameOptions.GetBool(BoolOptionNames.ConfirmImpostor))
+            confirmImpostorSecondText.transform.localPosition += new Vector3(0f, -0.4f, 0f);
+        else confirmImpostorSecondText.transform.localPosition += new Vector3(0f, -0.2f, 0f);
+
+        confirmImpostorSecondText.text = changeStringBuilder.ToString();
+        confirmImpostorSecondText.gameObject.SetActive(true);
+
+        if (Balancer.currentAbilityUser != null && Balancer.IsDoubleExile && __instance.exiled?.PlayerId == Balancer.targetplayerleft.PlayerId)
+        {
+            __instance.completeString = getString("二者一同放逐");
+        }
+    }
+
+    [HarmonyPatch(typeof(ExileController), nameof(ExileController.ReEnableGameplay))]
+    public class BalancerChatDisable
+    {
+        private static void Postfix()
+        {
+            if (confirmImpostorSecondText != null) confirmImpostorSecondText.gameObject?.SetActive(false);
+        }
     }
 }
 
@@ -231,7 +304,7 @@ internal class ExileControllerWrapUpPatch
         // Clear all traps
         KillTrap.clearAllTraps();
         EvilTrapper.meetingFlag = false;
-
+        Balancer.WrapUp(exiled == null ? null : exiled.Object);
         // Mini set adapted cooldown
         if (Mini.mini != null && CachedPlayer.LocalPlayer.PlayerControl == Mini.mini && Mini.mini.Data.Role.IsImpostor)
         {
@@ -379,6 +452,25 @@ internal class ExileControllerWrapUpPatch
         public static void Postfix(AirshipExileController __instance)
         {
             WrapUpPostfix(__instance.exiled);
+        }
+
+        public static bool Prefix(AirshipExileController __instance)
+        {
+
+            if (Balancer.currentAbilityUser != null && Balancer.IsDoubleExile && __instance != ExileController.Instance)
+            {
+                if (__instance.exiled != null)
+                {
+                    PlayerControl @object = __instance.exiled.Object;
+                    if (@object)
+                    {
+                        @object.Exiled();
+                    }
+                    __instance.exiled.IsDead = true;
+                }
+                Object.Destroy(__instance.gameObject);
+            }
+            return true;
         }
     }
 }

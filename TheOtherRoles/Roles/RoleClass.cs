@@ -73,6 +73,7 @@ public static class RoleClass
         Juggernaut.clearAndReload();
         Doomsayer.clearAndReload();
         Swooper.clearAndReload();
+        Balancer.clearAndReload();
         Akujo.clearAndReload();
         Yoyo.clearAndReload();
         EvilTrapper.clearAndReload();

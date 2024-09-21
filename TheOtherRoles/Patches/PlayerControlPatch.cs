@@ -1971,6 +1971,8 @@ public static class PlayerControlFixedUpdatePatch
             // PartTimer
             partTimerSetTarget();
             partTimerUpdate();
+            //Balancer
+            Balancer.Update();
 
             hackerUpdate();
             swapperUpdate();

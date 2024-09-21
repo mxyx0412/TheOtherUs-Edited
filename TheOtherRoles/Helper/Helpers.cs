@@ -589,6 +589,12 @@ public static class Helpers
         return newList;
     }
 
+    public static T GetRandom<T>(this T[] list)
+    {
+        var indexData = UnityEngine.Random.Range(0, list.Length);
+        return list[indexData];
+    }
+
     public static T Find<T>(this Il2CppSystem.Collections.Generic.List<T> data, Predicate<T> match)
     {
         return data.ToList().Find(match);
@@ -653,7 +659,6 @@ public static class Helpers
 
     public static List<RoleInfo> onlineRoleInfos()
     {
-        //if (CachedPlayer.AllPlayers.Count < Doomsayer.formationNum + 2) return allRoleInfos();
         var role = new List<RoleInfo>();
         role.AddRange(CachedPlayer.AllPlayers.Select(n => RoleInfo.getRoleInfoForPlayer(n, false)).SelectMany(n => n));
         return role;
@@ -855,6 +860,28 @@ public static class Helpers
         invisibleWriter.Write(byte.MinValue);
         AmongUsClient.Instance.FinishRpcImmediately(invisibleWriter);
         RPCProcedure.setInvisibleGen(player.PlayerId, byte.MinValue);
+    }
+
+    public static void SetActiveAllObject(this GameObject[] trans, string notdelete, bool IsActive)
+    {
+        foreach (GameObject tran in trans)
+        {
+            if (tran.name != notdelete)
+            {
+                tran.SetActive(IsActive);
+            }
+        }
+    }
+
+    public static GameObject[] GetChildren(this GameObject ParentObject)
+    {
+        GameObject[] ChildObject = new GameObject[ParentObject.transform.childCount];
+
+        for (int i = 0; i < ParentObject.transform.childCount; i++)
+        {
+            ChildObject[i] = ParentObject.transform.GetChild(i).gameObject;
+        }
+        return ChildObject;
     }
 
     public static bool shouldShowGhostInfo()

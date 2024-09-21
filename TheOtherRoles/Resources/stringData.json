@@ -214,6 +214,10 @@
         "11": "{0}と船に{1}がいます",
         "13": "{0}次，全船剩余{1}次"
     },
+    "Random": {
+        "0": "Random",
+        "13": "随机"
+    },
     "optionOff": {
         "0": "Off",
         "13": "关闭"
@@ -298,6 +302,14 @@
     "neutralRolesCountMax": {
         "0": "Maximum Neutral Roles",
         "13": "最大独立阵营职业数"
+    },
+    "killerNeutralRolesCountMin": {
+        "0": "Minimum Killer Neutral Roles",
+        "13": "最小独立阵营杀手数"
+    },
+    "killerNeutralRolesCountMax": {
+        "0": "Maximum Killer Neutral Roles",
+        "13": "最大独立阵营杀手数"
     },
     "impostorRolesCountMin": {
         "0": "Minimum Impostor Roles",
@@ -390,7 +402,8 @@
         "0": "Finish Tasks Before Haunting Or Zooming Out",
         "13": "未完成任务前不能使用跟随及千里眼"
     },
-    "preventTaskEnd": {
+    "disableTaskGameEnd": {
+        "0": "Disable Task Game End",
         "13": "阻止任务完成结束游戏"
     },
     "enableMapOptions": {
@@ -560,6 +573,10 @@
     "debugMode": {
         "0": "Enable Debug Mode",
         "13": "开启 Debug 模式"
+    },
+    "DisableGameEnd": {
+        "0": "Disable Game End",
+        "13": "阻止游戏结束"
     },
     "guesserGamemodeCrewNumber": {
         "0": "Number of Crew Guessers",
@@ -2052,6 +2069,12 @@
     "bodyGuardShowShielded": {
         "13": "保护目标可见护盾的存在"
     },
+    "balancerCount": {
+        "13": "审判次数"
+    },
+    "balancerVoteTime": {
+        "13": "审判时长"
+    },
     "trapperCooldown": {
         "0": "Trapper Cooldown",
         "13": "放置冷却"
@@ -2264,8 +2287,8 @@
         "13": "<size=80%> <color=#FCCE03FF>特别感谢：Spex & 善良的好人 & 天寸梦初 & Imp11</color></size>"
     },
     "creditsString1": {
-        "0": "<align=\"center\"><b>TheOtherUs-Edited Team:</b>\nmxyx    Huier-Huang    haoren\nImp2    FangKuaiYa\n\nThanks to The Other Roles, The Other Roles CE, The Other Roles GM IA, Town of Us, Stellar Roles, SuperNewRoles!\n\nThanks to miniduikboot & GD for hosting modded servers (and so much more)\n\n",
-        "13": "<align=\"center\"><b>TheOtherUs-Edited 开发者:</b>\n沫夏悠轩    天寸梦初    善良的好人    Imp11\n\n<b>美工:</b>\n方块    Det黎木\n\n<b>翻译:</b>\nEN：九头蛇\nCN：沫夏悠轩\n\n<b>GitHub贡献者:</b>\n沫夏悠轩    天寸梦初    Imp11\n\n本模组使用了部分[https://github.com/dabao40/TheOtherRolesGMIA]TheOtherRolesGMIA]的代码，感谢Imp11的支持！\n\nThanks to The Other Roles, The Other Roles CE, The Other Roles GM IA, Town of Us, Stellar Roles , SuperNewRoles!\n\nThanks to miniduikboot & GD for hosting modded servers (and so much more)\n"
+        "0": "<align=\"center\"><b>TheOtherUs-Edited Team:</b>\nmxyx0412    Huier-Huang    haoren\nImp11    FangKuaiYa\n\nThanks to The Other Roles, The Other Roles CE, The Other Roles GM IA, Town of Us, Stellar Roles, SuperNewRoles!\n\nThanks to miniduikboot & GD for hosting modded servers (and so much more)\n\n",
+        "13": "<align=\"center\"><b>TheOtherUs-Edited 开发者:</b>\n沫夏悠轩    善良的好人\n\n<b>美工:</b>\n方块    Det黎木\n\n<b>翻译:</b>\nEN：九头蛇\nZH：沫夏悠轩\n\n<b>GitHub贡献者:</b>\n天寸梦初    Imp11\n\n本模组使用了部分[https://github.com/dabao40/TheOtherRolesGMIA]TheOtherRolesGMIA]的代码，感谢Imp11的支持！\n\nThanks to The Other Roles, The Other Roles CE, The Other Roles GM IA, Town of Us, Stellar Roles , SuperNewRoles!\n\nThanks to miniduikboot & GD for hosting modded servers (and so much more)\n"
     },
     "WelcomeText": {
         "13": "欢迎游玩<color=#ff351f><size=120%>我们的超多职业</size></color> ！\n\n游戏指令：\n/r [职业名称] ：获取该职业的介绍\n/m ：游戏内使用，获取自己已有职业的介绍\n\n如需查看其它指令请输入：/cmd"
@@ -2395,6 +2418,18 @@
     "SerialKillerSuicideText": {
         "0": "{0} seconds to suicide",
         "13": "{0}秒后自杀"
+    },
+    "BalancerAbilityUseText": {
+        "0": "Ability activated",
+        "13": "发动技能"
+    },
+    "BalancerVoteText": {
+        "0": "Vote for one or the other!",
+        "13": "请选择一名玩家投票！"
+    },
+    "BalancerTitleTextYouVoteEither": {
+        "0": "Which way do you want to vote it?",
+        "13": "要投给谁？"
     },
     "colorSalmon": {
         "0": "Salmon",
@@ -3630,6 +3665,16 @@
     "InfoSleuthShortDesc": {
         "13": "在会议上通过投票获取对方的信息"
     },
+    "Balancer": {
+        "0": "Balancer",
+        "13": "大神官"
+    },
+    "BalancerIntroDesc": {
+        "13": "审判他人罪孽的轻重"
+    },
+    "BalancerShortDesc": {
+        "13": "审判他人罪孽的轻重"
+    },
     "Disperser": {
         "0": "Disperser",
         "13": "分散者"
@@ -4078,7 +4123,7 @@
         "13": "侠客具有会议上猜测别人职业的能力，猜对方就会死亡；\n猜错了，侠客自己死亡。\n"
     },
     "MayorFullDesc": {
-        "13": "市长在投票阶段拥有两票（可选择投1票或2票），\n具有远程召开会议的能力。\n\n市长在完成一定任务数后，获得窥视能力，\n会议结束时能够获悉每个人的投票情况。"
+        "13": "市长在投票阶段可以通过点击揭示按钮揭示自己的身份，无法被猜测。\n\n揭示后会议内拥有3票，同时视野大幅缩小。\n\n另外，根据房间设置，市长可以拥有远程开会议的能力。"
     },
     "ProsecutorFullDesc": {
         "13": "检察官可以强制驱逐一名玩家，每局游戏只能使用一次。\n在会议中左下角中新增 “起诉” 按钮，\n按下按钮后本次会议其他玩家的所有投票被无效，\n并且强制匿名投票，无法被窥视。\n\n按房间设置：如果驱逐了船员（包括善良中立）则检察官会自杀。\n\n（注：在检察官的会议中: 检察官无法跳过，如果会议结束时仍然不投票则本次会议无效，“起诉” 技能保留）"

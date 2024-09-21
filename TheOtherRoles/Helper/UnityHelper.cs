@@ -5,6 +5,7 @@ using System.Reflection;
 using Reactor.Utilities.Extensions;
 using TheOtherRoles.Utilities;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.Events;
 using Object = UnityEngine.Object;
 using SStream = System.IO.Stream;
@@ -99,6 +100,22 @@ public static class UnityHelper
         return null;
     }
 
+    public static AudioSource PlaySound(Transform parent, AudioClip clip, bool loop, float volume = 1f, AudioMixerGroup audioMixer = null)
+    {
+        if (audioMixer == null)
+        {
+            audioMixer = loop ? SoundManager.Instance.MusicChannel : SoundManager.Instance.SfxChannel;
+        }
+        AudioSource value = parent.GetComponent<AudioSource>() ?? parent.gameObject.AddComponent<AudioSource>();
+        value.outputAudioMixerGroup = audioMixer;
+        value.playOnAwake = false;
+        value.volume = volume;
+        value.loop = loop;
+        value.clip = clip;
+        value.Play();
+        return value;
+    }
+
     public static Sprite LoadSprite(this SStream stream, bool DontUnload, Vector2 pivot, float pixelsPerUnit)
     {
         var texture = stream.LoadTexture(DontUnload);
@@ -148,9 +165,9 @@ public static class UnityHelper
             audioClip.SetData(samples, 0);
             return audioClip;
         }
-        catch
+        catch (Exception e)
         {
-            Error("loading AudioClip from resources: " + path);
+            Error($"loading AudioClip from resources: {path}\n{e}");
         }
         return null;
     }
