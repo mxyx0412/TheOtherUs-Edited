@@ -219,7 +219,6 @@ internal class RoleManagerSelectRolesPatch
             crewSettings.Add((byte)RoleId.Spy, CustomOptionHolder.spySpawnRate.getSelection());
         crewSettings.Add((byte)RoleId.SecurityGuard, CustomOptionHolder.securityGuardSpawnRate.getSelection());
         crewSettings.Add((byte)RoleId.Jumper, CustomOptionHolder.jumperSpawnRate.getSelection());
-
         return new RoleAssignmentData
         {
             crewmates = crewmates,
@@ -386,7 +385,8 @@ internal class RoleManagerSelectRolesPatch
 
     private static void assignChanceRoles(RoleAssignmentData data)
     {
-        static List<byte> GetEnsuredRoles(Dictionary<byte, int> settings) => settings.Where(x => x.Value > 0).Select(x => x.Key).ToList();
+        static List<byte> GetEnsuredRoles(Dictionary<byte, int> settings) =>
+            settings.Where(x => x.Value is > 0 and < 10).Select(x => x.Key).ToList();
 
         // Get all roles where the chance to occur is set grater than 0% but not 100% and build a ticket pool based on their weight
         var crewmateTickets = GetEnsuredRoles(data.crewSettings);
@@ -399,8 +399,7 @@ internal class RoleManagerSelectRolesPatch
             (data.crewmates.Count > 0 && (
                 (data.maxCrewmateRoles > 0 && crewmateTickets.Count > 0)
                 || (data.maxNeutralRoles > 0 && neutralTickets.Count > 0)
-                || (data.maxKillerNeutralRoles > 0 && killerNeutralTickets.Count > 0)
-            )))
+                || (data.maxKillerNeutralRoles > 0 && killerNeutralTickets.Count > 0))))
         {
             var rolesToAssign = new Dictionary<RoleType, List<byte>>();
             if (data.crewmates.Count > 0 && data.maxCrewmateRoles > 0 && crewmateTickets.Count > 0)
@@ -704,7 +703,6 @@ internal class RoleManagerSelectRolesPatch
 
     private static byte setRoleToRandomPlayer(byte roleId, List<PlayerControl> playerList, bool removePlayer = true)
     {
-        Message("setRoleToRandomPlayer");
         var index = rnd.Next(0, playerList.Count);
         var playerId = playerList[index].PlayerId;
         if (removePlayer) playerList.RemoveAt(index);
@@ -882,6 +880,7 @@ internal class RoleManagerSelectRolesPatch
         {
             playerId = setModifierToRandomPlayer((byte)RoleId.Aftermath, noImpPlayer);
             noImpPlayer.RemoveAll(x => x.PlayerId == playerId);
+            crewPlayer.RemoveAll(x => x.PlayerId == playerId);
             playerList.RemoveAll(x => x.PlayerId == playerId);
             modifiers.RemoveAll(x => x == RoleId.Aftermath);
         }
