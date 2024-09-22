@@ -230,8 +230,8 @@ public static class ChatCommands
         public static void Postfix(HudManager __instance)
         {
             if (!__instance.Chat.isActiveAndEnabled && (ModOption.DebugMode
-                                                        || AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay
-                                                        || (CachedPlayer.LocalPlayer.PlayerControl.isLover() && Lovers.enableChat)))
+                    || AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay
+                    || (CachedPlayer.LocalPlayer.PlayerControl.isLover() && Lovers.enableChat)))
                 __instance.Chat.SetVisible(true);
 
             if (ModOption.transparentTasks
@@ -286,7 +286,7 @@ public static class ChatCommands
             if (playerControl == null) return true;
             if (ModOption.DebugMode) return flag;
             if (!playerControl.isLover()) return flag;
-            if ((playerControl.isLover() && Lovers.enableChat))
+            if (playerControl.isLover() && Lovers.enableChat)
                 return sourcePlayer.getChatPartner() == playerControl || playerControl.getChatPartner() == playerControl == (bool)sourcePlayer || flag;
             return flag;
         }

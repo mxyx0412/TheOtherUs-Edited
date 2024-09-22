@@ -39,7 +39,7 @@ internal class OptimizeMapPatch
             fance.transform.localScale = new Vector3(1f, 1f, 1f);
             fance.SetActive(true);
             var Collider = fance.AddComponent<EdgeCollider2D>();
-            Collider.points = new Vector2[] { new Vector2(1.5f, -0.2f), new Vector2(-1.5f, -0.2f), new Vector2(-1.5f, 1.5f) };
+            Collider.points = new Vector2[] { new(1.5f, -0.2f), new(-1.5f, -0.2f), new(-1.5f, 1.5f) };
             Collider.enabled = true;
             renderer = fance.AddComponent<SpriteRenderer>();
             renderer.sprite = UnityHelper.loadSpriteFromResources("TheOtherRoles.Resources.AirshipFence.png", 100f);

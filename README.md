@@ -428,7 +428,7 @@
 |     赌徒     |              |   设陷师   |   胆小鬼   |
 |              |              |   预言家   |   窥视者   |
 |              |              |   情报师   |    雷达    |
-|              |              |            |   执钮人   |
+|              |              |   大神官   |   执钮人   |
 |              |              |            |   变色龙   |
 |              |              |            |   交换师   |
 
@@ -479,7 +479,7 @@
 [Goose-Goose-Duck](https://store.steampowered.com/app/1568590/Goose_Goose_Duck) - Idea for the Vulture role came from **Slushiegoose**\
 [TheEpicRoles](https://github.com/LaicosVK/TheEpicRoles) - Idea for the first kill shield (partly) and the tabbed option menu (fully + some code), by **LaicosVK** **DasMonschta** **Nova**\
 [Ninja](#ninja), [Thief](#thief), [Lawyer](#lawyer) / [Pursuer](#pursuer), [Deputy](#deputy), [Portalmaker](#portalmaker), [Guesser Modifier](#guesser-modifier) - Idea: [K3ndo](https://github.com/K3ndoo) ; Developed by [Gendelo](https://github.com/gendelo3) & [Mallöris](https://github.com/Mallaris) \
-[PropHunt](https://github.com/ugackMiner53/PropHunt) - Idea and core code for the Prop Hunt game mode by **ugackMiner53**\
+[PropHunt](https://github.com/ugackMiner53/PropHunt) - Idea and core code by **ugackMiner53**\
 
 ## 许可
 

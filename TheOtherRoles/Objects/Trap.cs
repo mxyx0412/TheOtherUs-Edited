@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Hazel;
 using TheOtherRoles.Buttons;
-using TheOtherRoles.Patches;
 using TheOtherRoles.Utilities;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -158,8 +157,8 @@ public class Trap
 public class KillTrap
 {
     public GameObject killtrap;
-    public static ResourceSprite trapSprite = new("Trap.png", 300);
-    public static ResourceSprite trapActiveSprite = new("TrapActive.png", 300);
+    public static Sprite trapSprite = new ResourceSprite("Trap.png", 300);
+    public static Sprite trapActiveSprite = new ResourceSprite("TrapActive.png", 300);
     public static AudioClip place;
     public static AudioClip activate;
     public static AudioClip disable;
@@ -396,19 +395,7 @@ public class KillTrap
             }
         })));
         EvilTrapper.isTrapKill = true;
-        KillAnimationCoPerformKillPatch.hideNextAnimation = true;
-        //trapper.MurderPlayer(target, MurderResultFlags.Succeeded);
-        var shouldVetKill = Veteran.veteran == target && Veteran.alertActive;
-        if (shouldVetKill)
-        {
-            RPCProcedure.veteranKill(trapper.PlayerId);
-            return;
-        }
-        var murder = checkMuderAttempt(trapper, target);
-        if (murder == MurderAttemptResult.PerformKill)
-        {
-            trapper.MurderPlayer(target, MurderResultFlags.Succeeded);
-        }
+        if (PlayerControl.LocalPlayer == EvilTrapper.evilTrapper) checkMurderAttemptAndKill(trapper, target, true, false, true);
     }
 
     public static void clearAllTraps()
@@ -418,7 +405,7 @@ public class KillTrap
             if (trap.killtrap != null)
                 Object.DestroyObject(trap.killtrap);
         }
-        traps = new SortedDictionary<byte, KillTrap>();
+        traps.Clear();
         maxId = 0;
     }
 

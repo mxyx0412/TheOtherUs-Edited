@@ -10,11 +10,12 @@ using Random = System.Random;
 namespace TheOtherRoles.Modules;
 
 [HarmonyPatch(typeof(KeyboardJoystick), nameof(KeyboardJoystick.Update))]
-public class CommandHandler
+public class KeyboardHandler
 {
     //private static readonly string passwordHash = "d1f51dfdfd8d38027fd2ca9dfeb299399b5bdee58e6c0b3b5e9a45cd4e502848";
     private static readonly Random random = new((int)DateTime.Now.Ticks);
     private static readonly List<PlayerControl> bots = [];
+
     private static void Postfix(KeyboardJoystick __instance)
     {
         if (AmongUsClient.Instance && (AmongUsClient.Instance.AmHost || ModOption.DebugMode))
@@ -63,5 +64,32 @@ public class CommandHandler
     {
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         return new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
+    }
+}
+
+[HarmonyPatch(typeof(ControllerManager), nameof(ControllerManager.Update))]
+public class ControllerManagerUpdate
+{
+    private static int resolutionIndex = 0;
+    private static readonly (int, int)[] resolutions =
+    [
+        (640, 360),
+        (960, 540),
+        (1280, 720),
+        (1600, 900),
+        (1920, 1080),
+        (Screen.currentResolution.width, Screen.currentResolution.height),
+    ];
+
+    private static void Postfix(ControllerManager __instance)
+    {
+
+        if (Input.GetKeyDown(ModInputManager.screenResolution.keyCode))
+        {
+            resolutionIndex++;
+            if (resolutionIndex >= resolutions.Length) resolutionIndex = 0;
+            bool fullScreen = resolutionIndex == resolutions.Length - 1;
+            ResolutionManager.SetResolution(resolutions[resolutionIndex].Item1, resolutions[resolutionIndex].Item2, fullScreen);
+        }
     }
 }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Hazel;
-using TheOtherRoles.Patches;
 using TheOtherRoles.Utilities;
 using TMPro;
 using UnityEngine;
@@ -163,12 +162,18 @@ public static class Guesser
         {
             PageButtons[0].color = new(1, 1, 1, 1f);
             PageButtons[1].color = new(1, 1, 1, 1f);
-            if ((RoleButtons[currentTeamType].Count / MaxOneScreenRole + (RoleButtons[currentTeamType].Count % MaxOneScreenRole != 0 ? 1 : 0)) < Page)
+            if (RoleButtons.Count != 0)
+            {
+                return;
+            }
+            else if (((RoleButtons[currentTeamType].Count / MaxOneScreenRole) +
+                (RoleButtons[currentTeamType].Count % MaxOneScreenRole != 0 ? 1 : 0)) < Page)
             {
                 Page -= 1;
                 PageButtons[1].color = new(1, 1, 1, 0.1f);
             }
-            else if ((RoleButtons[currentTeamType].Count / MaxOneScreenRole + (RoleButtons[currentTeamType].Count % MaxOneScreenRole != 0 ? 1 : 0)) < Page + 1)
+            else if (((RoleButtons[currentTeamType].Count / MaxOneScreenRole) +
+                (RoleButtons[currentTeamType].Count % MaxOneScreenRole != 0 ? 1 : 0)) < Page + 1)
             {
                 PageButtons[1].color = new(1, 1, 1, 0.1f);
             }
@@ -225,50 +230,42 @@ public static class Guesser
         {
             if (roleInfo == null) continue; // Not guessable roles
 
-            var guesserRole = Vigilante.vigilante != null && CachedPlayer.LocalPlayer.PlayerId == Vigilante.vigilante.PlayerId
-                ? RoleId.Vigilante
-                : RoleId.Assassin;
-
-            if (Doomsayer.doomsayer != null && CachedPlayer.LocalPlayer.PlayerId == Doomsayer.doomsayer.PlayerId) guesserRole = RoleId.Doomsayer;
-
-            switch (guesserRole)
+            if (RoleClass.RoleIsEnable.TryGetValue(roleInfo.roleId, out int isEnabled) && isEnabled == 0)
             {
-                case RoleId.Doomsayer when !Doomsayer.canGuessImpostor && roleInfo.roleTeam == RoleTeam.Impostor:
-                case RoleId.Doomsayer when !Doomsayer.canGuessNeutral && roleInfo.roleTeam == RoleTeam.Neutral:
+                continue;
+            }
+
+            var guesserRole = CachedPlayer.LocalId == Vigilante.vigilante?.PlayerId ? RoleId.Vigilante : RoleId.Assassin;
+
+            if (CachedPlayer.LocalId == Doomsayer.doomsayer?.PlayerId)
+            {
+                if (!Doomsayer.canGuessImpostor && roleInfo.roleTeam == RoleTeam.Impostor)
+                    continue;
+                if (!Doomsayer.canGuessNeutral && roleInfo.roleTeam == RoleTeam.Neutral)
                     continue;
             }
 
-            if (Mayor.mayor != null && Mayor.Revealed && Mayor.Revealed && roleInfo.roleId == RoleId.Mayor) continue;
-
-            if (roleInfo.roleId == RoleId.Poucher) continue;
-
-            if (roleInfo.roleTeam == RoleTeam.Modifier)
-            {
-                // Allow Guessing the following mods: Bait, TieBreaker, Bloody, and VIP
-                if (ModOption.allowModGuess && !roleInfo.isGuessable) continue;
-            }
-
-            if (roleInfo.roleId == guesserRole ||
-                (!HandleGuesser.evilGuesserCanGuessSpy && guesserRole == RoleId.Assassin &&
-                roleInfo.roleId == RoleId.Spy && !HandleGuesser.isGuesserGm) ||
-                (!Assassin.evilGuesserCanGuessCrewmate && guesserRole == RoleId.Assassin &&
-                roleInfo.roleId == RoleId.Crewmate)) continue; // Not guessable roles & modifier
-
-            switch (HandleGuesser.isGuesserGm)
-            {
-                case true when roleInfo.roleId is RoleId.Vigilante or RoleId.Assassin:
-                case true when CachedPlayer.LocalPlayer.PlayerControl.Data.Role.IsImpostor &&
-                               !HandleGuesser.evilGuesserCanGuessSpy && roleInfo.roleId == RoleId.Spy:
-                    continue; // remove Guesser for guesser game mode
-            }
+            if (roleInfo.roleTeam == RoleTeam.Modifier && ModOption.allowModGuess && !roleInfo.isGuessable)
+                continue;
 
             // remove all roles that cannot spawn due to the settings from the ui.
-            var roleData = RoleManagerSelectRolesPatch.getRoleAssignmentData();
             switch (roleInfo.roleId)
             {
-                case RoleId.Pursuer when CustomOptionHolder.lawyerSpawnRate.getSelection() == 0
-                                      && CustomOptionHolder.executionerSpawnRate.getSelection() == 0:
-                case RoleId.Spy when roleData.impostors.Count <= 1:
+                case RoleId.Spy when ModOption.NumImpostors <= 1:
+                    continue;
+                case RoleId.Poucher when Poucher.spawnModifier:
+                    continue;
+                case RoleId.Crewmate when !Assassin.evilGuesserCanGuessCrewmate && guesserRole == RoleId.Assassin:
+                    continue;
+                case RoleId.Spy when PlayerControl.LocalPlayer.isImpostor() && !HandleGuesser.evilGuesserCanGuessSpy:
+                    continue;
+                case RoleId.Mayor when Mayor.Revealed:
+                    continue;
+                case RoleId.Vigilante when HandleGuesser.isGuesserGm || CachedPlayer.LocalPlayer.PlayerId == Vigilante.vigilante?.PlayerId:
+                    continue;
+                case RoleId.Sidekick when !Jackal.canCreateSidekick:
+                    continue;
+                case RoleId.Doomsayer when CachedPlayer.LocalPlayer.PlayerId == Doomsayer.doomsayer?.PlayerId:
                     continue;
             }
 
@@ -278,6 +275,7 @@ public static class Guesser
                 var numberOfLeftTasks = playerTotal - playerCompleted;
                 if (numberOfLeftTasks <= Snitch.taskCountForReveal && roleInfo.roleId == RoleId.Snitch) continue;
             }
+
             CreateRole(roleInfo);
         }
         #endregion

@@ -1209,7 +1209,7 @@ internal class GameOptionsDataPatch
             if (option.parent != null)
             {
                 var isIrrelevant = option.parent.getSelection() == 0 ||
-                                   (option.parent.parent != null && option.parent.parent.getSelection() == 0);
+                    (option.parent.parent != null && option.parent.parent.getSelection() == 0);
 
                 var c = isIrrelevant ? Color.grey : Color.white; // No use for now
                 if (isIrrelevant) continue;
@@ -1219,24 +1219,52 @@ internal class GameOptionsDataPatch
             {
                 if (option == CustomOptionHolder.neutralRolesCountMin)
                 {
-                    var optionName = CustomOptionHolder.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "NeutralRolesText".Translate());
+                    var optionName = cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "CrewmateRolesText".Translate());
+                    var neutralMin = CustomOptionHolder.neutralRolesCountMin.getSelection();
+                    var neutralMax = CustomOptionHolder.neutralRolesCountMax.getSelection();
+
+                    var min = PlayerControl.AllPlayerControls.Count - neutralMax - ModOption.NumImpostors;
+                    var max = PlayerControl.AllPlayerControls.Count - neutralMin - ModOption.NumImpostors;
+                    var optionValue = min == max ? $"{max}" : $"{min} ~ {max}";
+                    sb.AppendLine($"{optionName}: {optionValue}");
+                }
+                else if (option == CustomOptionHolder.neutralRolesCountMax)
+                {
+                    var optionName = cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "NeutralRolesText".Translate());
                     var min = CustomOptionHolder.neutralRolesCountMin.getSelection();
                     var max = CustomOptionHolder.neutralRolesCountMax.getSelection();
                     if (min > max) min = max;
-                    var optionValue = min == max ? $"{max}" : $"{min} - {max}";
+                    var optionValue = min == max ? $"{max}" : $"{min} ~ {max}";
                     sb.AppendLine($"{optionName}: {optionValue}");
+                }
+                else if (option == CustomOptionHolder.killerNeutralRolesCountMin)
+                {
+                    var optionName = cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "NeutralKillerRolesCount".Translate());
+                    var neutralMin = CustomOptionHolder.neutralRolesCountMin.getSelection();
+                    var neutralMax = CustomOptionHolder.neutralRolesCountMax.getSelection();
+                    var killMin = CustomOptionHolder.killerNeutralRolesCountMin.getSelection();
+                    var killMax = CustomOptionHolder.killerNeutralRolesCountMax.getSelection();
+                    var min = Mathf.Min(killMin, neutralMin);
+                    var max = Mathf.Min(killMax, neutralMax);
+                    if (min > max) min = max;
+                    var optionValue = min == max ? $"{max}" : $"{min} ~ {max}";
+                    if (killMin + killMax > 0) sb.AppendLine($"{optionName}: {optionValue}");
+                }
+                else if (option == CustomOptionHolder.killerNeutralRolesCountMax)
+                {
+                    var optionName = cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "ImpostorRolesText".Translate());
+                    sb.AppendLine($"{optionName}: {ModOption.NumImpostors}");
                 }
                 else if (option == CustomOptionHolder.modifiersCountMin)
                 {
-                    var optionName = CustomOptionHolder.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "ModifierRolesText".Translate());
+                    var optionName = cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "ModifierRolesText".Translate());
                     var min = CustomOptionHolder.modifiersCountMin.getSelection();
                     var max = CustomOptionHolder.modifiersCountMax.getSelection();
                     if (min > max) min = max;
-                    var optionValue = min == max ? $"{max}" : $"{min} - {max}";
+                    var optionValue = min == max ? $"{max}" : $"{min} ~ {max}";
                     sb.AppendLine($"{optionName}: {optionValue}");
                 }
-                else if (option == CustomOptionHolder.neutralRolesCountMax ||
-                         option == CustomOptionHolder.modifiersCountMax)
+                else if (option == CustomOptionHolder.modifiersCountMax)
                 {
                 }
                 else
@@ -1621,6 +1649,7 @@ public class HudManagerUpdate
             // add a special button for settings viewing:
             toggleSettingsButtonObject = Object.Instantiate(__instance.MapButton.gameObject, __instance.MapButton.transform.parent);
             toggleSettingsButtonObject.transform.localPosition = __instance.MapButton.transform.localPosition + new Vector3(0, -0.66f, -500f);
+            toggleSettingsButtonObject.transform.parent.SetLocalZ(-500f);
             var renderer = toggleSettingsButtonObject.GetComponent<SpriteRenderer>();
             renderer.sprite = UnityHelper.loadSpriteFromResources("TheOtherRoles.Resources.CurrentSettingsButton.png", 180f);
             toggleSettingsButton = toggleSettingsButtonObject.GetComponent<PassiveButton>();

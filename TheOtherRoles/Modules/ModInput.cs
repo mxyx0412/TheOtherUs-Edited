@@ -21,6 +21,7 @@ public class ModInputManager
     public static ModInput metaControlInput;
     public static ModInput endGameInput;
     public static ModInput meetingInput;
+    public static ModInput screenResolution;
 
     public class ModInput
     {
@@ -138,6 +139,7 @@ public class ModInputManager
         modKillInput = new ModInput("kill", KeyCode.Q);
         showOptionPageInput = new ModInput("showOptionPage", KeyCode.F1);
         toggleChat = new ModInput("toggleChat", KeyCode.F2);
+        screenResolution = new ModInput("screenResolution", KeyCode.F11);
         metaControlInput = new ModInput("metaControl", KeyCode.LeftControl);
         endGameInput = new ModInput("endGame", KeyCode.F5);
         meetingInput = new ModInput("meeting", KeyCode.F6);

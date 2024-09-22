@@ -68,6 +68,9 @@
         "0": "Show Option Page",
         "13": "显示预设页面"
     },
+    "keyBinding.screenResolution": {
+        "13": "快速修改屏幕分辨率"
+    },
     "keyBinding.metaControl": {
         "0": "Meta Control",
         "13": "控制键"
@@ -167,6 +170,10 @@
     "Evil": {
         "0": "Evil",
         "13": "邪恶"
+    },
+    "NeutralKillerRolesCount": {
+        "0": "Neutral Killer Roles ",
+        "13": "中立杀手数量"
     },
     "page1": {
         "0": "Page 1: Vanilla Settings \n\n",

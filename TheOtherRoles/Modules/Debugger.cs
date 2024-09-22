@@ -1,5 +1,4 @@
-﻿using Reactor.Utilities;
-using static TheOtherRoles.Options.ModOption;
+﻿using static TheOtherRoles.Options.ModOption;
 
 namespace TheOtherRoles.Modules;
 
@@ -22,7 +21,7 @@ public class Debugger
     [HarmonyPatch(typeof(LogicGameFlowNormal), nameof(LogicGameFlowNormal.CheckEndCriteria))]
     public static bool Prefix()
     {
-        return !DebugMode;
+        return !DisableGameEnd;
     }
 
     [HarmonyPatch(typeof(EndGameNavigation), nameof(EndGameNavigation.ShowDefaultNavigation))]

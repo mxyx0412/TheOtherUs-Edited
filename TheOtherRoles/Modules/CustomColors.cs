@@ -54,6 +54,7 @@ public class CustomColors
         Mildpurple,
         XmasRed,
     }
+
     private static Dictionary<ColorType, (Color32, Color32, bool)> CustomColorData = new()
     {
         {ColorType.Tamarind, (new Color32(48, 28, 34, byte.MaxValue), new Color32(30, 11, 16, byte.MaxValue), true)},

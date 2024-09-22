@@ -9,7 +9,7 @@ public class Bomb
 {
     private static Sprite bombSprite;
     private static Sprite backgroundSprite;
-    public static ResourceSprite defuseSprite = new("Bomb_Button_Defuse.png");
+    public static Sprite defuseSprite = new ResourceSprite("Bomb_Button_Defuse.png");
     public static bool canDefuse;
     public readonly GameObject background;
     public readonly GameObject bomb;

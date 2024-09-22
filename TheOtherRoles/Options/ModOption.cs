@@ -11,6 +11,7 @@ internal class ModOption
     public static float KillCooddown => GameOptionsManager.Instance.currentNormalGameOptions.KillCooldown;
     public static int NumImpostors => GameOptionsManager.Instance.currentNormalGameOptions.NumImpostors;
     public static bool DebugMode => CustomOptionHolder.debugMode.getBool();
+    public static bool DisableGameEnd => DebugMode && CustomOptionHolder.disableGameEnd.getBool();
 
     // Set values
     public static int maxNumberOfMeetings = 10;

@@ -217,6 +217,7 @@ public class OnGameEndPatch
         if (miniLose)
         {
             // If "no one is the Mini", it will display the Mini, but also show defeat to everyone
+            TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
             var wpd = new WinningPlayerData(Mini.mini.Data) { IsYou = false };
             TempData.winners.Add(wpd);
             AdditionalTempData.winCondition = WinCondition.MiniLose;
@@ -761,7 +762,7 @@ internal class CheckEndCriteriaPatch
     {
         if (!GameData.Instance) return false;
         var statistics = new PlayerStatistics(__instance);
-        if (ModOption.DebugMode) return false;
+        if (ModOption.DisableGameEnd) return false;
         // InstanceExists | Don't check Custom Criteria when in Tutorial
         if (DestroyableSingleton<TutorialManager>.InstanceExists) return true;
         if (CheckAndEndGameForTaskWin(__instance)) return false;

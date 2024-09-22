@@ -81,8 +81,6 @@ public class GameStartManagerPatch
             foreach (InnerNet.ClientData client in AmongUsClient.Instance.allClients.ToArray())
             {
                 if (client.Character == null) continue;
-                var dummyComponent = client.Character.GetComponent<DummyBehaviour>();
-                if (dummyComponent != null && dummyComponent.enabled) continue;
                 else if (!playerVersions.ContainsKey(client.Id))
                 {
                     versionMismatch = true;

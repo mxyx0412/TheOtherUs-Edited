@@ -19,6 +19,7 @@ public class CachedPlayer
     public PlayerPhysics PlayerPhysics;
     public Transform transform;
 
+    public static byte LocalId => LocalPlayer.PlayerId;
     public string PlayerName => Data.PlayerName;
     public float PlayerSpeed => PlayerPhysics.Speed;
     public float TrueSpeed => PlayerPhysics.TrueSpeed;

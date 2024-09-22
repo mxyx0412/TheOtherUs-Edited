@@ -1004,18 +1004,10 @@ public static class Helpers
         if (Ninja.isInvisble && Ninja.ninja == target) return true;
         if (Jackal.isInvisable && Jackal.jackal == target) return true;
         if (Swooper.isInvisable && Swooper.swooper == target) return true;
-        if (ModOption.hideOutOfSightNametags && InGame && !source.Data.IsDead && !isFungle
-            && PhysicsHelpers.AnythingBetween(localPlayer.GetTruePosition(), target.GetTruePosition(), Constants.ShadowMask, false)) return true;
-        /*
-        {
-            float num = (isLightsActive() ? 2f : 1.25f);
-            float num2 = Vector3.Distance(source.transform.position, target.transform.position);
-            if (PhysicsHelpers.AnythingBetween(source.GetTruePosition(), target.GetTruePosition(), Constants.ShadowMask, useTriggers: false))
-            {
-                return true;
-            }
-        }
-        */
+        if (ModOption.hideOutOfSightNametags && InGame && source.IsAlive() && !isFungle
+            && PhysicsHelpers.AnythingBetween(localPlayer.GetTruePosition(), target.GetTruePosition(), Constants.ShadowMask, false))
+            return true;
+
         if (!ModOption.hidePlayerNames) return false; // All names are visible
         if (source == null || target == null) return true;
         if (source == target) return false; // Player sees his own name

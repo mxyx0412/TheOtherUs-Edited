@@ -99,7 +99,7 @@ internal class MeetingHudPatch
 
         // reset swap.
         var reset = false;
-        if (dyingPlayerId == Swapper.playerId1 || dyingPlayerId == Swapper.playerId2)
+        if (dyingPlayerId == Swapper.playerId1 || dyingPlayerId == Swapper.playerId2 || dyingPlayerId == byte.MaxValue - 1)
         {
             reset = true;
             Swapper.playerId1 = Swapper.playerId2 = byte.MaxValue;
@@ -135,7 +135,7 @@ internal class MeetingHudPatch
     private static void mayorToggleVoteTwice(MeetingHud __instance)
     {
         __instance.playerStates[0].Cancel(); // This will stop the underlying buttons of the template from showing up
-        if (__instance.state == MeetingHud.VoteStates.Results || Mayor.mayor.Data.IsDead) return;
+        if (__instance.state == VoteStates.Results || Mayor.mayor.Data.IsDead) return;
 
         // Only accept changes until the mayor voted
         var mayorPVA = __instance.playerStates.FirstOrDefault(x => x.TargetPlayerId == Mayor.mayor.PlayerId);
@@ -148,11 +148,8 @@ internal class MeetingHudPatch
 
         var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
             (byte)CustomRPC.MayorRevealed, SendOption.Reliable);
-        writer.Write(Mayor.Revealed);
         AmongUsClient.Instance.FinishRpcImmediately(writer);
-        //meetingExtraButtonLabel.text = cs(Mayor.color, "揭示"); 
         Object.Destroy(MeetingExtraButton);
-
     }
 
     private static void populateButtonsPostfix(MeetingHud __instance)

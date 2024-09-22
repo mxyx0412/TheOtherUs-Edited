@@ -748,21 +748,22 @@ public static class PlayerControlFixedUpdatePatch
                     colorBlindTextMeetingInitialLocalPos + new Vector3(0f, 0.4f, 0f);
                 playerVoteArea.ColorBlindName.transform.localScale = colorBlindTextMeetingInitialLocalScale * 0.8f;
             }
-
+            /*
             // Colorblind Text During the round
             if (p.cosmetics.colorBlindText != null && p.cosmetics.showColorBlindText &&
                 p.cosmetics.colorBlindText.gameObject.active)
                 p.cosmetics.colorBlindText.transform.localPosition = new Vector3(0, -1f, 0f);
-
+            */
             // This moves both the name AND the colorblindtext behind objects (if the player is behind the object), like the rock on polus
             p.cosmetics.nameText.transform.parent.SetLocalZ(-0.0001f);
 
-            if ((Lawyer.lawyerKnowsRole && local == Lawyer.lawyer && p == Lawyer.target) ||
+            if (p == local || local.Data.IsDead ||
+                (Lawyer.lawyerKnowsRole && local == Lawyer.lawyer && p == Lawyer.target) ||
                 (PartTimer.knowsRole && local == PartTimer.partTimer && p == PartTimer.target) ||
                 (local == PartTimer.target && p == PartTimer.partTimer) ||
                 (Akujo.knowsRoles && local == Akujo.akujo &&
                     (p == Akujo.honmei || Akujo.keeps.Any(x => x.PlayerId == p.PlayerId))) ||
-                p == local || local.Data.IsDead || (Mayor.mayor != null && p == Mayor.mayor && Mayor.Revealed) ||
+                (p == Mayor.mayor && Mayor.Revealed) ||
                 (local == Slueth.slueth && Slueth.reported.Any(x => x.PlayerId == p.PlayerId)) ||
                 (ModOption.impostorSeeRoles && Spy.spy == null && CachedPlayer.LocalPlayer.Data.Role.IsImpostor &&
                  !CachedPlayer.LocalPlayer.IsDead && p == (p.Data.Role.IsImpostor && !p.Data.IsDead)) ||
@@ -826,22 +827,21 @@ public static class PlayerControlFixedUpdatePatch
                 }
                 else if (Lawyer.lawyerKnowsRole && local == Lawyer.lawyer && p == Lawyer.target)
                 {
-                    playerInfoText = $"{roleText}";
+                    playerInfoText = roleNames;
                     meetingInfoText = playerInfoText;
                 }
                 else if (PartTimer.partTimer == local && PartTimer.target != null && p == PartTimer.target && local.IsAlive())
                 {
-                    playerInfoText = $"{roleText}";
+                    playerInfoText = roleNames;
                     meetingInfoText = playerInfoText;
                 }
-                else if (local.IsAlive() && Mayor.mayor != null && Mayor.mayor == p && Mayor.Revealed)
+                else if (local.IsAlive() && Mayor.mayor == p && Mayor.Revealed)
                 {
-                    //playerInfoText = $"{roleNames}";
-                    meetingInfoText = playerInfoText;
+                    meetingInfoText = roleNames;
                 }
                 else if (local == PartTimer.target && p == PartTimer.partTimer)
                 {
-                    playerInfoText = $"{roleNames}";
+                    playerInfoText = roleNames;
                     meetingInfoText = playerInfoText;
                 }
                 else
@@ -2482,7 +2482,7 @@ public static class ExilePlayerPatch
             }
         }
 
-        if (__instance.Data.Role.IsImpostor && AmongUsClient.Instance.AmHost)
+        if (AmongUsClient.Instance.AmHost)
         {
             LastImpostor.promoteToLastImpostor();
         }

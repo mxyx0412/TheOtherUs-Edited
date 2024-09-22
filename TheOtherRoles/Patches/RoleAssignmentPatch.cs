@@ -110,16 +110,6 @@ internal class RoleManagerSelectRolesPatch
         neutralMin = Math.Min(neutralMin, neutralMax);
         killerNeutralMin = Math.Min(killerNeutralMin, killerNeutralMax);
 
-
-        // Automatically force everyone to get a role by setting crew Min / Max according to Neutral Settings
-        /*if (CustomOptionHolder.crewmateRolesFill.getBool())
-        {
-            crewmateMax = crewmates.Count - neutralMin;
-            crewmateMin = crewmates.Count - neutralMax;
-            crewmateMax += 1;
-            crewmateMin += 1;
-        }*/
-
         // Get the maximum allowed count of each role type based on the minimum and maximum option
         var neutralCountSettings = rnd.Next(neutralMin, neutralMax + 1);
         var killerNeutralCount = rnd.Next(killerNeutralMin, killerNeutralMax + 1);
@@ -248,11 +238,13 @@ internal class RoleManagerSelectRolesPatch
 
     private static void assignEnsuredRoles(RoleAssignmentData data)
     {
+        static List<byte> GetEnsuredRoles(Dictionary<byte, int> settings) => settings.Where(x => x.Value == 10).Select(x => x.Key).ToList();
+
         // Get all roles where the chance to occur is set to 100%
-        var ensuredCrewmateRoles = data.crewSettings.Where(x => x.Value == 10).Select(x => x.Key).ToList();
-        var ensuredNeutralRoles = data.neutralSettings.Where(x => x.Value == 10).Select(x => x.Key).ToList();
-        var ensuredKillerNeutralRoles = data.killerNeutralSettings.Where(x => x.Value == 10).Select(x => x.Key).ToList();
-        var ensuredImpostorRoles = data.impSettings.Where(x => x.Value == 10).Select(x => x.Key).ToList();
+        var ensuredCrewmateRoles = GetEnsuredRoles(data.crewSettings);
+        var ensuredNeutralRoles = GetEnsuredRoles(data.neutralSettings);
+        var ensuredKillerNeutralRoles = GetEnsuredRoles(data.killerNeutralSettings);
+        var ensuredImpostorRoles = GetEnsuredRoles(data.impSettings);
 
         // Assign roles until we run out of either players we can assign roles to or run out of roles we can assign to players
         while ((data.impostors.Count > 0 && data.maxImpostorRoles > 0 && ensuredImpostorRoles.Count > 0) ||

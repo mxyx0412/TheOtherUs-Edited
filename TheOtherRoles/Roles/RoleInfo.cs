@@ -247,7 +247,7 @@ public class RoleInfo
         if (showModifier)
         {
             // after dead modifier
-            if (!CustomOptionHolder.modifiersAreHidden.getBool() || PlayerControl.LocalPlayer.Data.IsDead ||
+            if (!CustomOptionHolder.modifiersAreHidden.getBool() || CachedPlayer.LocalPlayer.IsDead ||
                 AmongUsClient.Instance.GameState == InnerNetClient.GameStates.Ended)
             {
                 if (Bait.bait.Any(x => x.PlayerId == p.PlayerId)) infos.Add(bait);
@@ -256,7 +256,7 @@ public class RoleInfo
                 if (p == Tiebreaker.tiebreaker) infos.Add(tiebreaker);
                 if (p == Indomitable.indomitable) infos.Add(indomitable);
                 if (p == Aftermath.aftermath) infos.Add(aftermath);
-                if (p == Cursed.cursed && !Cursed.showModifier) infos.Add(cursed);
+                if (p == Cursed.cursed && (CachedPlayer.LocalPlayer.IsDead || !Cursed.hideModifier)) infos.Add(cursed);
             }
 
             if (p == Lovers.lover1 || p == Lovers.lover2) infos.Add(lover);

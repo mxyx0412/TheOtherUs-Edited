@@ -11,7 +11,7 @@ public class Silhouette
     private bool visibleForEveryOne;
     private SpriteRenderer renderer;
 
-    public static List<Silhouette> silhouettes = new List<Silhouette>();
+    public static List<Silhouette> silhouettes = new();
 
 
     private static ResourceSprite SilhouetteSprite = new("Silhouette.png", 225f);

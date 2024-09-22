@@ -55,8 +55,8 @@ internal static class GameHistory
 
     public static void clearGameHistory()
     {
-        localPlayerPositions = new List<Tuple<Vector3, bool>>();
-        deadPlayers = new List<DeadPlayer>();
+        localPlayerPositions.Clear();
+        deadPlayers.Clear();
     }
 
     public static void overrideDeathReasonAndKiller(PlayerControl player, DeadPlayer.CustomDeathReason deathReason, PlayerControl killer = null)

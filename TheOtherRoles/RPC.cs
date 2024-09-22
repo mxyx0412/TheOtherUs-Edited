@@ -2401,6 +2401,21 @@ public static class RPCProcedure
         PlayerControl player2 = playerById(player2Id);
         if (source is null || player1 is null || player2 is null) return;
         Balancer.StartAbility(source, player1, player2);
+
+        if (MeetingHud.Instance)
+        {
+            MeetingHudPatch.swapperCheckAndReturnSwap(MeetingHud.Instance, byte.MaxValue - 1);
+            foreach (var pva in MeetingHud.Instance.playerStates)
+            {
+                pva.UnsetVote();
+                var voteAreaPlayer = playerById(pva.TargetPlayerId);
+                if (!voteAreaPlayer.AmOwner) continue;
+                MeetingHud.Instance.ClearVote();
+            }
+
+            if (AmongUsClient.Instance.AmHost) MeetingHud.Instance.CheckForEndVoting();
+        }
+
     }
 
     public static void setFutureErased(byte playerId)
@@ -4088,6 +4103,7 @@ internal class RPCHandlerPatch
 
             case CustomRPC.MayorRevealed:
                 Mayor.Revealed = true;
+                if (Guesser.guesserUI != null) Guesser.guesserUIExitButton.OnClick.Invoke();
                 break;
 
             case CustomRPC.SurvivorVestActive:

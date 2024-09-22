@@ -34,11 +34,13 @@ internal class HudManagerUpdatePatch
             if (player)
             {
                 var playerName = text;
+                var nameText = player.cosmetics.nameText;
                 if (morphTimerNotUp && morphTargetNotNull && Morphling.morphling == player)
                     playerName = Morphling.morphTarget.Data.PlayerName;
-                var nameText = player.cosmetics.nameText;
 
                 nameText.text = hidePlayerName(localPlayer, player) ? "" : playerName;
+                player.cosmetics.colorBlindText.gameObject.SetActive(!hidePlayerName(localPlayer, player));
+
                 nameText.color = color = amImpostor && data.Role.IsImpostor ? Palette.ImpostorRed : Color.white;
                 nameText.color = nameText.color.SetAlpha(Chameleon.visibility(player.PlayerId));
             }
@@ -46,7 +48,6 @@ internal class HudManagerUpdatePatch
             {
                 color = Color.white;
             }
-
 
             dict.Add(data.PlayerId, (text, color));
         }

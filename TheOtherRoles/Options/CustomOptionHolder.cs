@@ -532,7 +532,7 @@ public class CustomOptionHolder
     public static CustomOption modifierSlueth;
 
     public static CustomOption modifierCursed;
-    public static CustomOption modifierShowCursed;
+    public static CustomOption modifierHideCursed;
 
     public static CustomOption modifierVip;
     public static CustomOption modifierVipQuantity;
@@ -1352,7 +1352,7 @@ public class CustomOptionHolder
         modifierSlueth = Create(40290, Types.Modifier, cs(Color.yellow, "Slueth"), rates, null, true);
 
         modifierCursed = Create(40300, Types.Modifier, cs(Color.yellow, "Cursed"), rates, null, true);
-        modifierShowCursed = Create(40301, Types.Modifier, "modifierShowCursed", false, modifierCursed);
+        modifierHideCursed = Create(40301, Types.Modifier, "modifierShowCursed", false, modifierCursed);
 
         modifierVip = Create(40310, Types.Modifier, cs(Color.yellow, "Vip"), rates, null, true);
         modifierVipQuantity = Create(40311, Types.Modifier, cs(Color.yellow, "modifierVipQuantity"), ratesCount, modifierVip);
