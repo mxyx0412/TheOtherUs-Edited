@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-namespace TheOtherRoles.Modules.CustomHats;
+namespace TheOtherRoles.CustomCosmetics.CustomHats;
 
 public static class CustomHatManager
 {
@@ -23,12 +23,12 @@ public static class CustomHatManager
         }
     }
 
+    //internal static string RepositoryUrl => "https://hats.mxyx.club/master";
     internal static readonly string ManifestFileName = "CustomHats.json";
-
     internal static string CustomSkinsDirectory => Path.Combine(Path.GetDirectoryName(Application.dataPath)!, ResourcesDirectory);
     internal static string HatsDirectory => CustomSkinsDirectory;
 
-    internal static List<CustomHat> UnregisteredHats = new();
+    internal static List<CustomHatConfig> UnregisteredHats = new();
     internal static readonly Dictionary<string, HatViewData> ViewDataCache = new();
     internal static readonly Dictionary<string, HatExtension> ExtensionCache = new();
     private static Material cachedShader;
@@ -69,7 +69,7 @@ public static class CustomHatManager
         return hatParent.Hat.IsCached();
     }
 
-    internal static HatData CreateHatBehaviour(CustomHat ch, bool testOnly = false)
+    internal static HatData CreateHatBehaviour(CustomHatConfig ch, bool testOnly = false)
     {
         if (cachedShader == null) cachedShader = DestroyableSingleton<HatManager>.Instance.PlayerMaterial;
         var viewData = ViewDataCache[ch.Name] = ScriptableObject.CreateInstance<HatViewData>();
@@ -77,9 +77,7 @@ public static class CustomHatManager
 
         viewData.MainImage = CreateHatSprite(ch.Resource);
         if (viewData.MainImage == null)
-        {
             throw new FileNotFoundException("File not downloaded yet");
-        }
         viewData.FloorImage = viewData.MainImage;
         if (ch.BackResource != null)
         {
@@ -102,9 +100,7 @@ public static class CustomHatManager
         hat.Free = true;
 #if MXYX_CLUB
         if (ch.Adaptive && cachedShader != null)
-        {
             viewData.AltShader = cachedShader;
-        }
 #endif
         var extend = new HatExtension
         {
@@ -115,14 +111,10 @@ public static class CustomHatManager
         };
 
         if (ch.FlipResource != null)
-        {
             extend.FlipImage = CreateHatSprite(ch.FlipResource);
-        }
 
         if (ch.BackFlipResource != null)
-        {
             extend.BackFlipImage = CreateHatSprite(ch.BackFlipResource);
-        }
 
         if (testOnly)
         {
@@ -156,9 +148,9 @@ public static class CustomHatManager
         return sprite;
     }
 
-    public static List<CustomHat> CreateHatDetailsFromFileNames(string[] fileNames, bool fromDisk = false)
+    public static List<CustomHatConfig> CreateHatDetailsFromFileNames(string[] fileNames, bool fromDisk = false)
     {
-        var fronts = new Dictionary<string, CustomHat>();
+        var fronts = new Dictionary<string, CustomHatConfig>();
         var backs = new Dictionary<string, string>();
         var flips = new Dictionary<string, string>();
         var backFlips = new Dictionary<string, string>();
@@ -171,9 +163,7 @@ public static class CustomHatManager
             var p = s.Split('_');
             var options = new HashSet<string>(p);
             if (options.Contains("back") && options.Contains("flip"))
-            {
                 backFlips[p[0]] = fileName;
-            }
             else if (options.Contains("climb"))
             {
                 climbs[p[0]] = fileName;
@@ -188,7 +178,7 @@ public static class CustomHatManager
             }
             else
             {
-                fronts[p[0]] = new CustomHat
+                fronts[p[0]] = new CustomHatConfig
                 {
                     Resource = fileName,
                     Name = p[0].Replace('-', ' '),
@@ -199,7 +189,7 @@ public static class CustomHatManager
             }
         }
 
-        var hats = new List<CustomHat>();
+        var hats = new List<CustomHatConfig>();
 
         foreach (var frontKvP in fronts)
         {
@@ -220,7 +210,7 @@ public static class CustomHatManager
         return hats;
     }
 
-    internal static List<CustomHat> SanitizeHats(SkinsConfigFile response)
+    internal static List<CustomHatConfig> SanitizeHats(SkinsConfigFile response)
     {
         foreach (var hat in response.Hats)
         {
@@ -247,9 +237,7 @@ public static class CustomHatManager
     {
         var filePath = Path.Combine(HatsDirectory, resFile);
         if (resHash == null || !File.Exists(filePath))
-        {
             return true;
-        }
         using var stream = File.OpenRead(filePath);
         var hash = BitConverter.ToString(algorithm.ComputeHash(stream))
             .Replace("-", string.Empty)
@@ -257,7 +245,7 @@ public static class CustomHatManager
         return !resHash.Equals(hash);
     }
 
-    internal static List<string> GenerateDownloadList(List<CustomHat> hats)
+    internal static List<string> GenerateDownloadList(List<CustomHatConfig> hats)
     {
         var algorithm = MD5.Create();
         var toDownload = new List<string>();
@@ -275,9 +263,7 @@ public static class CustomHatManager
             foreach (var (fileName, fileHash) in files)
             {
                 if (fileName != null && ResourceRequireDownload(fileName, fileHash, algorithm))
-                {
                     toDownload.Add(fileName);
-                }
             }
         }
 

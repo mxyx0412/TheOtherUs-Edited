@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using AmongUs.Data;
-using TheOtherRoles.Modules.CustomHats.Extensions;
 using TMPro;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace TheOtherRoles.Modules.CustomHats.Patches;
+namespace TheOtherRoles.CustomCosmetics.CustomHats.Patches;
 
 [HarmonyPatch(typeof(HatsTab))]
 internal static class HatsTabPatches
@@ -33,17 +32,13 @@ internal static class HatsTabPatches
             if (ext != null)
             {
                 if (!packages.ContainsKey(ext.Package))
-                {
                     packages[ext.Package] = new List<Tuple<HatData, HatExtension>>();
-                }
                 packages[ext.Package].Add(new Tuple<HatData, HatExtension>(hatBehaviour, ext));
             }
             else
             {
                 if (!packages.ContainsKey(CustomHatManager.InnerslothPackageName))
-                {
                     packages[CustomHatManager.InnerslothPackageName] = new List<Tuple<HatData, HatExtension>>();
-                }
                 packages[CustomHatManager.InnerslothPackageName].Add(new Tuple<HatData, HatExtension>(hatBehaviour, null));
             }
         }
@@ -72,9 +67,7 @@ internal static class HatsTabPatches
     {
         var isDefaultPackage = CustomHatManager.InnerslothPackageName == packageName;
         if (!isDefaultPackage)
-        {
             hats = hats.OrderBy(x => x.Item1.name).ToList();
-        }
 
         var offset = yStart;
         if (textTemplate != null)
@@ -92,7 +85,7 @@ internal static class HatsTabPatches
         {
             var (hat, ext) = hats[i];
             var xPos = hatsTab.XRange.Lerp(i % hatsTab.NumPerRow / (hatsTab.NumPerRow - 1f));
-            var yPos = offset - (i / hatsTab.NumPerRow * (isDefaultPackage ? 1f : 1.5f) * hatsTab.YOffset);
+            var yPos = offset - i / hatsTab.NumPerRow * (isDefaultPackage ? 1f : 1.5f) * hatsTab.YOffset;
             var colorChip = Object.Instantiate(hatsTab.ColorTabPrefab, hatsTab.scroller.Inner);
             if (ActiveInputManager.currentControlType == ActiveInputManager.InputType.Keyboard)
             {
@@ -119,9 +112,7 @@ internal static class HatsTabPatches
                     background.localScale = new Vector3(background.localScale.x, 0.8f, background.localScale.y);
                 }
                 if (foreground != null)
-                {
                     foreground.localPosition = Vector3.down * 0.243f;
-                }
 
                 if (textTemplate != null)
                 {
@@ -144,7 +135,7 @@ internal static class HatsTabPatches
             hatsTab.ColorChips.Add(colorChip);
         }
 
-        return offset - ((hats.Count - 1) / hatsTab.NumPerRow * (isDefaultPackage ? 1f : 1.5f) * hatsTab.YOffset) -
+        return offset - (hats.Count - 1) / hatsTab.NumPerRow * (isDefaultPackage ? 1f : 1.5f) * hatsTab.YOffset -
                1.75f;
     }
 }

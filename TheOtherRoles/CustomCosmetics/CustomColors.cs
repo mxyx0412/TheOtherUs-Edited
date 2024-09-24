@@ -5,7 +5,7 @@ using TheOtherRoles.Utilities;
 using UnityEngine;
 using Object = Il2CppSystem.Object;
 
-namespace TheOtherRoles.Modules;
+namespace TheOtherRoles.CustomCosmetics;
 
 public class CustomColors
 {
@@ -161,7 +161,7 @@ public class CustomColors
                 {
                     var chip = chips[i];
                     int row = i / cols, col = i % cols; // Dynamically do the positioningS
-                    chip.transform.localPosition = new Vector3(-0.975f + (col * 0.5f), 1.475f - (row * 0.5f), chip.transform.localPosition.z);
+                    chip.transform.localPosition = new Vector3(-0.975f + col * 0.5f, 1.475f - row * 0.5f, chip.transform.localPosition.z);
                     chip.transform.localScale *= 0.76f;
                 }
                 for (var j = chips.Count; j < chips.Length; j++)

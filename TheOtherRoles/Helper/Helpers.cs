@@ -9,6 +9,7 @@ using Hazel;
 using InnerNet;
 using Reactor.Utilities.Extensions;
 using TheOtherRoles.Buttons;
+using TheOtherRoles.CustomCosmetics;
 using TheOtherRoles.CustomGameModes;
 using TheOtherRoles.Patches;
 using TheOtherRoles.Utilities;
@@ -81,6 +82,9 @@ public static class Helpers
     public static bool isDleks => GameOptionsManager.Instance.CurrentGameOptions.MapId == 3;
     public static bool isAirship => GameOptionsManager.Instance.CurrentGameOptions.MapId == 4;
     public static bool isFungle => GameOptionsManager.Instance.CurrentGameOptions.MapId == 5;
+
+    public static PlayerControl GetHostPlayer => GameData.Instance.GetHost().Object;
+
 
     /// <summary>
     /// 假任务
@@ -664,11 +668,6 @@ public static class Helpers
         return role;
     }
 
-    public static PlayerControl GetHostPlayer()
-    {
-        return playerById(GameData.Instance.GetHost().PlayerId);
-    }
-
     public static PlayerControl playerById(byte id)
     {
         foreach (PlayerControl player in CachedPlayer.AllPlayers)
@@ -937,7 +936,7 @@ public static class Helpers
 
     public static string GithubUrl(this string url)
     {
-        return IsCN() && !url.Contains("mirror.ghproxy.com") ? "https://mirror.ghproxy.com/" + url : url;
+        return IsCN() && !url.Contains("mirror.ghproxy.com") ? "https://ghp.ci/" + url : url;
     }
 
     public static bool MushroomSabotageActive()

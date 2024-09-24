@@ -1953,7 +1953,7 @@ public static class RPCProcedure
     {
         var target = playerById(targetId);
         target.Exiled();
-        overrideDeathReasonAndKiller(target, DeadPlayer.CustomDeathReason.HostCmdKill, GetHostPlayer());
+        overrideDeathReasonAndKiller(target, DeadPlayer.CustomDeathReason.HostCmdKill, GetHostPlayer);
 
         DeadBody[] array = Object.FindObjectsOfType<DeadBody>();
         foreach (var body in array)

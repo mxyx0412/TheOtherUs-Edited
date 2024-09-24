@@ -2,7 +2,7 @@
 using System.Linq;
 using Cpp2IL.Core.Extensions;
 
-namespace TheOtherRoles.Modules.CustomHats.Patches;
+namespace TheOtherRoles.CustomCosmetics.CustomHats.Patches;
 
 [HarmonyPatch(typeof(HatManager))]
 internal static class HatManagerPatches

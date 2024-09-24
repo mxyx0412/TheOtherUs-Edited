@@ -1,4 +1,4 @@
-﻿namespace TheOtherRoles.Modules.CustomHats.Patches;
+﻿namespace TheOtherRoles.CustomCosmetics.CustomHats.Patches;
 
 [HarmonyPatch(typeof(CosmeticsCache))]
 internal static class CosmeticsCachePatches

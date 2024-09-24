@@ -1,6 +1,4 @@
-﻿using TheOtherRoles.Modules.CustomHats.Extensions;
-
-namespace TheOtherRoles.Modules.CustomHats.Patches;
+﻿namespace TheOtherRoles.CustomCosmetics.CustomHats.Patches;
 
 [HarmonyPatch(typeof(PlayerPhysics))]
 internal static class PlayerPhysicsPatches
@@ -20,9 +18,7 @@ internal static class PlayerPhysicsPatches
         if (extend.FlipImage != null)
         {
             if (__instance.FlipX)
-            {
                 hatParent.FrontLayer.sprite = extend.FlipImage;
-            }
             else
             {
                 hatParent.FrontLayer.sprite = viewData.MainImage;
@@ -32,9 +28,7 @@ internal static class PlayerPhysicsPatches
         if (extend.BackFlipImage != null)
         {
             if (__instance.FlipX)
-            {
                 hatParent.BackLayer.sprite = extend.BackFlipImage;
-            }
             else
             {
                 hatParent.BackLayer.sprite = viewData.BackImage;
