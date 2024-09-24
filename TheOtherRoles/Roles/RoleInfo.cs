@@ -256,9 +256,8 @@ public class RoleInfo
                 if (p == Tiebreaker.tiebreaker) infos.Add(tiebreaker);
                 if (p == Indomitable.indomitable) infos.Add(indomitable);
                 if (p == Aftermath.aftermath) infos.Add(aftermath);
-                if (p == Cursed.cursed && (CachedPlayer.LocalPlayer.IsDead || !Cursed.hideModifier)) infos.Add(cursed);
+                if (p == Cursed.cursed && !Cursed.hideModifier) infos.Add(cursed);
             }
-
             if (p == Lovers.lover1 || p == Lovers.lover2) infos.Add(lover);
             if (Assassin.assassin.Any(x => x.PlayerId == p.PlayerId) && p != Specoality.specoality) infos.Add(assassin);
             if (AntiTeleport.antiTeleport.Any(x => x.PlayerId == p.PlayerId)) infos.Add(antiTeleport);
@@ -365,12 +364,10 @@ public class RoleInfo
         return infos;
     }
 
-    public static string GetRolesString(PlayerControl p, bool useColors, bool showModifier = true,
-        bool suppressGhostInfo = false)
+    public static string GetRolesString(PlayerControl p, bool useColors, bool showModifier = true, bool suppressGhostInfo = false)
     {
         string roleName;
-        roleName = string.Join(" ",
-            getRoleInfoForPlayer(p, showModifier).Select(x => useColors ? cs(x.color, x.Name) : x.Name).ToArray());
+        roleName = string.Join(" ", getRoleInfoForPlayer(p, showModifier).Select(x => useColors ? cs(x.color, x.Name) : x.Name).ToArray());
         if (Lawyer.target != null && p.PlayerId == Lawyer.target.PlayerId &&
             CachedPlayer.LocalPlayer.PlayerControl != Lawyer.target) roleName += useColors ? cs(Lawyer.color, " §") : " §";
 

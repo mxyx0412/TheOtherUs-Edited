@@ -36,6 +36,7 @@ public class TheOtherRolesPlugin : BasePlugin
     public static ConfigEntry<bool> EnableSoundEffects { get; set; }
     public static ConfigEntry<bool> ToggleCursor { get; set; }
     public static ConfigEntry<bool> ShowFPS { get; set; }
+    public static ConfigEntry<bool> LocalHats { get; set; }
     public static ConfigEntry<bool> ShowKeyReminder { get; set; }
     public static ConfigEntry<string> Ip { get; set; }
     public static ConfigEntry<ushort> Port { get; set; }
@@ -84,6 +85,7 @@ public class TheOtherRolesPlugin : BasePlugin
         ShowPopUpVersion = Config.Bind("Custom", "Show PopUp", "0");
         ShowFPS = Config.Bind("Custom", "Show FPS", true);
         ShowKeyReminder = Config.Bind("Custom", "ShowKeyReminder", true);
+        LocalHats = Config.Bind("Custom", "Load Local Hats", false);
 
         Ip = Config.Bind("Custom", "Custom Server IP", "127.0.0.1");
         Port = Config.Bind("Custom", "Custom Server Port", (ushort)22023);
@@ -93,10 +95,10 @@ public class TheOtherRolesPlugin : BasePlugin
         UpdateRegions();
         CrowdedPlayer.Start();
 
+        ModOption.reloadPluginOptions();
         CustomHatManager.LoadHats();
         CustomColors.Load();
         CustomOptionHolder.Load();
-        ModOption.reloadPluginOptions();
         AssetLoader.LoadAudioAssets();
         if (ToggleCursor.Value) enableCursor(true);
 

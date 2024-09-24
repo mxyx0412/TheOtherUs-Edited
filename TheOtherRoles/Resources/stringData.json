@@ -28,6 +28,10 @@
         "0": "Show Key Reminder",
         "13": "游戏内显示键位提醒"
     },
+    "LocalHatsText": {
+        "0": "Load Local Hats",
+        "13": "加载离线帽子"
+    },
     "EnableDebugLogModeText": {
         "0": "Enable Debug Log Mode",
         "13": "收集Debug日志"

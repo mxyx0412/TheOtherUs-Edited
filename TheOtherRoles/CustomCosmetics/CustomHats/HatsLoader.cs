@@ -19,17 +19,51 @@ public class HatsLoader : MonoBehaviour
         this.StartCoroutine(CoFetchHats());
     }
 
-    [HideFromIl2Cpp]
     private IEnumerator CoFetchHats()
     {
         isRunning = true;
-        var www = new UnityWebRequest();
-        www.SetMethod(UnityWebRequest.UnityWebRequestMethod.Get);
-        string localFilePath = Path.Combine(ResourcesDirectory, ManifestFileName);
+        string localFilePath = Path.Combine(HatsDirectory, ManifestFileName);
+
+        if (ModOption.localHats)
+        {
+            LoadLocalHats(localFilePath);
+            isRunning = false;
+            yield break;
+        }
+
+        yield return DownloadHatsConfig(localFilePath);
+        isRunning = false;
+    }
+
+    private void LoadLocalHats(string Path)
+    {
+        Message("加载本地帽子文件");
+        if (File.Exists(Path))
+        {
+            var localFileContent = File.ReadAllText(Path);
+            var response = JsonSerializer.Deserialize<SkinsConfigFile>(localFileContent, new JsonSerializerOptions
+            {
+                AllowTrailingCommas = true
+            });
+            ProcessHatsData(response);
+        }
+        else
+        {
+            Error("不存在本地帽子配置文件.");
+        }
+    }
+
+    private IEnumerator DownloadHatsConfig(string Path)
+    {
+        var www = new UnityWebRequest
+        {
+            method = UnityWebRequest.kHttpVerbGET,
+            downloadHandler = new DownloadHandlerBuffer()
+        };
 
         Message($"正在下载帽子配置文件: {RepositoryUrl}/{ManifestFileName}");
-        www.SetUrl($"{RepositoryUrl}/{ManifestFileName}");
-        www.downloadHandler = new DownloadHandlerBuffer();
+        www.url = $"{RepositoryUrl}/{ManifestFileName}";
+
         var operation = www.SendWebRequest();
 
         while (!operation.isDone)
@@ -40,38 +74,23 @@ public class HatsLoader : MonoBehaviour
         if (www.isNetworkError || www.isHttpError)
         {
             Error($"下载帽子配置文件时出错: {www.error}");
-            Message("正在尝试以本地加载帽子...");
-
+            Message("正在尝试以本地方式加载帽子...");
+            LoadLocalHats(Path);
             isSuccessful = false;
-            if (File.Exists(localFilePath))
-            {
-                var localFileContent = File.ReadAllText(localFilePath);
-                var response = JsonSerializer.Deserialize<SkinsConfigFile>(localFileContent, new JsonSerializerOptions
-                {
-                    AllowTrailingCommas = true
-                });
-                ProcessHatsData(response);
-            }
-            else
-            {
-                Error("不存在本地帽子配置文件.");
-            }
-
-            isRunning = false;
             yield break;
         }
 
         try
         {
-            if (!Directory.Exists(ResourcesDirectory))
+            if (!Directory.Exists(HatsDirectory))
             {
-                Directory.CreateDirectory(ResourcesDirectory);
+                Directory.CreateDirectory(HatsDirectory);
             }
 
-            File.WriteAllBytes(localFilePath, www.downloadHandler.data);
-            Message($"帽子配置文件已保存到: {localFilePath}");
+            File.WriteAllBytes(Path, www.downloadHandler.data);
+            Message($"帽子清单已保存到: {Path}");
 
-            var downloadedFileContent = File.ReadAllText(localFilePath);
+            var downloadedFileContent = File.ReadAllText(Path);
             var response = JsonSerializer.Deserialize<SkinsConfigFile>(downloadedFileContent, new JsonSerializerOptions
             {
                 AllowTrailingCommas = true
@@ -81,12 +100,14 @@ public class HatsLoader : MonoBehaviour
         }
         catch (Exception ex)
         {
+            isSuccessful = false;
             Error($"未能保存或加载帽子配置文件: {ex.Message}");
         }
-
-        www.downloadHandler.Dispose();
-        www.Dispose();
-        isRunning = false;
+        finally
+        {
+            www.downloadHandler.Dispose();
+            www.Dispose();
+        }
     }
 
     private void ProcessHatsData(SkinsConfigFile response)
@@ -96,13 +117,15 @@ public class HatsLoader : MonoBehaviour
             Directory.CreateDirectory(HatsDirectory);
         }
 
-        if (!isSuccessful)
+        UnregisteredHats.AddRange(SanitizeHats(response));
+        Message($"读取了 {UnregisteredHats.Count} 项帽子");
+
+        if (!isSuccessful || ModOption.localHats)
         {
-            Error("在线配置文件无效，取消下载任务。");
+            Message("在线配置文件无效，取消下载任务。");
             return;
         };
 
-        UnregisteredHats.AddRange(SanitizeHats(response));
         var toDownload = GenerateDownloadList(UnregisteredHats);
 
         Message($"准备下载 {toDownload.Count} 项帽子文件");
@@ -119,7 +142,6 @@ public class HatsLoader : MonoBehaviour
         www.SetMethod(UnityWebRequest.UnityWebRequestMethod.Get);
         fileName = fileName.Replace(" ", "%20");
         www.SetUrl($"{RepositoryUrl}/hats/{fileName}");
-        Message($"正在下载: {fileName}");
         www.downloadHandler = new DownloadHandlerBuffer();
         var operation = www.SendWebRequest();
 
@@ -139,6 +161,7 @@ public class HatsLoader : MonoBehaviour
         var persistTask = File.WriteAllBytesAsync(filePath, www.downloadHandler.data);
         while (!persistTask.IsCompleted)
         {
+            Message($"正在下载: {fileName}");
             if (persistTask.Exception != null)
             {
                 Error(persistTask.Exception.Message);

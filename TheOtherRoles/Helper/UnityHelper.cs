@@ -74,7 +74,7 @@ public static class UnityHelper
         }
         catch
         {
-            Error("loading texture from resources: " + path);
+            //Error("loading texture from resources: " + path);
         }
 
         return null;

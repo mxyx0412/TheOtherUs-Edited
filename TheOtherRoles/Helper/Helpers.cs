@@ -151,7 +151,8 @@ public static class Helpers
 
     public static void handleTrapperTrapOnBodyReport()
     {
-        var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.TrapperMeetingFlag, SendOption.Reliable, -1);
+        var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
+            (byte)CustomRPC.TrapperMeetingFlag, SendOption.Reliable, -1);
         AmongUsClient.Instance.FinishRpcImmediately(writer);
         RPCProcedure.trapperMeetingFlag();
     }
@@ -936,7 +937,7 @@ public static class Helpers
 
     public static string GithubUrl(this string url)
     {
-        return IsCN() && !url.Contains("mirror.ghproxy.com") ? "https://ghp.ci/" + url : url;
+        return IsCN() && !url.Contains("ghp.ci") ? "https://ghp.ci/" + url : url;
     }
 
     public static bool MushroomSabotageActive()

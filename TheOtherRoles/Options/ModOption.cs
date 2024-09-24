@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using AmongUs.GameOptions;
 using TheOtherRoles.Utilities;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ internal class ModOption
     public static int NumImpostors => GameOptionsManager.Instance.currentNormalGameOptions.NumImpostors;
     public static bool DebugMode => CustomOptionHolder.debugMode.getBool();
     public static bool DisableGameEnd => DebugMode && CustomOptionHolder.disableGameEnd.getBool();
+    public static NormalGameOptionsV07 NormalOptions => GameOptionsManager.Instance.currentNormalGameOptions;
 
     // Set values
     public static int maxNumberOfMeetings = 10;
@@ -21,6 +23,7 @@ internal class ModOption
     public static bool allowParallelMedBayScans;
     public static bool showLighterDarker = true;
     public static bool showFPS = true;
+    public static bool localHats;
     public static bool toggleCursor = true;
     public static bool enableSoundEffects = true;
     public static bool showKeyReminder;
@@ -121,6 +124,7 @@ internal class ModOption
         toggleCursor = Main.ToggleCursor.Value;
         enableSoundEffects = Main.EnableSoundEffects.Value;
         showKeyReminder = Main.ShowKeyReminder.Value;
+        localHats = Main.LocalHats.Value;
     }
 
     public static void resetDeviceTimes()

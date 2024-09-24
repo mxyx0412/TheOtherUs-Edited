@@ -1037,11 +1037,11 @@ public class StringOptionFixedUpdate
         var option = options.FirstOrDefault(option => option.optionBehaviour == __instance);
         if (option == null || !CustomOptionHolder.isMapSelectionOption(option)) return;
         if (GameOptionsManager.Instance.CurrentGameOptions.MapId == 6)
-            if (option.optionBehaviour != null && option.optionBehaviour is StringOption stringOption)
+            if (option.optionBehaviour is not null and StringOption stringOption)
             {
                 stringOption.ValueText.text = option.selections[option.selection].ToString();
             }
-            else if (option.optionBehaviour != null && option.optionBehaviour is StringOption stringOptionToo)
+            else if (option.optionBehaviour is not null and StringOption stringOptionToo)
             {
                 stringOptionToo.oldValue = stringOptionToo.Value = option.selection;
                 stringOptionToo.ValueText.text = option.selections[option.selection].ToString();
@@ -1173,7 +1173,7 @@ internal class GameOptionsDataPatch
         else if (ModOption.gameMode == CustomGamemodes.HideNSeek)
         {
             options = options.Where(x =>
-                x.type == CustomOptionType.HideNSeekMain || x.type == CustomOptionType.HideNSeekRoles);
+                x.type is CustomOptionType.HideNSeekMain or CustomOptionType.HideNSeekRoles);
         }
         else if (ModOption.gameMode == CustomGamemodes.PropHunt)
         {
@@ -1223,8 +1223,8 @@ internal class GameOptionsDataPatch
                     var neutralMin = CustomOptionHolder.neutralRolesCountMin.getSelection();
                     var neutralMax = CustomOptionHolder.neutralRolesCountMax.getSelection();
 
-                    var min = PlayerControl.AllPlayerControls.Count - neutralMax - ModOption.NumImpostors;
-                    var max = PlayerControl.AllPlayerControls.Count - neutralMin - ModOption.NumImpostors;
+                    var min = Math.Max(0, PlayerControl.AllPlayerControls.Count - neutralMax - ModOption.NumImpostors);
+                    var max = Math.Max(0, PlayerControl.AllPlayerControls.Count - neutralMin - ModOption.NumImpostors);
                     var optionValue = min == max ? $"{max}" : $"{min} ~ {max}";
                     sb.AppendLine($"{optionName}: {optionValue}");
                 }

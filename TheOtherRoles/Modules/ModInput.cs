@@ -58,9 +58,9 @@ public class ModInputManager
     }
 
 #nullable enable
-    public class KeyInputTexture
+    public class KeyInputTexture(string address)
     {
-        private readonly string address;
+        private readonly string address = address;
         private Texture2D? texture;
         public Texture2D GetTexture()
         {
@@ -70,11 +70,6 @@ public class ModInputManager
             }
 
             return texture;
-        }
-
-        public KeyInputTexture(string address)
-        {
-            this.address = address;
         }
     }
 

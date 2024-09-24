@@ -9,11 +9,13 @@ namespace TheOtherRoles.CustomCosmetics.CustomHats;
 
 public static class CustomHatManager
 {
+    internal static string HatsDirectory => CosmeticsManager.CustomHatsDir;
     public const string ResourcesDirectory = Main.ModName + "/CustomHats";
     public const string InnerslothPackageName = "Innersloth Hats";
     public const string DeveloperPackageName = "Developer Hats";
-
+    /*
     internal static readonly Tuple<string, string, string> Repository = new("TheOtherRolesAU", "TheOtherHats", "master");
+
     internal static string RepositoryUrl
     {
         get
@@ -21,11 +23,9 @@ public static class CustomHatManager
             var (owner, repository, branch) = Repository;
             return $"https://raw.githubusercontent.com/{owner}/{repository}/{branch}".GithubUrl();
         }
-    }
+    }*/
 
     internal static readonly string ManifestFileName = "CustomHats.json";
-    internal static string CustomSkinsDirectory => Path.Combine(Path.GetDirectoryName(Application.dataPath)!, ResourcesDirectory);
-    internal static string HatsDirectory => CustomSkinsDirectory;
 
     internal static List<CustomHatConfig> UnregisteredHats = new();
     internal static readonly Dictionary<string, HatViewData> ViewDataCache = new();

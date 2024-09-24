@@ -34,7 +34,8 @@ public static class StartOptionMenuPatch
         button.onState = on;
         Color color = on ? new Color(0f, 1f, 0.16470589f, 1f) : Color.white;
         button.Background.color = color;
-        button.Text.text = text + ": " + DestroyableSingleton<TranslationController>.Instance.GetString(button.onState ? StringNames.SettingsOn : StringNames.SettingsOff, new Il2CppReferenceArray<Il2CppSystem.Object>(0));
+        button.Text.text = text + ": " + DestroyableSingleton<TranslationController>.Instance.GetString(button.onState
+            ? StringNames.SettingsOn : StringNames.SettingsOff, new Il2CppReferenceArray<Il2CppSystem.Object>(0));
         if (button.Rollover)
         {
             button.Rollover.ChangeOutColor(color);
@@ -67,10 +68,11 @@ public static class StartOptionMenuPatch
         return result;
     }
 
-    static ToggleButtonBehaviour toggleCursor;
-    static ToggleButtonBehaviour enableSoundEffects;
-    static ToggleButtonBehaviour showKeyReminder;
-    static ToggleButtonBehaviour showFPS;
+    private static ToggleButtonBehaviour toggleCursor;
+    private static ToggleButtonBehaviour enableSoundEffects;
+    private static ToggleButtonBehaviour showKeyReminder;
+    private static ToggleButtonBehaviour showFPS;
+    private static ToggleButtonBehaviour localHats;
 
     public static void Postfix(OptionsMenuBehaviour __instance)
     {
@@ -110,7 +112,7 @@ public static class StartOptionMenuPatch
         }, nebulaTab, toggleButtonTemplate);
 
         //ShowFPS
-        showKeyReminder = AddButton(new Vector2(1, 0), "ShowFPS", () =>
+        showKeyReminder = AddButton(new Vector2(1, 0), "ShowKeyReminder", () =>
         {
             showKeyReminder.UpdateToggleText(!showKeyReminder.onState, getString("ShowKeyReminder"));
             ModOption.showKeyReminder = Main.ShowKeyReminder.Value = showKeyReminder.onState;
@@ -121,6 +123,13 @@ public static class StartOptionMenuPatch
         {
             showFPS.UpdateToggleText(!showFPS.onState, getString("ShowFPS"));
             ModOption.showFPS = Main.ShowFPS.Value = showFPS.onState;
+        }, nebulaTab, toggleButtonTemplate);
+
+        //LocalHats
+        localHats = AddButton(new Vector2(0, 2), "LocalHats", () =>
+        {
+            localHats.UpdateToggleText(!localHats.onState, getString("LocalHatsText"));
+            ModOption.localHats = Main.LocalHats.Value = localHats.onState;
         }, nebulaTab, toggleButtonTemplate);
 
         //キー割り当てボタン
@@ -257,7 +266,7 @@ public static class StartOptionMenuPatch
         nebulaButton.Content = nebulaTab;
         GameObject textObj = nebulaButton.transform.FindChild("Text_TMP").gameObject;
         textObj.GetComponent<TextTranslatorTMP>().enabled = false;
-        textObj.GetComponent<TMP_Text>().text = "模组设置";
+        textObj.GetComponent<TMP_Text>().text = "modOptionsTitle".Translate();
 
         tabs.Add(Object.Instantiate(tabs[1], null));
         TabGroup keyBindingTabButton = tabs[^1];
@@ -277,6 +286,7 @@ public static class StartOptionMenuPatch
             enableSoundEffects.UpdateToggleText(Main.EnableSoundEffects.Value, getString("EnableSoundEffectsText"));
             showKeyReminder.UpdateToggleText(Main.ShowKeyReminder.Value, getString("ShowKeyReminder"));
             toggleCursor.UpdateToggleText(Main.ToggleCursor.Value, getString("ToggleCursorText"));
+            localHats.UpdateToggleText(Main.LocalHats.Value, getString("LocalHatsText"));
 
             passiveButton.OnMouseOver.Invoke();
         }
