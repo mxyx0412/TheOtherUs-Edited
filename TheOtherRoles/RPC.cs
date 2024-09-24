@@ -3219,13 +3219,12 @@ public static class RPCProcedure
             rend.transform.localPosition = new Vector3(-0.5f, 0.2f, -1f);
             rend.sprite = new ResourceSprite("TheOtherRoles.Resources.ChatOverlay.png", 130f);
             if (playerControl.PlayerId != localPlayerId) rend.gameObject.SetActive(true);
-            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(2f,
-                (Action<float>)delegate (float p)
+            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(2f, (Action<float>)delegate (float p)
                 {
                     if (p == 1f)
                     {
-                        rend.gameObject.SetActive(false);
-                        Object.Destroy(rend.gameObject);
+                        rend?.gameObject?.SetActive(false);
+                        Object.Destroy(rend?.gameObject);
                     }
                 }));
         }

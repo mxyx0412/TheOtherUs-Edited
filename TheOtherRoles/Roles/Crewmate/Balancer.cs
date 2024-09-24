@@ -80,6 +80,13 @@ public class Balancer
                     return;
                 case BalancerState.Animation_Chain:
                     bool flag = true;
+
+                    MeetingHud.Instance.TitleText.gameObject.SetActive(false);
+                    MeetingHud.Instance.TimerText.gameObject.SetActive(false);
+                    MeetingHud.Instance.SkipVoteButton.gameObject.SetActive(false);
+                    MeetingHud.Instance.SkippedVoting.SetActive(false);
+                    MeetingHud.Instance.ClearVote();
+
                     for (int i = 0; i <= animIndex; i++)
                     {
                         var cobj = ChainObjects[i];
@@ -197,7 +204,7 @@ public class Balancer
                     if (BackObject.transform.localPosition.x <= -10)
                     {
                         CurrentState = BalancerState.WaitVote;
-                        SetActiveMeetingHud(true);
+
                         MeetingHud.Instance.transform.FindChild("MeetingContents/PhoneUI/baseGlass").transform.localPosition = new(0.012f, 0, 0);
                         MeetingHud.Instance.TitleText.GetComponent<TextTranslatorTMP>().enabled = false;
                         MeetingHud.Instance.TitleText.transform.localPosition = new(0, 2, -1);
@@ -224,16 +231,6 @@ public class Balancer
     public static bool IsDoubleExile;
     private static PlayerControl currentTarget;
 
-    private static void SetActiveMeetingHud(bool active)
-    {
-        MeetingHud.Instance.TitleText.gameObject.SetActive(active);
-        MeetingHud.Instance.TimerText.gameObject.SetActive(active);
-        if (!active)
-        {
-            MeetingHud.Instance.SkipVoteButton.gameObject.SetActive(active);
-            MeetingHud.Instance.SkippedVoting.SetActive(active);
-        }
-    }
     public static void WrapUp(PlayerControl exiled)
     {
         if (exiled != null)
@@ -271,8 +268,6 @@ public class Balancer
             else
                 area.gameObject.SetActive(false);
         }
-        //後で表示する
-        SetActiveMeetingHud(false);
 
         BackObject = new GameObject("BackObject").AddComponent<SpriteRenderer>();
         BackObject.transform.parent = MeetingHud.Instance.transform;

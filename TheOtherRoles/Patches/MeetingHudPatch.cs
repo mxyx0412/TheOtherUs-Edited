@@ -30,7 +30,7 @@ internal class MeetingHudPatch
 
     private static void swapperOnClick(int i, MeetingHud __instance)
     {
-        if (Swapper.charges <= 0 || __instance.state == MeetingHud.VoteStates.Results || __instance.playerStates[i].AmDead) return;
+        if (Swapper.charges <= 0 || __instance.state == VoteStates.Results || __instance.playerStates[i].AmDead) return;
 
         var selectedCount = selections.Count(b => b);
         var renderer = renderers[i];
@@ -95,7 +95,7 @@ internal class MeetingHudPatch
     public static void swapperCheckAndReturnSwap(MeetingHud __instance, byte dyingPlayerId)
     {
         // someone was guessed or dced in the meeting, check if this affects the swapper.
-        if (Swapper.swapper == null || __instance.state == MeetingHud.VoteStates.Results) return;
+        if (Swapper.swapper == null || __instance.state == VoteStates.Results) return;
 
         // reset swap.
         var reset = false;
@@ -168,8 +168,8 @@ internal class MeetingHudPatch
             for (var i = 0; i < __instance.playerStates.Length; i++)
             {
                 var playerVoteArea = __instance.playerStates[i];
-                if (playerVoteArea.AmDead || (playerVoteArea.TargetPlayerId == Swapper.swapper.PlayerId &&
-                                              Swapper.canOnlySwapOthers)) continue;
+                if (playerVoteArea.AmDead || (playerVoteArea.TargetPlayerId == Swapper.swapper.PlayerId && Swapper.canOnlySwapOthers))
+                    continue;
 
                 var template = playerVoteArea.Buttons.transform.Find("CancelButton").gameObject;
                 var checkbox = Object.Instantiate(template, playerVoteArea.transform, true);
@@ -296,13 +296,11 @@ internal class MeetingHudPatch
     {
         if (PlayerControl.LocalPlayer.Data.IsDead) return;
 
-        if (MeetingHud.Instance.state is
-            not MeetingHud.VoteStates.Voted and
-            not MeetingHud.VoteStates.NotVoted and
-            not MeetingHud.VoteStates.Discussion) return;
+        if (Instance.state is not VoteStates.Voted and not VoteStates.NotVoted and not VoteStates.Discussion)
+            return;
+
         var meetingInfoText = "";
         int numGuesses = HandleGuesser.isGuesser(CachedPlayer.LocalPlayer.PlayerControl.PlayerId)
-            && CachedPlayer.LocalPlayer.PlayerControl != Doomsayer.doomsayer
             ? HandleGuesser.remainingShots(CachedPlayer.LocalPlayer.PlayerControl.PlayerId) : 0;
         if (numGuesses > 0)
         {
@@ -444,7 +442,7 @@ internal class MeetingHudPatch
             // If skipping is disabled, replace skipps/no-votes with self vote
             if (target == null && blockSkippingInEmergencyMeetings && noVoteIsSelfVote)
                 foreach (var playerVoteArea in __instance.playerStates)
-                    if (playerVoteArea.VotedFor == byte.MaxValue - 1)
+                    if (playerVoteArea.VotedFor == 254)
                         playerVoteArea.VotedFor = playerVoteArea.TargetPlayerId; // TargetPlayerId
 
             var self = CalculateVotes(__instance);
@@ -486,8 +484,8 @@ internal class MeetingHudPatch
                     VotedForId = playerVoteArea.VotedFor
                 });
 
-                if (Tiebreaker.tiebreaker == null ||
-                    playerVoteArea.TargetPlayerId != Tiebreaker.tiebreaker.PlayerId) continue;
+                if (Tiebreaker.tiebreaker == null || playerVoteArea.TargetPlayerId != Tiebreaker.tiebreaker.PlayerId)
+                    continue;
 
                 var tiebreakerVote = playerVoteArea.VotedFor;
                 if (swapped1 != null && swapped2 != null)
@@ -499,8 +497,7 @@ internal class MeetingHudPatch
                 //バランサー処理
                 if (Balancer.currentAbilityUser != null)
                 {
-                    if (playerVoteArea.VotedFor != Balancer.targetplayerright.PlayerId &&
-                        playerVoteArea.VotedFor != Balancer.targetplayerleft.PlayerId)
+                    if (playerVoteArea.VotedFor != Balancer.targetplayerright.PlayerId && playerVoteArea.VotedFor != Balancer.targetplayerleft.PlayerId)
                     {
                         playerVoteArea.VotedFor = Helpers.GetRandom([Balancer.targetplayerright.PlayerId, Balancer.targetplayerleft.PlayerId]);
                     }
@@ -560,7 +557,7 @@ internal class MeetingHudPatch
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.PopulateResults))]
     private class MeetingHudPopulateVotesPatch
     {
-        private static bool Prefix(MeetingHud __instance, Il2CppStructArray<MeetingHud.VoterState> states)
+        private static bool Prefix(MeetingHud __instance, Il2CppStructArray<VoterState> states)
         {
             // Swapper swap
             PlayerVoteArea swapped1 = null;
@@ -871,7 +868,7 @@ internal class MeetingHudPatch
             if (target == null && blockSkippingInEmergencyMeetings)
                 __instance.SkipVoteButton.gameObject.SetActive(false);
 
-            if (__instance.state >= MeetingHud.VoteStates.Discussion)
+            if (__instance.state >= VoteStates.Discussion)
                 // Remove first kill shield
                 firstKillPlayer = null;
 
@@ -883,7 +880,7 @@ internal class MeetingHudPatch
                 var playerState = __instance.playerStates.FirstOrDefault(x => x.TargetPlayerId == Blackmailer.blackmailed.PlayerId);
                 playerState.Overlay.gameObject.SetActive(true);
                 playerState.Overlay.sprite = Overlay;
-                if (__instance.state != MeetingHud.VoteStates.Animating && !Blackmailer.alreadyShook)
+                if (__instance.state != VoteStates.Animating && !Blackmailer.alreadyShook)
                 {
                     Blackmailer.alreadyShook = true;
                     __instance.StartCoroutine(Effects.SwayX(playerState.transform));

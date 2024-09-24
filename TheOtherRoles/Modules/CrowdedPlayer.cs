@@ -249,13 +249,11 @@ public static class CrowdedPlayer
 
         public virtual void Update()
         {
-            if (Guesser.guesserUI != null) return;
+            if (Guesser.guesserUI != null || Balancer.currentAbilityUser != null) return;
 
-            if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.LeftArrow) ||
-                Input.mouseScrollDelta.y > 0f)
+            if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.LeftArrow) || Input.mouseScrollDelta.y > 0f)
                 Cycle(false);
-            else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.RightArrow) ||
-                     Input.mouseScrollDelta.y < 0f)
+            else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.RightArrow) || Input.mouseScrollDelta.y < 0f)
                 Cycle(true);
 
         }
