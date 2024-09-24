@@ -9,7 +9,7 @@ public static class Torch
 
     public static void clearAndReload()
     {
-        torch = new List<PlayerControl>();
+        torch.Clear();
         vision = CustomOptionHolder.modifierTorchVision.getFloat();
     }
 }

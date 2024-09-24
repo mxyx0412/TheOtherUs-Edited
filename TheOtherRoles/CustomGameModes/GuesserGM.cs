@@ -39,7 +39,7 @@ internal class GuesserGM
 
     public static void clearAndReload()
     {
-        guessers = new List<GuesserGM>();
+        guessers.Clear();
     }
 
     public static bool isGuesser(byte playerId)

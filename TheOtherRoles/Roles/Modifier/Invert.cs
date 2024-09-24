@@ -9,7 +9,7 @@ public static class Invert
 
     public static void clearAndReload()
     {
-        invert = new List<PlayerControl>();
+        invert.Clear();
         meetings = (int)CustomOptionHolder.modifierInvertDuration.getFloat();
     }
 }

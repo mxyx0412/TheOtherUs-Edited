@@ -11,7 +11,7 @@ public static class AntiTeleport
 
     public static void clearAndReload()
     {
-        antiTeleport = new List<PlayerControl>();
+        antiTeleport.Clear();
         position = Vector3.zero;
     }
 

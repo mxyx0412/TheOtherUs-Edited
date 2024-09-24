@@ -8,6 +8,6 @@ public static class Multitasker
 
     public static void clearAndReload()
     {
-        multitasker = new List<PlayerControl>();
+        multitasker.Clear();
     }
 }

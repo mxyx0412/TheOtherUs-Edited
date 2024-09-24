@@ -9,7 +9,7 @@ public static class Akujo
     public static Color color = new Color32(142, 69, 147, byte.MaxValue);
     public static PlayerControl akujo;
     public static PlayerControl honmei;
-    public static List<PlayerControl> keeps;
+    public static List<PlayerControl> keeps = new();
     public static PlayerControl currentTarget;
     public static DateTime startTime;
 
@@ -48,7 +48,7 @@ public static class Akujo
     {
         akujo = null;
         honmei = null;
-        keeps = new List<PlayerControl>();
+        keeps.Clear();
         currentTarget = null;
         startTime = DateTime.UtcNow;
         timeLimit = CustomOptionHolder.akujoTimeLimit.getFloat();

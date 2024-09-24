@@ -21,11 +21,11 @@ public static class Eraser
     public static void clearAndReload()
     {
         eraser = null;
-        futureErased = new List<PlayerControl>();
+        futureErased.Clear();
         currentTarget = null;
         cooldown = CustomOptionHolder.eraserCooldown.getFloat();
         canEraseAnyone = CustomOptionHolder.eraserCanEraseAnyone.getBool();
         canEraseGuess = CustomOptionHolder.erasercanEraseGuess.getBool();
-        alreadyErased = new List<byte>();
+        alreadyErased.Clear();
     }
 }

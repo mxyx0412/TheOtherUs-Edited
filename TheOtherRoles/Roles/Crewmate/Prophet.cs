@@ -22,9 +22,9 @@ public static class Prophet
     public static int examinesLeft;
     public static bool revealProphet = true;
     public static bool isRevealed;
-    public static List<Arrow> arrows = new List<Arrow>();
+    public static List<Arrow> arrows = new();
 
-    public static Dictionary<PlayerControl, bool> examined = new Dictionary<PlayerControl, bool>();
+    public static Dictionary<PlayerControl, bool> examined = new();
     public static PlayerControl currentTarget;
 
     public static ResourceSprite buttonSprite = new("SeerButton.png");
@@ -44,7 +44,7 @@ public static class Prophet
         prophet = null;
         currentTarget = null;
         isRevealed = false;
-        examined = new Dictionary<PlayerControl, bool>();
+        examined.Clear();
         revealProphet = CustomOptionHolder.prophetIsRevealed.getBool();
         cooldown = CustomOptionHolder.prophetCooldown.getFloat();
         examineNum = Mathf.RoundToInt(CustomOptionHolder.prophetNumExamines.getFloat());
@@ -61,6 +61,6 @@ public static class Prophet
                 if (arrow?.arrow != null)
                     Object.Destroy(arrow.arrow);
         }
-        arrows = new List<Arrow>();
+        arrows.Clear();
     }
 }

@@ -12,7 +12,7 @@ public static class Prosecutor
     public static bool diesOnIncorrectPros;
     public static bool canCallEmergency;
     public static bool canSeeVoteColors;
-    public static float tasksNeededToSeeVoteColors;
+    public static int tasksNeededToSeeVoteColors;
 
     public static bool Prosecuted;
     public static bool StartProsecute;
@@ -27,7 +27,7 @@ public static class Prosecutor
         StartProsecute = false;
         Prosecuted = false;
         canSeeVoteColors = CustomOptionHolder.prosecutorCanSeeVoteColors.getBool();
-        tasksNeededToSeeVoteColors = (int)CustomOptionHolder.prosecutorTasksNeededToSeeVoteColors.getFloat();
+        tasksNeededToSeeVoteColors = CustomOptionHolder.prosecutorTasksNeededToSeeVoteColors.GetInt();
         diesOnIncorrectPros = CustomOptionHolder.prosecutorDiesOnIncorrectPros.getBool();
         canCallEmergency = CustomOptionHolder.prosecutorCanCallEmergency.getBool();
     }

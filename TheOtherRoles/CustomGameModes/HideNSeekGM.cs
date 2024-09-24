@@ -103,8 +103,8 @@ public static class Hunter
             foreach (var arrow in localArrows)
                 if (arrow?.arrow != null)
                     Object.Destroy(arrow.arrow);
-        localArrows = new List<Arrow>();
-        lightActive = new List<byte>();
+        localArrows.Clear();
+        lightActive.Clear();
         arrowActive = false;
 
         lightCooldown = CustomOptionHolder.hunterLightCooldown.getFloat();
@@ -132,7 +132,7 @@ public static class Hunted
 
     public static void clearAndReload()
     {
-        timeshieldActive = new List<byte>();
+        timeshieldActive.Clear();
         taskPunish = false;
 
         shieldCount = Mathf.RoundToInt(CustomOptionHolder.huntedShieldNumber.getFloat());

@@ -14,7 +14,7 @@ public static class Poucher
     public static void clearAndReload()
     {
         poucher = null;
-        killed = new();
+        killed.Clear();
         spawnModifier = CustomOptionHolder.poucherSpawnModifier.getBool();
     }
 }

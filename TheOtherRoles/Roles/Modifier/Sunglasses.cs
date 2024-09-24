@@ -9,7 +9,7 @@ public static class Sunglasses
 
     public static void clearAndReload()
     {
-        sunglasses = new List<PlayerControl>();
+        sunglasses.Clear();
         vision = CustomOptionHolder.modifierSunglassesVision.getSelection() + 1;
     }
 }

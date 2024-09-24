@@ -14,8 +14,8 @@ public static class Chameleon
 
     public static void clearAndReload()
     {
-        chameleon = new List<PlayerControl>();
-        lastMoved = new Dictionary<byte, float>();
+        chameleon.Clear();
+        lastMoved = new();
         holdDuration = CustomOptionHolder.modifierChameleonHoldDuration.getFloat();
         fadeDuration = CustomOptionHolder.modifierChameleonFadeDuration.getFloat();
         minVisibility = CustomOptionHolder.modifierChameleonMinVisibility.getSelection() / 10f;

@@ -30,9 +30,9 @@ public static class Medium
         medium = null;
         target = null;
         soulTarget = null;
-        deadBodies = new List<Tuple<DeadPlayer, Vector3>>();
-        futureDeadBodies = new List<Tuple<DeadPlayer, Vector3>>();
-        souls = new List<SpriteRenderer>();
+        deadBodies.Clear();
+        futureDeadBodies.Clear();
+        souls.Clear();
         meetingStartTime = DateTime.UtcNow;
         cooldown = CustomOptionHolder.mediumCooldown.getFloat();
         duration = CustomOptionHolder.mediumDuration.getFloat();

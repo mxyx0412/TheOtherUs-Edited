@@ -11,7 +11,7 @@ public static class Snitch
     public static PlayerControl snitch;
     public static Color color = new Color32(184, 251, 79, byte.MaxValue);
 
-    public static List<Arrow> localArrows = new List<Arrow>();
+    public static List<Arrow> localArrows = new();
     public static int taskCountForReveal = 1;
     public static bool seeInMeeting;
     //public static bool canSeeRoles;
@@ -37,7 +37,7 @@ public static class Snitch
                 if (arrow?.arrow != null)
                     Object.Destroy(arrow.arrow);
         }
-        localArrows = new List<Arrow>();
+        localArrows.Clear();
         taskCountForReveal = Mathf.RoundToInt(CustomOptionHolder.snitchLeftTasksForReveal.getFloat());
         seeInMeeting = CustomOptionHolder.snitchSeeMeeting.getBool();
         if (text != null) Object.Destroy(text);

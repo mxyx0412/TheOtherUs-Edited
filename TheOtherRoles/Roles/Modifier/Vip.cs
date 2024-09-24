@@ -9,7 +9,7 @@ public static class Vip
 
     public static void clearAndReload()
     {
-        vip = new List<PlayerControl>();
+        vip.Clear();
         showColor = CustomOptionHolder.modifierVipShowColor.getBool();
     }
 }

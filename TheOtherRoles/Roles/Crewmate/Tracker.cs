@@ -56,7 +56,7 @@ public static class Tracker
                 if (arrow?.arrow != null)
                     Object.Destroy(arrow.arrow);
         }
-        deadBodyPositions = new List<Vector3>();
+        deadBodyPositions.Clear();
         corpsesTrackingTimer = 0f;
         corpsesTrackingCooldown = CustomOptionHolder.trackerCorpsesTrackingCooldown.getFloat();
         corpsesTrackingDuration = CustomOptionHolder.trackerCorpsesTrackingDuration.getFloat();

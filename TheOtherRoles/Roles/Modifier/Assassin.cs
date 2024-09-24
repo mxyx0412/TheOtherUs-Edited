@@ -16,7 +16,7 @@ public class Assassin
 
     public static void clearAndReload()
     {
-        assassin = [];
+        assassin.Clear();
         remainingShotsEvilGuesser = Mathf.RoundToInt(CustomOptionHolder.modifierAssassinNumberOfShots.getFloat());
         assassinMultipleShotsPerMeeting = CustomOptionHolder.modifierAssassinMultipleShotsPerMeeting.getBool();
         assassinKillsThroughShield = CustomOptionHolder.modifierAssassinKillsThroughShield.getBool();

@@ -26,6 +26,6 @@ public class Amnisiac
             foreach (var arrow in localArrows)
                 if (arrow?.arrow != null)
                     Object.Destroy(arrow.arrow);
-        localArrows = new List<Arrow>();
+        localArrows.Clear();
     }
 }

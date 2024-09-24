@@ -12,6 +12,6 @@ public static class Slueth
     public static void clearAndReload()
     {
         slueth = null;
-        reported = new List<PlayerControl>();
+        reported.Clear();
     }
 }

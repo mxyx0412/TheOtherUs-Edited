@@ -27,9 +27,9 @@ public class Survivor
 
     public static void clearAndReload()
     {
-        survivor = [];
+        survivor.Clear();
         target = null;
-        blankedList = [];
+        blankedList.Clear();
 
         vestActive = false;
         blanksUsed = 0;

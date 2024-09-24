@@ -18,7 +18,7 @@ public static class Seer
     public static void clearAndReload()
     {
         seer = null;
-        deadBodyPositions = new List<Vector3>();
+        deadBodyPositions.Clear();
         limitSoulDuration = CustomOptionHolder.seerLimitSoulDuration.getBool();
         soulDuration = CustomOptionHolder.seerSoulDuration.getFloat();
         mode = CustomOptionHolder.seerMode.getSelection();

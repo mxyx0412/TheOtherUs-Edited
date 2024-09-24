@@ -115,15 +115,15 @@ internal class PropHunt
         timerRunning = false;
         timerText?.Destroy();
         timerText = null;
-        currentObject = new Dictionary<byte, Tuple<string, float>>();
-        isCurrentlyRevealed = new Dictionary<byte, float>();
+        currentObject.Clear();
+        isCurrentlyRevealed.Clear();
         poolablesBackground?.Destroy();
         foreach (var go in revealRenderer.Values) go.Destroy();
-        revealRenderer = new Dictionary<byte, GameObject>();
-        speedboostActive = new Dictionary<byte, float>();
-        invisPlayers = new Dictionary<byte, float>();
+        revealRenderer.Clear();
+        speedboostActive.Clear();
+        invisPlayers.Clear();
         foreach (var go in duplicatedCollider) go.Destroy();
-        duplicatedCollider = new List<GameObject>();
+        duplicatedCollider.Clear();
     }
 
     public static Sprite getIntroSprite(int index)

@@ -26,7 +26,7 @@ public static class Witch
     public static void clearAndReload()
     {
         witch = null;
-        futureSpelled = new List<PlayerControl>();
+        futureSpelled.Clear();
         currentTarget = spellCastingTarget = null;
         cooldown = CustomOptionHolder.witchCooldown.getFloat();
         cooldownAddition = CustomOptionHolder.witchAdditionalCooldown.getFloat();

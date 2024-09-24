@@ -12,9 +12,9 @@ public static class Bloody
 
     public static void clearAndReload()
     {
-        bloody = new List<PlayerControl>();
-        active = new Dictionary<byte, float>();
-        bloodyKillerMap = new Dictionary<byte, byte>();
+        bloody.Clear();
+        active.Clear();
+        bloodyKillerMap.Clear();
         duration = CustomOptionHolder.modifierBloodyDuration.getFloat();
     }
 }

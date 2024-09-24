@@ -19,8 +19,8 @@ public static class Bait
 
     public static void clearAndReload()
     {
-        bait = new List<PlayerControl>();
-        active = new Dictionary<DeadPlayer, float>();
+        bait.Clear();
+        active.Clear();
         reportDelayMin = CustomOptionHolder.modifierBaitReportDelayMin.getFloat();
         reportDelayMax = CustomOptionHolder.modifierBaitReportDelayMax.getFloat();
         if (reportDelayMin > reportDelayMax) reportDelayMin = reportDelayMax;

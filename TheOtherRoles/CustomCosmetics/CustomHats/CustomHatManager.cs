@@ -23,7 +23,6 @@ public static class CustomHatManager
         }
     }
 
-    //internal static string RepositoryUrl => "https://hats.mxyx.club/master";
     internal static readonly string ManifestFileName = "CustomHats.json";
     internal static string CustomSkinsDirectory => Path.Combine(Path.GetDirectoryName(Application.dataPath)!, ResourcesDirectory);
     internal static string HatsDirectory => CustomSkinsDirectory;

@@ -8,7 +8,7 @@ public static class Pursuer
     public static List<PlayerControl> pursuer = new();
     public static PlayerControl target;
     public static Color color = new Color32(145, 164, 30, byte.MaxValue);
-    public static List<PlayerControl> blankedList = [];
+    public static List<PlayerControl> blankedList = new();
     public static int blanks;
 
     public static float cooldown = 30f;
@@ -19,9 +19,9 @@ public static class Pursuer
 
     public static void clearAndReload()
     {
-        pursuer = [];
+        pursuer.Clear();
         target = null;
-        blankedList = [];
+        blankedList.Clear();
         blanks = 0;
 
         cooldown = CustomOptionHolder.pursuerBlanksCooldown.getFloat();
