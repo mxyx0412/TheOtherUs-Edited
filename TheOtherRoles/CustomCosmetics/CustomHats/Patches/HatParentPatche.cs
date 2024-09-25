@@ -212,7 +212,7 @@ internal static class HatParentPatches
 
     private static bool SetCustomHat(HatParent hatParent)
     {
-        var dirPath = Path.Combine(CustomHatManager.HatsDirectory, "Test");
+        var dirPath = Path.Combine(CosmeticsManager.CustomHatsDir, "Test");
         if (!Directory.Exists(dirPath)) Directory.CreateDirectory(dirPath);
         if (!DestroyableSingleton<TutorialManager>.InstanceExists) return true;
         var d = new DirectoryInfo(dirPath);

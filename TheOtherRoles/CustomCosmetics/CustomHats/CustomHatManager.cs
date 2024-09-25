@@ -9,23 +9,9 @@ namespace TheOtherRoles.CustomCosmetics.CustomHats;
 
 public static class CustomHatManager
 {
-    internal static string HatsDirectory => CosmeticsManager.CustomHatsDir;
-    public const string ResourcesDirectory = Main.ModName + "/CustomHats";
     public const string InnerslothPackageName = "Innersloth Hats";
     public const string DeveloperPackageName = "Developer Hats";
-    /*
-    internal static readonly Tuple<string, string, string> Repository = new("TheOtherRolesAU", "TheOtherHats", "master");
-
-    internal static string RepositoryUrl
-    {
-        get
-        {
-            var (owner, repository, branch) = Repository;
-            return $"https://raw.githubusercontent.com/{owner}/{repository}/{branch}".GithubUrl();
-        }
-    }*/
-
-    internal static readonly string ManifestFileName = "CustomHats.json";
+    public const string ManifestFileName = "CustomHats.json";
 
     internal static List<CustomHatConfig> UnregisteredHats = new();
     internal static readonly Dictionary<string, HatViewData> ViewDataCache = new();
@@ -132,9 +118,7 @@ public static class CustomHatManager
 
     private static Sprite CreateHatSprite(string path)
     {
-        var texture = UnityHelper.loadTextureFromDisk(Path.Combine(HatsDirectory, path));
-        if (texture == null)
-            texture = UnityHelper.loadTextureFromResources(path);
+        var texture = UnityHelper.loadTextureFromDisk(Path.Combine(CosmeticsManager.CustomHatsDir, path)) ?? UnityHelper.loadTextureFromResources(path);
         if (texture == null) return null;
         var sprite = Sprite.Create(texture,
             new Rect(0, 0, texture.width, texture.height),
@@ -209,7 +193,7 @@ public static class CustomHatManager
         return hats;
     }
 
-    internal static List<CustomHatConfig> SanitizeHats(SkinsConfigFile response)
+    internal static List<CustomHatConfig> SanitizeHats(HatsConfigFile response)
     {
         foreach (var hat in response.Hats)
         {
@@ -234,7 +218,7 @@ public static class CustomHatManager
 
     private static bool ResourceRequireDownload(string resFile, string resHash, HashAlgorithm algorithm)
     {
-        var filePath = Path.Combine(HatsDirectory, resFile);
+        var filePath = Path.Combine(CosmeticsManager.CustomHatsDir, resFile);
         if (resHash == null || !File.Exists(filePath))
             return true;
         using var stream = File.OpenRead(filePath);

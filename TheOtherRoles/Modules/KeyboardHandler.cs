@@ -70,7 +70,7 @@ public class KeyboardHandler
 [HarmonyPatch(typeof(ControllerManager), nameof(ControllerManager.Update))]
 public class ControllerManagerUpdate
 {
-    private static int resolutionIndex = 0;
+    private static int resolutionIndex;
     private static readonly (int, int)[] resolutions =
     [
         (640, 360),

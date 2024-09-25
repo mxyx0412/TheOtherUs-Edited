@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace TheOtherRoles.CustomCosmetics.CustomHats;
 
-public class SkinsConfigFile
+public class HatsConfigFile
 {
     [JsonPropertyName("hats")] public List<CustomHatConfig> Hats { get; set; }
 }
@@ -39,31 +39,6 @@ public class HatExtension
     public Sprite FlipImage { get; set; }
     public Sprite BackFlipImage { get; set; }
     public bool Adaptive { get; set; }
-}
-
-[Flags, JsonConverter(typeof(JsonStringEnumConverter))]
-public enum CustomCosmeticsFlags
-{
-    Hat = 1,
-    Skin = 2,
-    Visor = 8,
-    NamePlate = 16,
-}
-
-public class CosmeticsManagerConfig
-{
-    public string ConfigName = "None";
-    public string RootUrl { get; set; }
-    public CustomCosmeticsFlags hasCosmetics { get; set; }
-    public string HatDirName { get; set; } = "hats";
-    public string VisorDirName { get; set; } = "Visors";
-    public string NamePlateDirName { get; set; } = "NamePlates";
-    public string HatFileName { get; set; } = "CustomHats.json";
-    public string VisorFileName { get; set; } = "CustomVisors.json";
-    public string NamePlateFileName { get; set; } = "CustomNamePlates.json";
-    public string HatPropertyName { get; set; } = "hats";
-    public string VisorPropertyName { get; set; } = "Visors";
-    public string NamePlatePropertyName { get; set; } = "nameplates";
 }
 
 internal static class HatDataExtensions

@@ -96,8 +96,7 @@ public class TheOtherRolesPlugin : BasePlugin
         CrowdedPlayer.Start();
 
         ModOption.reloadPluginOptions();
-        CustomHatManager.LoadHats();
-        CustomColors.Load();
+        CosmeticsManager.Load();
         CustomOptionHolder.Load();
         AssetLoader.LoadAudioAssets();
         if (ToggleCursor.Value) enableCursor(true);

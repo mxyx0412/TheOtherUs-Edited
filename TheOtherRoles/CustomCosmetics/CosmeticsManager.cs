@@ -1,19 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using BepInEx;
 using TheOtherRoles.CustomCosmetics.CustomHats;
-using UnityEngine;
 
 namespace TheOtherRoles.CustomCosmetics;
 
-public class CosmeticsManager
+public class CosmeticsManager : ManagerBase<CosmeticsManager>
 {
-    internal static string CustomHatsDir => Path.Combine(Path.GetDirectoryName(Application.dataPath)!, Main.ModName + "/CustomHats");
-    internal static string CustomVisorsDir => Path.Combine(Path.GetDirectoryName(Application.dataPath)!, Main.ModName + "/CustomVisors");
-    internal static string CustomPlatesDir => Path.Combine(Path.GetDirectoryName(Application.dataPath)!, Main.ModName + "/CustomPlates");
-    internal static string CosmeticsConfigDir => Path.Combine(Path.GetDirectoryName(Application.dataPath)!, Main.ModName + "/CosmeticsConfig");
+    internal static string CosmeticDir = Path.Combine(Paths.GameRootPath, Main.ModName);
+    internal static string CustomHatsDir => Path.Combine(CosmeticDir, "CustomHats");
+    internal static string CustomVisorsDir => Path.Combine(CosmeticDir, "CustomVisors");
+    internal static string CustomPlatesDir => Path.Combine(CosmeticDir, "CustomPlates");
+    internal static string CosmeticsConfigDir => Path.Combine(CosmeticDir, "CosmeticsConfig");
 
     public readonly HashSet<CosmeticsManagerConfig> configs = [];
-    public static readonly CosmeticsManagerConfig DefConfig = new()
+    public readonly CosmeticsManagerConfig DefConfig = new()
     {
         ConfigName = "TheOtherHats",
         HatDirName = "hats",
@@ -21,6 +22,18 @@ public class CosmeticsManager
         RootUrl = "https://raw.githubusercontent.com/TheOtherRolesAU/TheOtherHats/master".GithubUrl(),
         hasCosmetics = CustomCosmeticsFlags.Hat
     };
+
+    internal static string RepositoryUrl => "https://raw.githubusercontent.com/TheOtherRolesAU/TheOtherHats/master".GithubUrl();
+
+    public static void Load()
+    {
+        Message($"Paths.GameRootPath: {Paths.GameRootPath}");
+        Message($"CosmeticDir: {CosmeticDir}");
+        Message($"CustomHatsDir: {CustomHatsDir}");
+        Instance.AddConfig();
+        CustomHatManager.LoadHats();
+        CustomColors.Load();
+    }
 
     public void AddConfig()
     {

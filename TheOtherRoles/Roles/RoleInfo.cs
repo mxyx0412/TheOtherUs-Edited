@@ -7,26 +7,19 @@ using UnityEngine;
 
 namespace TheOtherRoles.Roles;
 
-public class RoleInfo
+public class RoleInfo(string name, Color color, RoleId roleId, RoleTeam roleTeam, bool isGuessable = false)
 {
     public string Name => getString(nameKey);
     public string IntroDescription => getString(nameKey + "IntroDesc");
     public string ShortDescription => getString(nameKey + "ShortDesc");
     public string FullDescription => getString(nameKey + "FullDesc");
 
-    public Color color;
-    public RoleId roleId;
-    public RoleTeam roleTeam;
-    public bool isGuessable;
-    private readonly string nameKey;
-    public RoleInfo(string name, Color color, RoleId roleId, RoleTeam roleTeam, bool isGuessable = false)
-    {
-        nameKey = name;
-        this.color = color;
-        this.roleId = roleId;
-        this.roleTeam = roleTeam;
-        this.isGuessable = isGuessable;
-    }
+    public Color color = color;
+    public RoleId roleId = roleId;
+    public RoleTeam roleTeam = roleTeam;
+    public bool isGuessable = isGuessable;
+    private readonly string nameKey = name;
+
     public static RoleInfo impostor = new("Impostor", Palette.ImpostorRed, RoleId.Impostor, RoleTeam.Impostor);
     public static RoleInfo morphling = new("Morphling", Morphling.color, RoleId.Morphling, RoleTeam.Impostor);
     public static RoleInfo bomber = new("Bomber", Bomber.color, RoleId.Bomber, RoleTeam.Impostor);

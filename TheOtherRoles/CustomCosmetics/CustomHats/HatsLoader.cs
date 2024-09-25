@@ -22,11 +22,11 @@ public class HatsLoader : MonoBehaviour
     private IEnumerator CoFetchHats()
     {
         isRunning = true;
-        string localFilePath = Path.Combine(HatsDirectory, ManifestFileName);
+        string localFilePath = Path.Combine(CosmeticsManager.CustomHatsDir, ManifestFileName);
 
         if (ModOption.localHats)
         {
-            LoadLocalHats(localFilePath);
+            LoadLocalHats();
             isRunning = false;
             yield break;
         }
@@ -35,25 +35,26 @@ public class HatsLoader : MonoBehaviour
         isRunning = false;
     }
 
-    private void LoadLocalHats(string Path)
+    private void LoadLocalHats()
     {
-        Message("加载本地帽子文件");
-        if (File.Exists(Path))
+        try
         {
-            var localFileContent = File.ReadAllText(Path);
-            var response = JsonSerializer.Deserialize<SkinsConfigFile>(localFileContent, new JsonSerializerOptions
+            var path = Path.Combine(CosmeticsManager.CustomHatsDir, ManifestFileName);
+            Message($"加载本地帽子文件 {path}");
+            var localFileContent = File.ReadAllText(path);
+            var response = JsonSerializer.Deserialize<HatsConfigFile>(localFileContent, new JsonSerializerOptions
             {
                 AllowTrailingCommas = true
             });
             ProcessHatsData(response);
         }
-        else
+        catch
         {
             Error("不存在本地帽子配置文件.");
         }
     }
 
-    private IEnumerator DownloadHatsConfig(string Path)
+    private IEnumerator DownloadHatsConfig(string path)
     {
         var www = new UnityWebRequest
         {
@@ -61,8 +62,8 @@ public class HatsLoader : MonoBehaviour
             downloadHandler = new DownloadHandlerBuffer()
         };
 
-        Message($"正在下载帽子配置文件: {RepositoryUrl}/{ManifestFileName}");
-        www.url = $"{RepositoryUrl}/{ManifestFileName}";
+        Message($"正在下载帽子配置文件: {CosmeticsManager.RepositoryUrl}/{ManifestFileName}");
+        www.url = $"{CosmeticsManager.RepositoryUrl}/{ManifestFileName}";
 
         var operation = www.SendWebRequest();
 
@@ -74,24 +75,22 @@ public class HatsLoader : MonoBehaviour
         if (www.isNetworkError || www.isHttpError)
         {
             Error($"下载帽子配置文件时出错: {www.error}");
-            Message("正在尝试以本地方式加载帽子...");
-            LoadLocalHats(Path);
             isSuccessful = false;
             yield break;
         }
 
         try
         {
-            if (!Directory.Exists(HatsDirectory))
+            if (!Directory.Exists(CosmeticsManager.CustomHatsDir))
             {
-                Directory.CreateDirectory(HatsDirectory);
+                Directory.CreateDirectory(CosmeticsManager.CustomHatsDir);
             }
 
-            File.WriteAllBytes(Path, www.downloadHandler.data);
-            Message($"帽子清单已保存到: {Path}");
+            File.WriteAllBytes(path, www.downloadHandler.data);
+            Message($"帽子清单已保存到: {path}");
 
-            var downloadedFileContent = File.ReadAllText(Path);
-            var response = JsonSerializer.Deserialize<SkinsConfigFile>(downloadedFileContent, new JsonSerializerOptions
+            var downloadedFileContent = File.ReadAllText(path);
+            var response = JsonSerializer.Deserialize<HatsConfigFile>(downloadedFileContent, new JsonSerializerOptions
             {
                 AllowTrailingCommas = true
             });
@@ -110,13 +109,8 @@ public class HatsLoader : MonoBehaviour
         }
     }
 
-    private void ProcessHatsData(SkinsConfigFile response)
+    private void ProcessHatsData(HatsConfigFile response)
     {
-        if (!Directory.Exists(HatsDirectory))
-        {
-            Directory.CreateDirectory(HatsDirectory);
-        }
-
         UnregisteredHats.AddRange(SanitizeHats(response));
         Message($"读取了 {UnregisteredHats.Count} 项帽子");
 
@@ -141,7 +135,7 @@ public class HatsLoader : MonoBehaviour
         var www = new UnityWebRequest();
         www.SetMethod(UnityWebRequest.UnityWebRequestMethod.Get);
         fileName = fileName.Replace(" ", "%20");
-        www.SetUrl($"{RepositoryUrl}/hats/{fileName}");
+        www.SetUrl($"{CosmeticsManager.RepositoryUrl}/hats/{fileName}");
         www.downloadHandler = new DownloadHandlerBuffer();
         var operation = www.SendWebRequest();
 
@@ -156,7 +150,7 @@ public class HatsLoader : MonoBehaviour
             yield break;
         }
 
-        var filePath = Path.Combine(HatsDirectory, fileName);
+        var filePath = Path.Combine(CosmeticsManager.CustomHatsDir, fileName);
         filePath = filePath.Replace("%20", " ");
         var persistTask = File.WriteAllBytesAsync(filePath, www.downloadHandler.data);
         while (!persistTask.IsCompleted)
