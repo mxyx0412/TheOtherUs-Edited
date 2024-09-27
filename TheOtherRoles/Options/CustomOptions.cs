@@ -1234,21 +1234,17 @@ internal class GameOptionsDataPatch
                     var min = CustomOptionHolder.neutralRolesCountMin.getSelection();
                     var max = CustomOptionHolder.neutralRolesCountMax.getSelection();
                     if (min > max) min = max;
-                    var optionValue = min == max ? $"{max}" : $"{min} ~ {max}";
-                    sb.AppendLine($"{optionName}: {optionValue}");
-                }
-                else if (option == CustomOptionHolder.killerNeutralRolesCountMin)
-                {
-                    var optionName = cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "NeutralKillerRolesCount".Translate());
-                    var neutralMin = CustomOptionHolder.neutralRolesCountMin.getSelection();
-                    var neutralMax = CustomOptionHolder.neutralRolesCountMax.getSelection();
-                    var killMin = CustomOptionHolder.killerNeutralRolesCountMin.getSelection();
-                    var killMax = CustomOptionHolder.killerNeutralRolesCountMax.getSelection();
-                    var min = Mathf.Min(killMin, neutralMin);
-                    var max = Mathf.Min(killMax, neutralMax);
-                    if (min > max) min = max;
-                    var optionValue = min == max ? $"{max}" : $"{min} ~ {max}";
-                    if (killMin + killMax > 0) sb.AppendLine($"{optionName}: {optionValue}");
+                    var optionValue = min == max ? $"{min}" : $"{min} ~ {max}";
+
+                    var killerMin = CustomOptionHolder.killerNeutralRolesCountMin.getSelection();
+                    var killerMax = CustomOptionHolder.killerNeutralRolesCountMax.getSelection();
+                    var min2 = Mathf.Min(killerMin, min);
+                    var max2 = Mathf.Min(killerMax, max);
+                    if (min2 > max2) min2 = max2;
+                    var count = killerMin + killerMax;
+                    var optionValue2 = count == 0 ? "Random".Translate() : min2 == max2 ? $"{min2}" : $"{min2} ~ {max2}";
+
+                    sb.AppendLine($"{optionName}: {optionValue}  ({"NeutralKillerRolesCount".Translate()}: {optionValue2})");
                 }
                 else if (option == CustomOptionHolder.killerNeutralRolesCountMax)
                 {
@@ -1264,7 +1260,8 @@ internal class GameOptionsDataPatch
                     var optionValue = min == max ? $"{max}" : $"{min} ~ {max}";
                     sb.AppendLine($"{optionName}: {optionValue}");
                 }
-                else if (option == CustomOptionHolder.modifiersCountMax)
+                else if (option == CustomOptionHolder.modifiersCountMax ||
+                         option == CustomOptionHolder.killerNeutralRolesCountMin)
                 {
                 }
                 else
@@ -1280,8 +1277,7 @@ internal class GameOptionsDataPatch
     public static string buildAllOptions(string vanillaSettings = "", bool hideExtras = false)
     {
         if (vanillaSettings == "")
-            vanillaSettings =
-                GameOptionsManager.Instance.CurrentGameOptions.ToHudString(PlayerControl.AllPlayerControls.Count);
+            vanillaSettings = GameOptionsManager.Instance.CurrentGameOptions.ToHudString(PlayerControl.AllPlayerControls.Count);
         var counter = Main.optionsPage;
         var hudString = counter != 0 && !hideExtras
             ? cs(DateTime.Now.Second % 2 == 0 ? Color.white : Color.red, "useScrollWheel".Translate())

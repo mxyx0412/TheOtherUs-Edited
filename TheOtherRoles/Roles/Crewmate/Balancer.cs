@@ -81,11 +81,11 @@ public class Balancer
                 case BalancerState.Animation_Chain:
                     bool flag = true;
 
+                    MeetingHud.Instance.ClearVote();
                     MeetingHud.Instance.TitleText.gameObject.SetActive(false);
                     MeetingHud.Instance.TimerText.gameObject.SetActive(false);
                     MeetingHud.Instance.SkipVoteButton.gameObject.SetActive(false);
                     MeetingHud.Instance.SkippedVoting.SetActive(false);
-                    MeetingHud.Instance.ClearVote();
 
                     for (int i = 0; i <= animIndex; i++)
                     {

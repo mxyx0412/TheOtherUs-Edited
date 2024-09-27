@@ -837,7 +837,7 @@ public static class PlayerControlFixedUpdatePatch
                 }
                 else if (local.IsAlive() && Mayor.mayor == p && Mayor.Revealed)
                 {
-                    meetingInfoText = roleNames;
+                    meetingInfoText = "Mayor".Translate();
                 }
                 else if (local == PartTimer.target && p == PartTimer.partTimer)
                 {

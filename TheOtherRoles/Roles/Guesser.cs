@@ -263,7 +263,9 @@ public static class Guesser
                     continue;
                 case RoleId.Vigilante when HandleGuesser.isGuesserGm || CachedPlayer.LocalPlayer.PlayerId == Vigilante.vigilante?.PlayerId:
                     continue;
-                case RoleId.Sidekick when !Jackal.canCreateSidekick:
+                case RoleId.Sidekick when !CustomOptionHolder.jackalCanCreateSidekick.getBool():
+                    continue;
+                case RoleId.Deputy when CustomOptionHolder.sheriffSpawnRate.getSelection() == 0:
                     continue;
                 case RoleId.Doomsayer when CachedPlayer.LocalPlayer.PlayerId == Doomsayer.doomsayer?.PlayerId:
                     continue;
@@ -283,9 +285,8 @@ public static class Guesser
         void CreateRole(RoleInfo roleInfo = null)
         {
             RoleTeam team = roleInfo?.roleTeam ?? RoleTeam.Crewmate;
-            Color color = roleInfo?.color ?? Color.white;
-            string NameKey = roleInfo?.Name ?? "Crewmate";
-            RoleId role = roleInfo?.roleId ?? RoleId.Crewmate;
+            //Color color = roleInfo?.color ?? Color.white;
+            //RoleId role = roleInfo?.roleId ?? RoleId.Crewmate;
 
             var buttonParent = new GameObject().transform;
             buttonParent.SetParent(container);

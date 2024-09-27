@@ -584,6 +584,14 @@ public static class Helpers
         return default;
     }
 
+    public static T FirstOrDefault<T>(this Il2CppSystem.Collections.Generic.List<T> list, Func<T, bool> func)
+    {
+        foreach (T obj in list)
+            if (func(obj))
+                return obj;
+        return default;
+    }
+
     public static Il2CppSystem.Collections.Generic.List<T> ToIl2CppList<T>(this IEnumerable<T> list)
     {
         Il2CppSystem.Collections.Generic.List<T> newList = new(list.Count());

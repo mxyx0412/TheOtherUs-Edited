@@ -446,8 +446,9 @@ internal class MeetingHudPatch
                         playerVoteArea.VotedFor = playerVoteArea.TargetPlayerId; // TargetPlayerId
 
             var self = CalculateVotes(__instance);
-            var max = self.MaxPair(out var tie);
-            var exiled = GameData.Instance.AllPlayers.ToArray().FirstOrDefault(v => !tie && v.PlayerId == max.Key && !v.IsDead);
+            //var max = self.MaxPair(out var tie);
+            var exiled = CachedPlayer.LocalPlayer.Data;
+            bool tie = false;
 
             // TieBreaker 
             var potentialExiled = new List<GameData.PlayerInfo>();
@@ -472,12 +473,21 @@ internal class MeetingHudPatch
             }
 
             VoterState[] states;
-            GameData.PlayerInfo exiledPlayer = CachedPlayer.LocalPlayer.Data;
             List<VoterState> statesList = new();
 
             for (var i = 0; i < __instance.playerStates.Length; i++)
             {
                 var playerVoteArea = __instance.playerStates[i];
+
+                //バランサー処理
+                if (Balancer.currentAbilityUser != null)
+                {
+                    if (playerVoteArea.VotedFor != Balancer.targetplayerright.PlayerId && playerVoteArea.VotedFor != Balancer.targetplayerleft.PlayerId)
+                    {
+                        playerVoteArea.VotedFor = Helpers.GetRandom([Balancer.targetplayerright.PlayerId, Balancer.targetplayerleft.PlayerId]);
+                    }
+                }
+
                 statesList.Add(new VoterState()
                 {
                     VoterId = playerVoteArea.TargetPlayerId,
@@ -494,20 +504,6 @@ internal class MeetingHudPatch
                     else if (tiebreakerVote == swapped2.TargetPlayerId) tiebreakerVote = swapped1.TargetPlayerId;
                 }
 
-                //バランサー処理
-                if (Balancer.currentAbilityUser != null)
-                {
-                    if (playerVoteArea.VotedFor != Balancer.targetplayerright.PlayerId && playerVoteArea.VotedFor != Balancer.targetplayerleft.PlayerId)
-                    {
-                        playerVoteArea.VotedFor = Helpers.GetRandom([Balancer.targetplayerright.PlayerId, Balancer.targetplayerleft.PlayerId]);
-                    }
-                }
-
-                if (tie && Balancer.currentAbilityUser != null)
-                {
-                    exiledPlayer = Balancer.targetplayerleft.Data;
-                }
-
                 if (potentialExiled.FindAll(x => x != null && x.PlayerId == tiebreakerVote).Count <= 0 ||
                     (potentialExiled.Count <= 1 && !skipIsTie)) continue;
                 exiled = potentialExiled.ToArray().FirstOrDefault(v => v.PlayerId == tiebreakerVote);
@@ -520,6 +516,32 @@ internal class MeetingHudPatch
             }
 
             states = statesList.ToArray();
+
+            var VotingData = CalculateVotes(__instance);
+            byte exileId = byte.MaxValue;
+            int max1 = 0;
+            foreach (var data in VotingData)
+            {
+                if (data.Value > max1)
+                {
+                    exileId = data.Key;
+                    max1 = data.Value;
+                    tie = false;
+                }
+                else if (data.Value == max1)
+                {
+                    exileId = byte.MaxValue;
+                    tie = true;
+                }
+            }
+
+            exiled = GameData.Instance.AllPlayers.FirstOrDefault(info => !tie && info.PlayerId == exileId);
+
+            if (tie && Balancer.currentAbilityUser != null)
+            {
+                exiled = Balancer.targetplayerleft.Data;
+            }
+
             // RPCVotingComplete
             __instance.RpcVotingComplete(states, exiled, tie);
             return false;
@@ -868,10 +890,6 @@ internal class MeetingHudPatch
             if (target == null && blockSkippingInEmergencyMeetings)
                 __instance.SkipVoteButton.gameObject.SetActive(false);
 
-            if (__instance.state >= VoteStates.Discussion)
-                // Remove first kill shield
-                firstKillPlayer = null;
-
             updateMeetingText(__instance);
 
             if (Blackmailer.blackmailer != null && Blackmailer.blackmailed != null)
@@ -946,6 +964,10 @@ internal class MeetingHudPatch
         {
             Message("会议开始");
             shookAlready = false;
+
+            // Remove first kill shield
+            firstKillPlayer = null;
+
             //Nothing here for now. What to do when local player who is blackmailed starts meeting
             if (Blackmailer.blackmailed != null
                 && Blackmailer.blackmailed.Data.PlayerId == CachedPlayer.LocalPlayer.PlayerId

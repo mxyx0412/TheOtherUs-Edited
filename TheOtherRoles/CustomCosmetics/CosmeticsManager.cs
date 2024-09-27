@@ -27,9 +27,6 @@ public class CosmeticsManager : ManagerBase<CosmeticsManager>
 
     public static void Load()
     {
-        Message($"Paths.GameRootPath: {Paths.GameRootPath}");
-        Message($"CosmeticDir: {CosmeticDir}");
-        Message($"CustomHatsDir: {CustomHatsDir}");
         Instance.AddConfig();
         CustomHatManager.LoadHats();
         CustomColors.Load();
