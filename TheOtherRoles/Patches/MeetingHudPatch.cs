@@ -449,7 +449,7 @@ internal class MeetingHudPatch
             //var max = self.MaxPair(out var tie);
             var exiled = CachedPlayer.LocalPlayer.Data;
             bool tie = false;
-
+            bool tiebreakerHandled = false;
             // TieBreaker 
             var potentialExiled = new List<GameData.PlayerInfo>();
             var skipIsTie = false;
@@ -508,7 +508,7 @@ internal class MeetingHudPatch
                     (potentialExiled.Count <= 1 && !skipIsTie)) continue;
                 exiled = potentialExiled.ToArray().FirstOrDefault(v => v.PlayerId == tiebreakerVote);
                 tie = false;
-
+                tiebreakerHandled = true;
                 var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
                     (byte)CustomRPC.SetTiebreak, SendOption.Reliable);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -516,32 +516,33 @@ internal class MeetingHudPatch
             }
 
             states = statesList.ToArray();
-
-            var VotingData = CalculateVotes(__instance);
-            byte exileId = byte.MaxValue;
-            int max1 = 0;
-            foreach (var data in VotingData)
+            if (!tiebreakerHandled)
             {
-                if (data.Value > max1)
+                var VotingData = CalculateVotes(__instance);
+                byte exileId = byte.MaxValue;
+                int max1 = 0;
+                foreach (var data in VotingData)
                 {
-                    exileId = data.Key;
-                    max1 = data.Value;
-                    tie = false;
+                    if (data.Value > max1)
+                    {
+                        exileId = data.Key;
+                        max1 = data.Value;
+                        tie = false;
+                    }
+                    else if (data.Value == max1)
+                    {
+                        exileId = byte.MaxValue;
+                        tie = true;
+                    }
                 }
-                else if (data.Value == max1)
+
+                exiled = GameData.Instance.AllPlayers.FirstOrDefault(info => !tie && info.PlayerId == exileId);
+
+                if (tie && Balancer.currentAbilityUser != null)
                 {
-                    exileId = byte.MaxValue;
-                    tie = true;
+                    exiled = Balancer.targetplayerleft.Data;
                 }
             }
-
-            exiled = GameData.Instance.AllPlayers.FirstOrDefault(info => !tie && info.PlayerId == exileId);
-
-            if (tie && Balancer.currentAbilityUser != null)
-            {
-                exiled = Balancer.targetplayerleft.Data;
-            }
-
             // RPCVotingComplete
             __instance.RpcVotingComplete(states, exiled, tie);
             return false;
