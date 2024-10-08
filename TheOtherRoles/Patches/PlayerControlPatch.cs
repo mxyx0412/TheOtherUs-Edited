@@ -2306,18 +2306,19 @@ public static class MurderPlayerPatch
             }
             else if (KillTrap.isTrapped(target) && EvilTrapper.isTrapKill)  // トラップキルした場合のペナルティ
             {
-                EvilTrapper.killTimer = GameOptionsManager.Instance.currentNormalGameOptions.KillCooldown;
+                EvilTrapper.evilTrapper.killTimer = GameOptionsManager.Instance.currentNormalGameOptions.KillCooldown;
                 HudManagerStartPatch.evilTrapperSetTrapButton.Timer = EvilTrapper.cooldown;
             }
             else // トラップにかかっていない対象を通常キルした場合はペナルティーを受ける
             {
-                EvilTrapper.killTimer = GameOptionsManager.Instance.currentNormalGameOptions.KillCooldown + EvilTrapper.penaltyTime;
+                EvilTrapper.evilTrapper.killTimer = GameOptionsManager.Instance.currentNormalGameOptions.KillCooldown + EvilTrapper.penaltyTime;
                 HudManagerStartPatch.evilTrapperSetTrapButton.Timer = EvilTrapper.cooldown + EvilTrapper.penaltyTime;
             }
             if (!EvilTrapper.isTrapKill)
             {
                 MessageWriter writer;
-                writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ClearTrap, SendOption.Reliable, -1);
+                writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
+                    (byte)CustomRPC.ClearTrap, SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.clearTrap();
             }
