@@ -331,14 +331,12 @@ internal class MeetingHudPatch
     [HarmonyPatch]
     public class ShowHost
     {
-        private static TextMeshPro Text;
+        public static TextMeshPro Text;
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Start))]
         [HarmonyPostfix]
-
         public static void Setup(MeetingHud __instance)
         {
-            if (AmongUsClient.Instance.NetworkMode != NetworkModes.OnlineGame) return;
-
+            if (AmongUsClient.Instance.NetworkMode != NetworkModes.OnlineGame || Balancer.currentAbilityUser != null) return;
             __instance.ProceedButton.gameObject.transform.localPosition = new(-2.5f, 2.2f, 0);
             __instance.ProceedButton.gameObject.GetComponent<SpriteRenderer>().enabled = false;
             __instance.ProceedButton.GetComponent<PassiveButton>().enabled = false;
@@ -348,9 +346,9 @@ internal class MeetingHudPatch
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Update))]
         [HarmonyPostfix]
-
         public static void Postfix(MeetingHud __instance)
         {
+            if (Balancer.currentAbilityUser != null) return;
             var host = GameData.Instance.GetHost();
 
             if (host != null)
@@ -735,7 +733,7 @@ internal class MeetingHudPatch
         }
 
         private static void Prefix(MeetingHud __instance,
-            [HarmonyArgument(0)] Il2CppStructArray<MeetingHud.VoterState> states,
+            [HarmonyArgument(0)] Il2CppStructArray<VoterState> states,
             [HarmonyArgument(1)] GameData.PlayerInfo exiled,
             [HarmonyArgument(2)] bool tie)
         {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AmongUs.Data;
 using AmongUs.GameOptions;
 using InnerNet;
 using TheOtherRoles.Buttons;
@@ -39,7 +40,10 @@ internal class HudManagerUpdatePatch
                     playerName = Morphling.morphTarget.Data.PlayerName;
 
                 nameText.text = hidePlayerName(localPlayer, player) ? "" : playerName;
-                player.cosmetics.colorBlindText.gameObject.SetActive(!hidePlayerName(localPlayer, player));
+                if (DataManager.Settings.Accessibility.ColorBlindMode)
+                {
+                    player.cosmetics.colorBlindText.gameObject.SetActive(!hidePlayerName(localPlayer, player));
+                }
 
                 nameText.color = color = amImpostor && data.Role.IsImpostor ? Palette.ImpostorRed : Color.white;
                 nameText.color = nameText.color.SetAlpha(Chameleon.visibility(player.PlayerId));
