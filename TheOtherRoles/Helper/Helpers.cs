@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using AmongUs.GameOptions;
 using Hazel;
 using InnerNet;
@@ -566,7 +568,11 @@ public static class Helpers
 
     public static List<T> ToList<T>(this Il2CppSystem.Collections.Generic.List<T> list)
     {
-        List<T> newList = [.. list];
+        List<T> newList = new(list.Count);
+        foreach (T item in list)
+        {
+            newList.Add(item);
+        }
         return newList;
     }
 
@@ -780,7 +786,7 @@ public static class Helpers
             if (self.text == "") return self;
         return text[0];
     }
-    /*
+
     public static async Task checkBeta()
     {
         if (Main.betaDays > 0)
@@ -788,13 +794,13 @@ public static class Helpers
             Message($"Beta check");
             var ticks = GetBuiltInTicks();
             var compileTime = new DateTime(ticks, DateTimeKind.Utc);  // This may show as an error, but it is not, compilation will work!
-            Message($"Compiled at {compileTime.ToString(CultureInfo.InvariantCulture)}");
+            Message($"Beta版构建于: {compileTime.ToString(CultureInfo.InvariantCulture)}");
             DateTime? now;
             // Get time from the internet, so no-one can cheat it (so easily).
             try
             {
                 var client = new System.Net.Http.HttpClient();
-                using var response = await client.GetAsync("http://www.google.com/");
+                using var response = await client.GetAsync("http://www.bing.com/");
                 if (response.IsSuccessStatusCode)
                     now = response.Headers.Date?.UtcDateTime;
                 else
@@ -807,17 +813,25 @@ public static class Helpers
             {
                 now = DateTime.UtcNow;
             }
+
+            // Calculate the remaining days and store as an integer
+            Main.BetaDaysLeft = (int)Math.Round(Main.betaDays - (now - compileTime)?.TotalDays ?? 0);
+
             if ((now - compileTime)?.TotalDays > Main.betaDays)
             {
-                Message($"Beta expired!");
-                BepInExUpdater.MessageBoxTimeout(BepInExUpdater.GetForegroundWindow(), "BETA is expired. You cannot play this version anymore.", "The Other Us Beta", 0, 0, 10000);
+                Message($"该Beta版本已过期! ");
+                _ = BepInExUpdater.MessageBoxTimeout(BepInExUpdater.GetForegroundWindow(),
+                    "该Beta版本已经过期, 请进行手动更新.\nBETA is expired. You cannot play this version anymore", "The Other Us - Edited", 0, 0, 10000);
                 Application.Quit();
-
+                return;
             }
-            else Message($"Beta will remain runnable for {Main.betaDays - (now - compileTime)?.TotalDays} days!");
+            else
+            {
+                Message($"该Beta版本将在 {Main.BetaDaysLeft} 天后过期!");
+            }
         }
     }
-    */
+
     public static Color getTeamColor(RoleTeam team)
     {
         return team switch

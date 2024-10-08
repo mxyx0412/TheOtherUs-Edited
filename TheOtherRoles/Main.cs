@@ -7,7 +7,6 @@ using InnerNet;
 using Reactor.Networking;
 using Reactor.Networking.Attributes;
 using TheOtherRoles.CustomCosmetics;
-using TheOtherRoles.CustomCosmetics.CustomHats;
 using TheOtherRoles.Patches;
 using TheOtherRoles.Utilities;
 
@@ -22,7 +21,8 @@ public class TheOtherRolesPlugin : BasePlugin
     public const string Id = "TheOtherUs.Options.v2"; // Config files name
     public const string ModName = MyPluginInfo.PLUGIN_NAME;
     public const string VersionString = MyPluginInfo.PLUGIN_VERSION;
-    public static uint betaDays; // amount of days for the build to be usable (0 for infinite!)
+    public static uint betaDays = 30; // amount of days for the build to be usable (0 for infinite!)
+    public static int BetaDaysLeft;
 
     public static Version Version = Version.Parse(VersionString);
 
@@ -80,6 +80,8 @@ public class TheOtherRolesPlugin : BasePlugin
         SetLogSource(Log);
         Instance = this;
 
+        _ = checkBeta(); // Exit if running an expired beta
+
         ToggleCursor = Config.Bind("Custom", "Better Cursor", true);
         EnableSoundEffects = Config.Bind("Custom", "Enable Sound Effects", true);
         ShowPopUpVersion = Config.Bind("Custom", "Show PopUp", "0");
@@ -91,15 +93,22 @@ public class TheOtherRolesPlugin : BasePlugin
         Port = Config.Bind("Custom", "Custom Server Port", (ushort)22023);
         defaultRegions = ServerManager.DefaultRegions;
 
-        Harmony.PatchAll();
         UpdateRegions();
         CrowdedPlayer.Start();
+        Harmony.PatchAll();
 
         ModOption.reloadPluginOptions();
         CosmeticsManager.Load();
         CustomOptionHolder.Load();
         AssetLoader.LoadAudioAssets();
         if (ToggleCursor.Value) enableCursor(true);
+
+        if (BepInExUpdater.UpdateRequired)
+        {
+            AddComponent<BepInExUpdater>();
+            return;
+        }
+        AddComponent<ModUpdater>();
 
         SubmergedCompatibility.Initialize();
         MainMenuPatch.addSceneChangeCallbacks();

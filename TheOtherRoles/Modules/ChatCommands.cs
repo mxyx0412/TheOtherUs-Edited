@@ -40,7 +40,8 @@ public static class ChatCommands
                     }
                     else
                     {
-                        __instance.AddChat(CachedPlayer.LocalPlayer.PlayerControl, "Nice try, but you have to be the host to use this feature 这是房主至高无上的权利");
+                        __instance.AddChat(PlayerControl.LocalPlayer,
+                            "Nice try, but you have to be the host to use this feature\n这是房主至高无上的权利");
                     }
                     handled = true;
                 }
@@ -211,16 +212,16 @@ public static class ChatCommands
                 {
                     if (__instance.myPlayer.IsAlive())
                     {
-                        FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(__instance.myPlayer, GetWelcomeMessage());
+                        FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(__instance.myPlayer, GetWelcomeMessage);
+                        if (Main.betaDays > 0)
+                            FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(__instance.myPlayer, GetBetaMessage);
                     }
                 }, 1f, "Welcome Chat");
             }
         }
 
-        static string GetWelcomeMessage()
-        {
-            return "WelcomeText".Translate();
-        }
+        private static string GetWelcomeMessage => "WelcomeText".Translate();
+        private static string GetBetaMessage => string.Format("BetaMessage".Translate(), Main.BetaDaysLeft);
     }
 
 

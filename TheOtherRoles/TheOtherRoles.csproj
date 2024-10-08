@@ -7,6 +7,8 @@
         <LangVersion>latest</LangVersion>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+		<DebugType>embedded</DebugType>
+		<Optimize>true</Optimize>
 		<Configurations>Debug;Release;Sunday;mxyx-club</Configurations>
     </PropertyGroup>
 
@@ -43,6 +45,5 @@
     <Target Name="CopyCustomContent" AfterTargets="AfterBuild" Condition="Exists('$(AmongUsLatest)/BepInEx/plugins/')">
         <Message Text="Second occurrence" />
         <Copy SourceFiles="$(ProjectDir)\bin\$(Configuration)\net6.0\$(AssemblyName).dll" DestinationFolder="$(AmongUsLatest)/BepInEx/plugins/" />
-        <Copy SourceFiles="$(ProjectDir)\bin\$(Configuration)\net6.0\$(AssemblyName).pdb" DestinationFolder="$(AmongUsLatest)/BepInEx/plugins/" />
     </Target>
 </Project>

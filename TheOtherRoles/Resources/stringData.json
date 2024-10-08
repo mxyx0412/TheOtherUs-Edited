@@ -387,7 +387,7 @@
         "13": "伪装者死亡后不能破坏"
     },
     "randomLigherPlayer": {
-        "13": "随机设定玩家深浅色"
+        "13": "随机判断玩家深浅色\n( 不会影响角色外观)"
     },
     "allowModGuess": {
         "0": "Allow Guessing Some Modifiers",
@@ -2304,6 +2304,9 @@
     "WelcomeText": {
         "13": "欢迎游玩<color=#ff351f><size=120%>我们的超多职业</size></color> ！\n\n游戏指令：\n/r [职业名称] ：获取该职业的介绍\n/m ：游戏内使用，获取自己已有职业的介绍\n\n如需查看其它指令请输入：/cmd"
     },
+    "BetaMessage": {
+        "13": "当然模组版本为Beta测试版，将在 {0} 天后过期!\n\n版本过期后将无法进入游戏，注意更新！"
+    },
     "CommandsInHost": {
         "13": "大厅指令：\n/gm [模式代码] ：切换游戏模式\n模式代码：gm(赌怪模式)、hn(猎杀模式)、ph(道具躲猫猫)\n\n/kick [玩家名称] ：踢出玩家\n/ban [玩家名称] 封禁玩家\n\n游戏中指令：\n/end ：强制游戏结束\n/meeting (mt) 召集/结束会议\n/kill [玩家名称] ：强制击杀玩家\n/revive [玩家名称] ： 强制复活玩家"
     },
@@ -2381,18 +2384,6 @@
     "DifferentTouVersions": {
         "0": "Players With Different Versions:",
         "13": "装了不同版本模组的玩家:"
-    },
-    "welcomeChat": {
-        "13": "欢迎游玩TheOtherUs！"
-    },
-    "SendTargetsDefault": {
-        "13": "发送给：默认"
-    },
-    "SendTargetsAll": {
-        "13": "发送给：所有人"
-    },
-    "SendTargetsDead": {
-        "13": "发送给：死亡玩家"
     },
     "tasksNum": {
         "0": "Tasks {0}",
