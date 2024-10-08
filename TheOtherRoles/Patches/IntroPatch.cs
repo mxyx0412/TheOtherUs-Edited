@@ -114,7 +114,7 @@ internal class IntroCutsceneOnDestroyPatch
         if (AmongUsClient.Instance.AmHost)
         {
             var mapId = GameOptionsManager.Instance.currentNormalGameOptions.MapId;
-            var writerS = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
+            var writerS = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
                 (byte)CustomRPC.DynamicMapOption, SendOption.Reliable);
             writerS.Write(mapId);
             AmongUsClient.Instance.FinishRpcImmediately(writerS);
@@ -127,7 +127,7 @@ internal class IntroCutsceneOnDestroyPatch
                 var target = PlayerControl.AllPlayerControls.ToList().FirstOrDefault(x => x.Data.PlayerName.Equals(ModOption.firstKillName));
                 if (target != null)
                 {
-                    var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
+                    var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
                         (byte)CustomRPC.SetFirstKill, SendOption.Reliable);
                     writer.Write(target.PlayerId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);

@@ -105,6 +105,7 @@ public class CustomButton
         buttons.RemoveAll(item => item.actionButton == null);
 
         foreach (var t in buttons)
+        {
             try
             {
                 t.Update();
@@ -113,6 +114,7 @@ public class CustomButton
             {
                 Warn("NullReferenceException from HudUpdate().HasButton(), if theres only one warning its fine");
             }
+        }
     }
 
     public static void MeetingEndedUpdate()

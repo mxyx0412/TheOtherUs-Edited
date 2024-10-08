@@ -791,7 +791,6 @@ public static class Helpers
     {
         if (Main.betaDays > 0)
         {
-            Message($"Beta check");
             var ticks = GetBuiltInTicks();
             var compileTime = new DateTime(ticks, DateTimeKind.Utc);  // This may show as an error, but it is not, compilation will work!
             Message($"Beta版构建于: {compileTime.ToString(CultureInfo.InvariantCulture)}");

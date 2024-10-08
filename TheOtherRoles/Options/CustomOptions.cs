@@ -1645,7 +1645,6 @@ public class HudManagerUpdate
             // add a special button for settings viewing:
             toggleSettingsButtonObject = Object.Instantiate(__instance.MapButton.gameObject, __instance.MapButton.transform.parent);
             toggleSettingsButtonObject.transform.localPosition = __instance.MapButton.transform.localPosition + new Vector3(0, -0.66f, -500f);
-            toggleSettingsButtonObject.transform.parent.SetLocalZ(-500f);
             var renderer = toggleSettingsButtonObject.GetComponent<SpriteRenderer>();
             renderer.sprite = UnityHelper.loadSpriteFromResources("TheOtherRoles.Resources.CurrentSettingsButton.png", 180f);
             toggleSettingsButton = toggleSettingsButtonObject.GetComponent<PassiveButton>();

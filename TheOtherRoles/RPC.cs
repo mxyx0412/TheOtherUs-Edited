@@ -3631,8 +3631,7 @@ internal class RPCHandlerPatch
                 break;
 
             case CustomRPC.DynamicMapOption:
-                var mapId = reader.ReadByte();
-                RPCProcedure.dynamicMapOption(mapId);
+                RPCProcedure.dynamicMapOption(reader.ReadByte());
                 break;
 
             case CustomRPC.SetGameStarting:
