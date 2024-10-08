@@ -106,12 +106,35 @@ internal class IntroCutsceneOnDestroyPatch
         SoundEffectsManager.Load();
 
         // AntiTeleport set position
+
         AntiTeleport.setPosition();
+
+        if (CustomOptionHolder.randomGameStartPosition.getBool()) MapData.RandomSpawnPlayers();
 
         if (AmongUsClient.Instance.AmHost)
         {
+            var mapId = GameOptionsManager.Instance.currentNormalGameOptions.MapId;
+            var writerS = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
+                (byte)CustomRPC.DynamicMapOption, SendOption.Reliable);
+            writerS.Write(mapId);
+            AmongUsClient.Instance.FinishRpcImmediately(writerS);
+
             LastImpostor.promoteToLastImpostor();
-            if (CustomOptionHolder.randomGameStartPosition.getBool()) MapData.RandomSpawnAllPlayers();
+
+            // First kill
+            if (ModOption.shieldFirstKill && ModOption.firstKillName != "" && !HideNSeek.isHideNSeekGM && !PropHunt.isPropHuntGM)
+            {
+                var target = PlayerControl.AllPlayerControls.ToList().FirstOrDefault(x => x.Data.PlayerName.Equals(ModOption.firstKillName));
+                if (target != null)
+                {
+                    var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
+                        (byte)CustomRPC.SetFirstKill, SendOption.Reliable);
+                    writer.Write(target.PlayerId);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.setFirstKill(target.PlayerId);
+                }
+            }
+
         }
 
         // Force Bounty Hunter to load a new Bounty when the Intro is over
@@ -127,22 +150,6 @@ internal class IntroCutsceneOnDestroyPatch
                 BountyHunter.cooldownText.transform.localPosition = bottomLeft + new Vector3(0f, -0.35f, -62f);
                 BountyHunter.cooldownText.transform.localScale = Vector3.one * 0.4f;
                 BountyHunter.cooldownText.gameObject.SetActive(true);
-            }
-        }
-
-        // First kill
-        if (AmongUsClient.Instance.AmHost && ModOption.shieldFirstKill && ModOption.firstKillName != "" &&
-            !HideNSeek.isHideNSeekGM && !PropHunt.isPropHuntGM)
-        {
-            var target = PlayerControl.AllPlayerControls.ToArray().ToList()
-                .FirstOrDefault(x => x.Data.PlayerName.Equals(ModOption.firstKillName));
-            if (target != null)
-            {
-                var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
-                    (byte)CustomRPC.SetFirstKill, SendOption.Reliable);
-                writer.Write(target.PlayerId);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCProcedure.setFirstKill(target.PlayerId);
             }
         }
 

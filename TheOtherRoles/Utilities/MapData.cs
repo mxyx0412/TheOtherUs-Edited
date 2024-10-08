@@ -228,6 +228,23 @@ public class MapData
         return poss;
     }
 
+    public static void RandomSpawnPlayers()
+    {
+        if (AntiTeleport.antiTeleport.Any(x => x == PlayerControl.LocalPlayer)) return;
+        Vector3 newPosition;
+        if (CustomOptionHolder.randomGameStartToVents.getBool())
+        {
+            newPosition = FindVentSpawnPositions()[rnd.Next(FindVentSpawnPositions().Count)];
+            CachedPlayer.LocalPlayer.PlayerControl.NetTransform.RpcSnapTo(FindVentSpawnPositions()[rnd.Next(FindVentSpawnPositions().Count)]);
+        }
+        else
+        {
+            newPosition = MapSpawnPosition()[rnd.Next(MapSpawnPosition().Count)];
+            CachedPlayer.LocalPlayer.PlayerControl.NetTransform.RpcSnapTo(MapSpawnPosition()[rnd.Next(MapSpawnPosition().Count)]);
+        }
+        Message($"Span to Vector3: {newPosition.x}, {newPosition.y}, {newPosition.z}");
+    }
+
     public static void RandomSpawnAllPlayers() => RandomSpawnPlayers(PlayerControl.AllPlayerControls.ToArray());
 
     public static void RandomSpawnAllPlayersToVent() => RandomSpawnToVent(PlayerControl.AllPlayerControls.ToArray().Where(n => n.IsAlive()));

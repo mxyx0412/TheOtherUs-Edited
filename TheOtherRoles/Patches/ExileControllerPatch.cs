@@ -418,10 +418,7 @@ internal class ExileControllerWrapUpPatch
         // AntiTeleport set position
         AntiTeleport.setPosition();
 
-        if (AmongUsClient.Instance.AmHost)
-        {
-            if (CustomOptionHolder.randomGameStartPosition.getBool()) MapData.RandomSpawnAllPlayers();
-        }
+        if (CustomOptionHolder.randomGameStartPosition.getBool()) MapData.RandomSpawnPlayers();
 
         // Invert add meeting
         if (Invert.meetings > 0) Invert.meetings--;
