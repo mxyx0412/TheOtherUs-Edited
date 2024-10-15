@@ -31,6 +31,7 @@ public class Balancer
         CurrentState = BalancerState.NotBalance;
         IsDoubleExile = false;
         currentTarget = null;
+        exiled1 = false;
     }
 
     public static SpriteRenderer BackObject;
@@ -55,6 +56,7 @@ public class Balancer
     private static int pleasevoteanimIndex;
     private static float rotate;
     private static float openMADENOtimer;
+    private static bool exiled1;
 
     public static void Update()
     {
@@ -72,7 +74,8 @@ public class Balancer
                 {
                     target = targetplayerright;
                 }
-                if (AmongUsClient.Instance.AmHost) MeetingHud.Instance.RpcVotingComplete(new List<MeetingHud.VoterState>().ToArray(), target.Data, false);
+                if (AmongUsClient.Instance.AmHost && !exiled1) MeetingHud.Instance.RpcVotingComplete(new List<MeetingHud.VoterState>().ToArray(), target.Data, false);
+                exiled1 = true;
                 return;
             }
             switch (CurrentState)
@@ -242,6 +245,7 @@ public class Balancer
         targetplayerright = null;
         targetplayerleft = null;
         IsDoubleExile = false;
+        exiled1 = false;
         currentAbilityUser = null;
         CurrentState = BalancerState.NotBalance;
         currentTarget = null;

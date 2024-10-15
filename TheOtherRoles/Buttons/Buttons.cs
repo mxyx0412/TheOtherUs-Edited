@@ -3462,6 +3462,7 @@ internal static class HudManagerStartPatch
                 //set location
                 Jumper.jumpLocation = PlayerControl.LocalPlayer.transform.localPosition;
                 jumperMarkButton.Timer = jumperMarkButton.MaxTimer;
+                //jumperJumpButton.Timer = jumperMarkButton.MaxTimer;
             },
             () =>
             {
@@ -3493,7 +3494,9 @@ internal static class HudManagerStartPatch
                 //teleport to location if you have one
                 PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(Jumper.jumpLocation);
                 Jumper.Charges--;
-                if (Jumper.Charges > 0) jumperJumpButton.Timer = jumperJumpButton.MaxTimer;
+                jumperJumpButton.Timer = jumperJumpButton.MaxTimer;
+                //jumperMarkButton.Timer = jumperJumpButton.MaxTimer;
+
             },
             () =>
             {
@@ -3523,6 +3526,7 @@ internal static class HudManagerStartPatch
                 //set location
                 Escapist.escapeLocation = PlayerControl.LocalPlayer.transform.localPosition;
                 escapistMarkButton.Timer = escapistMarkButton.MaxTimer;
+                //escapistEscapeButton.Timer = escapistMarkButton.MaxTimer;
             },
             () =>
             {
@@ -3552,6 +3556,7 @@ internal static class HudManagerStartPatch
                 //set location
                 PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(Escapist.escapeLocation);
                 escapistEscapeButton.Timer = escapistEscapeButton.MaxTimer;
+                //escapistMarkButton.Timer = escapistEscapeButton.MaxTimer;
             },
             () =>
             {

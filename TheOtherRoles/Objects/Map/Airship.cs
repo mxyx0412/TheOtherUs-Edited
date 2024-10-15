@@ -59,7 +59,7 @@ internal class OptimizeMapPatch
             if (CustomOptionHolder.airshipLadder.getBool())
             {
                 // 梯子追加
-                GameObject ladder = meetingRoom.GetComponentsInChildren<SpriteRenderer>().Where(x => x.name == "ladder_meeting").FirstOrDefault().gameObject;
+                GameObject ladder = meetingRoom.GetComponentsInChildren<SpriteRenderer>().FirstOrDefault(x => x.name == "ladder_meeting").gameObject;
                 GameObject newLadder = UnityEngine.Object.Instantiate(ladder, ladder.transform.parent);
                 Il2CppArrayBase<Ladder> ladders = newLadder.GetComponentsInChildren<Ladder>();
                 int id = 100;
@@ -75,8 +75,8 @@ internal class OptimizeMapPatch
                 newLadder.GetComponentInChildren<SpriteRenderer>().sprite = ladderSprite;
 
                 // 梯子の周りの影を消す
-                UnityEngine.Object.Destroy(gapRoom.GetComponentsInChildren<EdgeCollider2D>().Where(x => Math.Abs(x.points[0].x + 6.2984f) < 0.1).FirstOrDefault());
-                EdgeCollider2D collider = meetingRoom.GetComponentsInChildren<EdgeCollider2D>().Where(x => x.pointCount == 46).FirstOrDefault();
+                UnityEngine.Object.Destroy(gapRoom.GetComponentsInChildren<EdgeCollider2D>().FirstOrDefault(x => Math.Abs(x.points[0].x + 6.2984f) < 0.1));
+                EdgeCollider2D collider = meetingRoom.GetComponentsInChildren<EdgeCollider2D>().FirstOrDefault(x => x.pointCount == 46);
                 Il2CppSystem.Collections.Generic.List<Vector2> points = new();
                 EdgeCollider2D newCollider = collider.gameObject.AddComponent<EdgeCollider2D>();
                 EdgeCollider2D newCollider2 = collider.gameObject.AddComponent<EdgeCollider2D>();
@@ -95,7 +95,7 @@ internal class OptimizeMapPatch
                 UnityEngine.Object.DestroyObject(collider);
 
                 // 梯子の背景を変更
-                SpriteRenderer side = meetingRoom.GetComponentsInChildren<SpriteRenderer>().Where(x => x.name == "meeting_side").FirstOrDefault();
+                SpriteRenderer side = meetingRoom.GetComponentsInChildren<SpriteRenderer>().FirstOrDefault(x => x.name == "meeting_side");
                 SpriteRenderer bg = UnityEngine.Object.Instantiate(side, side.transform.parent);
                 if (!ladderBgSprite) ladderBgSprite = UnityHelper.loadSpriteFromResources("TheOtherRoles.Resources.ladder_bg.png", 100f);
                 bg.sprite = ladderBgSprite;

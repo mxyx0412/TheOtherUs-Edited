@@ -136,9 +136,7 @@ public static class VentUsePatch
 
         if (Trapper.playersOnMap.Contains(CachedPlayer.LocalPlayer.PlayerControl)) return false;
 
-        bool canUse;
-        bool couldUse;
-        __instance.CanUse(CachedPlayer.LocalPlayer.Data, out canUse, out couldUse);
+        __instance.CanUse(CachedPlayer.LocalPlayer.Data, out var canUse, out var couldUse);
         var canMoveInVents = CachedPlayer.LocalPlayer.PlayerControl != Spy.spy &&
                              !Trapper.playersOnMap.Contains(CachedPlayer.LocalPlayer.PlayerControl);
         if (!canUse) return false; // No need to execute the native method as using is disallowed anyways

@@ -62,12 +62,10 @@ public static class FungleAdditionalElectrical
 
 public static class MapLoader
 {
-    private static ShipStatus skeld;
-    private static ShipStatus airship;
     public static ShipStatus Polus;
     public static GameObject PolusObject => Polus.gameObject;
-    public static ShipStatus Skeld => skeld;
-    public static ShipStatus Airship => airship;
+    public static ShipStatus Skeld { get; private set; }
+    public static ShipStatus Airship { get; private set; }
 
     public static IEnumerator LoadMaps()
     {
@@ -76,7 +74,7 @@ public static class MapLoader
         AsyncOperationHandle<GameObject> skeldAsset = AmongUsClient.Instance.ShipPrefabs.ToArray()[0].LoadAsset<GameObject>();
         while (!skeldAsset.IsDone)
             yield return null;
-        skeld = skeldAsset.Result.GetComponent<ShipStatus>();
+        Skeld = skeldAsset.Result.GetComponent<ShipStatus>();
         AsyncOperationHandle<GameObject> polusAsset = AmongUsClient.Instance.ShipPrefabs.ToArray()[2].LoadAsset<GameObject>();
         while (!polusAsset.IsDone)
             yield return null;
@@ -84,7 +82,7 @@ public static class MapLoader
         AsyncOperationHandle<GameObject> airshipAsset = AmongUsClient.Instance.ShipPrefabs.ToArray()[4].LoadAsset<GameObject>();
         while (!airshipAsset.IsDone)
             yield return null;
-        airship = airshipAsset.Result.GetComponent<ShipStatus>();
+        Airship = airshipAsset.Result.GetComponent<ShipStatus>();
     }
 }
 

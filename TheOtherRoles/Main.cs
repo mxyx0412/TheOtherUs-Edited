@@ -21,7 +21,11 @@ public class TheOtherRolesPlugin : BasePlugin
     public const string Id = "TheOtherUs.Options.v2"; // Config files name
     public const string ModName = MyPluginInfo.PLUGIN_NAME;
     public const string VersionString = MyPluginInfo.PLUGIN_VERSION;
-    public static uint betaDays = 30; // amount of days for the build to be usable (0 for infinite!)
+#if RELEASE
+    public static uint betaDays; // amount of days for the build to be usable (0 for infinite!)
+#else
+    public static uint betaDays = 30;
+#endif
     public static int BetaDaysLeft;
 
     public static Version Version = Version.Parse(VersionString);

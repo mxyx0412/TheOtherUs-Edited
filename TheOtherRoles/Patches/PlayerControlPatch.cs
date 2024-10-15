@@ -1090,6 +1090,7 @@ public static class PlayerControlFixedUpdatePatch
                     (p != Mini.mini || Mini.isGrownUp()) && (BountyHunter.bountyHunter.getPartner() == null ||
                                                              p != BountyHunter.bountyHunter.getPartner()))
                     possibleTargets.Add(p);
+            if (possibleTargets.Count == 0) return;
             BountyHunter.bounty = possibleTargets[rnd.Next(0, possibleTargets.Count)];
             if (BountyHunter.bounty == null) return;
 
@@ -1542,9 +1543,8 @@ public static class PlayerControlFixedUpdatePatch
         List<PlayerControl> untargetables;
         if (Witch.spellCastingTarget != null)
         {
-            untargetables = PlayerControl.AllPlayerControls.ToArray()
-                .Where(x => x.PlayerId != Witch.spellCastingTarget.PlayerId)
-                .ToList(); // Don't switch the target from the the one you're currently casting a spell on
+            // Don't switch the target from the the one you're currently casting a spell on
+            untargetables = PlayerControl.AllPlayerControls.ToArray().Where(x => x.PlayerId != Witch.spellCastingTarget.PlayerId).ToList();
         }
         else
         {

@@ -221,6 +221,11 @@ public static class Shifter
             if (repeat) shiftRole(player2, player1, false);
             PartTimer.partTimer = player1;
         }
+        else if (Balancer.balancer != null && Balancer.balancer == player2)
+        {
+            if (repeat) shiftRole(player2, player1, false);
+            Balancer.balancer = player1;
+        }
     }
 
     public static void clearAndReload()

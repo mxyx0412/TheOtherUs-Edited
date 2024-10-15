@@ -486,8 +486,7 @@ internal class HudManagerUpdatePatch
         {
             var pet = target.GetPet();
             if (pet != null)
-                pet.Visible = ((PlayerControl.LocalPlayer.Data.IsDead && target.Data.IsDead) || !target.Data.IsDead) &&
-                              !target.inVent;
+                pet.Visible = ((PlayerControl.LocalPlayer.Data.IsDead && target.Data.IsDead) || !target.Data.IsDead) && !target.inVent;
         }
     }
 }

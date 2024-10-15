@@ -37,20 +37,9 @@ public class CachedPlayer
     public Vector2 TruePosition => PlayerControl.GetTruePosition();
     public Vector2 ControlOffset => PlayerControl.Collider.offset;
 
-    public static implicit operator bool(CachedPlayer player)
-    {
-        return player != null && player.PlayerControl;
-    }
-
-    public static implicit operator PlayerControl(CachedPlayer player)
-    {
-        return player.PlayerControl;
-    }
-
-    public static implicit operator PlayerPhysics(CachedPlayer player)
-    {
-        return player.PlayerPhysics;
-    }
+    public static implicit operator bool(CachedPlayer player) => player != null && player.PlayerControl;
+    public static implicit operator PlayerControl(CachedPlayer player) => player.PlayerControl;
+    public static implicit operator PlayerPhysics(CachedPlayer player) => player.PlayerPhysics;
 }
 
 [HarmonyPatch]
@@ -70,14 +59,6 @@ public static class CachedPlayerPatches
         };
         CachedPlayer.AllPlayers.Add(player);
         CachedPlayer.PlayerPtrs[__instance.Pointer] = player;
-        // Debug
-        foreach (var cachedPlayer in CachedPlayer.AllPlayers)
-        {
-            if (!cachedPlayer.PlayerControl || !cachedPlayer.PlayerPhysics || !cachedPlayer.NetTransform || !cachedPlayer.transform)
-            {
-                Error($"CachedPlayer {cachedPlayer.PlayerControl.name} has null fields");
-            }
-        }
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.OnDestroy))]

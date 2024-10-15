@@ -220,6 +220,6 @@ class GameStartPatch
 {
     public static void Prefix(ShipStatus __instance)
     {
-        LobbyRoleInfo.RolesSummaryUI?.SetActive(false);
+        if (LobbyRoleInfo.RolesSummaryUI != null) LobbyRoleInfo.RolesSummaryUI.SetActive(false);
     }
 }
