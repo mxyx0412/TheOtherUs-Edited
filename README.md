@@ -17,6 +17,7 @@
 
 | 游戏版本            | 模组版本 | 发布日期  | 链接                                                         |
 | ------------------- | -------- | --------- | ------------------------------------------------------------ |
+| 2024.3.5 ~ 2024.6.4 | v1.0.8.6 | 2024.10.18  | [下载](https://github.com/mxyx-club/TheOtherUs-Edited/releases/download/v1.0.8.6/TheOtherUs.zip) |
 | 2024.3.5 ~ 2024.6.4 | v1.0.7.7 | 2024.9.16  | [下载](https://github.com/mxyx-club/TheOtherUs-Edited/releases/download/v1.0.7.7/TheOtherUs.zip) |
 | 2024.3.5 ~ 2024.6.4 | v1.0.7.6 | 2024.9.14  | [下载](https://github.com/mxyx-club/TheOtherUs-Edited/releases/download/v1.0.7.6/TheOtherUs.zip) |
 | 2024.3.5 ~ 2024.6.4 | v1.0.7.2 | 2024.9.6  | [下载](https://github.com/mxyx-club/TheOtherUs-Edited/releases/download/v1.0.7.2/TheOtherUs.zip) |
@@ -34,6 +35,17 @@
 
 ## 更新日志
 
+## v1.0.8.6:
+
+* 重新添加自动更新
+* 更新BepinEx依赖至be.697
+* 新增船员职业：大神官
+* 添加对本地帽子的支持（请在模组设置中查看）
+* 修复色盲文本会被强制显示、变色龙在部分情况不会隐藏色盲文字的问题
+* 优化随机出生
+* 修复邪恶的设陷师击杀cd
+* 可以使用F11键位控制游戏分辨率大小
+* 添加 "最小/最大 独立阵营杀手数" 调整选项，如果这两项都是随机，则使用原先的概率分配。
 
 ###  v1.0.7.7:
 
