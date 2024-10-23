@@ -49,7 +49,7 @@ jobs:
         run: wget https://github.com/NuclearPowered/Reactor/releases/download/2.2.0/Reactor.dll -P ./Release/BepInEx/plugins
         
       - name: Build
-        run: dotnet build TheOtherRoles/TheOtherRoles.csproj --configuration Beta --output ./Release/BepInEx/plugins
+        run: dotnet build TheOtherRoles/TheOtherRoles.csproj --configuration Release --output ./Release/BepInEx/plugins
 
       - name: Cleanup
         run: |
@@ -68,3 +68,38 @@ jobs:
         with:
           name: TheOtherUs
           path: ./Release/
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+
+    steps:
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: TheOtherUs
+      - name: Compress subdirectories
+        run: |
+          ls -R
+          zip -q -r TheOtherUs.zip *
+          mv ./BepInEx/plugins/TheOtherUs.dll ./
+        
+      - name: Extract version from tag
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+
+      - name: Clone Changes Log
+        run: |
+          wget https://raw.githubusercontent.com/mxyx-club/TheOtherUs-Edited/v${{ env.VERSION }}/CHANGELOG.md -O CHANGELOG.md
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: "TheOtherUs-Edited v${{ env.VERSION }}"
+          body_path: CHANGELOG.md
+          files: |
+            TheOtherUs.dll
+            ./TheOtherUs.zip
+          draft: true
+          prerelease: false
