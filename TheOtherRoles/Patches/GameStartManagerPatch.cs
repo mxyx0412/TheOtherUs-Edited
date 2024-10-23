@@ -15,7 +15,6 @@ public class GameStartManagerPatch
     public static float timer = 600f;
     private static float kickingTimer;
     private static bool versionSent;
-    private static string lobbyCodeText = "";
 
     [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnPlayerJoined))]
     public class AmongUsClientOnPlayerJoinedPatch
@@ -43,7 +42,7 @@ public class GameStartManagerPatch
             // Copy lobby code
             string code = InnerNet.GameCode.IntToGameName(AmongUsClient.Instance.GameId);
             GUIUtility.systemCopyBuffer = code;
-            lobbyCodeText = FastDestroyableSingleton<TranslationController>.Instance.GetString(StringNames.RoomCode,
+            _ = FastDestroyableSingleton<TranslationController>.Instance.GetString(StringNames.RoomCode,
                 new Il2CppReferenceArray<Il2CppSystem.Object>(0)) + "\r\n" + code;
         }
     }

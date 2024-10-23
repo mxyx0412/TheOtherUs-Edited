@@ -3426,9 +3426,8 @@ internal static class HudManagerStartPatch
                 var attempt = checkMuderAttempt(Witch.witch, Witch.spellCastingTarget);
                 if (attempt == MurderAttemptResult.PerformKill)
                 {
-                    var writer = AmongUsClient.Instance.StartRpcImmediately(
-                        CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SetFutureSpelled,
-                        SendOption.Reliable);
+                    var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
+                        (byte)CustomRPC.SetFutureSpelled, SendOption.Reliable);
                     writer.Write(Witch.currentTarget.PlayerId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     RPCProcedure.setFutureSpelled(Witch.currentTarget.PlayerId);

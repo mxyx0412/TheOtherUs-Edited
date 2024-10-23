@@ -1378,6 +1378,7 @@ public static class RPCProcedure
                 Amnisiac.clearAndReload();
                 break;
             case RoleId.EvilTrapper:
+                Helpers.turnToImpostor(Amnisiac.amnisiac);
                 if (Amnisiac.resetRole) EvilTrapper.clearAndReload();
                 EvilTrapper.evilTrapper = amnisiac;
                 Amnisiac.clearAndReload();
@@ -1711,7 +1712,11 @@ public static class RPCProcedure
         {
             var target = killer;
             if (Witch.currentTarget != null) target = Witch.currentTarget;
-            Witch.spellCastingTarget = target;
+            var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
+                (byte)CustomRPC.SetFutureSpelled, SendOption.Reliable);
+            writer.Write(target.PlayerId);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            setFutureSpelled(target.PlayerId);
             SoundEffectsManager.play("witchSpell");
             witchSpellButton.Timer = witchSpellButton.MaxTimer;
         }/*
@@ -3037,6 +3042,7 @@ public static class RPCProcedure
             }
         }
 
+        bool lawyerDiedAdditionally = false;
         if (Lawyer.lawyer != null && Lawyer.lawyer.PlayerId == killerId && Lawyer.target != null && Lawyer.target.PlayerId == dyingTargetId)
         {
             // Lawyer guessed client.
@@ -3047,6 +3053,8 @@ public static class RPCProcedure
             }
 
             Lawyer.lawyer.Exiled();
+            lawyerDiedAdditionally = true;
+            overrideDeathReasonAndKiller(Lawyer.lawyer, DeadPlayer.CustomDeathReason.LawyerSuicide, guesser);
         }
 
         var partnerId = dyingLoverPartner != null ? dyingLoverPartner.PlayerId : dyingTargetId;
@@ -3061,14 +3069,17 @@ public static class RPCProcedure
             MeetingHudPatch.swapperCheckAndReturnSwap(MeetingHud.Instance, dyingTargetId);
             foreach (var pva in MeetingHud.Instance.playerStates)
             {
-                if (pva.TargetPlayerId == dyingTargetId || pva.TargetPlayerId == partnerId || pva.TargetPlayerId == akujoPartnerId)
+                if (pva.TargetPlayerId == dyingTargetId || pva.TargetPlayerId == partnerId || pva.TargetPlayerId == akujoPartnerId
+                    || lawyerDiedAdditionally && Lawyer.lawyer?.PlayerId == pva.TargetPlayerId)
                 {
                     pva.SetDead(pva.DidReport, true);
                     pva.Overlay.gameObject.SetActive(true);
+                    MeetingHudPatch.swapperCheckAndReturnSwap(MeetingHud.Instance, pva.TargetPlayerId);
                 }
 
                 //Give players back their vote if target is shot dead
-                if (pva.VotedFor != dyingTargetId || pva.VotedFor != partnerId) continue;
+                if (pva.VotedFor != dyingTargetId || pva.VotedFor != partnerId ||
+                    (lawyerDiedAdditionally && Lawyer.lawyer?.PlayerId == pva.TargetPlayerId)) continue;
                 pva.UnsetVote();
                 var voteAreaPlayer = playerById(pva.TargetPlayerId);
                 if (!voteAreaPlayer.AmOwner) continue;
@@ -3126,8 +3137,7 @@ public static class RPCProcedure
             {
                 if (Guesser.guesserCurrentTarget == dyingTarget.PlayerId)
                     Guesser.guesserUIExitButton.OnClick.Invoke();
-                else if (dyingLoverPartner != null &&
-                         Guesser.guesserCurrentTarget == dyingLoverPartner.PlayerId)
+                else if (dyingLoverPartner != null && Guesser.guesserCurrentTarget == dyingLoverPartner.PlayerId)
                     Guesser.guesserUIExitButton.OnClick.Invoke();
             }
         }

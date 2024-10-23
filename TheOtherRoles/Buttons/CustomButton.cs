@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
+using static TheOtherRoles.Buttons.HudManagerStartPatch;
 
 namespace TheOtherRoles.Buttons;
 
@@ -162,27 +163,15 @@ public class CustomButton
             return;
         }
 
-        var killerbutton = new Dictionary<PlayerControl, CustomButton>();
-        if (Vampire.vampire != null) killerbutton.Add(Vampire.vampire, HudManagerStartPatch.vampireKillButton);
-        if (Sheriff.sheriff != null) killerbutton.Add(Sheriff.sheriff, HudManagerStartPatch.sheriffKillButton);
-        if (Jackal.jackal != null) killerbutton.Add(Jackal.jackal, HudManagerStartPatch.jackalKillButton);
-        if (Sidekick.sidekick != null) killerbutton.Add(Sidekick.sidekick, HudManagerStartPatch.sidekickKillButton);
-        if (Swooper.swooper != null) killerbutton.Add(Swooper.swooper, HudManagerStartPatch.swooperKillButton);
-        if (Werewolf.werewolf != null) killerbutton.Add(Werewolf.werewolf, HudManagerStartPatch.werewolfKillButton);
-        if (Juggernaut.juggernaut != null) killerbutton.Add(Juggernaut.juggernaut, HudManagerStartPatch.juggernautKillButton);
-        if (Thief.thief != null) killerbutton.Add(Thief.thief, HudManagerStartPatch.thiefKillButton);
-
-        if (killerbutton.TryGetValue(p, out var button))
-        {
-            if (time == 0f) time = button.MaxTimer;
-            else button.Timer = time;
-        }
-        else if (Pavlovsdogs.pavlovsdogs.Any(x => x == p))
-        {
-            button = HudManagerStartPatch.pavlovsdogsKillButton;
-            if (time == 0f) time = button.MaxTimer;
-            else button.Timer = time;
-        }
+        vampireKillButton.Timer = time == 0 ? vampireKillButton.MaxTimer : time;
+        sheriffKillButton.Timer = time == 0 ? sheriffKillButton.MaxTimer : time;
+        jackalKillButton.Timer = time == 0 ? jackalKillButton.MaxTimer : time;
+        sidekickKillButton.Timer = time == 0 ? sidekickKillButton.MaxTimer : time;
+        swooperKillButton.Timer = time == 0 ? swooperKillButton.MaxTimer : time;
+        werewolfKillButton.Timer = time == 0 ? werewolfKillButton.MaxTimer : time;
+        juggernautKillButton.Timer = time == 0 ? juggernautKillButton.MaxTimer : time;
+        thiefKillButton.Timer = time == 0 ? thiefKillButton.MaxTimer : time;
+        pavlovsdogsKillButton.Timer = time == 0 ? pavlovsdogsKillButton.MaxTimer : time;
     }
 
     public void setActive(bool isActive)

@@ -943,17 +943,6 @@ internal class MeetingHudPatch
         }
     }
 
-
-    [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.UpdateButtons))]
-    private class MeetingHudUpdateButtonsPatch
-    {
-        private static void Postfix(MeetingHud __instance)
-        {
-            if (Balancer.balancer != null && CachedPlayer.LocalPlayer.PlayerControl == Balancer.balancer)
-                Balancer.Balancer_updatepatch.UpdateButtonsPostfix(__instance);
-        }
-    }
-
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Start))]
     public class MeetingHudStart
     {

@@ -259,20 +259,19 @@ public class Balancer
         targetplayerright = player2;
         CurrentState = BalancerState.Animation_Chain;
         MeetingHud.Instance.ClearVote();
+        if (Guesser.guesserUI != null) Guesser.guesserUIExitButton.OnClick.Invoke();
         foreach (PlayerVoteArea area in MeetingHud.Instance.playerStates)
         {
+            area.transform.localPosition = new(999, 999, 999);
+
             if (area.TargetPlayerId == targetplayerleft.PlayerId)
             {
-                area.transform.localPosition = new(999, 999, 999);
                 leftplayerarea = area;
             }
             else if (area.TargetPlayerId == targetplayerright.PlayerId)
             {
-                area.transform.localPosition = new(999, 999, 999);
                 rightplayerarea = area;
             }
-            else
-                area.gameObject.SetActive(false);
         }
 
         BackObject = new GameObject("BackObject").AddComponent<SpriteRenderer>();
@@ -362,8 +361,11 @@ public class Balancer
         return obj;
     }
 
+
+    /*[HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.UpdateButtons))]
     public class Balancer_updatepatch
     {
+        [HarmonyPostfix]
         internal static void UpdateButtonsPostfix(MeetingHud __instance)
         {
             if (PlayerControl.LocalPlayer.IsDead())
@@ -380,7 +382,8 @@ public class Balancer
                 }
             }
         }
-    }
+    }*/
+
     public static class Balancer_Patch
     {
         private static void BalancerOnClick(int Index, MeetingHud __instance)
@@ -393,6 +396,7 @@ public class Balancer
                 __instance.playerStates.ForEach(x => { if (x.TargetPlayerId == currentTarget.PlayerId && x.transform.FindChild("BalancerButton") != null) x.transform.FindChild("BalancerButton").gameObject.SetActive(false); });
                 return;
             }
+            if (balancer.IsDead()) return;
             var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
                 (byte)CustomRPC.BalancerBalance, SendOption.Reliable);
             writer.Write(PlayerControl.LocalPlayer.PlayerId);

@@ -1190,11 +1190,11 @@ internal class GameOptionsDataPatch
             else if (option.parent.getSelection() > 0)
             {
                 if (option.id == 30170) //Deputy
-                    sb.AppendLine(
-                        $"- {cs(Deputy.color, "Deputy".Translate())}: {option.getString()}");
+                    sb.AppendLine($"- {cs(Deputy.color, "Deputy".Translate())}: {option.getString()}");
+                else if (option.id == 20142)
+                    sb.AppendLine($"- {cs(Sidekick.color, "jackalSwoopChance".Translate())}: {option.getString()}");
                 else if (option.id == 20135) //Sidekick
-                    sb.AppendLine(
-                        $"- {cs(Sidekick.color, "Sidekick".Translate())}: {option.getString()}");
+                    sb.AppendLine($"- {cs(Sidekick.color, "Sidekick".Translate())}: {option.getString()}");
             }
 
         if (headerOnly) return sb.ToString();
@@ -1572,13 +1572,12 @@ public class HudManagerUpdate
         foreach (var tmp in settingsTMPs) tmp.text = "";
         var settingsString = GameOptionsDataPatch.buildAllOptions(hideExtras: true);
         var blocks = settingsString.Split("\n\n", StringSplitOptions.RemoveEmptyEntries);
-        ;
         var curString = "";
         string curBlock;
         var j = 0;
         for (var i = 0; i < blocks.Length; i++)
         {
-            if (IsCN()) blocks[i] = $"<line-height=110%>{blocks[i]}</line-height>";
+            if (IsCN()) blocks[i] = $"<line-height=120%>{blocks[i]}</line-height>";
             curBlock = blocks[i];
             if (lineCount(curBlock) + lineCount(curString) < (IsCN() ? 40 : 43)) curString += curBlock + "\n\n";
             else

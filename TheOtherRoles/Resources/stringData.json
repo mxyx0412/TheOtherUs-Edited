@@ -179,6 +179,10 @@
         "0": "Neutral Killer Roles ",
         "13": "杀手数量"
     },
+    "jackalSwoopChance": {
+        "0": "Swooper",
+        "13": "隐身豺狼"
+    },
     "page1": {
         "0": "Page 1: Vanilla Settings \n\n",
         "11": "Page 1: バニラの設定 ￤バニラの設定",
